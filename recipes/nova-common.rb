@@ -31,7 +31,7 @@ end
 
 package nova_common_package do
   action :upgrade
-  options options
+  options nova_common_package_options
 end
 
 directory "/etc/nova" do
