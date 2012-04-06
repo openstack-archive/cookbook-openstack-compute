@@ -34,6 +34,7 @@ end
 
 package nova_scheduler_package do
   action :upgrade
+  options nova_scheduler_package_options
 end
 
 service nova_scheduler_service do
