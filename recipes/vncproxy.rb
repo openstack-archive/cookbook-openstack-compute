@@ -52,7 +52,7 @@ end
 execute "Fix permission Bug" do
   command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
   action :run
-  only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 }
+  only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 and platform?("ubuntu","debian")}
 end
 
 service nova_vncproxy_service do
