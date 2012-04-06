@@ -38,35 +38,35 @@ else
   nova_vncproxy_package_options = "-o Dpkg::Options::='--force-confold' --force-yes"
 end
 
-package nova_vncproxy_package do
-  action :upgrade
-  only_if do platform?("ubuntu","debian") end
-end
+case node["platform"]
+when "ubuntu","debian"
+  package nova_vncproxy_package do
+    action :upgrade
+    options nova_vncproxy_package_options
+  end
 
-# required for vnc console authentication
-package nova_vncproxy_consoleauth_package do
-  action :upgrade
-  only_if do platform?("ubuntu","debian") end
-end
+  # required for vnc console authentication
+  package nova_vncproxy_consoleauth_package do
+    action :upgrade
+  end
 
-execute "Fix permission Bug" do
-  command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
-  action :run
-  only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 and platform?("ubuntu","debian")}
-end
+  execute "Fix permission Bug" do
+    command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
+    action :run
+    only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 }
+  end
 
-service nova_vncproxy_service do
-  # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
-  supports :status => true, :restart => true
-  action :enable
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-  only_if do platform?("ubuntu","debian") end
-end
+  service nova_vncproxy_service do
+    # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
+    supports :status => true, :restart => true
+    action :enable
+    subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  end
 
-service nova_vncproxy_consoleauth_service do
-  # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
-  supports :status => true, :restart => true
-  action :enable
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-  only_if do platform?("ubuntu","debian") end
+  service nova_vncproxy_consoleauth_service do
+    # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
+    supports :status => true, :restart => true
+    action :enable
+    subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  end
 end
