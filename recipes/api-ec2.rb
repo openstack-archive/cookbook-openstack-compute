@@ -125,7 +125,7 @@ template "/etc/nova/api-paste.ini" do
 end
 
 node["nova"]["ec2"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8773/services/Admin"
-node["nova"]["ec2"]["publicURL"] = http://#{node["nova"]["api_ipaddress"]}:8773/services/Cloud"
+node["nova"]["ec2"]["publicURL"] = "http://#{node["nova"]["api_ipaddress"]}:8773/services/Cloud"
 node["nova"]["ec2"]["internalURL"] = node["nova"]["ec2"]["publicURL"]
 
 # Register EC2 Endpoint
