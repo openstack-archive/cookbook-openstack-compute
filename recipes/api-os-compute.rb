@@ -123,9 +123,9 @@ template "/etc/nova/api-paste.ini" do
   notifies :restart, resources(:service => nova_api_os_compute_service), :delayed
 end
 
-node["nova"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8774/v1.1/%(tenant_id)s"
-node["nova"]["internalURL"] = node["nova"]["adminURL"]
-node["nova"]["publicURL"] = node["nova"]["adminURL"]
+node["nova"]["compute"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8774/v2/%(tenant_id)s"
+node["nova"]["compute"]["internalURL"] = node["nova"]["compute"]["adminURL"]
+node["nova"]["compute"]["publicURL"] = node["nova"]["compute"]["adminURL"]
 
 keystone_register "Register Compute Endpoint" do
   auth_host node["keystone"]["api_ipaddress"]
@@ -135,8 +135,8 @@ keystone_register "Register Compute Endpoint" do
   auth_token node["keystone"]["admin_token"]
   service_type "compute"
   endpoint_region "RegionOne"
-  endpoint_adminurl node["nova"]["adminURL"]
-  endpoint_internalurl node["nova"]["internalURL"]
-  endpoint_publicurl node["nova"]["publicURL"]
+  endpoint_adminurl node["nova"]["compute"]["adminURL"]
+  endpoint_internalurl node["nova"]["compute"]["internalURL"]
+  endpoint_publicurl node["nova"]["compute"]["publicURL"]
   action :create_endpoint
 end
