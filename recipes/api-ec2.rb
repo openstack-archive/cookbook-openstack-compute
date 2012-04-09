@@ -128,6 +128,7 @@ node["nova"]["ec2"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8773/
 node["nova"]["ec2"]["publicURL"] = http://#{node["nova"]["api_ipaddress"]}:8773/services/Cloud"
 node["nova"]["ec2"]["internalURL"] = node["nova"]["ec2"]["publicURL"]
 
+# Register EC2 Endpoint
 keystone_register "Register Compute Endpoint" do
   auth_host node["keystone"]["api_ipaddress"]
   auth_port node["keystone"]["admin_port"]

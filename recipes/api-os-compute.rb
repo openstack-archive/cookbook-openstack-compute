@@ -95,6 +95,7 @@ keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
   action :grant_role
 end
 
+# Register Compute Service
 keystone_register "Register Compute Service" do
   auth_host node["keystone"]["api_ipaddress"]
   auth_port node["keystone"]["admin_port"]
@@ -127,6 +128,7 @@ node["nova"]["compute"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8
 node["nova"]["compute"]["internalURL"] = node["nova"]["compute"]["adminURL"]
 node["nova"]["compute"]["publicURL"] = node["nova"]["compute"]["adminURL"]
 
+# Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
   auth_host node["keystone"]["api_ipaddress"]
   auth_port node["keystone"]["admin_port"]
