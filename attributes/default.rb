@@ -12,6 +12,13 @@ default['nova']['service_role'] = "admin"
 
 default["rabbit"]["ipaddress"] = node["controller_ipaddress"]
 
+default["nova"]["compute"]["adminURL"] = ""
+default["nova"]["compute"]["internalURL"] = ""
+default["nova"]["compute"]["publicURL"] = ""
+default["nova"]["ec2"]["adminURL"] = ""
+default["nova"]["ec2"]["internalURL"] = ""
+default["nova"]["ec2"]["publicURL"] = ""
+
 # TODO (cleanup this section)
 default["glance"]["db"] = "glance"
 default["glance"]["db_user"] = "glance"
