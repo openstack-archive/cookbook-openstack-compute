@@ -55,6 +55,59 @@ service nova_api_ec2_service do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
+# Register Service Tenant
+keystone_register "Register Service Tenant" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  tenant_name node["nova"]["service_tenant_name"]
+  tenant_description "Service Tenant"
+  tenant_enabled "true" # Not required as this is the default
+  action :create_tenant
+end
+
+# Register Service User
+keystone_register "Register Service User" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  tenant_name node["nova"]["service_tenant_name"]
+  user_name node["nova"]["service_user"]
+  user_pass node["nova"]["service_pass"]
+  user_enabled "true" # Not required as this is the default
+  action :create_user
+end
+
+## Grant Admin role to Service User for Service Tenant ##
+keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  tenant_name node["nova"]["service_tenant_name"]
+  user_name node["nova"]["service_user"]
+  role_name node["nova"]["service_role"]
+  action :grant_role
+end
+
+# Register EC2 Service
+keystone_register "Register EC2 Service" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  service_name "ec2"
+  service_type "ec2"
+  service_description "EC2 Compatibility Layer"
+  action :create_service
+end
+
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
   owner "root"
@@ -69,4 +122,23 @@ template "/etc/nova/api-paste.ini" do
     :admin_token => node["keystone"]["admin_token"]
   )
   notifies :restart, resources(:service => nova_api_ec2_service), :delayed
+end
+
+node["nova"]["ec2"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8773/services/Admin"
+node["nova"]["ec2"]["publicURL"] = http://#{node["nova"]["api_ipaddress"]}:8773/services/Cloud"
+node["nova"]["ec2"]["internalURL"] = node["nova"]["ec2"]["publicURL"]
+
+# Register EC2 Endpoint
+keystone_register "Register Compute Endpoint" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  service_type "ec2"
+  endpoint_region "RegionOne"
+  endpoint_adminurl node["nova"]["ec2"]["adminURL"]
+  endpoint_internalurl node["nova"]["ec2"]["internalURL"]
+  endpoint_publicurl node["nova"]["ec2"]["publicURL"]
+  action :create_endpoint
 end
