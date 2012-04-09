@@ -95,6 +95,17 @@ keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
   action :grant_role
 end
 
+keystone_register "Register Compute Service" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  service_name "nova"
+  service_type "compute"
+  service_description "Nova Compute Service"
+  action :create_service
+end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
@@ -110,4 +121,22 @@ template "/etc/nova/api-paste.ini" do
     :admin_token => node["keystone"]["admin_token"]
   )
   notifies :restart, resources(:service => nova_api_os_compute_service), :delayed
+end
+
+node["nova"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8774/v1.1/%(tenant_id)s"
+node["nova"]["internalURL"] = node["nova"]["adminURL"]
+node["nova"]["publicURL"] = node["nova"]["adminURL"]
+
+keystone_register "Register Compute Endpoint" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  service_type "compute"
+  endpoint_region "RegionOne"
+  endpoint_adminurl node["nova"]["adminURL"]
+  endpoint_internalurl node["nova"]["internalURL"]
+  endpoint_publicurl node["nova"]["publicURL"]
+  action :create_endpoint
 end
