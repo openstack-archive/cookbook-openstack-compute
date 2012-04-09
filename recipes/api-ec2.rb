@@ -95,6 +95,19 @@ keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
   action :grant_role
 end
 
+# Register EC2 Service
+keystone_register "Register EC2 Service" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  service_name "ec2"
+  service_type "ec2"
+  service_description "EC2 Compatibility Layer"
+  action :create_service
+end
+
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
   owner "root"
@@ -109,4 +122,22 @@ template "/etc/nova/api-paste.ini" do
     :admin_token => node["keystone"]["admin_token"]
   )
   notifies :restart, resources(:service => nova_api_ec2_service), :delayed
+end
+
+node["nova"]["ec2"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8773/services/Admin"
+node["nova"]["ec2"]["publicURL"] = http://#{node["nova"]["api_ipaddress"]}:8773/services/Cloud"
+node["nova"]["ec2"]["internalURL"] = node["nova"]["ec2"]["publicURL"]
+
+keystone_register "Register Compute Endpoint" do
+  auth_host node["keystone"]["api_ipaddress"]
+  auth_port node["keystone"]["admin_port"]
+  auth_protocol "http"
+  api_ver "/v2.0"
+  auth_token node["keystone"]["admin_token"]
+  service_type "ec2"
+  endpoint_region "RegionOne"
+  endpoint_adminurl node["nova"]["ec2"]["adminURL"]
+  endpoint_internalurl node["nova"]["ec2"]["internalURL"]
+  endpoint_publicurl node["nova"]["ec2"]["publicURL"]
+  action :create_endpoint
 end
