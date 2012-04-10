@@ -78,6 +78,9 @@ template "/root/.novarc" do
     :keystone_service_port => node["keystone"]["service_port"],
     :nova_api_version => '1.1',
     :keystone_region => 'RegionOne',
-    :auth_strategy => 'keystone'
+    :auth_strategy => 'keystone',
+    :ec2_url => 'http://#{node["nova"]["api_ipaddress"]}:8773/services/Cloud',
+    :ec2_access_key => node["credentials"]["ec2"]["admin"]["access"],
+    :ec2_secret_key => node["credentials"]["ec2"]["admin"]["secret"]
   )
 end
