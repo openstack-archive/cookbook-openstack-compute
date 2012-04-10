@@ -1,6 +1,8 @@
 default["mysql"]["root_pass"] = "secrete"
 
-default["credentials"] = ""
+# Adding these as blank 
+default["credentials"]["ec2"]["admin"]["access"] = ""
+default["credentials"]["ec2"]["admin"]["secret"] = ""
 
 default["nova"]["db"] = "nova"
 default["nova"]["db_user"] = "nova"
