@@ -15,6 +15,6 @@ export NOVA_VERSION=<%= @nova_api_version %>
 export NOVA_REGION_NAME=<%= @keystone_region %>
 
 # EUCA2OOLs ENV VARIABLES
-export EC2_ACCESS_KEY=${OS_AUTH_USER}
-export EC2_SECRET_KEY=${OS_AUTH_KEY}
-export EC2_URL=http://<%= @nova_api_ipaddress %>:8773/services/Cloud
+export EC2_ACCESS_KEY=<%= @ec2_access_key %>
+export EC2_SECRET_KEY=<%= @ec2_secret_key %>
+export EC2_URL=<%= @ec2_url %>
