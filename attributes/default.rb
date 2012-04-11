@@ -25,7 +25,7 @@ default["glance"]["db_user"] = "glance"
 default["glance"]["db_passwd"] = "glance"
 default["glance"]["api_port"] = "9292"
 default["glance"]["registry_port"] = "9191"
-default["glance"]["images"] = [ "tty", "natty" ]
+default["glance"]["images"] = [ "tty" ]
 
 default["volume"]["api_port"] = 8776
 default["volume"]["ipaddress"] = node["controller_ipaddress"]
