@@ -57,5 +57,11 @@ use_deprecated_auth=false
 allow_admin_api=true
 enable_zone_routing=true
 
+<% if node["platform"] == "fedora" -%>
+# Adding support for non-modded euca2ools to display ip address info
+# https://bugs.launchpad.net/nova/+bug/901594
+ec2_private_dns_show_ip=True
+<% end -%>
+
 # KEYSTONE
 keystone_ec2_url=http://<%= @keystone_api_ipaddress %>:5000/v2.0/ec2tokens
