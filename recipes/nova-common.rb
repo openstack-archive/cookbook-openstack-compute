@@ -43,7 +43,27 @@ directory "/etc/nova" do
     File.exists?("/etc/nova")
   end
 end
-  
+ 
+# Lookup mysql ip address
+mysql_server = search(:node, 'role:mysql-server')
+db_ip_address = mysql_server[0]['ipaddress'] 
+# Or
+# db_ipaddress = mysql_server[0]['mysql']['bind_address']
+
+# Lookup rabbit ip address
+rabbit = search(:node, 'role:rabbitmq-server')
+rabbit_ip_address = rabbit[0]['ipaddress']
+
+# Lookup keystone api ip address
+keystone = search(:node, 'role:keystone')
+keystone_api_ip = keystone[0]['api_ipaddress']
+keystone_service_port = keystone[0]['service_port']
+
+# Lookup glance api ip address
+glance = search(:node, 'role:glance-api')
+glance_api_ip = glance[0]['api_ipaddress']
+glance_api_port = glance[0]['api_port']
+
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
   owner "root"
@@ -54,11 +74,11 @@ template "/etc/nova/nova.conf" do
     :passwd => node["nova"]["db_passwd"],
     :ip_address => node["controller_ipaddress"],
     :db_name => node["nova"]["db"],
-    :db_ipaddress => node["nova"]["db_ipaddress"],
-    :rabbit_ipaddress => node["rabbit"]["rabbit_ipaddress"],
-    :keystone_api_ipaddress => node["keystone"]["api_ipaddress"],
-    :glance_api_ipaddress => node["glance"]["api_ipaddress"],
-    :api_port => node["glance"]["api_port"],
+    :db_ipaddress => db_ip_address,
+    :rabbit_ipaddress => rabbit_ip_address,
+    :keystone_api_ipaddress => keystone_api_ip,
+    :glance_api_ipaddress => glance_api_ip,
+    :api_port => glance_api_port,
     :ipv4_cidr => node["public"]["ipv4_cidr"],
     :virt_type => node["virt_type"]
   )
@@ -73,9 +93,9 @@ template "/root/.novarc" do
     :user => 'admin',
     :tenant => 'openstack',
     :password => 'secrete',
-    :keystone_api_ipaddress => node["keystone"]["api_ipaddress"],
+    :keystone_api_ipaddress => keystone_api_ip,
+    :keystone_service_port => keystone_service_port,
     :nova_api_ipaddress => node["nova"]["api_ipaddress"],
-    :keystone_service_port => node["keystone"]["service_port"],
     :nova_api_version => '1.1',
     :keystone_region => 'RegionOne',
     :auth_strategy => 'keystone',
