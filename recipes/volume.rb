@@ -34,13 +34,31 @@ service nova_volume_service do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  # Lookup keystone api ip address
+  keystone = search(:node, 'recipe:keystone\\:\\:server') || []
+  if keystone.length > 0
+    Chef::Log.info("Using Keystone attributes from SEARCH")
+    keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
+    keystone_admin_port = keystone[0]['keystone']['admin_port']
+    keystone_admin_token = keystone[0]['keystone']['admin_token']
+  else
+    Chef::Log.info("Using Keystone attributes from NODE")
+    keystone_api_ip = node['keystone']['api_ipaddress']
+    keystone_admin_port = node['keystone']['admin_port']
+    keystone_admin_token = node['keystone']['admin_token']
+  end
+end
+
 # Register Volume Service
 keystone_register "Register Volume Service" do
-  auth_host node["keystone"]["api_ipaddress"]
-  auth_port node["keystone"]["admin_port"]
+  auth_host keystone_api_ip
+  auth_port keystone_admin_port
   auth_protocol "http"
   api_ver "/v2.0"
-  auth_token node["keystone"]["admin_token"]
+  auth_token keystone_admin_token
   service_name "Volume Service"
   service_type "volume"
   service_description "Nova Volume Service"
@@ -53,11 +71,11 @@ node["volume"]["publicURL"] = node["volume"]["adminURL"]
 
 # Register Image Endpoint
 keystone_register "Register Volume Endpoint" do
-  auth_host node["keystone"]["api_ipaddress"]
-  auth_port node["keystone"]["admin_port"]
+  auth_host keystone_api_ip
+  auth_port keystone_admin_port
   auth_protocol "http"
   api_ver "/v2.0"
-  auth_token node["keystone"]["admin_token"]
+  auth_token keystone_admin_token
   service_type "volume"
   endpoint_region "RegionOne"
   endpoint_adminurl node["volume"]["adminURL"]
