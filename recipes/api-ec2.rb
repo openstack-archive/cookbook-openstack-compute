@@ -55,12 +55,16 @@ service nova_api_ec2_service do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-# Lookup keystone api ip address
-keystone = search(:node, 'role:keystone')
-keystone_api_ip = keystone[0]['api_ipaddress']
-keystone_service_port = keystone[0]['service_port']
-keystone_admin_port = keystone[0]['admin_port']
-keystone_admin_token = keystone[0]['admin_token']
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  # Lookup keystone api ip address
+  keystone = search(:node, 'role:keystone')
+  keystone_api_ip = keystone[0]['api_ipaddress']
+  keystone_service_port = keystone[0]['service_port']
+  keystone_admin_port = keystone[0]['admin_port']
+  keystone_admin_token = keystone[0]['admin_token']
+end
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
