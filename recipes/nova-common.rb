@@ -48,19 +48,17 @@ if Chef::Config[:solo]
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   # Lookup mysql ip address
-  mysql_server = search(:node, 'role:mysql-server') || []
+  mysql_server = search(:node, 'recipes:mysql\\:\\:server') || []
   if mysql_server.length > 0
-    db_ip_address = mysql_server[0]['ipaddress'] 
-    # Or
-    # db_ipaddress = mysql_server[0]['mysql']['bind_address']
+    Chef::Log.info("MySQL IP Address being pulled from search: [#{mysql_server[0]['bind_address']}]")
+    db_ipaddress = mysql_server[0]['mysql']['bind_address']
   else
-    db_ipaddress = node['mysql']['ipaddress']
-    # Or
-    # db_ipaddress = node['mysql']['bind_address']
+    Chef::Log.info("MySQL IP Address NOT being pulled from search: [#{node['mysql']['bind_address']}]")
+    db_ipaddress = node['mysql']['bind_address']
   end
 
   # Lookup rabbit ip address
-  rabbit = search(:node, 'role:rabbitmq-server') || []
+  rabbit = search(:node, 'recipes:rabbitmq\\:\\:default') || []
   if rabbit.length > 0
     rabbit_ip_address = rabbit[0]['ipaddress']
   else
@@ -68,7 +66,7 @@ else
   end
 
   # Lookup keystone api ip address
-  keystone = search(:node, 'role:keystone') || []
+  keystone = search(:node, 'recipes:keystone\\:\\:server') || []
   if keystone.length > 0
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_service_port = keystone[0]['keystone']['service_port']
@@ -78,7 +76,7 @@ else
   end
 
   # Lookup glance api ip address
-  glance = search(:node, 'role:glance-api') || []
+  glance = search(:node, 'recipes:glance\\:\\:api') || []
   if glance.length > 0
     glance_api_ip = glance[0]['glance']['api_ipaddress']
     glance_api_port = glance[0]['glance']['api_port']
