@@ -51,10 +51,10 @@ else
   mysql_server = search(:node, 'recipes:mysql\:\:server') || []
   if mysql_server.length > 0
     Chef::Log.info("MySQL IP Address being pulled from search: [#{mysql_server[0]['bind_address']}]")
-    db_ipaddress = mysql_server[0]['mysql']['bind_address']
+    db_ip_address = mysql_server[0]['mysql']['bind_address']
   else
     Chef::Log.info("MySQL IP Address NOT being pulled from search: [#{node['mysql']['bind_address']}]")
-    db_ipaddress = node['mysql']['bind_address']
+    db_ip_address = node['mysql']['bind_address']
   end
 
   # Lookup rabbit ip address
