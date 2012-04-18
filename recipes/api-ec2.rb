@@ -59,11 +59,18 @@ if Chef::Config[:solo]
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   # Lookup keystone api ip address
-  keystone = search(:node, 'role:keystone')
-  keystone_api_ip = keystone['api_ipaddress']
-  keystone_service_port = keystone['service_port']
-  keystone_admin_port = keystone['admin_port']
-  keystone_admin_token = keystone['admin_token']
+  keystone = search(:node, 'role:keystone') || []
+  if keystone.length > 0
+    keystone_api_ip = keystone[0]['api_ipaddress']
+    keystone_service_port = keystone[0]['service_port']
+    keystone_admin_port = keystone[0]['admin_port']
+    keystone_admin_token = keystone[0]['admin_token']
+  else
+    keystone_api_ip = node['api_ipaddress']
+    keystone_service_port = node['service_port']
+    keystone_admin_port = node['admin_port']
+    keystone_admin_token = node['admin_token']
+  end
 end
 
 # Register Service Tenant
