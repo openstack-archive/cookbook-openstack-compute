@@ -61,15 +61,17 @@ else
   # Lookup keystone api ip address
   keystone = search(:node, 'role:keystone') || []
   if keystone.length > 0
-    keystone_api_ip = keystone[0]['api_ipaddress']
-    keystone_service_port = keystone[0]['service_port']
-    keystone_admin_port = keystone[0]['admin_port']
-    keystone_admin_token = keystone[0]['admin_token']
+    Chef::Log.info("Using Keystone attributes from SEARCH")
+    keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
+    keystone_service_port = keystone[0]['keystone']['service_port']
+    keystone_admin_port = keystone[0]['keystone']['admin_port']
+    keystone_admin_token = keystone[0]['keystone']['admin_token']
   else
-    keystone_api_ip = node['api_ipaddress']
-    keystone_service_port = node['service_port']
-    keystone_admin_port = node['admin_port']
-    keystone_admin_token = node['admin_token']
+    Chef::Log.info("Using Keystone attributes from NODE")
+    keystone_api_ip = node['keystone']['api_ipaddress']
+    keystone_service_port = node['keystone']['service_port']
+    keystone_admin_port = node['keystone']['admin_port']
+    keystone_admin_token = node['keystone']['admin_token']
   end
 end
 

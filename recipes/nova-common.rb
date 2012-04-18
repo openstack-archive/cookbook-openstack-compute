@@ -70,21 +70,21 @@ else
   # Lookup keystone api ip address
   keystone = search(:node, 'role:keystone') || []
   if keystone.length > 0
-    keystone_api_ip = keystone[0]['api_ipaddress']
-    keystone_service_port = keystone[0]['service_port']
+    keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
+    keystone_service_port = keystone[0]['keystone']['service_port']
   else
-    keystone_api_ip = node['api_ipaddress']
-    keystone_service_port = node['service_port']
+    keystone_api_ip = node['keystone']['api_ipaddress']
+    keystone_service_port = node['keystone']['service_port']
   end
 
   # Lookup glance api ip address
   glance = search(:node, 'role:glance-api') || []
   if glance.length > 0
-    glance_api_ip = glance[0]['api_ipaddress']
-    glance_api_port = glance[0]['api_port']
+    glance_api_ip = glance[0]['glance']['api_ipaddress']
+    glance_api_port = glance[0]['glance']['api_port']
   else
-    glance_api_ip = node['api_ipaddress']
-    glance_api_port = node['api_port']
+    glance_api_ip = node['glance']['api_ipaddress']
+    glance_api_port = node['glance']['api_port']
   end
 end
 
