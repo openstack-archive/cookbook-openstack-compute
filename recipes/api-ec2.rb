@@ -60,10 +60,10 @@ if Chef::Config[:solo]
 else
   # Lookup keystone api ip address
   keystone = search(:node, 'role:keystone')
-  keystone_api_ip = keystone[0]['api_ipaddress']
-  keystone_service_port = keystone[0]['service_port']
-  keystone_admin_port = keystone[0]['admin_port']
-  keystone_admin_token = keystone[0]['admin_token']
+  keystone_api_ip = keystone['api_ipaddress']
+  keystone_service_port = keystone['service_port']
+  keystone_admin_port = keystone['admin_port']
+  keystone_admin_token = keystone['admin_token']
 end
 
 # Register Service Tenant

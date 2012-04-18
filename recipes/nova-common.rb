@@ -49,23 +49,23 @@ if Chef::Config[:solo]
 else
   # Lookup mysql ip address
   mysql_server = search(:node, 'role:mysql-server')
-  db_ip_address = mysql_server[0]['ipaddress'] 
+  db_ip_address = mysql_server['ipaddress'] 
   # Or
-  # db_ipaddress = mysql_server[0]['mysql']['bind_address']
+  # db_ipaddress = mysql_server['mysql']['bind_address']
 
   # Lookup rabbit ip address
   rabbit = search(:node, 'role:rabbitmq-server')
-  rabbit_ip_address = rabbit[0]['ipaddress']
+  rabbit_ip_address = rabbit['ipaddress']
 
   # Lookup keystone api ip address
   keystone = search(:node, 'role:keystone')
-  keystone_api_ip = keystone[0]['api_ipaddress']
-  keystone_service_port = keystone[0]['service_port']
+  keystone_api_ip = keystone['api_ipaddress']
+  keystone_service_port = keystone['service_port']
 
   # Lookup glance api ip address
   glance = search(:node, 'role:glance-api')
-  glance_api_ip = glance[0]['api_ipaddress']
-  glance_api_port = glance[0]['api_port']
+  glance_api_ip = glance['api_ipaddress']
+  glance_api_port = glance['api_port']
 end
 
 template "/etc/nova/nova.conf" do
