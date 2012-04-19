@@ -68,7 +68,8 @@ else
   # Lookup keystone api ip address
   keystone = search(:node, "role:keystone and chef_environment:#{node.chef_environment}")
   Chef::Log.info("keystone search length: #{keystone.length}")
-  if keystone.length > 0
+  Chef::Log.info("keystone search length[0]: #{keystone[0].length}")
+  if keystone[0].length > 0
     Chef::Log.info("keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_service_port = keystone[0]['keystone']['service_port']
@@ -80,7 +81,7 @@ else
 
   # Lookup glance api ip address
   glance = search(:node, "role:glance-api and chef_environment:#{node.chef_environment}")
-  if glance.length > 0
+  if glance[0].length > 0
     Chef::Log.info("glance: using search")
     glance_api_ip = glance[0]['glance']['api_ipaddress']
     glance_api_port = glance[0]['glance']['api_port']
