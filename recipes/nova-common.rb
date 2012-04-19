@@ -49,7 +49,7 @@ if Chef::Config[:solo]
 else
   # Lookup mysql ip address
   mysql_server = search(:node, "role:mysql-master AND chef_environment:#{node.chef_environment}")
-  if mysql_server.length > 0
+  if mysql_server[0].length > 0
     Chef::Log.info("mysql: using search")
     db_ip_address = mysql_server[0]['mysql']['bind_address']
   else
@@ -59,7 +59,7 @@ else
 
   # Lookup rabbit ip address
   rabbit = search(:node, "role:rabbitmq-server and chef_environment:#{node.chef_environment}")
-  if rabbit.length > 0
+  if rabbit[0].length > 0
     rabbit_ip_address = rabbit[0]['ipaddress']
   else
     rabbit_ip_address = node['ipaddress']
