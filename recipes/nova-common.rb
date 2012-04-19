@@ -67,6 +67,7 @@ else
 
   # Lookup keystone api ip address
   keystone = search(:node, "role:keystone and chef_environment:#{node.chef_environment}")
+  Chef::Log.info("keystone search length: #{keystone.length}")
   if keystone.length > 0
     Chef::Log.info("keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
