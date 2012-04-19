@@ -48,7 +48,7 @@ if Chef::Config[:solo]
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   # Lookup mysql ip address
-  mysql_server = search(:node, 'recipes:mysql\:\:server and chef_environment:#{node.chef_environment}') || []
+  mysql_server = search(:node, "recipes:mysql\:\:server and chef_environment:#{node.chef_environment}") || []
   if mysql_server.length > 0
     Chef::Log.info("MySQL IP Address being pulled from search: [#{mysql_server[0]['bind_address']}]")
     db_ipaddress = mysql_server[0]['mysql']['bind_address']
