@@ -48,18 +48,17 @@ if Chef::Config[:solo]
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   # Lookup mysql ip address
-  Chef::Log.info("search for recipes:mysql\:\:server in chef_environment:#{node.chef_environment}")
-  mysql_server = search(:node, "chef_environment:#{node.chef_environment} AND roles:mysql-master") || []
+  mysql_server = search(:node, "role:mysql-master AND chef_environment:#{node.chef_environment}")
   if mysql_server.length > 0
-    Chef::Log.info("MySQL IP Address being pulled from search: [#{mysql_server[0]['bind_address']}]")
+    Chef::Log.info("mysql: using search")
     db_ip_address = mysql_server[0]['mysql']['bind_address']
   else
-    Chef::Log.info("MySQL IP Address NOT being pulled from search: [#{node['mysql']['bind_address']}]")
+    Chef::Log.info("mysql: NOT using search")
     db_ip_address = node['mysql']['bind_address']
   end
 
   # Lookup rabbit ip address
-  rabbit = search(:node, "roles:rabbitmq-server and chef_environment:#{node.chef_environment}") || []
+  rabbit = search(:node, "role:rabbitmq-server and chef_environment:#{node.chef_environment}")
   if rabbit.length > 0
     rabbit_ip_address = rabbit[0]['ipaddress']
   else
@@ -67,21 +66,25 @@ else
   end
 
   # Lookup keystone api ip address
-  keystone = search(:node, "roles:keystone and chef_environment:#{node.chef_environment}") || []
+  keystone = search(:node, "role:keystone and chef_environment:#{node.chef_environment}")
   if keystone.length > 0
+    Chef::Log.info("keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_service_port = keystone[0]['keystone']['service_port']
   else
+    Chef::Log.info("keystone: NOT using search")
     keystone_api_ip = node['keystone']['api_ipaddress']
     keystone_service_port = node['keystone']['service_port']
   end
 
   # Lookup glance api ip address
-  glance = search(:node, "roles:glance-api and chef_environment:#{node.chef_environment}") || []
+  glance = search(:node, "role:glance-api and chef_environment:#{node.chef_environment}")
   if glance.length > 0
+    Chef::Log.info("glance: using search")
     glance_api_ip = glance[0]['glance']['api_ipaddress']
     glance_api_port = glance[0]['glance']['api_port']
   else
+    Chef::Log.info("glance: NOT using search")
     glance_api_ip = node['glance']['api_ipaddress']
     glance_api_port = node['glance']['api_port']
   end
