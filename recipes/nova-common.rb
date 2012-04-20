@@ -48,8 +48,8 @@ if Chef::Config[:solo]
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   # Lookup mysql ip address
-  mysql_server = search(:node, "recipe:mysql\\:\\:server AND chef_environment:#{node.chef_environment}")
-  if mysql_server.length > 0
+  mysql_server, something, result_count = Chef::Search::Query.new.search(:node, "roles:mysql-master AND chef_environment:#{node.chef_environment}")
+  if result_count > 0
     Chef::Log.info("mysql: using search")
     db_ip_address = mysql_server[0]['mysql']['bind_address']
   else
@@ -58,17 +58,18 @@ else
   end
 
   # Lookup rabbit ip address
-  rabbit = search(:node, "recipe:rabbitmq\\:\\:default and chef_environment:#{node.chef_environment}")
-  if rabbit.length > 0
+  rabbit, something, result_count = Chef::Search::Query.new.search(:node, "roles:rabbitmq-server AND chef_environment:#{node.chef_environment}")
+  if result_count > 0
+    Chef::Log.info("rabbitmq: using search")
     rabbit_ip_address = rabbit[0]['ipaddress']
   else
+    Chef::Log.info("rabbitmq: NOT using search")
     rabbit_ip_address = node['ipaddress']
   end
 
   # Lookup keystone api ip address
-  keystone = search(:node, "recipe:keystone\\:\\:server and chef_environment:#{node.chef_environment}")
-  Chef::Log.info("keystone search length: #{keystone.length}")
-  if keystone.length > 0
+  keystone, something, result_count = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
+  if result_count > 0
     Chef::Log.info("keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_service_port = keystone[0]['keystone']['service_port']
@@ -79,8 +80,8 @@ else
   end
 
   # Lookup glance api ip address
-  glance = search(:node, "reipe:glance\\:\\:api and chef_environment:#{node.chef_environment}")
-  if glance.length > 0
+  glance, something, result_count = Chef::Search::Query.new.search(:node, "roles:glance-api AND chef_environment:#{node.chef_environment}")
+  if result_count > 0
     Chef::Log.info("glance: using search")
     glance_api_ip = glance[0]['glance']['api_ipaddress']
     glance_api_port = glance[0]['glance']['api_port']
