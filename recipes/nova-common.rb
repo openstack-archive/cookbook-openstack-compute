@@ -48,7 +48,7 @@ if Chef::Config[:solo]
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   # Lookup mysql ip address
-  mysql_server, something, result_count = Chef::Search::Query.new.search(:node, "role:mysql-master AND chef_environment:#{node.chef_environment}")
+  mysql_server, something, result_count = Chef::Search::Query.new.search(:node, "roles:mysql-master AND chef_environment:#{node.chef_environment}")
   if result_count > 0
     Chef::Log.info("mysql: using search")
     db_ip_address = mysql_server[0]['mysql']['bind_address']
@@ -58,7 +58,7 @@ else
   end
 
   # Lookup rabbit ip address
-  rabbit, something, result_count = Chef::Search::Query.new.search(:node, "role:rabbitmq-server AND chef_environment:#{node.chef_environment}")
+  rabbit, something, result_count = Chef::Search::Query.new.search(:node, "roles:rabbitmq-server AND chef_environment:#{node.chef_environment}")
   if result_count > 0
     Chef::Log.info("rabbitmq: using search")
     rabbit_ip_address = rabbit[0]['ipaddress']
@@ -68,7 +68,7 @@ else
   end
 
   # Lookup keystone api ip address
-  keystone, something, result_count = Chef::Search::Query.new.search(:node, "role:keystone AND chef_environment:#{node.chef_environment}")
+  keystone, something, result_count = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
   if result_count > 0
     Chef::Log.info("keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
@@ -80,7 +80,7 @@ else
   end
 
   # Lookup glance api ip address
-  glance, something, result_count = Chef::Search::Query.new.search(:node, "role:glance-api AND chef_environment:#{node.chef_environment}")
+  glance, something, result_count = Chef::Search::Query.new.search(:node, "roles:glance-api AND chef_environment:#{node.chef_environment}")
   if result_count > 0
     Chef::Log.info("glance: using search")
     glance_api_ip = glance[0]['glance']['api_ipaddress']
