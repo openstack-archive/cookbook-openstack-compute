@@ -104,64 +104,64 @@ volume
 Attributes 
 ==========
 
-`nova["db"]` - name of nova database  
-`nova["db_user"]` - username for nova database access  
-`nova["db_passwd"]` - password for nova database access  
-`nova["db_ipaddress"]` - ip address for nova api to bind to
+* `nova["db"]` - name of nova database  
+* `nova["db_user"]` - username for nova database access  
+* `nova["db_passwd"]` - password for nova database access  
+* `nova["db_ipaddress"]` - ip address for nova api to bind to
 
-`nova["service_tenant_name"]` - tenant name used by nova when interacting with keystone  
-`nova["service_user"]` - user name used by nova when interacting with keystone  
-`nova["service_pass"]` - user password used by nova when interacting with keystone  
-`nova["service_role"]` - user role used by nova when interacting with keystone  
+* `nova["service_tenant_name"]` - tenant name used by nova when interacting with keystone  
+* `nova["service_user"]` - user name used by nova when interacting with keystone  
+* `nova["service_pass"]` - user password used by nova when interacting with keystone  
+* `nova["service_role"]` - user role used by nova when interacting with keystone  
 
-`nova["compute"]["adminURL"]` - defines the url used to access the OS API for admin functions  
-`nova["compute"]["internalURL"]` - defines the url used to access the OS API for user functions from an internal network 
-`nova["compute"]["publicURL"]` - defines the url used to access the OS API for user functions from an external network  
-`nova["ec2"]["adminURL"]` - defines the url used to access the AWS EC2 compatible API for admin functions  
-`nova["ec2"]["internalURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an internal network  
-`nova["ec2"]["publicURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an external network  
+* `nova["compute"]["adminURL"]` - defines the url used to access the OS API for admin functions  
+* `nova["compute"]["internalURL"]` - defines the url used to access the OS API for user functions from an internal network 
+* `nova["compute"]["publicURL"]` - defines the url used to access the OS API for user functions from an external network  
+* `nova["ec2"]["adminURL"]` - defines the url used to access the AWS EC2 compatible API for admin functions  
+* `nova["ec2"]["internalURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an internal network  
+* `nova["ec2"]["publicURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an external network  
 
-`volume["api_port"]` - port on which nova volumes api runs  
-`volume["ipaddress"]` - ip address where nova volumes api runs  
-`volume["adminURL"]` - the url used to access the nova volumes API for admin functions  
-`volume["internalURL"]` - the url used to access the nova volumes API for user functions from an internal network  
-`volume["publicURL"]` - the url used to access the nova volumes API for user functions from an external network  
+* `volume["api_port"]` - port on which nova volumes api runs  
+* `volume["ipaddress"]` - ip address where nova volumes api runs  
+* `volume["adminURL"]` - the url used to access the nova volumes API for admin functions  
+* `volume["internalURL"]` - the url used to access the nova volumes API for user functions from an internal network  
+* `volume["publicURL"]` - the url used to access the nova volumes API for user functions from an external network  
 
-`public["label"]` - network label to be assigned to the public network on creation  
-`public["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.100.0/24)  
-`public["num_networks"]` - number of networks to be created  
-`public["network_size"]` - number of IP addresses to be used in this network  
-`public["bridge"]` - bridge to be created for accessing the vm network (eg br100)  
-`public["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth2)  
-`public["dns1"]` - dns server 1  
-`public["dns2"]` - dns server 2  
+* `public["label"]` - network label to be assigned to the public network on creation  
+* `public["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.100.0/24)  
+* `public["num_networks"]` - number of networks to be created  
+* `public["network_size"]` - number of IP addresses to be used in this network  
+* `public["bridge"]` - bridge to be created for accessing the vm network (eg br100)  
+* `public["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth2)  
+* `public["dns1"]` - dns server 1  
+* `public["dns2"]` - dns server 2  
 
-`private["label"]` - network label to be assigned to the private network on creation  
-`private["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.200.0/24)  
-`private["num_networks"]` - number of networks to be created  
-`private["network_size"]` - number of IP addresses to be used in this network  
-`private["bridge"]` - bridge to be created for accessing the vm network (eg br200)  
-`private["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth3)  
+* `private["label"]` - network label to be assigned to the private network on creation  
+* `private["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.200.0/24)  
+* `private["num_networks"]` - number of networks to be created  
+* `private["network_size"]` - number of IP addresses to be used in this network  
+* `private["bridge"]` - bridge to be created for accessing the vm network (eg br200)  
+* `private["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth3)  
 
-`virt_type` - what hypervisor software layer to use with libvirt (eg kvm, qemu)  
+* `virt_type` - what hypervisor software layer to use with libvirt (eg kvm, qemu)  
 
-`libvirt["auth_tcp"]` - the type of authentication your libvirt layer requires  
-`libvirt["ssh"]["private_key"]` - private key to use if using ssh authentication to your libvirt layer  
-`libvirt["ssh"]["public_key"]` - public key to use if using ssh authentication to your libvirt layer  
+* `libvirt["auth_tcp"]` - the type of authentication your libvirt layer requires  
+* `libvirt["ssh"]["private_key"]` - private key to use if using ssh authentication to your libvirt layer  
+* `libvirt["ssh"]["public_key"]` - public key to use if using ssh authentication to your libvirt layer  
 
 Templates
 =====
-`api-paste.ini.erb` - paste config for nova api middleware  
-`libvirt-bin.erb` - initscript for starting libvirtd  
-`libvirtd-ssh-config` - config file for libvirt ssh auth  
-`libvirtd-ssh-private-key.erb` - private ssh key for libvirt ssh    
-`libvirtd-ssh-public-key.erb` - public ssh key for libvirt ssh auth  
-`libvirtd.conf.erb` - libvirt config file  
-`local_settings.py.erb` - dashboard (horizon) config file  
-`mysql-server.seed.erb` - debian preseed file for configuring mysql  
-`nova-mysql.cnf.erb` - mysql config file  
-`nova.conf.erb` - basic nova.conf file  
-`novarc.erb` - contains environment variable settings to enable easy use of the nova client
+* `api-paste.ini.erb` - paste config for nova api middleware  
+* `libvirt-bin.erb` - initscript for starting libvirtd  
+* `libvirtd-ssh-config` - config file for libvirt ssh auth  
+* `libvirtd-ssh-private-key.erb` - private ssh key for libvirt ssh    
+* `libvirtd-ssh-public-key.erb` - public ssh key for libvirt ssh auth  
+* `libvirtd.conf.erb` - libvirt config file  
+* `local_settings.py.erb` - dashboard (horizon) config file  
+* `mysql-server.seed.erb` - debian preseed file for configuring mysql  
+* `nova-mysql.cnf.erb` - mysql config file  
+* `nova.conf.erb` - basic nova.conf file  
+* `novarc.erb` - contains environment variable settings to enable easy use of the nova client
 
 
 License and Author
