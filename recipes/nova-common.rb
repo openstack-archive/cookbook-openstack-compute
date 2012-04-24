@@ -119,7 +119,7 @@ template "/root/.novarc" do
   mode "0600"
   variables(
     :user => 'admin',
-    :tenant => 'openstack',
+    :tenant => 'admin',
     :password => 'secrete',
     :keystone_api_ipaddress => keystone_api_ip,
     :keystone_service_port => keystone_service_port,
