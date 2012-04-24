@@ -54,6 +54,26 @@ service nova_api_os_volume_service do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  # Lookup keystone api ip address
+  keystone, something, arbitrary_value = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
+  if keystone.length > 0
+    Chef::Log.info("api-os-volume/keystone: using search")
+    keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
+    keystone_service_port = keystone[0]['keystone']['service_port']
+    keystone_admin_port = keystone[0]['keystone']['admin_port']
+    keystone_admin_token = keystone[0]['keystone']['admin_token']
+  else
+    Chef::Log.info("api-os-volume/keystone: NOT using search")
+    keystone_api_ip = node['keystone']['api_ipaddress']
+    keystone_service_port = node['keystone']['service_port']
+    keystone_admin_port = node['keystone']['admin_port']
+    keystone_admin_token = node['keystone']['admin_token']
+  end
+end
+
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
   owner "root"
@@ -62,10 +82,10 @@ template "/etc/nova/api-paste.ini" do
   variables(
     :ip_address => node["controller_ipaddress"],
     :component  => node["package_component"],
-    :service_port => node["keystone"]["service_port"],
-    :keystone_api_ipaddress => node["keystone"]["api_ipaddress"],
-    :admin_port => node["keystone"]["admin_port"],
-    :admin_token => node["keystone"]["admin_token"]
+    :service_port => keystone_service_port,
+    :keystone_api_ipaddress => keystone_api_ip,
+    :admin_port => keystone_admin_port,
+    :admin_token => keystone_admin_token
   )
   notifies :restart, resources(:service => nova_api_os_volume_service), :delayed
 end
