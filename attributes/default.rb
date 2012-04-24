@@ -5,10 +5,10 @@ default["nova"]["db_user"] = "nova"
 default["nova"]["db_passwd"] = "nova"
 default["nova"]["db_ipaddress"] = node["controller_ipaddress"]
 
-default['nova']['service_tenant_name'] = "service"
-default['nova']['service_user'] = "nova"
-default['nova']['service_pass'] = "zCSupi4M"
-default['nova']['service_role'] = "admin"
+default["nova"]["service_tenant_name"] = "service"
+default["nova"]["service_user"] = "nova"
+default["nova"]["service_pass"] = "zCSupi4M"
+default["nova"]["service_role"] = "admin"
 
 default["rabbit"]["ipaddress"] = node["controller_ipaddress"]
 
