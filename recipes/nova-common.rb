@@ -50,31 +50,31 @@ else
   # Lookup mysql ip address
   mysql_server, something, arbitary_value = Chef::Search::Query.new.search(:node, "roles:mysql-master AND chef_environment:#{node.chef_environment}")
   if mysql_server.length > 0
-    Chef::Log.info("mysql: using search")
+    Chef::Log.info("nova-common/mysql: using search")
     db_ip_address = mysql_server[0]['mysql']['bind_address']
   else
-    Chef::Log.info("mysql: NOT using search")
+    Chef::Log.info("nova-common/mysql: NOT using search")
     db_ip_address = node['mysql']['bind_address']
   end
 
   # Lookup rabbit ip address
   rabbit, something, arbitary_value = Chef::Search::Query.new.search(:node, "roles:rabbitmq-server AND chef_environment:#{node.chef_environment}")
   if rabbit.length > 0
-    Chef::Log.info("rabbitmq: using search")
+    Chef::Log.info("nova-common/rabbitmq: using search")
     rabbit_ip_address = rabbit[0]['ipaddress']
   else
-    Chef::Log.info("rabbitmq: NOT using search")
+    Chef::Log.info("nova-common/rabbitmq: NOT using search")
     rabbit_ip_address = node['ipaddress']
   end
 
   # Lookup keystone api ip address
   keystone, start, arbitary_value = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
   if keystone.length > 0
-    Chef::Log.info("keystone: using search")
+    Chef::Log.info("nova-common/keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_service_port = keystone[0]['keystone']['service_port']
   else
-    Chef::Log.info("keystone: NOT using search")
+    Chef::Log.info("nova-common/keystone: NOT using search")
     keystone_api_ip = node['keystone']['api_ipaddress']
     keystone_service_port = node['keystone']['service_port']
   end
@@ -82,11 +82,11 @@ else
   # Lookup glance api ip address
   glance, something, arbitary_value = Chef::Search::Query.new.search(:node, "roles:glance-api AND chef_environment:#{node.chef_environment}")
   if glance.length > 0
-    Chef::Log.info("glance: using search")
+    Chef::Log.info("nova-common/glance: using search")
     glance_api_ip = glance[0]['glance']['api_ipaddress']
     glance_api_port = glance[0]['glance']['api_port']
   else
-    Chef::Log.info("glance: NOT using search")
+    Chef::Log.info("nova-common/glance: NOT using search")
     glance_api_ip = node['glance']['api_ipaddress']
     glance_api_port = node['glance']['api_port']
   end
