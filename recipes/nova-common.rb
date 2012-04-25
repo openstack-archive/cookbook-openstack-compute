@@ -98,11 +98,11 @@ template "/etc/nova/nova.conf" do
   group "root"
   mode "0644"
   variables(
-    :user => node["nova"]["db_user"],
-    :passwd => node["nova"]["db_passwd"],
-    :ip_address => node["controller_ipaddress"],
-    :db_name => node["nova"]["db"],
     :db_ipaddress => db_ip_address,
+    :user => node["nova"]["db"]["username"],
+    :passwd => node["nova"]["db"]["password"],
+    :db_name => node["nova"]["db"]["name"],
+    :ip_address => node["controller_ipaddress"],
     :rabbit_ipaddress => rabbit_ip_address,
     :keystone_api_ipaddress => keystone_api_ip,
     :glance_api_ipaddress => glance_api_ip,

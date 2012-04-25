@@ -1,7 +1,6 @@
-default["nova"]["db"] = "nova"
-default["nova"]["db_user"] = "nova"
-default["nova"]["db_passwd"] = "nova"
-default["nova"]["db_ipaddress"] = node["controller_ipaddress"]
+default["nova"]["db"]["name"] = "nova"
+default["nova"]["db"]["username"] = "nova"
+default["nova"]["db"]["password"] = "nova"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"

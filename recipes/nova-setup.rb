@@ -39,20 +39,20 @@ end
 connection_info = {:host => db_ip_address, :username => "root", :password => db_root_password}
 mysql_database "create nova database" do
   connection connection_info
-  database_name node["nova"]["db"]
+  database_name node["nova"]["db"]["name"]
   action :create
 end
 
-mysql_database_user node["nova"]["db_user"] do
+mysql_database_user node["nova"]["db"]["username"] do
   connection connection_info
-  password node["nova"]["db_passwd"]
+  password node["nova"]["db"]["password"]
   action :create
 end
 
-mysql_database_user node["nova"]["db_user"] do
+mysql_database_user node["nova"]["db"]["username"] do
   connection connection_info
-  password node["nova"]["db_passwd"]
-  database_name node["nova"]["db"]
+  password node["nova"]["db"]["password"]
+  database_name node["nova"]["db"]["name"]
   host '%'
   privileges ["all"]
   action :grant
