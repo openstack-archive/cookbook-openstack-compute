@@ -7,8 +7,6 @@ default["nova"]["service_user"] = "nova"
 default["nova"]["service_pass"] = "zCSupi4M"
 default["nova"]["service_role"] = "admin"
 
-# default["rabbit"]["ipaddress"] = node["controller_ipaddress"]
-
 default["nova"]["compute"]["adminURL"] = ""
 default["nova"]["compute"]["internalURL"] = ""
 default["nova"]["compute"]["publicURL"] = ""
