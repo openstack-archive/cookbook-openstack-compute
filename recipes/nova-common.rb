@@ -92,6 +92,7 @@ else
   end
 end
 
+# TODO: need to re-evaluate this for accuracy
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
   owner "root"
@@ -112,6 +113,7 @@ template "/etc/nova/nova.conf" do
   )
 end
 
+# TODO: need to re-evaluate this for accuracy
 template "/root/.novarc" do
   source "novarc.erb"
   owner "root"
