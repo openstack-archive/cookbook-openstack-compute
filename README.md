@@ -104,10 +104,9 @@ volume
 Attributes 
 ==========
 
-* `nova["db"]` - name of nova database  
-* `nova["db_user"]` - username for nova database access  
-* `nova["db_passwd"]` - password for nova database access  
-* `nova["db_ipaddress"]` - ip address for nova api to bind to
+* `nova["db"]["name"]` - name of nova database  
+* `nova["db"]["username"]` - username for nova database access  
+* `nova["db"]["password"]` - password for nova database access  
 
 * `nova["service_tenant_name"]` - tenant name used by nova when interacting with keystone  
 * `nova["service_user"]` - user name used by nova when interacting with keystone  
@@ -158,8 +157,6 @@ Templates
 * `libvirtd-ssh-public-key.erb` - public ssh key for libvirt ssh auth  
 * `libvirtd.conf.erb` - libvirt config file  
 * `local_settings.py.erb` - dashboard (horizon) config file  
-* `mysql-server.seed.erb` - debian preseed file for configuring mysql  
-* `nova-mysql.cnf.erb` - mysql config file  
 * `nova.conf.erb` - basic nova.conf file  
 * `novarc.erb` - contains environment variable settings to enable easy use of the nova client
 

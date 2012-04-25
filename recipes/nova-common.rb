@@ -83,26 +83,27 @@ else
   glance, something, arbitary_value = Chef::Search::Query.new.search(:node, "roles:glance-api AND chef_environment:#{node.chef_environment}")
   if glance.length > 0
     Chef::Log.info("nova-common/glance: using search")
-    glance_api_ip = glance[0]['glance']['api_ipaddress']
-    glance_api_port = glance[0]['glance']['api_port']
+    glance_api_ip = glance[0]['glance']['api']['ip_address']
+    glance_api_port = glance[0]['glance']['api']['port']
   else
     Chef::Log.info("nova-common/glance: NOT using search")
-    glance_api_ip = node['glance']['api_ipaddress']
-    glance_api_port = node['glance']['api_port']
+    glance_api_ip = node['glance']['api']['ip_address']
+    glance_api_port = node['glance']['api']['port']
   end
 end
 
+# TODO: need to re-evaluate this for accuracy
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
   owner "root"
   group "root"
   mode "0644"
   variables(
-    :user => node["nova"]["db_user"],
-    :passwd => node["nova"]["db_passwd"],
-    :ip_address => node["controller_ipaddress"],
-    :db_name => node["nova"]["db"],
     :db_ipaddress => db_ip_address,
+    :user => node["nova"]["db"]["username"],
+    :passwd => node["nova"]["db"]["password"],
+    :db_name => node["nova"]["db"]["name"],
+    :ip_address => node["controller_ipaddress"],
     :rabbit_ipaddress => rabbit_ip_address,
     :keystone_api_ipaddress => keystone_api_ip,
     :glance_api_ipaddress => glance_api_ip,
@@ -112,6 +113,7 @@ template "/etc/nova/nova.conf" do
   )
 end
 
+# TODO: need to re-evaluate this for accuracy
 template "/root/.novarc" do
   source "novarc.erb"
   owner "root"
