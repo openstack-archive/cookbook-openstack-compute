@@ -83,11 +83,11 @@ else
   glance, something, arbitary_value = Chef::Search::Query.new.search(:node, "roles:glance-api AND chef_environment:#{node.chef_environment}")
   if glance.length > 0
     Chef::Log.info("nova-common/glance: using search")
-    glance_api_ip = glance[0]['glance']['api']['ipaddress']
+    glance_api_ip = glance[0]['glance']['api']['ip_address']
     glance_api_port = glance[0]['glance']['api']['port']
   else
     Chef::Log.info("nova-common/glance: NOT using search")
-    glance_api_ip = node['glance']['api']['ipaddress']
+    glance_api_ip = node['glance']['api']['ip_address']
     glance_api_port = node['glance']['api']['port']
   end
 end
