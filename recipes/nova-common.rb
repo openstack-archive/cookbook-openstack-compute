@@ -108,7 +108,6 @@ template "/etc/nova/nova.conf" do
     :keystone_api_ipaddress => keystone_api_ip,
     :glance_api_ipaddress => glance_api_ip,
     :api_port => glance_api_port,
-    :ipv4_cidr => node["nova"]["network"]["public"]["ipv4_cidr"],
     :virt_type => node["nova"]["libvirt"]["virt_type"]
   )
 end
