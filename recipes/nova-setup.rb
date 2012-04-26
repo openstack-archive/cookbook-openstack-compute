@@ -64,18 +64,13 @@ execute "nova-manage db sync" do
   not_if "nova-manage db version && test $(nova-manage db version) -gt 0"
 end
 
-execute "nova-manage network create --label=public" do
-  command "nova-manage network create --multi_host='T' --label=#{node["nova"]["network"]["public"]["label"]} --fixed_range_v4=#{node["nova"]["network"]["public"]["ipv4_cidr"]} --num_networks=#{node["nova"]["network"]["public"]["num_networks"]} --network_size=#{node["nova"]["network"]["public"]["network_size"]} --bridge=#{node["nova"]["network"]["public"]["bridge"]} --bridge_interface=#{node["nova"]["network"]["public"]["bridge_dev"]} --dns1=#{node["nova"]["network"]["public"]["dns1"]} --dns2=#{node["nova"]["network"]["public"]["dns2"]}"
-  action :run
-  not_if "nova-manage network list | grep #{node["nova"]["network"]["public"]["ipv4_cidr"]}"
+node["nova"]["networks"].each do |net|
+    execute "nova-manage network create --label=#{net['label']}" do
+        command "nova-manage network create --multi_host='T' --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']} --num_networks=#{net['num_networks']} --network_size=#{net['network_size']} --bridge=#{net['bridge']} --bridge_interface=#{net['bridge_dev']} --dns1=#{net['dns1']} --dns2=#{net['dns2']}"
+        action :run
+        not_if "nova-manage network list | grep #{net['ipv4_cidr']}"
+    end
 end
-
-execute "nova-manage network create --label=private" do
-  command "nova-manage network create --multi_host='T' --label=#{node["nova"]["network"]["private"]["label"]} --fixed_range_v4=#{node["nova"]["network"]["private"]["ipv4_cidr"]} --num_networks=#{node["nova"]["network"]["private"]["num_networks"]} --network_size=#{node["nova"]["network"]["private"]["network_size"]} --bridge=#{node["nova"]["network"]["private"]["bridge"]} --bridge_interface=#{node["nova"]["network"]["private"]["bridge_dev"]}"
-  action :run
-  not_if "nova-manage network list | grep #{node["nova"]["network"]["private"]["ipv4_cidr"]}"
-end
-
 
 if node.has_key?(:floating) and node["nova"]["network"]["floating"].has_key?(:ipv4_cidr)
   execute "nova-manage floating create" do

@@ -20,23 +20,28 @@ default["nova"]["volume"]["adminURL"] = "http://#{default["controller_ipaddress"
 default["nova"]["volume"]["internalURL"] = default["nova"]["volume"]["adminURL"]
 default["nova"]["volume"]["publicURL"] = default["nova"]["volume"]["adminURL"]
 
-# TODO: This needs to be moved into the nova namespace
-default["nova"]["network"]["public"]["label"] = "public"
-default["nova"]["network"]["public"]["ipv4_cidr"] = "192.168.100.0/24"
-default["nova"]["network"]["public"]["num_networks"] = "1"
-default["nova"]["network"]["public"]["network_size"] = "255"
-default["nova"]["network"]["public"]["bridge"] = "br100"
-default["nova"]["network"]["public"]["bridge_dev"] = "eth2"
-default["nova"]["network"]["public"]["dns1"] = "8.8.8.8"
-default["nova"]["network"]["public"]["dns2"] = "8.8.4.4"
-
-# TODO: This needs to be moved into the nova namespace
-default["nova"]["network"]["private"]["label"] = "private"
-default["nova"]["network"]["private"]["ipv4_cidr"] = "192.168.200.0/24"
-default["nova"]["network"]["private"]["num_networks"] = "1"
-default["nova"]["network"]["private"]["network_size"] = "255"
-default["nova"]["network"]["private"]["bridge"] = "br200"
-default["nova"]["network"]["private"]["bridge_dev"] = "eth3"
+default["nova"]["networks"] = [
+	{
+		"label" => "public",
+		"ipv4_cidr" => "192.168.100.0/24",
+		"num_networks" => "1",
+		"network_size" => "255",
+		"bridge" => "br100",
+		"bridge_dev" => "eth2",
+		"dns1" => "8.8.8.8",
+		"dns2" => "8.8.4.4"
+	},	
+	{
+		"label" => "private",
+		"ipv4_cidr" => "192.168.200.0/24",
+		"num_networks" => "1",
+		"network_size" => "255",
+		"bridge" => "br200",
+		"bridge_dev" => "eth3",
+		"dns1" => "8.8.8.8",
+		"dns2" => "8.8.4.4"
+	}	
+]
 
 default["controller_ipaddress"] = node["ipaddress"]
 
