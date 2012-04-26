@@ -120,33 +120,33 @@ Attributes
 * `nova["ec2"]["internalURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an internal network  
 * `nova["ec2"]["publicURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an external network  
 
-* `volume["api_port"]` - port on which nova volumes api runs  
-* `volume["ipaddress"]` - ip address where nova volumes api runs  
-* `volume["adminURL"]` - the url used to access the nova volumes API for admin functions  
-* `volume["internalURL"]` - the url used to access the nova volumes API for user functions from an internal network  
-* `volume["publicURL"]` - the url used to access the nova volumes API for user functions from an external network  
+* `nova["volume"]["api_port"]` - port on which nova volumes api runs  
+* `nova["volume"]["ipaddress"]` - ip address where nova volumes api runs  
+* `nova["volume"]["adminURL"]` - the url used to access the nova volumes API for admin functions  
+* `nova["volume"]["internalURL"]` - the url used to access the nova volumes API for user functions from an internal network  
+* `nova["volume"]["publicURL"]` - the url used to access the nova volumes API for user functions from an external network  
 
-* `public["label"]` - network label to be assigned to the public network on creation  
-* `public["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.100.0/24)  
-* `public["num_networks"]` - number of networks to be created  
-* `public["network_size"]` - number of IP addresses to be used in this network  
-* `public["bridge"]` - bridge to be created for accessing the vm network (eg br100)  
-* `public["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth2)  
-* `public["dns1"]` - dns server 1  
-* `public["dns2"]` - dns server 2  
+* `nova["network"]["public"]["label"]` - network label to be assigned to the public network on creation  
+* `nova["network"]["public"]["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.100.0/24)  
+* `nova["network"]["public"]["num_networks"]` - number of networks to be created  
+* `nova["network"]["public"]["network_size"]` - number of IP addresses to be used in this network  
+* `nova["network"]["public"]["bridge"]` - bridge to be created for accessing the vm network (eg br100)  
+* `nova["network"]["public"]["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth2)  
+* `nova["network"]["public"]["dns1"]` - dns server 1  
+* `nova["network"]["public"]["dns2"]` - dns server 2  
 
-* `private["label"]` - network label to be assigned to the private network on creation  
-* `private["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.200.0/24)  
-* `private["num_networks"]` - number of networks to be created  
-* `private["network_size"]` - number of IP addresses to be used in this network  
-* `private["bridge"]` - bridge to be created for accessing the vm network (eg br200)  
-* `private["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth3)  
+* `nova["network"]["private"]["label"]` - network label to be assigned to the private network on creation  
+* `nova["network"]["private"]["ipv4_cidr"]` - network to be created (in cidr notation eg 192.168.200.0/24)  
+* `nova["network"]["private"]["num_networks"]` - number of networks to be created  
+* `nova["network"]["private"]["network_size"]` - number of IP addresses to be used in this network  
+* `nova["network"]["private"]["bridge"]` - bridge to be created for accessing the vm network (eg br200)  
+* `nova["network"]["private"]["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth3)  
 
-* `virt_type` - what hypervisor software layer to use with libvirt (eg kvm, qemu)  
+* `nova["libvirt"]["virt_type"]` - what hypervisor software layer to use with libvirt (eg kvm, qemu)  
 
-* `libvirt["auth_tcp"]` - the type of authentication your libvirt layer requires  
-* `libvirt["ssh"]["private_key"]` - private key to use if using ssh authentication to your libvirt layer  
-* `libvirt["ssh"]["public_key"]` - public key to use if using ssh authentication to your libvirt layer  
+* `nova["libvirt"]["auth_tcp"]` - the type of authentication your libvirt layer requires  
+* `nova["libvirt"]["ssh"]["private_key"]` - private key to use if using ssh authentication to your libvirt layer  
+* `nova["libvirt"]["ssh"]["public_key"]` - public key to use if using ssh authentication to your libvirt layer  
 
 Templates
 =====

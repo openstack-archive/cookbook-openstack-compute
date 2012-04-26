@@ -65,9 +65,9 @@ keystone_register "Register Volume Service" do
   action :create_service
 end
 
-node["volume"]["adminURL"] = "http://#{node["volume"]["ipaddress"]}:#{node["volume"]["api_port"]}/v1/%(tenant_id)s"
-node["volume"]["internalURL"] = node["volume"]["adminURL"]
-node["volume"]["publicURL"] = node["volume"]["adminURL"]
+node["nova"]["volume"]["adminURL"] = "http://#{node["nova"]["volume"]["ipaddress"]}:#{node["nova"]["volume"]["api_port"]}/v1/%(tenant_id)s"
+node["nova"]["volume"]["internalURL"] = node["nova"]["volume"]["adminURL"]
+node["nova"]["volume"]["publicURL"] = node["nova"]["volume"]["adminURL"]
 
 # Register Image Endpoint
 keystone_register "Register Volume Endpoint" do
@@ -78,8 +78,8 @@ keystone_register "Register Volume Endpoint" do
   auth_token keystone_admin_token
   service_type "volume"
   endpoint_region "RegionOne"
-  endpoint_adminurl node["volume"]["adminURL"]
-  endpoint_internalurl node["volume"]["internalURL"]
-  endpoint_publicurl node["volume"]["publicURL"]
+  endpoint_adminurl node["nova"]["volume"]["adminURL"]
+  endpoint_internalurl node["nova"]["volume"]["internalURL"]
+  endpoint_publicurl node["nova"]["volume"]["publicURL"]
   action :create_endpoint
 end

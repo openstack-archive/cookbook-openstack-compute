@@ -51,7 +51,7 @@ template "/var/lib/nova/.ssh/id_dsa.pub" do
     group "nova"
     mode "0644"
     variables(
-      :public_key => node['libvirt']['ssh']['public_key']
+      :public_key => node["nova"]["libvirt"]["ssh"]["public_key"]
     )
 end
 
@@ -62,7 +62,7 @@ template "/var/lib/nova/.ssh/id_dsa" do
     group "nova"
     mode "0600"
     variables(
-      :private_key => node['libvirt']['ssh']['private_key']
+      :private_key => node["nova"]["libvirt"]["ssh"]["private_key"]
     )
 end
 
@@ -81,7 +81,7 @@ template "/var/lib/nova/.ssh/authorized_keys" do
     group "nova"
     mode "0600"
     variables(
-      :public_key => node['libvirt']['ssh']['public_key']
+      :public_key => node["nova"]["libvirt"]["ssh"]["public_key"]
     )
 end
 
@@ -94,7 +94,7 @@ template "/etc/libvirt/libvirtd.conf" do
   group "root"
   mode "0644"
   variables(
-    :auth_tcp => node['libvirt']['auth_tcp']
+    :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
   )
   notifies :restart, resources(:service => libvirt_service), :immediately
 end
