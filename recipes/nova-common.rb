@@ -109,7 +109,7 @@ template "/etc/nova/nova.conf" do
     :glance_api_ipaddress => glance_api_ip,
     :api_port => glance_api_port,
     :ipv4_cidr => node["nova"]["network"]["public"]["ipv4_cidr"],
-    :virt_type => node["virt_type"]
+    :virt_type => node["nova"]["libvirt"]["virt_type"]
   )
 end
 
