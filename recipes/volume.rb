@@ -40,12 +40,12 @@ else
   # Lookup keystone api ip address
   keystone, something, arbitrary_value = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
   if keystone.length > 0
-    Chef::Log.info("Using Keystone attributes from SEARCH")
+    Chef::Log.info("nova::volume/keystone: using search")
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_admin_port = keystone[0]['keystone']['admin_port']
     keystone_admin_token = keystone[0]['keystone']['admin_token']
   else
-    Chef::Log.info("Using Keystone attributes from NODE")
+    Chef::Log.info("nova::volume/keystone: NOT using search")
     keystone_api_ip = node['keystone']['api_ipaddress']
     keystone_admin_port = node['keystone']['admin_port']
     keystone_admin_token = node['keystone']['admin_token']
