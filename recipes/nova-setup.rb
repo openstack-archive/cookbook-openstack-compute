@@ -26,11 +26,11 @@ else
   # Lookup mysql ip address
   mysql_server = search(:node, "roles:mysql-master AND chef_environment:#{node.chef_environment}")
   if mysql_server.length > 0
-    Chef::Log.info("nova-common/mysql: using search")
+    Chef::Log.info("nova::nova-common/mysql: using search")
     db_ip_address = mysql_server[0]['mysql']['bind_address']
     db_root_password = mysql_server[0]['mysql']['server_root_password']
   else
-    Chef::Log.info("nova-common/mysql: NOT using search")
+    Chef::Log.info("nova::nova-common/mysql: NOT using search")
     db_ip_address = node['mysql']['bind_address']
     db_root_password = node['mysql']['server_root_password']
   end
