@@ -134,7 +134,6 @@ template "/etc/nova/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
-    :ip_address => node["controller_ipaddress"],
     :component  => node["package_component"],
     :service_port => keystone_service_port,
     :keystone_api_ipaddress => keystone_api_ip,
