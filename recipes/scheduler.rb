@@ -32,6 +32,13 @@ else
   nova_scheduler_package_options = "-o Dpkg::Options::='--force-confold' --force-yes"
 end
 
+directory "/var/lock/nova" do
+    owner "nova"
+    group "nova"
+    mode "0755"
+    action :create
+end
+
 package nova_scheduler_package do
   action :upgrade
   options nova_scheduler_package_options
