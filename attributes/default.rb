@@ -14,6 +14,14 @@ default["nova"]["ec2"]["adminURL"] = ""
 default["nova"]["ec2"]["internalURL"] = ""
 default["nova"]["ec2"]["publicURL"] = ""
 
+default["nova"]["xvpvnc"]["proxy_bind_host"] = "0.0.0.0"
+default["nova"]["xvpvnc"]["proxy_bind_port"] = "6081"
+default["nova"]["xvpvnc"]["ip_address"] = node["ipaddress"]
+default["nova"]["xvpvnc"]["proxy_base_url"] = "http://#{node['nova']['xvpvnc']['ip_address']}:#{node['nova']['xvpvnc']['proxy_bind_port']}/console"
+
+default["nova"]["novnc"]["proxy_bind_port"] = "6080"
+default["nova"]["novnc"]["proxy_base_url"] = "http://#{node['nova']['xvpvnc']['ip_address']}:#{node['nova']['novnc']['proxy_bind_port']}/vnc_auto.html"
+
 default["nova"]["volume"]["api_port"] = 8776
 default["nova"]["volume"]["ipaddress"] = node["controller_ipaddress"]
 default["nova"]["volume"]["adminURL"] = "http://#{default["controller_ipaddress"]}:#{default["nova"]["volume"]["api_port"]}/v1"
@@ -46,6 +54,8 @@ default["nova"]["networks"] = [
 default["controller_ipaddress"] = node["ipaddress"]
 
 default["nova"]["libvirt"]["virt_type"] = "kvm"
+default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
+default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
 default["nova"]["libvirt"]["auth_tcp"] = "none"
 default["nova"]["libvirt"]["ssh"]["private_key"] = "-----BEGIN DSA PRIVATE KEY-----
 MIIBvAIBAAKBgQDUIz3rg0afavOwNeTJL/112U/l4B08kzZVx+QcflxllpW4sn/f
