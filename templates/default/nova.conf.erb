@@ -43,12 +43,15 @@ sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @db_ipaddress %>/<%= @db_
 connection_type=libvirt
 libvirt_type=<%= @virt_type %>
 root_helper=sudo nova-rootwrap
+vncserver_listen=<%= @vncserver_listen %>
+vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
 # VNCPROXY
-vncserver_proxyclient_address=<%= @ip_address %>
-vncserver_listen=<%= @ip_address %>
-novncproxy_base_url=http://<%= @ip_address %>:6080/vnc_auto.html
-xvpvncproxy_base_url=http://<%= @ip_address %>:6081/console
+novncproxy_base_url=<%= @novncproxy_base_url %>
+xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
+# This is only required on the server running xvpvncproxy
+xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
+xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 
 # MISC
 use_deprecated_auth=false
@@ -62,4 +65,4 @@ ec2_private_dns_show_ip=True
 <% end -%>
 
 # KEYSTONE
-keystone_ec2_url=http://<%= @keystone_api_ipaddress %>:5000/v2.0/ec2tokens
+keystone_ec2_url=http://<%= @keystone_api_ipaddress %>:<%= @keystone_service_port %>/v2.0/ec2tokens

@@ -90,6 +90,16 @@ else
     glance_api_ip = node['glance']['api']['ip_address']
     glance_api_port = node['glance']['api']['port']
   end
+
+  # Lookup nova-vncproxy ip address
+  vncproxy = search(:node, "roles:nova-vncproxy AND chef_environment:#{node.chef_environment}")
+  if vncproxy.length > 0
+    xvpvncproxy_base_url = vncproxy[0]["nova"]["xvpvnc"]["proxy_base_url"]
+    novncproxy_base_url = vncproxy[0]["nova"]["novnc"]["proxy_base_url"]
+  else
+    xvpvncproxy_base_url = node["nova"]["xvpvnc"]["proxy_base_url"]
+    novncproxy_base_url = node["nova"]["novnc"]["proxy_base_url"]
+  end
 end
 
 # TODO: need to re-evaluate this for accuracy
@@ -103,9 +113,15 @@ template "/etc/nova/nova.conf" do
     :user => node["nova"]["db"]["username"],
     :passwd => node["nova"]["db"]["password"],
     :db_name => node["nova"]["db"]["name"],
-    :ip_address => node["controller_ipaddress"],
+    "vncserver_listen" => node["nova"]["libvirt"]["vncserver_listen"], 
+    "xvpvncproxy_bind_host" => node["nova"]["xvpvnc"]["proxy_bind_host"],
+    "xvpvncproxy_bind_port" => node["nova"]["xvpvnc"]["proxy_bind_port"],
+    "xvpvncproxy_base_url" => xvpvncproxy_base_url,
+    "novncproxy_base_url" => novncproxy_base_url,
+    "vncserver_proxyclient_address" => node["nova"]["libvirt"]["vncserver_proxyclient_address"],
     :rabbit_ipaddress => rabbit_ip_address,
-    :keystone_api_ipaddress => keystone_api_ip,
+    "keystone_api_ipaddress" => keystone_api_ip,
+    "keystone_service_port" => keystone_service_port,
     :glance_api_ipaddress => glance_api_ip,
     :api_port => glance_api_port,
     :virt_type => node["nova"]["libvirt"]["virt_type"]
