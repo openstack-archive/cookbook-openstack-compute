@@ -113,12 +113,30 @@ Attributes
 * `nova["service_pass"]` - user password used by nova when interacting with keystone  
 * `nova["service_role"]` - user role used by nova when interacting with keystone  
 
+* `nova["compute"]["api"]["protocol"]` - defines the protocol used for the OS API
+* `nova["compute"]["api"]["port"]` - defines the port on which OS API runs
+* `nova["compute"]["api"]["version"]` - defines the version of the OS API used
+
 * `nova["compute"]["adminURL"]` - defines the url used to access the OS API for admin functions  
 * `nova["compute"]["internalURL"]` - defines the url used to access the OS API for user functions from an internal network 
 * `nova["compute"]["publicURL"]` - defines the url used to access the OS API for user functions from an external network  
+
+* `nova["ec2"]["api"]["protocol"]` - defines the protocol used for the AWS EC2 compatible API
+* `nova["ec2"]["api"]["port"]` - defines the port on which AWS EC2 compatible API runs
+* `nova["ec2"]["api"]["admin_path"]` - defines the path for admin functions in the AWS EC2 compatible API
+* `nova["ec2"]["api"]["cloud_path"]` - defines the path for service functions in the AWS EC2 compatible API
+
 * `nova["ec2"]["adminURL"]` - defines the url used to access the AWS EC2 compatible API for admin functions  
 * `nova["ec2"]["internalURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an internal network  
 * `nova["ec2"]["publicURL"]` - defines the url used to access the AWS EC2 compatible API for user functions from an external network  
+
+* `nova["xvpvnc"]["proxy_bind_host"] - ip address which the xvpvncproxy binds to
+* `nova["xvpvnc"]["proxy_bind_port"] - port on which the xvpvncproxy runs
+* `nova["xvpvnc"]["ip_address"] - ip address for accessing the xvpvncproxy service
+* `nova["xvpvnc"]["proxy_base_url"] - base url returned for xvpvncproxy requests
+
+* `nova["novnc"]["proxy_bind_port"] - port on which the novncproxy runs
+* `nova["novnc"]["proxy_base_url"] - base url returned for novncproxy requests
 
 * `nova["volume"]["api_port"]` - port on which nova volumes api runs  
 * `nova["volume"]["ipaddress"]` - ip address where nova volumes api runs  
@@ -143,6 +161,9 @@ Attributes
 * `nova["network"]["private"]["bridge_dev"]` - physical device on which the bridge device should be attached (eg eth3)  
 
 * `nova["libvirt"]["virt_type"]` - what hypervisor software layer to use with libvirt (eg kvm, qemu)  
+
+* `nova["libvirt"]["vncserver_listen"]` - the ip address on the hypervisor that libvirt listens for vnc requests on
+* `nova["libvirt"]["vncserver_proxyclient_address"]` - the ip address on the hypervisor that libvirt exposes for vnc requests on (should be the same as vncserver_listen)
 
 * `nova["libvirt"]["auth_tcp"]` - the type of authentication your libvirt layer requires  
 * `nova["libvirt"]["ssh"]["private_key"]` - private key to use if using ssh authentication to your libvirt layer  

@@ -7,12 +7,23 @@ default["nova"]["service_user"] = "nova"
 default["nova"]["service_pass"] = "zCSupi4M"
 default["nova"]["service_role"] = "admin"
 
-default["nova"]["compute"]["adminURL"] = ""
-default["nova"]["compute"]["internalURL"] = ""
-default["nova"]["compute"]["publicURL"] = ""
-default["nova"]["ec2"]["adminURL"] = ""
-default["nova"]["ec2"]["internalURL"] = ""
-default["nova"]["ec2"]["publicURL"] = ""
+default["nova"]["compute"]["api"]["protocol"] = "http"
+default["nova"]["compute"]["api"]["port"] = "8774"
+default["nova"]["compute"]["api"]["version"] = "v2"
+
+default["nova"]["compute"]["region"] = "RegionOne"
+default["nova"]["compute"]["adminURL"] = "#{node['nova']['compute']['api']['protocol']}://#{node['ipaddress']}:#{node['nova']['compute']['api']['port']}/#{node['nova']['compute']['api']['version']}/%(tenant_id)s"
+default["nova"]["compute"]["internalURL"] = node["nova"]["compute"]["adminURL"]
+default["nova"]["compute"]["publicURL"] = node["nova"]["compute"]["adminURL"]
+
+default["nova"]["ec2"]["api"]["protocol"] = "http"
+default["nova"]["ec2"]["api"]["port"] = "8773"
+default["nova"]["ec2"]["api"]["admin_path"] = "services/Admin"
+default["nova"]["ec2"]["api"]["cloud_path"] = "services/Cloud"
+
+default["nova"]["ec2"]["adminURL"] = "#{node["nova"]["ec2"]["api"]["protocol"]}://#{node["ipaddress"]}:#{node["nova"]["ec2"]["api"]["port"]}/#{node["nova"]["ec2"]["api"]["admin_path"]}"
+default["nova"]["ec2"]["publicURL"] = "#{node["nova"]["ec2"]["api"]["protocol"]}://#{node["ipaddress"]}:#{node["nova"]["ec2"]["api"]["port"]}/#{node["nova"]["ec2"]["api"]["cloud_path"]}"
+default["nova"]["ec2"]["internalURL"] = node["nova"]["ec2"]["publicURL"]
 
 default["nova"]["xvpvnc"]["proxy_bind_host"] = "0.0.0.0"
 default["nova"]["xvpvnc"]["proxy_bind_port"] = "6081"
@@ -23,8 +34,8 @@ default["nova"]["novnc"]["proxy_bind_port"] = "6080"
 default["nova"]["novnc"]["proxy_base_url"] = "http://#{node['nova']['xvpvnc']['ip_address']}:#{node['nova']['novnc']['proxy_bind_port']}/vnc_auto.html"
 
 default["nova"]["volume"]["api_port"] = 8776
-default["nova"]["volume"]["ipaddress"] = node["controller_ipaddress"]
-default["nova"]["volume"]["adminURL"] = "http://#{default["controller_ipaddress"]}:#{default["nova"]["volume"]["api_port"]}/v1"
+default["nova"]["volume"]["ipaddress"] = node["ipaddress"]
+default["nova"]["volume"]["adminURL"] = "http://#{node["nova"]["volume"]["ipaddress"]}:#{default["nova"]["volume"]["api_port"]}/v1"
 default["nova"]["volume"]["internalURL"] = default["nova"]["volume"]["adminURL"]
 default["nova"]["volume"]["publicURL"] = default["nova"]["volume"]["adminURL"]
 
@@ -50,8 +61,6 @@ default["nova"]["networks"] = [
 		"dns2" => "8.8.4.4"
 	}	
 ]
-
-default["controller_ipaddress"] = node["ipaddress"]
 
 default["nova"]["libvirt"]["virt_type"] = "kvm"
 default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]

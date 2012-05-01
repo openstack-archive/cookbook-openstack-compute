@@ -143,10 +143,6 @@ template "/etc/nova/api-paste.ini" do
   notifies :restart, resources(:service => nova_api_os_compute_service), :delayed
 end
 
-node["nova"]["compute"]["adminURL"] = "http://#{node["nova"]["api_ipaddress"]}:8774/v2/%(tenant_id)s"
-node["nova"]["compute"]["internalURL"] = node["nova"]["compute"]["adminURL"]
-node["nova"]["compute"]["publicURL"] = node["nova"]["compute"]["adminURL"]
-
 # Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
   auth_host keystone_api_ip
@@ -155,7 +151,7 @@ keystone_register "Register Compute Endpoint" do
   api_ver "/v2.0"
   auth_token keystone_admin_token
   service_type "compute"
-  endpoint_region "RegionOne"
+  endpoint_region node["nova"]["compute"]["region"]
   endpoint_adminurl node["nova"]["compute"]["adminURL"]
   endpoint_internalurl node["nova"]["compute"]["internalURL"]
   endpoint_publicurl node["nova"]["compute"]["publicURL"]
