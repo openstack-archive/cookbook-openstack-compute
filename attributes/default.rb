@@ -12,7 +12,7 @@ default["nova"]["compute"]["api"]["port"] = "8774"
 default["nova"]["compute"]["api"]["version"] = "v2"
 
 default["nova"]["compute"]["region"] = "RegionOne"
-default["nova"]["compute"]["adminURL"] = "#{node["nova"]["compute"]["api"]["protocol"]}://#{node["ipaddress"]}:#{node["compute"]["nova"]["api"]["port"]}/#{node["nova"]["compute"]["api"]["version"]}/%(tenant_id)s"
+default["nova"]["compute"]["adminURL"] = "#{node['nova']['compute']['api']['protocol']}://#{node['ipaddress']}:#{node['nova']['compute']['api']['port']}/#{node['nova']['compute']['api']['version']}/%(tenant_id)s"
 default["nova"]["compute"]["internalURL"] = node["nova"]["compute"]["adminURL"]
 default["nova"]["compute"]["publicURL"] = node["nova"]["compute"]["adminURL"]
 
