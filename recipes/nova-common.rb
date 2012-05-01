@@ -140,7 +140,7 @@ template "/root/.novarc" do
     "password" => "secrete",
     "keystone_api_ipaddress" => keystone_api_ip,
     "keystone_service_port" => keystone_service_port,
-    "nova_api_ipaddress" => node["nova"]["api_ipaddress"],
+    "nova_api_ipaddress" => node["ipaddress"],
     "nova_api_version" => "1.1",
     "keystone_region" => node["nova"]["compute"]["region"],
     "auth_strategy" => "keystone",
