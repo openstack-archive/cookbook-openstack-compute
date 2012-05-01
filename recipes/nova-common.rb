@@ -135,17 +135,17 @@ template "/root/.novarc" do
   group "root"
   mode "0600"
   variables(
-    :user => 'admin',
-    :tenant => 'admin',
-    :password => 'secrete',
-    :keystone_api_ipaddress => keystone_api_ip,
-    :keystone_service_port => keystone_service_port,
-    :nova_api_ipaddress => node["nova"]["api_ipaddress"],
-    :nova_api_version => '1.1',
-    :keystone_region => 'RegionOne',
-    :auth_strategy => 'keystone',
-    :ec2_url => "http://#{node['nova']['api_ipaddress']}:8773/services/Cloud",
-    :ec2_access_key => node["credentials"]["EC2"]["admin"]["access"],
-    :ec2_secret_key => node["credentials"]["EC2"]["admin"]["secret"]
+    "user" => "admin",
+    "tenant" => "admin",
+    "password" => "secrete",
+    "keystone_api_ipaddress" => keystone_api_ip,
+    "keystone_service_port" => keystone_service_port,
+    "nova_api_ipaddress" => node["nova"]["api_ipaddress"],
+    "nova_api_version" => "1.1",
+    "keystone_region" => node["nova"]["compute"]["region"],
+    "auth_strategy" => "keystone",
+    "ec2_url" => node["nova"]["ec2"]["publicURL"],
+    "ec2_access_key" => node["credentials"]["EC2"]["admin"]["access"],
+    "ec2_secret_key" => node["credentials"]["EC2"]["admin"]["secret"]
   )
 end
