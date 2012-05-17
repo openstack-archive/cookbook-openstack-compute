@@ -71,10 +71,16 @@ else
   keystone, start, arbitary_value = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
   if keystone.length > 0
     Chef::Log.info("nova::nova-common/keystone: using search")
+    keystone_admin_user = keystone[0]['keystone']['admin_user']
+    keystone_admin_password = keystone[0]['keystone']['users'][keystone_admin_user]['password']
+    keystone_admin_tenantname = keystone[0]['keystone']['users'][keystone_admin_user]['default_tenant']
     keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
     keystone_service_port = keystone[0]['keystone']['service_port']
   else
     Chef::Log.info("nova::nova-common/keystone: NOT using search")
+    keystone_admin_user = ['keystone']['admin_user']
+    keystone_admin_password = node['keystone']['users'][keystone_admin_user]['password']
+    keystone_admin_tenantname = node['keystone']['users'][keystone_admin_user]['default_tenant']
     keystone_api_ip = node['keystone']['api_ipaddress']
     keystone_service_port = node['keystone']['service_port']
   end
@@ -135,9 +141,9 @@ template "/root/.novarc" do
   group "root"
   mode "0600"
   variables(
-    "user" => "admin",
-    "tenant" => "admin",
-    "password" => "secrete",
+    "user" => keystone_admin_user,
+    "tenant" => keystone_admin_tenantname,
+    "password" => keystone_admin_password,
     "keystone_api_ipaddress" => keystone_api_ip,
     "keystone_service_port" => keystone_service_port,
     "nova_api_ipaddress" => node["ipaddress"],
