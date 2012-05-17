@@ -78,7 +78,7 @@ else
     keystone_service_port = keystone[0]['keystone']['service_port']
   else
     Chef::Log.info("nova::nova-common/keystone: NOT using search")
-    keystone_admin_user = ['keystone']['admin_user']
+    keystone_admin_user = node['keystone']['admin_user']
     keystone_admin_password = node['keystone']['users'][keystone_admin_user]['password']
     keystone_admin_tenantname = node['keystone']['users'][keystone_admin_user]['default_tenant']
     keystone_api_ip = node['keystone']['api_ipaddress']
