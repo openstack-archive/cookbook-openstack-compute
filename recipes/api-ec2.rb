@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: api
+# Recipe:: api-ec2
 #
 # Copyright 2009, Rackspace Hosting, Inc.
 #
@@ -15,7 +15,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+ 
+# Set a secure keystone service password
+node.set_unless['nova']['service_pass'] = secure_password
 
 include_recipe "nova::nova-common"
 

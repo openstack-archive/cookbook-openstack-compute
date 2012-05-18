@@ -5,7 +5,8 @@ default["nova"]["db"]["username"] = "nova"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
-default["nova"]["service_pass"] = "zCSupi4M"
+# Replacing with OpenSSL::Password in recipes/api-os-compute.rb and recipes/api-ec2.rb
+#default["nova"]["service_pass"] = "zCSupi4M"
 default["nova"]["service_role"] = "admin"
 
 default["nova"]["compute"]["api"]["protocol"] = "http"
