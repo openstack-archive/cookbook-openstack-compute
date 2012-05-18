@@ -16,10 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
+include_recipe "nova::nova-common"
+
 # Set a secure keystone service password
 node.set_unless['nova']['service_pass'] = secure_password
 
-include_recipe "nova::nova-common"
 
 #TODO(breu): test for fedora
 # Distribution specific settings go here
