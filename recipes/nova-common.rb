@@ -17,6 +17,15 @@
 # limitations under the License.
 #
 
+::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
+
+# Allow for using a well known db password
+if node["developer_mode"]
+  node.set_unless["nova"]["db"]["password"] = "nova"
+else
+  node.set_unless["nova"]["db"]["password"] = secure_password
+end
+
 # Distribution specific settings go here
 if platform?(%w{fedora})
   # Fedora

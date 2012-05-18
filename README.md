@@ -110,10 +110,12 @@ Attributes
 * `nova["db"]["name"]` - Name of nova database
 * `nova["db"]["username"]` - Username for nova database access
 * `nova["db"]["password"]` - Password for nova database access
+NOTE: db password is no longer set statically in the attributes file, but securely/randomly in the nova-common recipe
 
 * `nova["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `nova["service_user"]` - User name used by nova when interacting with keystone
 * `nova["service_pass"]` - User password used by nova when interacting with keystone
+NOTE: service password is no longer set statically in the attributes file, but securely/randomly in the *api recipes
 * `nova["service_role"]` - User role used by nova when interacting with keystone
 
 * `nova["compute"]["api"]["protocol"]` - Protocol used for the OS API
