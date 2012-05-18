@@ -86,7 +86,7 @@ else
   end
 
   # Lookup nova db information
-  nova = search(:node, "roles:nova-setup AND chef_environment:#{node.chef_environment}")
+  nova = search(:node, "recipes:nova-setup AND chef_environment:#{node.chef_environment}")
   if nova.length > 0
     nova_db_password = nova[0]['nova']['db']['password']
   else
