@@ -1,6 +1,7 @@
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
-default["nova"]["db"]["password"] = "nova"
+# Replacing with OpenSSL::Password in recipes/nova-common.rb
+#default["nova"]["db"]["password"] = "nova"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
