@@ -17,15 +17,6 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
-
-# Allow for using a well known db password
-if node["developer_mode"]
-  node.set_unless["nova"]["db"]["password"] = "nova"
-else
-  node.set_unless["nova"]["db"]["password"] = secure_password
-end
-
 # Distribution specific settings go here
 if platform?(%w{fedora})
   # Fedora
@@ -94,6 +85,14 @@ else
     keystone_service_port = node['keystone']['service_port']
   end
 
+  # Lookup nova db information
+  nova = search(:node, "recipes:nova\\:\\:nova-setup AND chef_environment:#{node.chef_environment}")
+  if nova.length > 0
+    nova_db_password = nova[0]['nova']['db']['password']
+  else
+    nova_db_password = node['nova']['db']['password']
+  end
+
   # Lookup glance api ip address
   glance, something, arbitary_value = Chef::Search::Query.new.search(:node, "roles:glance-api AND chef_environment:#{node.chef_environment}")
   if glance.length > 0
@@ -126,7 +125,7 @@ template "/etc/nova/nova.conf" do
   variables(
     :db_ipaddress => db_ip_address,
     :user => node["nova"]["db"]["username"],
-    :passwd => node["nova"]["db"]["password"],
+    :passwd => nova_db_password,
     :db_name => node["nova"]["db"]["name"],
     "vncserver_listen" => node["nova"]["libvirt"]["vncserver_listen"], 
     "xvpvncproxy_bind_host" => node["nova"]["xvpvnc"]["proxy_bind_host"],
