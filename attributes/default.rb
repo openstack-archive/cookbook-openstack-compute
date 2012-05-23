@@ -98,6 +98,8 @@ when "fedora"
     "nova_volume_service" => "openstack-nova-volume",
     "nova_api_metadata_packages" => ["openstack-nova"],
     "nova_api_metadata_service" => "openstack-nova-api",
+    "nova_compute_packages" => ["openstack-nova"], # seriously?
+    "nova_compute_service" => "openstack-nova-compute",
     "common_packages" => ["openstack-nova"],
     "package_overrides" => ""
   }
@@ -113,6 +115,8 @@ when "ubuntu"
     "nova_api_metadata_service" => "nova-api-metadata",
     "nova_volume_packages" => ["nova-volume"],
     "nova_volume_service" => "nova-volume",
+    "nova_compute_packages" => ["nova-compute"],
+    "nova_compute_service" => "nova-compute",
     "common_packages" => ["nova-common"],
     "package_overrides" => "-o Dpkg::Options::='--force-confold'-o Dpkg::Options::='--force-confdef'"
   }
