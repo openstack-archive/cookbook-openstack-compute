@@ -96,6 +96,8 @@ when "fedora"
     "api_os_volume_service" => "openstack_nova_api",
     "nova_volume_packages" => ["openstack-nova"],
     "nova_volume_service" => "openstack-nova-volume",
+    "nova_api_metadata_packages" => ["openstack-nova"],
+    "nova_api_metadata_service" => "openstack-nova-api",
     "common_packages" => ["openstack-nova"],
     "package_overrides" => ""
   }
@@ -107,6 +109,8 @@ when "ubuntu"
     "api_os_compute_service" => "nova-api-os-compute",
     "api_os_volume_packages" => ["nova-api-os-volume"],
     "api_os_volume_service" => "nova-api-os-volume",
+    "nova_api_metadata_packages" => ["nova-api-metadata"],
+    "nova_api_metadata_service" => "nova-api-metadata",
     "nova_volume_packages" => ["nova-volume"],
     "nova_volume_service" => "nova-volume",
     "common_packages" => ["nova-common"],
