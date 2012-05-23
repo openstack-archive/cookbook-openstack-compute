@@ -90,6 +90,8 @@ when "fedora"
   default["nova"]["platform"] = {
     "api_ec2_packages" => ["openstack-nova"],
     "api_ec2_service" => "openstack-nova-api",
+    "api_os_compute_packages" => ["openstack-nova"],
+    "api_os_compute_service" => "openstack-nova-api",
     "common_packages" => ["openstack-nova"],
     "package_overrides" => ""
   }
@@ -97,6 +99,8 @@ when "ubuntu"
   default["nova"]["platform"] = {
     "api_ec2_packages" => ["nova-api-ec2"],
     "api_ec2_service" => "nova-api-ec2",
+    "api_os_compute_packages" => ["nova-api-os-compute"],
+    "api_os_compute_service" => "nova-api-os-compute",
     "common_packages" => ["nova-common"],
     "package_overrides" => "-o Dpkg::Options::='--force-confold'-o Dpkg::Options::='--force-confdef'"
   }
