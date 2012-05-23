@@ -6,80 +6,55 @@
 include_recipe "nova::nova-common"
 include_recipe "nova::api-os-volume"
 
-# Distribution specific settings go here
-if platform?(%w{fedora})
-  # Fedora
-  nova_volume_package = "openstack-nova"
-  nova_volume_service = "openstack-nova-volume"
-  nova_volume_package_options = ""
-else
-  # All Others (right now Debian and Ubuntu)
-  nova_volume_package = "nova-volume"
-  nova_volume_service = nova_volume_package
-  nova_volume_package_options = "-o Dpkg::Options::='--force-confold' --force-yes"
-end
+platform_options = node["nova"]["platform"]
 
 package "python-keystone" do
   action :upgrade
 end
 
-package nova_volume_package do
-  action :upgrade
-  options nova_volume_package_options
+platform_options["nova_volume_packages"].each do |pkg|
+  package pkg do
+    action :upgrade
+    options platform_options["package_overrides"]
+  end
 end
 
-service nova_volume_service do
+service "nova-volume" do
+  service_name platform_options["nova_volume_service"]
   supports :status => true, :restart => true
   action :disable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-if Chef::Config[:solo]
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-else
-  # Lookup keystone api ip address
-  keystone, something, arbitrary_value = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
-  if keystone.length > 0
-    Chef::Log.info("nova::volume/keystone: using search")
-    keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
-    keystone_admin_port = keystone[0]['keystone']['admin_port']
-    keystone_admin_token = keystone[0]['keystone']['admin_token']
-  else
-    Chef::Log.info("nova::volume/keystone: NOT using search")
-    keystone_api_ip = node['keystone']['api_ipaddress']
-    keystone_admin_port = node['keystone']['admin_port']
-    keystone_admin_token = node['keystone']['admin_token']
-  end
-end
+ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
+ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
+keystone = get_settings_by_role("keystone","keystone")
+volume_endpoint = get_access_endpoint("nova-volume", "nova", "volume")
 
 # Register Volume Service
 keystone_register "Register Volume Service" do
-  auth_host keystone_api_ip
-  auth_port keystone_admin_port
-  auth_protocol "http"
-  api_ver "/v2.0"
-  auth_token keystone_admin_token
+  auth_host ks_admin_endpoint["host"]
+  auth_port ks_admin_endpoint["port"]
+  auth_protocol ks_admin_endpoint["scheme"]
+  api_ver ks_admin_endpoint["path"]
+  auth_token keystone["admin_token"]
   service_name "Volume Service"
   service_type "volume"
   service_description "Nova Volume Service"
   action :create_service
 end
 
-node["nova"]["volume"]["adminURL"] = "http://#{node["nova"]["volume"]["ipaddress"]}:#{node["nova"]["volume"]["api_port"]}/v1/%(tenant_id)s"
-node["nova"]["volume"]["internalURL"] = node["nova"]["volume"]["adminURL"]
-node["nova"]["volume"]["publicURL"] = node["nova"]["volume"]["adminURL"]
-
 # Register Image Endpoint
 keystone_register "Register Volume Endpoint" do
-  auth_host keystone_api_ip
-  auth_port keystone_admin_port
-  auth_protocol "http"
-  api_ver "/v2.0"
-  auth_token keystone_admin_token
+  auth_host ks_admin_endpoint["host"]
+  auth_port ks_admin_endpoint["port"]
+  auth_protocol ks_admin_endpoint["scheme"]
+  api_ver ks_admin_endpoint["path"]
+  auth_token keystone["admin_token"]
   service_type "volume"
   endpoint_region "RegionOne"
-  endpoint_adminurl node["nova"]["volume"]["adminURL"]
-  endpoint_internalurl node["nova"]["volume"]["internalURL"]
-  endpoint_publicurl node["nova"]["volume"]["publicURL"]
+  endpoint_adminurl volume_endpoint["uri"]
+  endpoint_internalurl volume_endpoint["uri"]
+  endpoint_publicurl volume_endpoint["uri"]
   action :create_endpoint
 end
