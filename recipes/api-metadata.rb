@@ -40,7 +40,7 @@ platform_options["nova_api_metadata_packages"].each do |pkg|
 end
 
 service "nova-api-metadata" do
-  service_name platform_options["nova_volume_service"]
+  service_name platform_options["nova_api_metadata_service"]
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed

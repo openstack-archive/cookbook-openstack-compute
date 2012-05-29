@@ -40,7 +40,7 @@ nova_compute_packages.each do |pkg|
 end
 
 service "nova-compute" do
-  service_name platform_options["package_overrides"]
+  service_name platform_options["nova_compute_service"]
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
