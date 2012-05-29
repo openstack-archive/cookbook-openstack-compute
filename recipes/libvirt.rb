@@ -3,21 +3,12 @@
 # Recipe:: libvirt
 #
 
-# Distribution specific settings go here
-if platform?(%w{fedora})
-  # Fedora
-  libvirt_package = "libvirt"
-  libvirt_service = "libvirtd"
-  libvirt_package_options = ""
-else
-  # All Others (right now Debian and Ubuntu)
-  libvirt_package = "libvirt-bin"
-  libvirt_service = libvirt_package
-  libvirt_package_options = "-o Dpkg::Options::='--force-confold' --force-yes"
-end
+platform_options = node["nova"]["platform"]
 
-package libvirt_package do
-  action :install
+platform_options["libvirt_packages"].each do |pkg|
+  package pkg do
+    action :install
+  end
 end
 
 # oh fedora...
@@ -31,11 +22,11 @@ bash "create libvirtd group" do
   only_if { platform?(%w{fedora}) }
 end
 
-service libvirt_service do
+service "libvirt-bin" do
+  service_name platform_options["libvirt_service"]
   supports :status => true, :restart => true
   action :enable
 end
-
 
 directory "/var/lib/nova/.ssh" do
     owner "nova"
@@ -96,7 +87,7 @@ template "/etc/libvirt/libvirtd.conf" do
   variables(
     :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
   )
-  notifies :restart, resources(:service => libvirt_service), :immediately
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
 template "/etc/default/libvirt-bin" do
@@ -104,6 +95,5 @@ template "/etc/default/libvirt-bin" do
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, resources(:service => libvirt_service), :immediately
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
-

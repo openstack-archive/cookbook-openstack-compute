@@ -19,18 +19,7 @@
 
 include_recipe "nova::nova-common"
 
-# Distribution specific settings go here
-if platform?(%w{fedora})
-  # Fedora
-  nova_api_os_volume_package = "openstack-nova"
-  nova_api_os_volume_service = "openstack-nova-api"
-  nova_api_os_volume_package_options = ""
-else
-  # All Others (right now Debian and Ubuntu)
-  nova_api_os_volume_package = "nova-api-os-volume"
-  nova_api_os_volume_service = nova_api_os_volume_package
-  nova_api_os_volume_package_options = "-o Dpkg::Options::='--force-confold' --force-yes"
-end
+platform_options = node["nova"]["platform"]
 
 directory "/var/lock/nova" do
     owner "nova"
@@ -43,36 +32,23 @@ package "python-keystone" do
   action :upgrade
 end
 
-package nova_api_os_volume_package do
-  action :upgrade
-  options nova_api_os_volume_package_options
+platform_options["api_os_volume_packages"].each do |pkg|
+  package pkg do
+    action :upgrade
+    options platform_options["package_overrides"]
+  end
 end
 
-service nova_api_os_volume_service do
+service "nova-api-os-volume" do
+  service_name platform_options["api_os_volume_service"]
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-if Chef::Config[:solo]
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-else
-  # Lookup keystone api ip address
-  keystone, something, arbitrary_value = Chef::Search::Query.new.search(:node, "roles:keystone AND chef_environment:#{node.chef_environment}")
-  if keystone.length > 0
-    Chef::Log.info("nova::api-os-volume/keystone: using search")
-    keystone_api_ip = keystone[0]['keystone']['api_ipaddress']
-    keystone_service_port = keystone[0]['keystone']['service_port']
-    keystone_admin_port = keystone[0]['keystone']['admin_port']
-    keystone_admin_token = keystone[0]['keystone']['admin_token']
-  else
-    Chef::Log.info("nova::api-os-volume/keystone: NOT using search")
-    keystone_api_ip = node['keystone']['api_ipaddress']
-    keystone_service_port = node['keystone']['service_port']
-    keystone_admin_port = node['keystone']['admin_port']
-    keystone_admin_token = node['keystone']['admin_token']
-  end
-end
+ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
+ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
+keystone = get_settings_by_role("keystone","keystone")
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
@@ -80,11 +56,11 @@ template "/etc/nova/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
-    :component  => node["package_component"],
-    :service_port => keystone_service_port,
-    :keystone_api_ipaddress => keystone_api_ip,
-    :admin_port => keystone_admin_port,
-    :admin_token => keystone_admin_token
+    "component"  => node["package_component"],
+    "service_port" => ks_service_endpoint["port"],
+    "keystone_api_ipaddress" => ks_service_endpoint["host"],
+    "admin_port" => ks_admin_endpoint["port"],
+    "admin_token" => keystone["admin_token"]
   )
-  notifies :restart, resources(:service => nova_api_os_volume_service), :delayed
+  notifies :restart, resources(:service => "nova-api-os-volume"), :delayed
 end

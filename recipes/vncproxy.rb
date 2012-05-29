@@ -19,35 +19,22 @@
 
 include_recipe "nova::nova-common"
 
-# Distribution specific settings go here
-if platform?(%w{fedora})
-  # Fedora
-  # TODO(breu): fedora doesn't have a working vncproxy yet.  Once they fix it include it here
-  # TODO(breu): fedora packages consoleauth but they don't include systemd startup scripts
-  nova_vncproxy_package = "openstack-nova"
-  nova_vncproxy_service = "openstack-nova-vncproxy"
-  nova_vncproxy_consoleauth_package = "openstack-nova"
-  #nova_vncproxy_consoleauth_service = ""
-  #nova_vncproxy_package_options = ""
-else
-  # All Others (right now Debian and Ubuntu)
-  nova_vncproxy_package = "nova-vncproxy"
-  nova_vncproxy_service = nova_vncproxy_package
-  nova_vncproxy_consoleauth_package = "nova-consoleauth"
-  nova_vncproxy_consoleauth_service = nova_vncproxy_consoleauth_package
-  nova_vncproxy_package_options = "-o Dpkg::Options::='--force-confold' --force-yes"
-end
+platform_options = node["nova"]["platform"]
 
 case node["platform"]
 when "ubuntu","debian"
-  package nova_vncproxy_package do
-    action :upgrade
-    options nova_vncproxy_package_options
+  platform_options["nova_vncproxy_packages"].each do |pkg|
+    package pkg do
+      action :upgrade
+      options platform_options["nova_vncproxy_service"]
+    end
   end
 
   # required for vnc console authentication
-  package nova_vncproxy_consoleauth_package do
-    action :upgrade
+  platform_options["nova_vncproxy_consoleauth_packages"].each do |pkg|
+    package pkg do
+      action :upgrade
+    end
   end
 
   execute "Fix permission Bug" do
@@ -56,15 +43,17 @@ when "ubuntu","debian"
     only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 }
   end
 
-  service nova_vncproxy_service do
+  service "nova-vncproxy" do
     # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
+    service_name platform_options["nova_vncproxy_service"]
     supports :status => true, :restart => true
     action :enable
     subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
   end
 
-  service nova_vncproxy_consoleauth_service do
+  service "nova-consoleauth" do
     # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
+    service_name platform_options["nova_vncproxy_consoleauth_service"]
     supports :status => true, :restart => true
     action :enable
     subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
