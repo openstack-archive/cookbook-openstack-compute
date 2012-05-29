@@ -102,6 +102,11 @@ when "fedora"
     "nova_compute_service" => "openstack-nova-compute",
     "nova_network_packages" => ["openstack-nova"],
     "nova_network_service" => "openstack-nova-network",
+    "nova_scheduler_packages" => ["openstack-nova"],
+    "nova_scheduler_service" => "openstack-nova-scheduler",
+    "nova_vncproxy_packages" => ["openstack-nova"],
+    "nova_vncproxy_service" => "openstack-nova-vncproxy",
+    "nova_vncproxy_consoleauth_packages" => ["openstack-nova"],
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
     "common_packages" => ["openstack-nova"],
@@ -123,9 +128,15 @@ when "ubuntu"
     "nova_compute_service" => "nova-compute",
     "nova_network_packages" => ["nova-network"],
     "nova_network_service" => "nova-network",
+    "nova_scheduler_packages" => ["nova-scheduler"],
+    "nova_scheduler_service" => "nova-scheduler",
+    "nova_vncproxy_packages" => ["nova-vncproxy"],
+    "nova_vncproxy_service" => "nova-vncproxy",
+    "nova_vncproxy_consoleauth_packages" => ["nova-consoleauth"],
+    "nova_vncproxy_consoleauth_service" => "nova-consoleauth",
     "libvirt_packages" => ["libvirt-bin"],
     "libvirt_service" => "libvirt-bin",
     "common_packages" => ["nova-common"],
-    "package_overrides" => "-o Dpkg::Options::='--force-confold'-o Dpkg::Options::='--force-confdef'"
+    "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end
