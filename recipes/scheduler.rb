@@ -31,7 +31,7 @@ end
 platform_options["nova_scheduler_packages"].each do |pkg|
   package pkg do
     action :upgrade
-    options platform_options["nova_scheduler_service"]
+    options platform_options["package_overrides"]
   end
 end
 
