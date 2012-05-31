@@ -68,7 +68,7 @@ template "/etc/nova/nova.conf" do
     "keystone_api_ipaddress" => ks_admin_endpoint["host"],
     "keystone_service_port" => ks_service_endpoint["port"],
     "glance_api_ipaddress" => glance_endpoint["host"],
-    "api_port" => glance_endpoint["host"],
+    "glance_api_port" => glance_endpoint["port"],
     "virt_type" => node["nova"]["libvirt"]["virt_type"]
   )
 end
