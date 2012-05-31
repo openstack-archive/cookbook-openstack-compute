@@ -132,8 +132,8 @@ keystone_register "Register Compute Endpoint" do
   auth_token keystone["admin_token"]
   service_type "compute"
   endpoint_region node["nova"]["compute"]["region"]
-  endpoint_adminurl node["nova"]["compute"]["adminURL"]
-  endpoint_internalurl node["nova"]["compute"]["internalURL"]
-  endpoint_publicurl node["nova"]["compute"]["publicURL"]
+  endpoint_adminurl nova_api_endpoint["uri"]
+  endpoint_internalurl nova_api_endpoint["uri"]
+  endpoint_publicurl nova_api_endpoint["uri"]
   action :create_endpoint
 end
