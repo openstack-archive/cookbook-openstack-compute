@@ -69,6 +69,7 @@ default["nova"]["libvirt"]["virt_type"] = "kvm"
 default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
 default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
 default["nova"]["libvirt"]["auth_tcp"] = "none"
+default["nova"]["config"]["availability_zone"] = "nova"
 
 # FIXME: OMG!
 default["nova"]["libvirt"]["ssh"]["private_key"] = "-----BEGIN DSA PRIVATE KEY-----
