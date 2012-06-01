@@ -34,7 +34,8 @@ directory "/etc/nova" do
 end
 
 mysql_info = get_settings_by_role("mysql-master", "mysql")
-rabbit_info = get_settings_by_role("rabbitmq-server", "rabbitmq")
+rabbit_ip = IPManagement.get_ips_for_role("rabbitmq-server", "nova", node)[0] # FIXME: we need to be able to specify foreign endpoints.  Nova?
+
 nova_setup_info = get_settings_by_recipe("nova\\:\\:nova-setup", "nova")
 keystone = get_settings_by_role("keystone", "keystone")
 
@@ -64,7 +65,7 @@ template "/etc/nova/nova.conf" do
     "xvpvncproxy_bind_host" => xvpvnc_endpoint["host"],
     "xvpvncproxy_bind_port" => xvpvnc_endpoint["port"],
     "xvpvncproxy_base_url" => xvpvnc_endpoint["uri"],
-    "rabbit_ipaddress" => rabbit_info["ipaddress"],
+    "rabbit_ipaddress" => rabbit_ip,
     "keystone_api_ipaddress" => ks_admin_endpoint["host"],
     "keystone_service_port" => ks_service_endpoint["port"],
     "glance_api_ipaddress" => glance_endpoint["host"],
