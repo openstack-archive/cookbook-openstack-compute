@@ -69,6 +69,7 @@ default["nova"]["libvirt"]["virt_type"] = "kvm"
 default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
 default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
 default["nova"]["libvirt"]["auth_tcp"] = "none"
+default["nova"]["config"]["availability_zone"] = "nova"
 
 # FIXME: OMG!
 default["nova"]["libvirt"]["ssh"]["private_key"] = "-----BEGIN DSA PRIVATE KEY-----
@@ -110,6 +111,7 @@ when "fedora"
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
     "common_packages" => ["openstack-nova"],
+    "iscsi_helper" => "ietadm",
     "package_overrides" => ""
   }
 when "ubuntu"
@@ -137,6 +139,7 @@ when "ubuntu"
     "libvirt_packages" => ["libvirt-bin"],
     "libvirt_service" => "libvirt-bin",
     "common_packages" => ["nova-common"],
+    "iscsi_helper" => "tgtadm",
     "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end

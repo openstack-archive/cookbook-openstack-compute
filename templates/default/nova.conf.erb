@@ -18,6 +18,8 @@ rabbit_host=<%= @rabbit_ipaddress %>
 # SCHEDULER
 #--scheduler_manager=nova.scheduler.abstract_scheduler.AbstractScheduler
 scheduler_driver=nova.scheduler.simple.SimpleScheduler
+node_availability_zone=<%= @availability_zone %>
+default_schedule_zone=nova
 
 # NETWORK
 network_manager=nova.network.manager.FlatDHCPManager
@@ -66,3 +68,6 @@ ec2_private_dns_show_ip=True
 
 # KEYSTONE
 keystone_ec2_url=http://<%= @keystone_api_ipaddress %>:<%= @keystone_service_port %>/v2.0/ec2tokens
+
+# Volumes
+iscsi_helper=<%= @iscsi_helper %>
