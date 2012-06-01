@@ -110,6 +110,7 @@ when "fedora"
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
     "common_packages" => ["openstack-nova"],
+    "iscsi_helper" => "ietadm",
     "package_overrides" => ""
   }
 when "ubuntu"
@@ -137,6 +138,7 @@ when "ubuntu"
     "libvirt_packages" => ["libvirt-bin"],
     "libvirt_service" => "libvirt-bin",
     "common_packages" => ["nova-common"],
+    "iscsi_helper" => "tgtadm",
     "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end
