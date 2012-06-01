@@ -69,6 +69,7 @@ template "/etc/nova/nova.conf" do
     "keystone_service_port" => ks_service_endpoint["port"],
     "glance_api_ipaddress" => glance_endpoint["host"],
     "glance_api_port" => glance_endpoint["port"],
+    "iscsi_helper" => platform_options["iscsi_helper"],
     "virt_type" => node["nova"]["libvirt"]["virt_type"]
   )
 end
