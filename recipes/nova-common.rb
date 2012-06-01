@@ -35,7 +35,7 @@ end
 
 mysql_info = get_settings_by_role("mysql-master", "mysql")
 rabbit_info = get_settings_by_role("rabbitmq-server", "rabbitmq")
-nova_setup_info = get_settings_by_recipe("nova\:\:nova-setup", "nova")
+nova_setup_info = get_settings_by_recipe("nova\\:\\:nova-setup", "nova")
 keystone = get_settings_by_role("keystone", "keystone")
 
 # find the node attribute endpoint settings for the server holding a given role
