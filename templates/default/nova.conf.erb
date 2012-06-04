@@ -24,9 +24,10 @@ default_schedule_zone=nova
 # NETWORK
 network_manager=nova.network.manager.FlatDHCPManager
 #--flat_interface=eth1
-#--fixed_range=10.20.1.0/24
 #--flat_network_dhcp_start=10.20.1.2
 #--public_interface=eth0
+fixed_range=<%= @fixed_range %>
+dmz_cidr=<%= @dmz_cidr %>
 force_dhcp_release=true
 send_arp_for_ha=True
 <% if @virt_type == "qemu" -%>

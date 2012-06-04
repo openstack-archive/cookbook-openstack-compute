@@ -73,7 +73,9 @@ template "/etc/nova/nova.conf" do
     "glance_api_port" => glance_endpoint["port"],
     "iscsi_helper" => platform_options["iscsi_helper"],
     "availability_zone" => node["nova"]["config"]["availability_zone"],
-    "virt_type" => node["nova"]["libvirt"]["virt_type"]
+    "virt_type" => node["nova"]["libvirt"]["virt_type"],
+    "fixed_range" => node["nova"]["network"]["fixed_range"],
+    "dmz_cidr" => node["nova"]["network"]["dmz_cidr"]
   )
 end
 
