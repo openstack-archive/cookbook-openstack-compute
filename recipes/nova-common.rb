@@ -37,7 +37,7 @@ mysql_info = get_settings_by_role("mysql-master", "mysql")
 rabbit_ip = IPManagement.get_ips_for_role("rabbitmq-server", "nova", node)[0] # FIXME: we need to be able to specify foreign endpoints.  Nova?
 
 # nova::nova-setup does not need to be double escaped here
-nova_setup_info = get_settings_by_recipe("nova\:\:nova-setup", "nova")
+nova_setup_info = get_settings_by_role("nova-setup", "nova")
 keystone = get_settings_by_role("keystone", "keystone")
 
 # find the node attribute endpoint settings for the server holding a given role
