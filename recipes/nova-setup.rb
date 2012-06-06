@@ -19,6 +19,12 @@
 
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
+# FIXME: we need a better identifier that we want to collect
+# collectd/graphite info
+if get_settings_by_role("collectd-server", "roles")
+  include_recipe "nova::nova-setup-monitoring"
+end
+
 # Allow for using a well known db password
 if node["developer_mode"]
   node.set_unless["nova"]["db"]["password"] = "nova"
@@ -88,5 +94,3 @@ if node.has_key?(:floating) and node["nova"]["network"]["floating"].has_key?(:ip
     not_if "nova-manage floating list"
   end
 end
-
-
