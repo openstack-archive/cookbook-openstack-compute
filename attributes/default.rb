@@ -112,7 +112,13 @@ when "fedora"
     "libvirt_service" => "libvirtd",
     "common_packages" => ["openstack-nova"],
     "iscsi_helper" => "ietadm",
-    "package_overrides" => ""
+    "package_overrides" => "",
+    "monit_commands" => {
+      "mysqld" => {
+        "start" => "/usr/sbin/service mysqld start",
+        "stop" => "/usr/sbin/service mysqld stop"
+      }
+    }
   }
 when "ubuntu"
   default["nova"]["platform"] = {
@@ -140,6 +146,13 @@ when "ubuntu"
     "libvirt_service" => "libvirt-bin",
     "common_packages" => ["nova-common"],
     "iscsi_helper" => "tgtadm",
-    "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
+    "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'",
+    "monit_commands" => {
+      "mysqld" => {
+        "start" => "/usr/sbin/service mysql start",
+        "stop" => "/usr/sbin/service mysql stop"
+      }
+    }
+
   }
 end

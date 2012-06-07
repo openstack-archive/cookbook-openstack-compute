@@ -25,7 +25,6 @@ include_recipe "collectd-graphite::collectd-client"
 
 # First, let's monitor mysql
 
-
 # this gets me credentials, still need per-role info on db name
 mysql_info = get_settings_by_role("mysql-master", "mysql")
 
