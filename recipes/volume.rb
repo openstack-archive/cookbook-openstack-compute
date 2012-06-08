@@ -58,3 +58,7 @@ keystone_register "Register Volume Endpoint" do
   endpoint_publicurl volume_endpoint["uri"]
   action :create_endpoint
 end
+
+# TODO(shep): this needs to be if blocked on env collectd toggle
+# Include recipe(nova::volume-monitoring)
+include_recipe "nova::volume-monitoring"

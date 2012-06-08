@@ -130,6 +130,10 @@ when "fedora"
         "start" => "/usr/sbin/service openstack-nova-scheduler start",
         "stop" => "/usr/sbin/service openstack-nova-scheduler stop"
       },
+      "nova-volume" => {
+        "start" => "/usr/sbin/service openstack-nova-volume start",
+        "stop" => "/usr/sbin/service openstack-nova-volume stop"
+      },
       "nova-api-os-compute" => {
         "start" => "/usr/sbin/service openstack-nova-api-os-compute start",
         "stop" => "/usr/sbin/service openstack-nova-api-os-compute stop"
@@ -195,6 +199,10 @@ when "ubuntu"
       "nova-scheduler" => {
         "start" => "/usr/sbin/service nova-scheduler start",
         "stop" => "/usr/sbin/service nova-scheduler stop"
+      },
+      "nova-volume" => {
+        "start" => "/usr/sbin/service nova-volume start",
+        "stop" => "/usr/sbin/service nova-volume stop"
       },
       "nova-api-os-compute" => {
         "start" => "/usr/sbin/service nova-api-os-compute start",
