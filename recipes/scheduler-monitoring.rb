@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: network-monitoring
+# Recipe:: scheduler-monitoring
 #
 # Copyright 2009, Rackspace Hosting, Inc.
 #

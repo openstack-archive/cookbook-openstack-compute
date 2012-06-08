@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: compute-monitoring
+# Recipe:: libvirt-monitoring
 #
 # Copyright 2009, Rackspace Hosting, Inc.
 #
@@ -18,15 +18,38 @@
 #
 
 ########################################
+# BEGIN COLLECTD SECTION
+# TODO(shep): This needs to be encased in an if block for the collectd_enabled environment toggle
+
+include_recipe "collectd-graphite::collectd-client"
+
+nova = get_settings_by_role("single-compute", "nova")
+if nova["libvirt"]["virt_type"] == "qemu"
+  virt_conn = "qemu:///system"
+else
+  virt_conn = "kvm:///"
+end
+
+collectd_plugin "libvirt" do
+  options(
+    "Connection"=>virt_conn,
+    "HostnameFormat"=>"name",
+    "RefreshInterval"=>60
+  )
+end
+########################################
+
+
+########################################
 # BEGIN MONIT SECTION
 # TODO(shep): This needs to be encased in an if block for the monit_enabled environment toggle
 
 include_recipe "monit::server"
 platform_options = node["nova"]["platform"]
 
-monit_procmon "nova-compute" do
-  process_name "nova-compute"
-  start_cmd platform_options["monit_commands"]["nova-compute"]["start"]
-  stop_cmd platform_options["monit_commands"]["nova-compute"]["stop"]
+monit_procmon "libvirt-bin" do
+  process_name "libvirtd"
+  start_cmd platform_options["monit_commands"]["libvirt-bin"]["start"]
+  stop_cmd platform_options["monit_commands"]["libvirt-bin"]["stop"]
 end
 ########################################

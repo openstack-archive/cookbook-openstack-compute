@@ -129,6 +129,10 @@ when "fedora"
       "nova-scheduler" => {
         "start" => "/usr/sbin/service openstack-nova-scheduler start",
         "stop" => "/usr/sbin/service openstack-nova-scheduler stop"
+      },
+      "libvirt-bin" => {
+        "start" => "/usr/sbin/service libvirt-bin start",
+        "stop" => "/usr/sbin/service libvirt-bin stop"
       }
     }
   }
@@ -175,6 +179,10 @@ when "ubuntu"
       "nova-scheduler" => {
         "start" => "/usr/sbin/service nova-scheduler start",
         "stop" => "/usr/sbin/service nova-scheduler stop"
+      },
+      "libvirt-bin" => {
+        "start" => "/usr/sbin/service libvirt-bin start",
+        "stop" => "/usr/sbin/service libvirt-bin stop"
       }
     }
 
