@@ -23,7 +23,6 @@
 
 include_recipe "collectd-graphite::collectd-client"
 
-ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
 nova = get_settings_by_role("single-compute", "nova")
 if nova["libvirt"]["virt_type"] == "qemu"
   virt_conn = "qemu:///system"
