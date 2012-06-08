@@ -41,3 +41,7 @@ service "nova-scheduler" do
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
+
+# TODO(shep): this needs to be if blocked on env collectd toggle
+# Include recipe(nova::scheduler-monitoring)
+include_recipe "nova::scheduler-monitoring"

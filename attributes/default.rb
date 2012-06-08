@@ -125,6 +125,10 @@ when "fedora"
       "nova-network" => {
         "start" => "/usr/sbin/service openstack-nova-network start",
         "stop" => "/usr/sbin/service openstack-nova-network stop"
+      },
+      "nova-scheduler" => {
+        "start" => "/usr/sbin/service openstack-nova-scheduler start",
+        "stop" => "/usr/sbin/service openstack-nova-scheduler stop"
       }
     }
   }
@@ -167,6 +171,10 @@ when "ubuntu"
       "nova-network" => {
         "start" => "/usr/sbin/service nova-network start",
         "stop" => "/usr/sbin/service nova-network stop"
+      },
+      "nova-scheduler" => {
+        "start" => "/usr/sbin/service nova-scheduler start",
+        "stop" => "/usr/sbin/service nova-scheduler stop"
       }
     }
 
