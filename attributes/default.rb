@@ -212,6 +212,10 @@ when "ubuntu"
         "start" => "/usr/sbin/service nova-api-metadata start",
         "stop" => "/usr/sbin/service nova-api-metadata stop"
       },
+      "nova-consoleauth" => {
+        "start" => "/usr/sbin/service nova-consoleauth start",
+        "stop" => "/usr/sbin/service nova-consoleauth stop"
+      },
       "libvirt-bin" => {
         "start" => "/usr/sbin/service libvirt-bin start",
         "stop" => "/usr/sbin/service libvirt-bin stop"
