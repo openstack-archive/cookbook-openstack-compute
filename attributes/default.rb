@@ -117,6 +117,10 @@ when "fedora"
       "mysqld" => {
         "start" => "/usr/sbin/service mysqld start",
         "stop" => "/usr/sbin/service mysqld stop"
+      },
+      "nova-compute" => {
+        "start" => "/usr/sbin/service openstack-nova-compute start",
+        "stop" => "/usr/sbin/service openstack-nova-compute stop"
       }
     }
   }
@@ -151,6 +155,10 @@ when "ubuntu"
       "mysqld" => {
         "start" => "/usr/sbin/service mysql start",
         "stop" => "/usr/sbin/service mysql stop"
+      },
+      "nova-compute" => {
+        "start" => "/usr/sbin/service nova-compute start",
+        "stop" => "/usr/sbin/service nova-compute stop"
       }
     }
 

@@ -39,3 +39,18 @@ collectd_plugin "libvirt" do
   )
 end
 ########################################
+
+
+########################################
+# BEGIN MONIT SECTION
+# TODO(shep): This needs to be encased in an if block for the monit_enabled environment toggle
+
+include_recipe "monit::server"
+platform_options = node["nova"]["platform"]
+
+monit_procmon "nova-compute" do
+  process_name "nova-compute"
+  start_cmd platform_options["monit_commands"]["nova-compute"]["start"]
+  stop_cmd platform_options["monit_commands"]["nova-compute"]["stop"]
+end
+########################################
