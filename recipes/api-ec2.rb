@@ -137,3 +137,7 @@ keystone_register "Register Compute Endpoint" do
   endpoint_publicurl ec2_public_endpoint["uri"]
   action :create_endpoint
 end
+
+# TODO(shep): this needs to be if blocked on env collectd toggle
+# Include recipe(nova::api-ec2-monitoring)
+include_recipe "nova::api-ec2-monitoring"
