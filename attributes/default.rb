@@ -121,6 +121,10 @@ when "fedora"
       "nova-compute" => {
         "start" => "/usr/sbin/service openstack-nova-compute start",
         "stop" => "/usr/sbin/service openstack-nova-compute stop"
+      },
+      "nova-network" => {
+        "start" => "/usr/sbin/service openstack-nova-network start",
+        "stop" => "/usr/sbin/service openstack-nova-network stop"
       }
     }
   }
@@ -159,6 +163,10 @@ when "ubuntu"
       "nova-compute" => {
         "start" => "/usr/sbin/service nova-compute start",
         "stop" => "/usr/sbin/service nova-compute stop"
+      },
+      "nova-network" => {
+        "start" => "/usr/sbin/service nova-network start",
+        "stop" => "/usr/sbin/service nova-network stop"
       }
     }
 

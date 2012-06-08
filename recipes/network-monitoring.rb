@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: network
+# Recipe:: network-monitoring
 #
 # Copyright 2009, Rackspace Hosting, Inc.
 #
@@ -17,24 +17,16 @@
 # limitations under the License.
 #
 
-include_recipe "nova::nova-common"
+########################################
+# BEGIN MONIT SECTION
+# TODO(shep): This needs to be encased in an if block for the monit_enabled environment toggle
 
+include_recipe "monit::server"
 platform_options = node["nova"]["platform"]
 
-platform_options["nova_network_packages"].each do |pkg|
-  package pkg do
-    action :upgrade
-    options platform_options["package_overrides"]
-  end
+monit_procmon "nova-network" do
+  process_name "nova-network"
+  start_cmd platform_options["monit_commands"]["nova-network"]["start"]
+  stop_cmd platform_options["monit_commands"]["nova-network"]["stop"]
 end
-
-service "nova-network" do
-  service_name platform_options["nova_network_service"]
-  supports :status => true, :restart => true
-  action :enable
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-end
-
-# TODO(shep): this needs to be if blocked on env collectd toggle
-# Include recipe(nova::network-monitoring)
-include_recipe "nova::network-monitoring"
+########################################
