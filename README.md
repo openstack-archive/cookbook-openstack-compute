@@ -1,7 +1,11 @@
 Description
 ===========
 
-This cookbook installs the OpenStack Compute service **Nova** as part of the OpenStack **Essex** reference deployment Chef for OpenStack. The http://github.com/opscode/openstack-chef-repo contains documentation for using this cookbook in the context of a full OpenStack deployment. Nova is installed from packages.
+This cookbook installs the OpenStack Compute service **Nova** as part
+of a reference deployment Chef for OpenStack. The
+http://github.com/opscode/openstack-chef-repo contains documentation
+for using this cookbook in the context of a full OpenStack deployment.
+Nova is installed from packages.
 
 http://nova.openstack.org
 
