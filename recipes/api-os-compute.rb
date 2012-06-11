@@ -44,7 +44,7 @@ platform_options["api_os_compute_packages"].each do |pkg|
 end
 
 service "nova-api-os-compute" do
-  service_name platform_options["nova_os_compute_service"]
+  service_name platform_options["api_os_compute_service"]
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
