@@ -21,8 +21,6 @@
 # nova recipe, in case there are other monitoring systems besides
 # collectd that people want to integrate.
 
-include_recipe "collectd-graphite::collectd-client"
-
 # First, let's monitor mysql
 
 # this gets me credentials, still need per-role info on db name
@@ -49,8 +47,37 @@ rolemap.each_pair do |role, key|
   end
 end
 
+ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
+keystone = get_settings_by_roles("keystone", "keystone")
+keystone_admin_user = keystone["admin_user"]
+keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
+keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
+
+########################################
+# BEGIN COLLECTD SECTION
+# TODO(shep): This needs to be encased in an if block for the collectd_enabled environment toggle
+
+include_recipe "collectd-graphite::collectd-client"
+
 collectd_plugin "mysql" do
   template "collectd-plugin-mysql.conf.erb"
   cookbook "nova"
   options :databases => db_options
 end
+
+cookbook_file File.join(node['collectd']['plugin_dir'], "nova_plugin.py") do
+  source "nova_plugin.py"
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
+collectd_python_plugin "nova_plugin" do
+  options(
+    "Username"=>keystone_admin_user,
+    "Password"=>keystone_admin_password,
+    "TenantName"=>keystone_admin_tenant,
+    "AuthURL"=>ks_service_endpoint["uri"]
+  )
+end
+########################################
