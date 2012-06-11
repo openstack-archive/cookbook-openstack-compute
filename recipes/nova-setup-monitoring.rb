@@ -21,63 +21,60 @@
 # nova recipe, in case there are other monitoring systems besides
 # collectd that people want to integrate.
 
-# First, let's monitor mysql
-
-# this gets me credentials, still need per-role info on db name
-mysql_info = get_settings_by_role("mysql-master", "mysql")
-
-# run through each role and find the db usernames and passwords
-db_options = {}
-rolemap = {
-  "keystone" => "keystone",
-  "glance-registry" => "glance",
-  "horizon-server" => "horizon",
-  "nova-setup" => "nova"
-}
-
-rolemap.each_pair do |role, key|
-  attrs = get_settings_by_role(role, key)
-  if attrs
-    db_options[attrs["db"]["name"]] = {
-      :host => mysql_info["bind_address"],
-      :user => attrs["db"]["username"],
-      :password => attrs["db"]["password"],
-      :master_stats => false
-    }
-  end
-end
-
-ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
-keystone = get_settings_by_roles("keystone", "keystone")
-keystone_admin_user = keystone["admin_user"]
-keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
-keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
-
 ########################################
 # BEGIN COLLECTD SECTION
-# TODO(shep): This needs to be encased in an if block for the collectd_enabled environment toggle
+# Allow for enable/disable of monit
+if node["enable_collectd"]
+  include_recipe "collectd-graphite::collectd-client"
 
-include_recipe "collectd-graphite::collectd-client"
+  ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
+  keystone = get_settings_by_roles("keystone", "keystone")
+  keystone_admin_user = keystone["admin_user"]
+  keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
+  keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
+  mysql_info = get_settings_by_role("mysql-master", "mysql")
 
-collectd_plugin "mysql" do
-  template "collectd-plugin-mysql.conf.erb"
-  cookbook "nova"
-  options :databases => db_options
-end
+  # run through each role and find the db usernames and passwords
+  db_options = {}
+  rolemap = {
+    "keystone" => "keystone",
+    "glance-registry" => "glance",
+    "horizon-server" => "horizon",
+    "nova-setup" => "nova"
+  }
 
-cookbook_file File.join(node['collectd']['plugin_dir'], "nova_plugin.py") do
-  source "nova_plugin.py"
-  owner "root"
-  group "root"
-  mode "0644"
-end
+  rolemap.each_pair do |role, key|
+    attrs = get_settings_by_role(role, key)
+    if attrs
+      db_options[attrs["db"]["name"]] = {
+        :host => mysql_info["bind_address"],
+        :user => attrs["db"]["username"],
+        :password => attrs["db"]["password"],
+        :master_stats => false
+      }
+    end
+  end
 
-collectd_python_plugin "nova_plugin" do
-  options(
-    "Username"=>keystone_admin_user,
-    "Password"=>keystone_admin_password,
-    "TenantName"=>keystone_admin_tenant,
-    "AuthURL"=>ks_service_endpoint["uri"]
-  )
+  collectd_plugin "mysql" do
+    template "collectd-plugin-mysql.conf.erb"
+    cookbook "nova"
+    options :databases => db_options
+  end
+
+  cookbook_file File.join(node['collectd']['plugin_dir'], "nova_plugin.py") do
+    source "nova_plugin.py"
+    owner "root"
+    group "root"
+    mode "0644"
+  end
+
+  collectd_python_plugin "nova_plugin" do
+    options(
+      "Username"=>keystone_admin_user,
+      "Password"=>keystone_admin_password,
+      "TenantName"=>keystone_admin_tenant,
+      "AuthURL"=>ks_service_endpoint["uri"]
+    )
+  end
 end
 ########################################

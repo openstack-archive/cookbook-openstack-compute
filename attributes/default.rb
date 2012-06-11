@@ -1,12 +1,15 @@
+########################################################################
+# Toggles - These can be overridden at the environment level
+default["enable_monit"] = True  # OS provides packages
+default["enable_collectd"] = False  # OS does not provide packages
+default["developer_mode"] = False  # we want secure passwords by default
+########################################################################
+
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
-# Replacing with OpenSSL::Password in recipes/nova-common.rb
-#default["nova"]["db"]["password"] = "nova"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
-# Replacing with OpenSSL::Password in recipes/api-os-compute.rb and recipes/api-ec2.rb
-#default["nova"]["service_pass"] = "zCSupi4M"
 default["nova"]["service_role"] = "admin"
 
 default["nova"]["services"]["api"]["scheme"] = "http"
