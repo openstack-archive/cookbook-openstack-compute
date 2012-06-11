@@ -137,3 +137,7 @@ keystone_register "Register Compute Endpoint" do
   endpoint_publicurl nova_api_endpoint["uri"]
   action :create_endpoint
 end
+
+# TODO(shep): this needs to be if blocked on env collectd toggle
+# Include recipe(nova::api-os-compute-monitoring)
+include_recipe "nova::api-os-compute-monitoring"
