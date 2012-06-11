@@ -19,14 +19,15 @@
 
 ########################################
 # BEGIN MONIT SECTION
-# TODO(shep): This needs to be encased in an if block for the monit_enabled environment toggle
+# Allow for enable/disable of monit
+if node["enable_monit"]
+  include_recipe "monit::server"
+  platform_options = node["nova"]["platform"]
 
-include_recipe "monit::server"
-platform_options = node["nova"]["platform"]
-
-monit_procmon "nova-api-metadata" do
-  process_name "nova-api-metadata"
-  start_cmd platform_options["monit_commands"]["nova-api-metadata"]["start"]
-  stop_cmd platform_options["monit_commands"]["nova-api-metadata"]["stop"]
+  monit_procmon "nova-api-metadata" do
+    process_name "nova-api-metadata"
+    start_cmd platform_options["monit_commands"]["nova-api-metadata"]["start"]
+    stop_cmd platform_options["monit_commands"]["nova-api-metadata"]["stop"]
+  end
 end
 ########################################
