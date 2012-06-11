@@ -94,7 +94,7 @@ when "fedora"
     "api_os_compute_packages" => ["openstack-nova"],
     "api_os_compute_service" => "openstack-nova-api",
     "api_os_volume_packages" => ["openstack-nova"],
-    "api_os_volume_service" => "openstack_nova_api",
+    "api_os_volume_service" => "openstack-nova-api",
     "nova_volume_packages" => ["openstack-nova"],
     "nova_volume_service" => "openstack-nova-volume",
     "nova_api_metadata_packages" => ["openstack-nova"],
