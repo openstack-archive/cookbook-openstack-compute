@@ -17,14 +17,17 @@
 # limitations under the License.
 #
 
-include_recipe "nova::nova-common"
-include_recipe "monit::server"
-include_recipe "mysql::server"
+########################################
+# BEGIN MONIT SECTION
+# Allow for enable/disable of monit
+if node["enable_monit"]
+  include_recipe "monit::server"
+  platform_options = node["nova"]["platform"]
 
-platform_options = node["nova"]["platform"]
-
-monit_procmon "mysqld" do
-  process_name "mysqld"
-  start_cmd platform_options["monit_commands"]["mysqld"]["start"]
-  stop_cmd platform_options["monit_commands"]["mysqld"]["stop"]
+  monit_procmon "mysqld" do
+    process_name "mysqld"
+    start_cmd platform_options["monit_commands"]["mysqld"]["start"]
+    stop_cmd platform_options["monit_commands"]["mysqld"]["stop"]
+  end
 end
+########################################
