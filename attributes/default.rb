@@ -68,7 +68,7 @@ default["nova"]["networks"] = [
         }
 ]
 
-default["nova"]["network"]["fixed_range"] = "192.168.100.0/24"
+default["nova"]["network"]["fixed_range"] = default["nova"]["networks"][0]["ipv4_cidr"]
 default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 
 default["nova"]["libvirt"]["virt_type"] = "kvm"
