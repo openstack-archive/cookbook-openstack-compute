@@ -16,13 +16,13 @@ rabbit_port=5672
 rabbit_host=<%= @rabbit_ipaddress %>
 
 # SCHEDULER
-#--scheduler_manager=nova.scheduler.abstract_scheduler.AbstractScheduler
-scheduler_driver=nova.scheduler.simple.SimpleScheduler
+# scheduler_manager=nova.scheduler.manager.SchedulerManager
+scheduler_driver=<%= @scheduler_driver %>
 node_availability_zone=<%= @availability_zone %>
 default_schedule_zone=nova
 
 # NETWORK
-network_manager=nova.network.manager.FlatDHCPManager
+network_manager=<%= @network_manager %>
 #--flat_interface=eth1
 #--flat_network_dhcp_start=10.20.1.2
 #--public_interface=eth0

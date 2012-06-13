@@ -45,6 +45,7 @@ default["nova"]["services"]["volume"]["path"] = "/v1/%(tenant_id)s"
 # can this be wedged into the "api" endpoint?
 default["nova"]["compute"]["region"] = "RegionOne"
 
+# TODO(shep): This should probably be ['nova']['network']['fixed']
 default["nova"]["networks"] = [
         {
                 "label" => "public",
@@ -70,7 +71,9 @@ default["nova"]["networks"] = [
 
 default["nova"]["network"]["fixed_range"] = default["nova"]["networks"][0]["ipv4_cidr"]
 default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
+default["nova"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
 
+default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.simple.SimpleScheduler"
 default["nova"]["libvirt"]["virt_type"] = "kvm"
 default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
 default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
