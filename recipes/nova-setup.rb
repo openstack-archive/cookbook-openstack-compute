@@ -35,43 +35,13 @@ end
 include_recipe "nova::nova-common"
 include_recipe "mysql::client"
 
-if Chef::Config[:solo]
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-else
-  # Lookup mysql ip address
-  mysql_server = search(:node, "roles:mysql-master AND chef_environment:#{node.chef_environment}")
-  if mysql_server.length > 0
-    Chef::Log.info("nova::nova-common/mysql: using search")
-    db_ip_address = mysql_server[0]['mysql']['bind_address']
-    db_root_password = mysql_server[0]['mysql']['server_root_password']
-  else
-    Chef::Log.info("nova::nova-common/mysql: NOT using search")
-    db_ip_address = node['mysql']['bind_address']
-    db_root_password = node['mysql']['server_root_password']
-  end
-end
-
-connection_info = {:host => db_ip_address, :username => "root", :password => db_root_password}
-mysql_database "create nova database" do
-  connection connection_info
-  database_name node["nova"]["db"]["name"]
-  action :create
-end
-
-mysql_database_user node["nova"]["db"]["username"] do
-  connection connection_info
-  password node["nova"]["db"]["password"]
-  action :create
-end
-
-mysql_database_user node["nova"]["db"]["username"] do
-  connection connection_info
-  password node["nova"]["db"]["password"]
-  database_name node["nova"]["db"]["name"]
-  host '%'
-  privileges ["all"]
-  action :grant
-end
+#creates db and user
+#function defined in osops-utils/libraries
+create_db_and_user("mysql",
+                   "nova",
+                   node["nova"]["db"]["name"],
+                   node["nova"]["db"]["username"],
+                   node["nova"]["db"]["password"])
 
 execute "nova-manage db sync" do
   command "nova-manage db sync"
