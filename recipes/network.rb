@@ -35,6 +35,5 @@ service "nova-network" do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-# TODO(shep): this needs to be if blocked on env collectd toggle
 # Include recipe(nova::network-monitoring)
 include_recipe "nova::network-monitoring"

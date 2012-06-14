@@ -48,6 +48,5 @@ end
 
 include_recipe "nova::libvirt"
 
-# TODO(shep): this needs to be if blocked on env collectd toggle
 # Include recipe(nova::compute-monitoring)
 include_recipe "nova::compute-monitoring"

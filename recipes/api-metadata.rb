@@ -65,6 +65,5 @@ template "/etc/nova/api-paste.ini" do
   notifies :restart, resources(:service => "nova-api-metadata"), :delayed
 end
 
-# TODO(shep): this needs to be if blocked on env collectd toggle
 # Include recipe(nova::api-metadata-monitoring)
 include_recipe "nova::api-metadata-monitoring"

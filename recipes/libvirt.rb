@@ -98,6 +98,5 @@ template "/etc/default/libvirt-bin" do
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
-# TODO(shep): this needs to be if blocked on env collectd toggle
 # Include recipe(nova::libvirt-monitoring)
 include_recipe "nova::libvirt-monitoring"
