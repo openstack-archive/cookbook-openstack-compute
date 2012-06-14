@@ -59,7 +59,6 @@ when "ubuntu","debian"
     subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
   end
 
-  # TODO(shep): this needs to be if blocked on env collectd toggle
   # Include recipe(nova::vncproxy-monitoring)
   include_recipe "nova::vncproxy-monitoring"
 end

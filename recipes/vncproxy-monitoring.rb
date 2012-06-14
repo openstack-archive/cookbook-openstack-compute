@@ -26,8 +26,8 @@ if node["enable_monit"]
 
   monit_procmon "nova-consoleauth" do
     process_name "nova-consoleauth"
-    start_cmd platform_options["monit_commands"]["nova-consoleauth"]["start"]
-    stop_cmd platform_options["monit_commands"]["nova-consoleauth"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["nova_vncproxy_consoleauth_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["nova_vncproxy_consoleauth_service"] + " stop"
   end
 end
 ########################################

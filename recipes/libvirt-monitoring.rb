@@ -48,8 +48,8 @@ if node["enable_monit"]
 
   monit_procmon "libvirt-bin" do
     process_name "libvirtd"
-    start_cmd platform_options["monit_commands"]["libvirt-bin"]["start"]
-    stop_cmd platform_options["monit_commands"]["libvirt-bin"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["libvirt_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["libvirt_service"] + " stop"
   end
 end
 ########################################

@@ -65,6 +65,5 @@ template "/etc/nova/api-paste.ini" do
   notifies :restart, resources(:service => "nova-api-os-volume"), :delayed
 end
 
-# TODO(shep): this needs to be if blocked on env collectd toggle
 # Include recipe(nova::api-os-volume-monitoring)
 include_recipe "nova::api-os-volume-monitoring"
