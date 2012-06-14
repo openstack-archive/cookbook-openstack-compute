@@ -27,8 +27,8 @@ if node["enable_monit"]
 
   monit_procmon "nova-network" do
     process_name "nova-network"
-    start_cmd platform_options["monit_commands"]["nova-network"]["start"]
-    stop_cmd platform_options["monit_commands"]["nova-network"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["nova_network_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["nova_network_service"] + " stop"
   end
 end
 ########################################

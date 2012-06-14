@@ -26,8 +26,8 @@ if node["enable_monit"]
 
   monit_procmon "nova-api-ec2" do
     process_name "nova-api-ec2"
-    start_cmd platform_options["monit_commands"]["nova-api-ec2"]["start"]
-    stop_cmd platform_options["monit_commands"]["nova-api-ec2"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["api_ec2_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["api_ec2_service"] + " stop"
   end
 end
 ########################################

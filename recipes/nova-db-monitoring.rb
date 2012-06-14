@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: nova-db
+# Recipe:: nova-db-monitoring
 #
 # Copyright 2009, Rackspace Hosting, Inc.
 #
@@ -26,8 +26,8 @@ if node["enable_monit"]
 
   monit_procmon "mysqld" do
     process_name "mysqld"
-    start_cmd platform_options["monit_commands"]["mysqld"]["start"]
-    stop_cmd platform_options["monit_commands"]["mysqld"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["mysql_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["mysql_service"] + " stop"
   end
 end
 ########################################

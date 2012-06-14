@@ -26,8 +26,8 @@ if node["enable_monit"]
 
   monit_procmon "nova-scheduler" do
     process_name "nova-scheduler"
-    start_cmd platform_options["monit_commands"]["nova-scheduler"]["start"]
-    stop_cmd platform_options["monit_commands"]["nova-scheduler"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["nova_scheduler_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["nova_scheduler_service"] + " stop"
   end
 end
 ########################################

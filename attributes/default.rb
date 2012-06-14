@@ -119,51 +119,10 @@ when "fedora"
     "nova_vncproxy_consoleauth_packages" => ["openstack-nova"],
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
+    "mysql_service" => "mysqld",
     "common_packages" => ["openstack-nova"],
     "iscsi_helper" => "ietadm",
     "package_overrides" => "",
-    "monit_commands" => {
-      "mysqld" => {
-        "start" => "/usr/sbin/service mysqld start",
-        "stop" => "/usr/sbin/service mysqld stop"
-      },
-      "nova-compute" => {
-        "start" => "/usr/sbin/service openstack-nova-compute start",
-        "stop" => "/usr/sbin/service openstack-nova-compute stop"
-      },
-      "nova-network" => {
-        "start" => "/usr/sbin/service openstack-nova-network start",
-        "stop" => "/usr/sbin/service openstack-nova-network stop"
-      },
-      "nova-scheduler" => {
-        "start" => "/usr/sbin/service openstack-nova-scheduler start",
-        "stop" => "/usr/sbin/service openstack-nova-scheduler stop"
-      },
-      "nova-volume" => {
-        "start" => "/usr/sbin/service openstack-nova-volume start",
-        "stop" => "/usr/sbin/service openstack-nova-volume stop"
-      },
-      "nova-api-os-compute" => {
-        "start" => "/usr/sbin/service openstack-nova-api-os-compute start",
-        "stop" => "/usr/sbin/service openstack-nova-api-os-compute stop"
-      },
-      "nova-api-os-volume" => {
-        "start" => "/usr/sbin/service openstack-nova-api-os-volume start",
-        "stop" => "/usr/sbin/service openstack-nova-api-os-volume stop"
-      },
-      "nova-api-ec2" => {
-        "start" => "/usr/sbin/service openstack-nova-api-ec2 start",
-        "stop" => "/usr/sbin/service openstack-nova-api-ec2 stop"
-      },
-      "nova-api-metadata" => {
-        "start" => "/usr/sbin/service openstack-nova-api-metadata start",
-        "stop" => "/usr/sbin/service openstack-nova-api-metadata stop"
-      },
-      "libvirt-bin" => {
-        "start" => "/usr/sbin/service libvirt-bin start",
-        "stop" => "/usr/sbin/service libvirt-bin stop"
-      }
-    }
   }
 when "ubuntu"
   default["nova"]["platform"] = {
@@ -189,55 +148,9 @@ when "ubuntu"
     "nova_vncproxy_consoleauth_service" => "nova-consoleauth",
     "libvirt_packages" => ["libvirt-bin"],
     "libvirt_service" => "libvirt-bin",
+    "mysql_service" => "mysql",
     "common_packages" => ["nova-common"],
     "iscsi_helper" => "tgtadm",
-    "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'",
-    "monit_commands" => {
-      "mysqld" => {
-        "start" => "/usr/sbin/service mysql start",
-        "stop" => "/usr/sbin/service mysql stop"
-      },
-      "nova-compute" => {
-        "start" => "/usr/sbin/service nova-compute start",
-        "stop" => "/usr/sbin/service nova-compute stop"
-      },
-      "nova-network" => {
-        "start" => "/usr/sbin/service nova-network start",
-        "stop" => "/usr/sbin/service nova-network stop"
-      },
-      "nova-scheduler" => {
-        "start" => "/usr/sbin/service nova-scheduler start",
-        "stop" => "/usr/sbin/service nova-scheduler stop"
-      },
-      "nova-volume" => {
-        "start" => "/usr/sbin/service nova-volume start",
-        "stop" => "/usr/sbin/service nova-volume stop"
-      },
-      "nova-api-os-compute" => {
-        "start" => "/usr/sbin/service nova-api-os-compute start",
-        "stop" => "/usr/sbin/service nova-api-os-compute stop"
-      },
-      "nova-api-os-volume" => {
-        "start" => "/usr/sbin/service nova-api-os-volume start",
-        "stop" => "/usr/sbin/service nova-api-os-volume stop"
-      },
-      "nova-api-ec2" => {
-        "start" => "/usr/sbin/service nova-api-ec2 start",
-        "stop" => "/usr/sbin/service nova-api-ec2 stop"
-      },
-      "nova-api-metadata" => {
-        "start" => "/usr/sbin/service nova-api-metadata start",
-        "stop" => "/usr/sbin/service nova-api-metadata stop"
-      },
-      "nova-consoleauth" => {
-        "start" => "/usr/sbin/service nova-consoleauth start",
-        "stop" => "/usr/sbin/service nova-consoleauth stop"
-      },
-      "libvirt-bin" => {
-        "start" => "/usr/sbin/service libvirt-bin start",
-        "stop" => "/usr/sbin/service libvirt-bin stop"
-      }
-    }
-
+    "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end

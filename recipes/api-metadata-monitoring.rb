@@ -26,8 +26,8 @@ if node["enable_monit"]
 
   monit_procmon "nova-api-metadata" do
     process_name "nova-api-metadata"
-    start_cmd platform_options["monit_commands"]["nova-api-metadata"]["start"]
-    stop_cmd platform_options["monit_commands"]["nova-api-metadata"]["stop"]
+    start_cmd "/usr/sbin/service " + platform_options["nova_api_metadata_service"] + " start"
+    stop_cmd "/usr/sbin/service " + platform_options["nova_api_metadata_service"] + " stop"
   end
 end
 ########################################
