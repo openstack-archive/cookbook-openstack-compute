@@ -59,5 +59,5 @@ keystone_register "Register Volume Endpoint" do
   action :create_endpoint
 end
 
-# Include recipe(nova::volume-monitoring)
-include_recipe "nova::volume-monitoring"
+# TODO(shep): Commenting out until we add volume support"
+# include_recipe "nova::volume-monitoring"
