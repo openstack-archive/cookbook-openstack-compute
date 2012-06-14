@@ -38,7 +38,6 @@ include_recipe "mysql::client"
 #creates db and user
 #function defined in osops-utils/libraries
 create_db_and_user("mysql",
-                   "nova",
                    node["nova"]["db"]["name"],
                    node["nova"]["db"]["username"],
                    node["nova"]["db"]["password"])
