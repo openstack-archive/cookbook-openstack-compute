@@ -20,7 +20,7 @@
 ########################################
 # BEGIN COLLECTD SECTION
 # Allow for enable/disable of collectd
-if node["enable_collectd"]
+if get_settings_by_role("collectd-server", "roles") and node["roles"].include?("collectd-client")
   include_recipe "collectd-graphite::collectd-client"
   nova = get_settings_by_role("single-compute", "nova")
   if nova["libvirt"]["virt_type"] == "qemu"
