@@ -33,7 +33,7 @@ if get_settings_by_role("collectd-server", "roles") and node["roles"].include?("
   end
 
   collectd_plugin "libvirt" do
-    template "collect-plugin-libvirt.conf.erb"
+    template "collectd-plugin-libvirt.conf.erb"
     cookbook "nova"
     options(
       "Connection"=>virt_conn,
