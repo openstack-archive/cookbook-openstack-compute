@@ -39,6 +39,12 @@ nova_compute_packages.each do |pkg|
   end
 end
 
+cookbook_file "/etc/nova/nova-compute.conf" do
+  source "nova-compute.conf"
+  mode "0600"
+  action :create
+end
+
 service "nova-compute" do
   service_name platform_options["nova_compute_service"]
   supports :status => true, :restart => true
