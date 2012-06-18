@@ -22,14 +22,19 @@
 # Allow for enable/disable of collectd
 if get_settings_by_role("collectd-server", "roles") and node["roles"].include?("collectd-client")
   include_recipe "collectd-graphite::collectd-client"
+
+  # Figure out which connection type to use for libvirt
   nova = get_settings_by_role("single-compute", "nova")
   if nova["libvirt"]["virt_type"] == "qemu"
     virt_conn = "qemu:///system"
   else
+    # TODO(shep): Not sure this is the right one
     virt_conn = "kvm:///"
   end
 
   collectd_plugin "libvirt" do
+    template "collect-plugin-libvirt.conf.erb"
+    cookbook "nova"
     options(
       "Connection"=>virt_conn,
       "HostnameFormat"=>"name",
