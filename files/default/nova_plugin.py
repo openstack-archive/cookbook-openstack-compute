@@ -19,7 +19,7 @@ def get_stats(user, passwd, tenant, url):
     user_list = keystone.users.list()
     admin_uuid = ""
     for user in user_list:
-        if user.name == "admin":
+        if user.name == username:
             admin_uuid = user.id
 
     # Find out which tenants I have roles in
