@@ -18,9 +18,9 @@ def get_stats(user, passwd, tenant, url):
     # Find my uuid
     user_list = keystone.users.list()
     admin_uuid = ""
-    for user in user_list:
-        if user.name == username:
-            admin_uuid = user.id
+    for usr in user_list:
+        if usr.name == user:
+            admin_uuid = usr.id
 
     # Find out which tenants I have roles in
     tenant_list = keystone.tenants.list()
@@ -43,7 +43,7 @@ def get_stats(user, passwd, tenant, url):
 
     # for tenant in tenant_list:
     for tenant in my_tenants:
-        client = NovaClient("1.1",username,password,tenant['name'],auth_url,service_type="compute")
+        client = NovaClient("1.1",user,passwd,tenant['name'],url,service_type="compute")
 
         # Figure out how much ram has been allocated total for all servers
         server_list = client.servers.list()
