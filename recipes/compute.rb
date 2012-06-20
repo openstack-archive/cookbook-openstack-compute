@@ -56,3 +56,9 @@ include_recipe "nova::libvirt"
 
 # Include recipe(nova::compute-monitoring)
 include_recipe "nova::compute-monitoring"
+
+
+# Sysctl tunables
+sysctl_multi "nova" do
+  instructions "net.ipv4.ip_forward" => "1"
+end
