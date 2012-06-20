@@ -41,6 +41,10 @@ default["nova"]["services"]["volume"]["network"] = "public"
 default["nova"]["services"]["volume"]["port"] = 8776
 default["nova"]["services"]["volume"]["path"] = "/v1/%(tenant_id)s"
 
+# Logging stuff
+default["nova"]["syslog"]["use"] = True
+default["nova"]["syslog"]["facility"] = "LOG_LOCAL1"
+
 # can this be wedged into the "api" endpoint?
 default["nova"]["compute"]["region"] = "RegionOne"
 
