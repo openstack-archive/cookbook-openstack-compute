@@ -57,6 +57,8 @@ template "/etc/nova/nova.conf" do
   group "root"
   mode "0644"
   variables(
+    "use_syslog" => node["nova"]["syslog"]["use"],
+    "log_facility" => node["nova"]["syslog"]["facility"],
     "db_ipaddress" => mysql_info["bind_address"],
     "user" => node["nova"]["db"]["username"],
     "passwd" => nova_setup_info["db"]["password"],
