@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-if node["nova"]["syslog"]["use"] == True
+if node["nova"]["syslog"]["use"] == true
     template "/etc/rsyslog.d/21-nova.conf" do
         source "21-nova.conf.erb"
         owner "root"
