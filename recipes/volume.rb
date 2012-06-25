@@ -33,8 +33,8 @@ end
 #   service_name=platform_options["nova_volume_service"]
 
 #   process_name "nova-volume"
-#   start_cmd "/usr/sbin/service #{service_naem} start"
-#   stop_cmd "/usr/sbin/service #{service_naem} stop"
+#   start_cmd "/usr/sbin/service #{service_name} start"
+#   stop_cmd "/usr/sbin/service #{service_name} stop"
 # end
 
 

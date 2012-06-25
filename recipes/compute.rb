@@ -58,7 +58,7 @@ monitoring_procmon "nova-compute" do
 
   process_name "nova-compute"
   start_cmd "/usr/sbin/service #{service_name} start"
-  stop_cmd "/usr/sbin/service #{service_naem} stop"
+  stop_cmd "/usr/sbin/service #{service_name} stop"
 end
 
 include_recipe "nova::libvirt"
