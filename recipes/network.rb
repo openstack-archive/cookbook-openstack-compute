@@ -18,6 +18,7 @@
 #
 
 include_recipe "nova::nova-common"
+include_recipe "monitoring"
 
 platform_options = node["nova"]["platform"]
 
@@ -35,5 +36,10 @@ service "nova-network" do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-# Include recipe(nova::network-monitoring)
-include_recipe "nova::network-monitoring"
+monitoring_procmon "nova-network" do
+  service_name=platform_options["nova_network_service"]
+
+  process_name "nova-network"
+  start_cmd "/usr/sbin/service #{service_name} start"
+  stop_cmd "/usr/sbin/service #{service_name} stop"
+end

@@ -5,6 +5,7 @@
 
 include_recipe "nova::nova-common"
 include_recipe "nova::api-os-volume"
+include_recipe "monitoring"
 
 platform_options = node["nova"]["platform"]
 
@@ -25,6 +26,17 @@ service "nova-volume" do
   action :disable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
+
+# TODO(rp): need the flag on whether or not to start nova-volume service
+# this is already on backlog
+# monitoring_procmon "nova-volume" do
+#   service_name=platform_options["nova_volume_service"]
+
+#   process_name "nova-volume"
+#   start_cmd "/usr/sbin/service #{service_naem} start"
+#   stop_cmd "/usr/sbin/service #{service_naem} stop"
+# end
+
 
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
@@ -58,6 +70,3 @@ keystone_register "Register Volume Endpoint" do
   endpoint_publicurl volume_endpoint["uri"]
   action :create_endpoint
 end
-
-# TODO(shep): Commenting out until we add volume support"
-# include_recipe "nova::volume-monitoring"

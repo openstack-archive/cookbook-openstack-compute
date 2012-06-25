@@ -18,6 +18,7 @@
 
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 include_recipe "nova::nova-common"
+include_recipe "monitoring"
 
 platform_options=node["nova"]["platform"]
 
@@ -47,6 +48,14 @@ service "nova-api-ec2" do
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+end
+
+monitoring_procmon "nova-api-ec2" do
+  service_name = platform_options["api_ec2_service"]
+
+  process_name "nova-api_ec2"
+  start_cmd "/usr/sbin/service #{service_name} start"
+  stop_cmd "/usr/sbin/service #{service_name} stop"
 end
 
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
@@ -137,6 +146,3 @@ keystone_register "Register Compute Endpoint" do
   endpoint_publicurl ec2_public_endpoint["uri"]
   action :create_endpoint
 end
-
-# Include recipe(nova::api-ec2-monitoring)
-include_recipe "nova::api-ec2-monitoring"

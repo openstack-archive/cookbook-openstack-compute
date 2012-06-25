@@ -19,12 +19,6 @@
 
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
-# FIXME: we need a better identifier that we want to collect
-# collectd/graphite info
-if get_settings_by_role("collectd-server", "roles")
-  include_recipe "nova::nova-setup-monitoring"
-end
-
 # Allow for using a well known db password
 if node["developer_mode"]
   node.set_unless["nova"]["db"]["password"] = "nova"
@@ -34,6 +28,13 @@ end
 
 include_recipe "nova::nova-common"
 include_recipe "mysql::client"
+include_recipe "monitoring"
+
+ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
+keystone = get_settings_by_role("keystone", "keystone")
+keystone_admin_user = keystone["admin_user"]
+keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
+keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
 
 #creates db and user
 #function defined in osops-utils/libraries
@@ -62,4 +63,13 @@ if node.has_key?(:floating) and node["nova"]["network"]["floating"].has_key?(:ip
     action :run
     not_if "nova-manage floating list"
   end
+end
+
+monitoring_metric "nova-plugin" do
+  type "pyscript"
+  script "nova_plugin.py"
+  options("Username" => keystone_admin_user,
+          "Password" => keystone_admin_password,
+          "TenantName" => keystone_admin_tenant,
+          "AuthURL" => ks_service_endpoint["uri"])
 end

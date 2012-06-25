@@ -18,6 +18,7 @@
 #
 
 include_recipe "nova::nova-common"
+include_recipe "monitoring"
 
 platform_options = node["nova"]["platform"]
 
@@ -51,6 +52,14 @@ when "ubuntu","debian"
     subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
   end
 
+  monitoring_procmon "nova-vncproxy" do
+    service_name=platform_options["nova_vncproxy_service"]
+
+    process_name "nova-vncproxy"
+    start_cmd "/usr/sbin/service #{service_name} start"
+    stop_cmd "/usr/sbin/service #{service_name} stop"
+  end
+
   service "nova-consoleauth" do
     # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
     service_name platform_options["nova_vncproxy_consoleauth_service"]
@@ -59,6 +68,11 @@ when "ubuntu","debian"
     subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
   end
 
-  # Include recipe(nova::vncproxy-monitoring)
-  include_recipe "nova::vncproxy-monitoring"
+  monitoring_procmon "nova-consoleauth" do
+    service_name=platform_options["nova_vncproxy_consoleauth_service"]
+
+    process_name "nova-consoleauth"
+    start_cmd "/usr/sbin/service #{service_name} start"
+    stop_cmd "/usr/sbin/service #{service_name} stop"
+  end
 end
