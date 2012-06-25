@@ -2,7 +2,7 @@
 # Cookbook Name:: nova
 # Recipe:: nova-db-monitoring
 #
-# Copyright 2009, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace Hosting, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,17 +17,23 @@
 # limitations under the License.
 #
 
-########################################
-# BEGIN MONIT SECTION
-# Allow for enable/disable of monit
-if node["enable_monit"]
-  include_recipe "monit::server"
-  platform_options = node["nova"]["platform"]
+include_recipe "osops-utils"
+include_recipe "monitoring"
 
-  monit_procmon "mysqld" do
-    process_name "mysqld"
-    start_cmd "/usr/sbin/service " + platform_options["mysql_service"] + " start"
-    stop_cmd "/usr/sbin/service " + platform_options["mysql_service"] + " stop"
-  end
+mysql_info = get_settings_by_role("mysql-master", "mysql")
+
+monitoring_procmon "mysqld" do
+  service_name = node["nova"]["platform"]["mysql_service"]
+
+  process_name "mysqld"
+  start_cmd "/usr/sbin/service #{service_name} start"
+  stop_cmd "/usr/sbin/service #{service_name} stop"
 end
-########################################
+
+monitoring_metric "mysql" do
+  host mysql_info["bind_address"]
+  user node["nova"]["db"]["username"]
+  password node["nova"]["db"]["password"]
+  port 3306
+  db "nova"
+end

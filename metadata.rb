@@ -10,6 +10,6 @@ version           "1.0.7"
   supports os
 end
 
-%w{ apt collectd-graphite database glance keystone mysql openssh rabbitmq selinux osops-utils monit sysctl }.each do |dep|
+%w{ apt database glance keystone mysql openssh rabbitmq selinux osops-utils sysctl }.each do |dep|
   depends dep
 end
