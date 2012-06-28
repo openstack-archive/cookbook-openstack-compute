@@ -63,7 +63,7 @@ template "/etc/nova/nova.conf" do
     "user" => node["nova"]["db"]["username"],
     "passwd" => nova_setup_info["db"]["password"],
     "db_name" => node["nova"]["db"]["name"],
-    "vncserver_listen" => novnc_endpoint["host"],
+    "vncserver_listen" => "0.0.0.0",
     "vncserver_proxyclient_address" => novnc_endpoint["host"],
     "novncproxy_base_url" => novnc_endpoint["uri"],
     "xvpvncproxy_bind_host" => xvpvnc_endpoint["host"],
