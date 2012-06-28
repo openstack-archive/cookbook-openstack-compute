@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs the Openstack compute service (codename: nova) from packages.
+This cookbook installs the OpenStack Image service **Nova** as part of the OpenStack **Essex** reference deployment Chef for OpenStack. The http://github.com/opscode/openstack-chef-repo contains documentation for using this cookbook in the context of a full OpenStack deployment. Nova is installed from packages.
 
 http://nova.openstack.org
 
@@ -27,23 +27,18 @@ The following cookbooks are dependencies:
 * keystone
 * mysql
 * openssh
+* osops-utils
 * rabbitmq
 * selinux (Fedora)
-* osops-utils
-
-Resources/Providers
-===================
-
-None
-
+* sysctl
 
 Recipes
 =======
 
 api-ec2
 ----
--Includes recipe `nova-common`  
--Installs AWS EC2 compatible API and configures the service and endpoints in keystone  
+-Includes recipe `nova-common`
+-Installs AWS EC2 compatible API and configures the service and endpoints in keystone
 
 api-ec2-monitoring
 ---
@@ -53,62 +48,62 @@ api-ec2-monitoring
 
 api-metadata
 ----
--Includes recipe `nova-common`  
--Installs the nova metadata package  
+-Includes recipe `nova-common`
+-Installs the nova metadata package
 
 api-os-compute
 ----
--Includes recipe `nova-common`  
--Installs OS API and configures the service and endpoints in keystone  
+-Includes recipe `nova-common`
+-Installs OS API and configures the service and endpoints in keystone
 
 api-os-volume
 ----
--Includes recipe `nova-common`  
--Installs the OpenStack volume service API  
+-Includes recipe `nova-common`
+-Installs the OpenStack volume service API
 
 apt
 ----
--Performs an apt-get update  
+-Performs an apt-get update
 
 compute
 ----
--Includes recipes `nova-common`, `api-metadata`, `network`  
--Installs nova-compute service  
+-Includes recipes `nova-common`, `api-metadata`, `network`
+-Installs nova-compute service
 
 libvirt
 ----
--Installs libvirt, used by nova compute for management of the virtual machine environment  
+-Installs libvirt, used by nova compute for management of the virtual machine environment
 
 network
 ----
--Includes recipe `nova-common`  
--Installs nova network service  
+-Includes recipe `nova-common`
+-Installs nova network service
 
 nova-common
 ----
--May include recipe `selinux` (Fedora)  
--Builds the basic nova.conf config file with details of the rabbitmq, mysql, glance and keystone servers  
--Builds a .novarc file for root with appropriate environment variables to interact with the nova client CLI  
+-May include recipe `selinux` (Fedora)
+-Builds the basic nova.conf config file with details of the rabbitmq, mysql, glance and keystone servers
+-Builds a .novarc file for root with appropriate environment variables to interact with the nova client CLI
 
 nova-setup
 ----
--Includes recipes `nova-common`, `mysql:client`  
--Sets up the nova database on the mysql server, including the initial schema and subsequent creation of the appropriate networks  
+-Includes recipes `nova-common`, `mysql:client`
+-Sets up the nova database on the mysql server, including the initial schema and subsequent creation of the appropriate networks
 
 scheduler
 ----
--Includes recipe `nova-common`  
--Installs nova scheduler service  
+-Includes recipe `nova-common`
+-Installs nova scheduler service
 
 vncproxy
 ----
--Includes recipe `nova-common`  
--Installs and configures the vncproxy service for console access to VMs  
+-Includes recipe `nova-common`
+-Installs and configures the vncproxy service for console access to VMs
 
 volume
 ----
--Includes recipes `nova-common`, `api-os-volume`  
--Installs nova volume service and configures the service and endpoints in keystone  
+-Includes recipes `nova-common`, `api-os-volume`
+-Installs nova volume service and configures the service and endpoints in keystone
 
 nova-scheduler-patch
 ----
@@ -200,9 +195,9 @@ NOTE: service password is no longer set statically in the attributes file, but s
 
 * `nova["scheduler"]["scheduler_driver"]` - the scheduler driver to use
 NOTE: The filter scheduler currently does not work with ec2.
-* `nova["scheduler"]["default_filters"]` - a list of filters enabled for schedulers that support them. 
+* `nova["scheduler"]["default_filters"]` - a list of filters enabled for schedulers that support them.
 
-* `nova["syslog"]["use"]` - Should nova log to syslog? 
+* `nova["syslog"]["use"]` - Should nova log to syslog?
 * `nova["syslog"]["facility"]` - Which facility nova should use when logging in python style (for example, LOG_LOCAL1)
 * `nova["syslog"]["config_facility"]` - Which facility nova should use when logging in rsyslog style (for example, local1)
 
@@ -223,15 +218,17 @@ Templates
 License and Author
 ==================
 
-Author:: Justin Shepherd (<justin.shepherd@rackspace.com>)  
-Author:: Jason Cannavale (<jason.cannavale@rackspace.com>)  
-Author:: Ron Pedde (<ron.pedde@rackspace.com>)  
-Author:: Joseph Breu (<joseph.breu@rackspace.com>)  
-Author:: William Kelly (<william.kelly@rackspace.com>)  
-Author:: Darren Birkett (<darren.birkett@rackspace.co.uk>)  
-Author:: Evan Callicoat (<evan.callicoat@rackspace.com>)  
+Author:: Justin Shepherd (<justin.shepherd@rackspace.com>)
+Author:: Jason Cannavale (<jason.cannavale@rackspace.com>)
+Author:: Ron Pedde (<ron.pedde@rackspace.com>)
+Author:: Joseph Breu (<joseph.breu@rackspace.com>)
+Author:: William Kelly (<william.kelly@rackspace.com>)
+Author:: Darren Birkett (<darren.birkett@rackspace.co.uk>)
+Author:: Evan Callicoat (<evan.callicoat@rackspace.com>)
+Author:: Matt Ray (<matt@opscode.com>)
 
-Copyright 2012, Rackspace, Inc.  
+Copyright 2012 Rackspace, Inc.
+Copyright 2012 Opscode, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
