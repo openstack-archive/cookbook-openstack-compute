@@ -38,11 +38,13 @@ when "ubuntu","debian"
     end
   end
 
-  execute "Fix permission Bug" do
-    command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
-    action :run
-    only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 }
-  end
+  # TODO(breu):this needs to be re-worked when novnc and nova-xvpvncproxy can coexist.  for
+  # now don't do this at all.
+  #execute "Fix permission Bug" do
+  #  command "sed -i 's/nova$/root/g' /etc/init/nova-vncproxy.conf"
+  #  action :run
+  #  only_if { File.readlines("/etc/init/nova-vncproxy.conf").grep(/exec.*nova$/).size > 0 }
+  #end
 
   service "nova-vncproxy" do
     # TODO(breu): remove the platform specifier when fedora fixes their vncproxy package
