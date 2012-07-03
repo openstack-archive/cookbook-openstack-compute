@@ -77,6 +77,7 @@ template "/etc/nova/nova.conf" do
     "iscsi_helper" => platform_options["iscsi_helper"],
     "network_manager" => node["nova"]["network"]["network_manager"],
     "scheduler_driver" => node["nova"]["scheduler"]["scheduler_driver"],
+    "scheduler_default_filters" => node["nova"]["scheduler"]["default_filters"].join(","),
     "availability_zone" => node["nova"]["config"]["availability_zone"],
     "virt_type" => node["nova"]["libvirt"]["virt_type"],
     "fixed_range" => node["nova"]["network"]["fixed_range"],
