@@ -77,6 +77,12 @@ default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 default["nova"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
 
 default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.simple.SimpleScheduler"
+default["nova"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
+                                                   "RamFilter",
+                                                   "ComputeFilter",
+                                                   "CoreFilter",
+                                                   "SameHostFilter",
+                                                   "DifferentHostFilter"]
 default["nova"]["libvirt"]["virt_type"] = "kvm"
 default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
 default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
