@@ -65,6 +65,7 @@ xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 use_deprecated_auth=false
 allow_admin_api=true
 enable_zone_routing=true
+force_raw_images=<%= @force_raw_images %>
 
 <% if node["platform"] == "fedora" -%>
 # Adding support for non-modded euca2ools to display ip address info
