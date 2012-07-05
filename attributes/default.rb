@@ -120,7 +120,7 @@ when "fedora"
     "nova_api_metadata_service" => "openstack-nova-api",
     "nova_compute_packages" => ["openstack-nova"], # seriously?
     "nova_compute_service" => "openstack-nova-compute",
-    "nova_network_packages" => ["openstack-nova"],
+    "nova_network_packages" => ["iptables", "openstack-nova"],
     "nova_network_service" => "openstack-nova-network",
     "nova_scheduler_packages" => ["openstack-nova"],
     "nova_scheduler_service" => "openstack-nova-scheduler",
@@ -148,7 +148,7 @@ when "ubuntu"
     "nova_volume_service" => "nova-volume",
     "nova_compute_packages" => ["nova-compute"],
     "nova_compute_service" => "nova-compute",
-    "nova_network_packages" => ["nova-network"],
+    "nova_network_packages" => ["iptables", "nova-network"],
     "nova_network_service" => "nova-network",
     "nova_scheduler_packages" => ["nova-scheduler"],
     "nova_scheduler_service" => "nova-scheduler",
