@@ -24,7 +24,7 @@ rabbit_host=<%= @rabbit_ipaddress %>
 scheduler_driver=<%= @scheduler_driver %>
 scheduler_default_filters=<%= @scheduler_default_filters %>
 node_availability_zone=<%= @availability_zone %>
-default_schedule_zone=nova
+default_schedule_zone=<%= @default_schedule_zone %>
 
 # NETWORK
 network_manager=<%= @network_manager %>
@@ -65,6 +65,7 @@ xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 use_deprecated_auth=false
 allow_admin_api=true
 enable_zone_routing=true
+force_raw_images=<%= @force_raw_images %>
 
 <% if node["platform"] == "fedora" -%>
 # Adding support for non-modded euca2ools to display ip address info
