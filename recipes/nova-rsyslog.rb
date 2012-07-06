@@ -17,17 +17,14 @@
 # limitations under the License.
 #
 
-# test
-
-if node["nova"]["syslog"]["use"] == true
-    template "/etc/rsyslog.d/21-nova.conf" do
-        source "21-nova.conf.erb"
-        owner "root"
-        group "root"
-        mode "0644"
-        variables(
-            "use_syslog" => node["nova"]["syslog"]["use"],
-            "log_facility" => node["nova"]["syslog"]["facility"]
-        )
-    end
+template "/etc/rsyslog.d/21-nova.conf" do
+    source "21-nova.conf.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables(
+        "use_syslog" => node["nova"]["syslog"]["use"],
+        "log_facility" => node["nova"]["syslog"]["facility"]
+    )
+    only_if { node["nova"]["syslog"]["use"] == true }
 end
