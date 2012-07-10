@@ -52,54 +52,6 @@ monitoring_procmon "libvirt-bin" do
   stop_cmd "/usr/sbin/service #{service_name} stop"
 end
 
-directory "/var/lib/nova/.ssh" do
-    owner "nova"
-    group "nova"
-    mode "0700"
-    action :create
-end
-
-template "/var/lib/nova/.ssh/id_dsa.pub" do
-    # public key
-    source "libvirtd-ssh-public-key.erb"
-    owner "nova"
-    group "nova"
-    mode "0644"
-    variables(
-      :public_key => node["nova"]["libvirt"]["ssh"]["public_key"]
-    )
-end
-
-template "/var/lib/nova/.ssh/id_dsa" do
-    # private key
-    source "libvirtd-ssh-private-key.erb"
-    owner "nova"
-    group "nova"
-    mode "0600"
-    variables(
-      :private_key => node["nova"]["libvirt"]["ssh"]["private_key"]
-    )
-end
-
-template "/var/lib/nova/.ssh/config" do
-    # default config
-    source "libvirtd-ssh-config"
-    owner "nova"
-    group "nova"
-    mode "0644"
-end
-
-template "/var/lib/nova/.ssh/authorized_keys" do
-    # copy of the public key
-    source "libvirtd-ssh-public-key.erb"
-    owner "nova"
-    group "nova"
-    mode "0600"
-    variables(
-      :public_key => node["nova"]["libvirt"]["ssh"]["public_key"]
-    )
-end
-
 #
 # TODO(breu): this section needs to be rewritten to support key privisioning
 #
