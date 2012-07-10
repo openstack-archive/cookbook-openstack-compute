@@ -27,4 +27,5 @@ template "/etc/rsyslog.d/21-nova.conf" do
         "log_facility" => node["nova"]["syslog"]["config_facility"]
     )
     only_if { node["nova"]["syslog"]["use"] == true }
+    notifies :restart, "service[rsyslog]", :immediately
 end
