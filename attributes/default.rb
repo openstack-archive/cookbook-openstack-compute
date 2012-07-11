@@ -76,7 +76,7 @@ default["nova"]["network"]["fixed_range"] = default["nova"]["networks"][0]["ipv4
 default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 default["nova"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
 
-default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.simple.SimpleScheduler"
+default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.filter_scheduler.FilterScheduler"
 default["nova"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
                                                    "RamFilter",
                                                    "ComputeFilter",
