@@ -132,6 +132,10 @@ NOTE: service password is no longer set statically in the attributes file, but s
 * `nova["compute"]["internalURL"]` - URL used to access the OS API for user functions from an internal network
 * `nova["compute"]["publicURL"]` - URL used to access the OS API for user functions from an external network
 
+* `nova["config"]["availability_zone"]` - Nova availability zone.  Usually set at the node level to place a compute node in another az
+* `nova["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
+* `nova["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
+
 * `nova["ec2"]["api"]["protocol"]` - Protocol used for the AWS EC2 compatible API
 * `nova["ec2"]["api"]["port"]` - Port on which AWS EC2 compatible API runs
 * `nova["ec2"]["api"]["admin_path"]` - Path for admin functions in the AWS EC2 compatible API
@@ -179,6 +183,14 @@ NOTE: service password is no longer set statically in the attributes file, but s
 * `nova["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
 * `nova["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
 * `nova["libvirt"]["ssh"]["public_key"]` - Public key to use if using SSH authentication to your libvirt layer
+
+* `nova["scheduler"]["scheduler_driver"]` - the scheduler driver to use
+NOTE: The filter scheduler currently does not work with ec2.
+* `nova["scheduler"]["default_filters"]` - a list of filters enabled for schedulers that support them. 
+
+* `nova["syslog"]["use"]` - Should nova log to syslog? 
+* `nova["syslog"]["facility"]` - Which facility nova should use when logging in python style (for example, LOG_LOCAL1)
+* `nova["syslog"]["config_facility"]` - Which facility nova should use when logging in rsyslog style (for example, local1)
 
 Templates
 =====
