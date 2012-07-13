@@ -21,7 +21,7 @@ rabbit_host=<%= @rabbit_ipaddress %>
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
 scheduler_driver=<%= @scheduler_driver %>
-scheduler_available_filters="nova.scheduler.filters.standard_filters"
+scheduler_available_filters=nova.scheduler.filters.standard_filters
 # which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
 node_availability_zone=<%= @availability_zone %>
