@@ -66,13 +66,13 @@ xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 # force backing images to raw format
 force_raw_images=<%= @force_raw_images %>
 
-<%- if @scheduler_driver.matches(/FilterScheduler/) %>
+<%- if /FilterScheduler/.match(@scheduler_driver) %>
 # FilterScheduler Only Options
 # virtual CPU to Physical CPU allocation ratio (default: 16.0)
 cpu_allocation_ratio=<%= @cpu_allocation_ratio %>
 # virtual ram to physical ram allocation ratio (default: 1.5)
 ram_allocation_ratio=<%= @ram_allocation_ratio %>
-<%- elsif @scheduler_driver.matches(/SimpleScheduler/) %>
+<%- elsif /SimpleScheduler/.match(@scheduler_driver) %>
 # SimpleScheduler Only Options
 # maximum number of instance cores to allow per host
 max_cores=<% @cpu_allocation_ratio.to_i * node["cpu"]["total"].to_i %>
