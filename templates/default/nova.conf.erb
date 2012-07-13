@@ -17,21 +17,22 @@ syslog_log_facility=<%= @log_facility %>
 <% end %>
 state_path=/var/lib/nova
 lock_path=/var/lock/nova
-iscsi_helper=tgtadm
 
-# RABBITMQ
+##### RABBITMQ #####
 rabbit_password=guest
 rabbit_port=5672
 rabbit_host=<%= @rabbit_ipaddress %>
 
-# SCHEDULER
+##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
 scheduler_driver=<%= @scheduler_driver %>
+scheduler_available_filters=nova.scheduler.filters.standard_filters
+# which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
 node_availability_zone=<%= @availability_zone %>
 default_schedule_zone=<%= @default_schedule_zone %>
 
-# NETWORK
+##### NETWORK #####
 network_manager=<%= @network_manager %>
 #--flat_interface=eth1
 #--flat_network_dhcp_start=10.20.1.2
@@ -46,11 +47,11 @@ libvirt_use_virtio_for_bridges=false
 libvirt_use_virtio_for_bridges=true
 <% end -%>
 
-# GLANCE
+##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService
 glance_api_servers=<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
 
-# COMPUTE
+##### COMPUTE #####
 compute_manager=nova.compute.manager.ComputeManager
 sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @db_ipaddress %>/<%= @db_name %>
 connection_type=libvirt
@@ -59,20 +60,28 @@ root_helper=sudo nova-rootwrap
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
-# VNCPROXY
+##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>
 xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
 # This is only required on the server running xvpvncproxy
 xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
 xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 
-# MISC
-use_deprecated_auth=false
-allow_admin_api=true
-enable_zone_routing=true
+##### MISC #####
+# force backing images to raw format
 force_raw_images=<%= @force_raw_images %>
+
+<%- if /FilterScheduler/.match(@scheduler_driver) %>
+# FilterScheduler Only Options
+# virtual CPU to Physical CPU allocation ratio (default: 16.0)
 cpu_allocation_ratio=<%= @cpu_allocation_ratio %>
+# virtual ram to physical ram allocation ratio (default: 1.5)
 ram_allocation_ratio=<%= @ram_allocation_ratio %>
+<%- elsif /SimpleScheduler/.match(@scheduler_driver) %>
+# SimpleScheduler Only Options
+# maximum number of instance cores to allow per host
+max_cores=<% @cpu_allocation_ratio.to_i * node["cpu"]["total"].to_i %>
+<%- end %>
 
 <% if node["platform"] == "fedora" -%>
 # Adding support for non-modded euca2ools to display ip address info
@@ -80,8 +89,9 @@ ram_allocation_ratio=<%= @ram_allocation_ratio %>
 ec2_private_dns_show_ip=True
 <% end -%>
 
-# KEYSTONE
+##### KEYSTONE #####
 keystone_ec2_url=http://<%= @keystone_api_ipaddress %>:<%= @keystone_service_port %>/v2.0/ec2tokens
 
-# Volumes
+##### VOLUMES #####
+# iscsi target user-land tool to use
 iscsi_helper=<%= @iscsi_helper %>
