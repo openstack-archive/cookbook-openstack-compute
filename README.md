@@ -29,6 +29,7 @@ The following cookbooks are dependencies:
 * openssh
 * rabbitmq
 * selinux (Fedora)
+* osops-utils
 
 Resources/Providers
 ===================
@@ -109,10 +110,16 @@ volume
 -Includes recipes `nova-common`, `api-os-volume`  
 -Installs nova volume service and configures the service and endpoints in keystone  
 
+nova-scheduler-patch
+----
+-Includes recipe osops-utils
+-Patches nova-scheduler based on installed package version
+
 
 Attributes
 ==========
 
+* `nova["patch_files_on_disk"] - Boolean for patching files on disk
 * `nova["db"]["name"]` - Name of nova database
 * `nova["db"]["username"]` - Username for nova database access
 * `nova["db"]["password"]` - Password for nova database access
@@ -203,6 +210,7 @@ Templates
 * `local_settings.py.erb` - Dashboard (horizon) config file
 * `nova.conf.erb` - Basic nova.conf file
 * `novarc.erb` - Contains environment variable settings to enable easy use of the nova client
+* `patches/` - misc. patches for nova
 
 
 License and Author
