@@ -66,6 +66,8 @@ use_deprecated_auth=false
 allow_admin_api=true
 enable_zone_routing=true
 force_raw_images=<%= @force_raw_images %>
+cpu_allocation_ratio=<%= @cpu_allocation_ratio %>
+ram_allocation_ratio=<%= @ram_allocation_ratio %>
 
 <% if node["platform"] == "fedora" -%>
 # Adding support for non-modded euca2ools to display ip address info

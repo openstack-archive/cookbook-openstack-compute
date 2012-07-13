@@ -95,6 +95,8 @@ default["nova"]["libvirt"]["auth_tcp"] = "none"
 default["nova"]["config"]["availability_zone"] = "nova"
 default["nova"]["config"]["default_schedule_zone"] = "nova"
 default["nova"]["config"]["force_raw_images"] = false
+default["nova"]["config"]["cpu_allocation_ratio"] = 16.0
+default["nova"]["config"]["ram_allocation_ratio"] = 1.5
 
 case platform
 when "fedora", "redhat"
