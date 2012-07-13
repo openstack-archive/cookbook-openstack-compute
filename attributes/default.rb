@@ -4,6 +4,7 @@ default["enable_monit"] = false  # OS provides packages
 default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
+default["nova"]["apply_patches"] = true
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
 
