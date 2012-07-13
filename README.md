@@ -110,10 +110,10 @@ volume
 -Includes recipes `nova-common`, `api-os-volume`  
 -Installs nova volume service and configures the service and endpoints in keystone  
 
-patch
+nova-scheduler-patch
 ----
 -Includes recipe osops-utils
--Patches files on the filesystem based on installed package version
+-Patches nova-scheduler based on installed package version
 
 
 Attributes
