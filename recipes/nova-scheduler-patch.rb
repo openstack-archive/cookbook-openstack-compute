@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: patch
+# Recipe:: nova-scheduler-patch
 #
 # Copyright 2009, Rackspace Hosting, Inc.
 #

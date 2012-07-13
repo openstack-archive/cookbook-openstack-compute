@@ -50,3 +50,5 @@ monitoring_procmon "nova-scheduler" do
   start_cmd "/usr/sbin/service #{service_name} start"
   stop_cmd "/usr/sbin/service #{service_name} stop"
 end
+
+include_recipe "nova::nova-scheduler-patch"
