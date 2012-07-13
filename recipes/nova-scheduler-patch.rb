@@ -25,6 +25,5 @@ template "/usr/share/pyshared/nova/scheduler/filters/affinity_filter.py" do
   group "root"
   mode "0644"
   notifies :restart, resources(:service => "nova-scheduler"), :immediately
-  only_if { node["patch_files_on_disk"] and
-            ::Chef::Recipe::Patch.check_package_version("nova-scheduler","2012.1+stable~20120612-3ee026e-0ubuntu1.2") }
+  only_if { ::Chef::Recipe::Patch.check_package_version("nova-scheduler","2012.1+stable~20120612-3ee026e-0ubuntu1.2",node) }
 end
