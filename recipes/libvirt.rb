@@ -74,4 +74,6 @@ template "/etc/default/libvirt-bin" do
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
-monitoring_metric "libvirt"
+monitoring_metric "libvirt" do
+  type "libvirt"
+end
