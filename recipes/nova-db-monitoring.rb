@@ -31,6 +31,7 @@ monitoring_procmon "mysqld" do
 end
 
 monitoring_metric "mysql" do
+  type "mysql"
   host mysql_info["bind_address"]
   user node["nova"]["db"]["username"]
   password node["nova"]["db"]["password"]
