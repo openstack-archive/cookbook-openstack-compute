@@ -95,6 +95,15 @@ default["nova"]["config"]["default_schedule_zone"] = "nova"
 default["nova"]["config"]["force_raw_images"] = false
 default["nova"]["config"]["cpu_allocation_ratio"] = 16.0
 default["nova"]["config"]["ram_allocation_ratio"] = 1.5
+default["nova"]["ratelimit"]["settings"] = {
+    "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
+    "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
+    "generic-put-limit" => { "verb" => "PUT", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
+    "changes-since-limit" => { "verb" => "GET", "uri" => "*changes-since*", "regex" => ".*changes-since.*", "limit" => "3", "interval" => "MINUTE" },
+    "generic-delete-limit" => { "verb" => "DELETE", "uri" => "*", "regex" => ".*", "limit" => "100", "interval" => "MINUTE" }
+}
+default["nova"]["ratelimit"]["api"]["enabled"] = true
+default["nova"]["ratelimit"]["volume"]["enabled"] = true
 
 case platform
 when "fedora", "redhat"
@@ -113,7 +122,7 @@ when "fedora", "redhat"
     "nova_compute_service" => "openstack-nova-compute",
     "nova_network_packages" => ["iptables", "openstack-nova"],
     "nova_network_service" => "openstack-nova-network",
-    "nova_scheduler_packages" => ["openstack-nova"],
+    "NOVA_SCheduler_packages" => ["openstack-nova"],
     "nova_scheduler_service" => "openstack-nova-scheduler",
     "nova_vncproxy_packages" => ["openstack-nova"],
     "nova_vncproxy_service" => "openstack-nova-vncproxy",

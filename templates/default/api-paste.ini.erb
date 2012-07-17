@@ -105,14 +105,22 @@ use = call:nova.api.openstack.urlmap:urlmap_factory
 # NOTE(vish): use the following pipeline for deprecated auth
 # pipeline = faultwrap auth ratelimit osapi_compute_app_v2
 # NOTE(vish): use the following pipeline for keystone auth
+<% if node["nova"]["ratelimit"]["api"]["enabled"] -%>
 pipeline = faultwrap authtoken keystonecontext ratelimit osapi_compute_app_v2
+<% else -%>
+pipeline = faultwrap authtoken keystonecontext osapi_compute_app_v2
+<% end -%>
 
 [pipeline:openstack_volume_api_v1]
 #pipeline = faultwrap noauth ratelimit osapi_volume_app_v1
 # NOTE(vish): use the following pipeline for deprecated auth
 # pipeline = faultwrap auth ratelimit osapi_volume_app_v1
 # NOTE(vish): use the following pipeline for keystone auth
+<% if node["nova"]["ratelimit"]["volume"]["enabled"] -%>
 pipeline = faultwrap authtoken keystonecontext ratelimit osapi_volume_app_v1
+<% else -%>
+pipeline = faultwrap authtoken keystonecontext osapi_volume_app_v1
+<% end -%>
 
 [filter:faultwrap]
 paste.filter_factory = nova.api.openstack:FaultWrapper.factory
@@ -125,6 +133,8 @@ paste.filter_factory = nova.api.openstack.auth:NoAuthMiddleware.factory
 
 [filter:ratelimit]
 paste.filter_factory = nova.api.openstack.compute.limits:RateLimitingMiddleware.factory
+limits = 
+<%= node["nova"]["ratelimit"]["settings"].values.inject([]) { |output,v| output << "    (" + v.values.join(", ") + ")" }.join(";\n") %>
 
 [app:osapi_compute_app_v2]
 paste.app_factory = nova.api.openstack.compute:APIRouter.factory
