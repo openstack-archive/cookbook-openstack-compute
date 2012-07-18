@@ -59,6 +59,8 @@ libvirt_type=<%= @virt_type %>
 root_helper=sudo nova-rootwrap
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
+remove_unused_base_images=true
+remove_unused_original_minimum_age_seconds=360
 
 ##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>
