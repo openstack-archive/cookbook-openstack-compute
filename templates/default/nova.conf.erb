@@ -70,6 +70,7 @@ xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 ##### MISC #####
 # force backing images to raw format
 force_raw_images=<%= @force_raw_images %>
+allow_same_net_traffic=<%= @allow_same_net_traffic %>
 
 <%- if /FilterScheduler/.match(@scheduler_driver) %>
 # FilterScheduler Only Options
