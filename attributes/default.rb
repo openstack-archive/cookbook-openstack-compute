@@ -122,7 +122,7 @@ when "fedora", "redhat"
     "nova_compute_service" => "openstack-nova-compute",
     "nova_network_packages" => ["iptables", "openstack-nova"],
     "nova_network_service" => "openstack-nova-network",
-    "NOVA_SCheduler_packages" => ["openstack-nova"],
+    "nova_scheduler_packages" => ["openstack-nova"],
     "nova_scheduler_service" => "openstack-nova-scheduler",
     "nova_vncproxy_packages" => ["openstack-nova"],
     "nova_vncproxy_service" => "openstack-nova-vncproxy",
