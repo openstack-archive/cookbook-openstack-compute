@@ -142,6 +142,7 @@ NOTE: service password is no longer set statically in the attributes file, but s
 * `nova["config"]["availability_zone"]` - Nova availability zone.  Usually set at the node level to place a compute node in another az
 * `nova["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
 * `nova["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
+* `nova["config"]["allow_same_net_traffic"]` - Disable security groups for internal networks (we default to true)
 * `nova["config"]["cpu_allocation_ratio"]` - Virtual CPU to Physical CPU allocation ratio (default 16.0)
 * `nova["config"]["ram_allocation_ratio"]` - Virtual RAM to Physical RAM allocation ratio (default 1.5)
 
