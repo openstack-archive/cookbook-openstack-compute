@@ -77,12 +77,17 @@ snapshot_image_format=<%= @snapshot_image_format %>
 start_guests_on_host_boot=<%= @start_guests_on_host_boot %>
 resume_guests_state_on_host_boot=<%= @resume_guests_state_on_host_boot %>
 
-<%- if /FilterScheduler/.match(@scheduler_driver) %>
+<%- if /FilterScheduler/.match(@scheduler_driver) or 
+       /MultiScheduler/.match(@scheduler_driver) %>
 # FilterScheduler Only Options
+<%- if /ComputeFilter/.match(@scheduler_default_filters) %>
 # virtual CPU to Physical CPU allocation ratio (default: 16.0)
 cpu_allocation_ratio=<%= @cpu_allocation_ratio %>
+<%- end %>
+<%- if /RamFilter/.match(@scheduler_default_filters) %>
 # virtual ram to physical ram allocation ratio (default: 1.5)
 ram_allocation_ratio=<%= @ram_allocation_ratio %>
+<%- end %>
 <%- elsif /SimpleScheduler/.match(@scheduler_driver) %>
 # SimpleScheduler Only Options
 # maximum number of instance cores to allow per host
