@@ -145,6 +145,9 @@ NOTE: service password is no longer set statically in the attributes file, but s
 * `nova["config"]["allow_same_net_traffic"]` - Disable security groups for internal networks (we default to true)
 * `nova["config"]["cpu_allocation_ratio"]` - Virtual CPU to Physical CPU allocation ratio (default 16.0)
 * `nova["config"]["ram_allocation_ratio"]` - Virtual RAM to Physical RAM allocation ratio (default 1.5)
+* `nova["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
+* `nova["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
+* `nova["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 
 * `nova["ec2"]["api"]["protocol"]` - Protocol used for the AWS EC2 compatible API
 * `nova["ec2"]["api"]["port"]` - Port on which AWS EC2 compatible API runs
