@@ -87,7 +87,10 @@ template "/etc/nova/nova.conf" do
     "dmz_cidr" => node["nova"]["network"]["dmz_cidr"],
     "allow_same_net_traffic" => node["nova"]["config"]["allow_same_net_traffic"].to_s,
     "cpu_allocation_ratio" => node["nova"]["config"]["cpu_allocation_ratio"].to_s,
-    "ram_allocation_ratio" => node["nova"]["config"]["ram_allocation_ratio"].to_s
+    "ram_allocation_ratio" => node["nova"]["config"]["ram_allocation_ratio"].to_s,
+    "snapshot_image_format" => node["nova"]["config"]["snapshot_image_format"],
+    "start_guests_on_host_boot" => node["nova"]["config"]["start_guests_on_host_boot"].to_s,
+    "resume_guests_state_on_host_boot" => node["nova"]["config"]["resume_guests_state_on_host_boot"].to_s
   )
 end
 

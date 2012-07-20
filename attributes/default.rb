@@ -96,6 +96,11 @@ default["nova"]["config"]["force_raw_images"] = false
 default["nova"]["config"]["allow_same_net_traffic"] = true
 default["nova"]["config"]["cpu_allocation_ratio"] = 16.0
 default["nova"]["config"]["ram_allocation_ratio"] = 1.5
+default["nova"]["config"]["snapshot_image_format"] = "qcow2"
+default["nova"]["config"]["start_guests_on_host_boot"] = true
+# requires https://review.openstack.org/#/c/8423/
+default["nova"]["config"]["resume_guests_state_on_host_boot"] = false
+
 default["nova"]["ratelimit"]["settings"] = {
     "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
     "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
