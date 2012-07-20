@@ -83,14 +83,14 @@ template "/etc/nova/nova.conf" do
     "default_schedule_zone" => node["nova"]["config"]["default_schedule_zone"],        
     "virt_type" => node["nova"]["libvirt"]["virt_type"],
     "fixed_range" => node["nova"]["network"]["fixed_range"],
-    "force_raw_images" => node["nova"]["config"]["force_raw_images"].to_s,
+    "force_raw_images" => node["nova"]["config"]["force_raw_images"],
     "dmz_cidr" => node["nova"]["network"]["dmz_cidr"],
-    "allow_same_net_traffic" => node["nova"]["config"]["allow_same_net_traffic"].to_s,
-    "cpu_allocation_ratio" => node["nova"]["config"]["cpu_allocation_ratio"].to_s,
-    "ram_allocation_ratio" => node["nova"]["config"]["ram_allocation_ratio"].to_s,
+    "allow_same_net_traffic" => node["nova"]["config"]["allow_same_net_traffic"],
+    "cpu_allocation_ratio" => node["nova"]["config"]["cpu_allocation_ratio"],
+    "ram_allocation_ratio" => node["nova"]["config"]["ram_allocation_ratio"],
     "snapshot_image_format" => node["nova"]["config"]["snapshot_image_format"],
-    "start_guests_on_host_boot" => node["nova"]["config"]["start_guests_on_host_boot"].to_s,
-    "resume_guests_state_on_host_boot" => node["nova"]["config"]["resume_guests_state_on_host_boot"].to_s
+    "start_guests_on_host_boot" => node["nova"]["config"]["start_guests_on_host_boot"],
+    "resume_guests_state_on_host_boot" => node["nova"]["config"]["resume_guests_state_on_host_boot"]
   )
 end
 
