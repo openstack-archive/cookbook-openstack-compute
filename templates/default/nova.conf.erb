@@ -57,8 +57,6 @@ sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @db_ipaddress %>/<%= @db_
 connection_type=libvirt
 libvirt_type=<%= @virt_type %>
 root_helper=sudo nova-rootwrap
-vncserver_listen=<%= @vncserver_listen %>
-vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 remove_unused_base_images=true
 remove_unused_original_minimum_age_seconds=360
 
@@ -68,6 +66,8 @@ xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
 # This is only required on the server running xvpvncproxy
 xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
 xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
+vncserver_listen=<%= @vncserver_listen %>
+vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
 ##### MISC #####
 # force backing images to raw format
@@ -77,7 +77,7 @@ snapshot_image_format=<%= @snapshot_image_format %>
 start_guests_on_host_boot=<%= @start_guests_on_host_boot %>
 resume_guests_state_on_host_boot=<%= @resume_guests_state_on_host_boot %>
 
-<%- if /FilterScheduler/.match(@scheduler_driver) or 
+<%- if /FilterScheduler/.match(@scheduler_driver) or
        /MultiScheduler/.match(@scheduler_driver) %>
 # FilterScheduler Only Options
 <%- if /ComputeFilter/.match(@scheduler_default_filters) %>

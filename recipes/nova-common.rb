@@ -47,6 +47,8 @@ ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
 xvpvnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "xvpvnc")
 novnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "novnc")
+novnc_proxy_endpoint = get_bind_endpoint("nova", "novnc")
+
 glance_endpoint = get_access_endpoint("glance-api", "glance", "api")
 nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api")
 ec2_public_endpoint = get_access_endpoint("nova-api-ec2", "nova", "ec2-public")
@@ -65,7 +67,7 @@ template "/etc/nova/nova.conf" do
     "passwd" => nova_setup_info["db"]["password"],
     "db_name" => node["nova"]["db"]["name"],
     "vncserver_listen" => "0.0.0.0",
-    "vncserver_proxyclient_address" => novnc_endpoint["host"],
+    "vncserver_proxyclient_address" => novnc_proxy_endpoint["host"],
     "novncproxy_base_url" => novnc_endpoint["uri"],
     "xvpvncproxy_bind_host" => xvpvnc_endpoint["host"],
     "xvpvncproxy_bind_port" => xvpvnc_endpoint["port"],
@@ -80,7 +82,7 @@ template "/etc/nova/nova.conf" do
     "scheduler_driver" => node["nova"]["scheduler"]["scheduler_driver"],
     "scheduler_default_filters" => node["nova"]["scheduler"]["default_filters"].join(","),
     "availability_zone" => node["nova"]["config"]["availability_zone"],
-    "default_schedule_zone" => node["nova"]["config"]["default_schedule_zone"],        
+    "default_schedule_zone" => node["nova"]["config"]["default_schedule_zone"],
     "virt_type" => node["nova"]["libvirt"]["virt_type"],
     "fixed_range" => node["nova"]["network"]["fixed_range"],
     "force_raw_images" => node["nova"]["config"]["force_raw_images"],
