@@ -46,7 +46,7 @@ keystone = get_settings_by_role("keystone", "keystone")
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
 xvpvnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "xvpvnc")
-novnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "novnc")
+novnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "novnc-server")
 novnc_proxy_endpoint = get_bind_endpoint("nova", "novnc")
 
 glance_endpoint = get_access_endpoint("glance-api", "glance", "api")
