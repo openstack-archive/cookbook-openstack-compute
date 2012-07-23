@@ -38,6 +38,11 @@ default["nova"]["services"]["novnc"]["network"] = "nova"
 default["nova"]["services"]["novnc"]["port"] = 6080
 default["nova"]["services"]["novnc"]["path"] = "/vnc_auto.html"
 
+default["nova"]["services"]["novnc-server"]["scheme"] = "http"
+default["nova"]["services"]["novnc-server"]["network"] = "nova"
+default["nova"]["services"]["novnc-server"]["port"] = 6080
+default["nova"]["services"]["novnc-server"]["path"] = "/vnc_auto.html"
+
 default["nova"]["services"]["volume"]["scheme"] = "http"
 default["nova"]["services"]["volume"]["network"] = "public"
 default["nova"]["services"]["volume"]["port"] = 8776
