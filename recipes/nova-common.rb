@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: nova
-# Recipe:: common
+# Recipe:: nova-common
 #
 # Copyright 2012, Rackspace Hosting, Inc.
 #
