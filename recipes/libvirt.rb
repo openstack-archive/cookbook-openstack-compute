@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: openstack
+# Cookbook Name:: nova
 # Recipe:: libvirt
 #
 # Copyright 2012, Rackspace Hosting, Inc.

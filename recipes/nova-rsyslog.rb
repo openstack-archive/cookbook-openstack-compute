@@ -1,8 +1,8 @@
 #
 # Cookbook Name:: nova
-# Recipe:: default
+# Recipe:: nova-rsyslog
 #
-# Copyright 2009, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace Hosting, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
