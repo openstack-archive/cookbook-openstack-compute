@@ -3,10 +3,6 @@ license           "Apache 2.0"
 description       "Installs and configures Openstack"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           "1.0.8"
-api-ec2.rb              compute.rb              nova-common.rb          nova-setup.rb
-api-metadata.rb         default.rb              nova-db-monitoring.rb   scheduler.rb
-api-os-compute.rb       libvirt.rb              nova-rsyslog.rb         vncproxy.rb
-api-os-volume.rb        network.rb              nova-scheduler-patch.rb volume.rb
 recipe		  "api-ec2", ""
 recipe		  "api-metadata", ""
 recipe		  "api-os-compute", ""
