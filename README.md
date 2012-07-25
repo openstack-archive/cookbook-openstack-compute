@@ -143,6 +143,7 @@ NOTE: service password is no longer set statically in the attributes file, but s
 * `nova["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
 * `nova["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
 * `nova["config"]["allow_same_net_traffic"]` - Disable security groups for internal networks (we default to true)
+* `nova["config"]["osapi_max_limit"]` - The maximum number of items returned in a single response from a collection resource (default is 1000)
 * `nova["config"]["cpu_allocation_ratio"]` - Virtual CPU to Physical CPU allocation ratio (default 16.0)
 * `nova["config"]["ram_allocation_ratio"]` - Virtual RAM to Physical RAM allocation ratio (default 1.5)
 * `nova["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
