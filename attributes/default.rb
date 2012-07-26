@@ -99,6 +99,7 @@ default["nova"]["config"]["availability_zone"] = "nova"
 default["nova"]["config"]["default_schedule_zone"] = "nova"
 default["nova"]["config"]["force_raw_images"] = false
 default["nova"]["config"]["allow_same_net_traffic"] = true
+default["nova"]["config"]["osapi_max_limit"] = 1000
 default["nova"]["config"]["cpu_allocation_ratio"] = 16.0
 default["nova"]["config"]["ram_allocation_ratio"] = 1.5
 default["nova"]["config"]["snapshot_image_format"] = "qcow2"

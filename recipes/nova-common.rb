@@ -89,6 +89,7 @@ template "/etc/nova/nova.conf" do
     "force_raw_images" => node["nova"]["config"]["force_raw_images"],
     "dmz_cidr" => node["nova"]["network"]["dmz_cidr"],
     "allow_same_net_traffic" => node["nova"]["config"]["allow_same_net_traffic"],
+    "osapi_max_limit" => node["nova"]["config"]["osapi_max_limit"],
     "cpu_allocation_ratio" => node["nova"]["config"]["cpu_allocation_ratio"],
     "ram_allocation_ratio" => node["nova"]["config"]["ram_allocation_ratio"],
     "snapshot_image_format" => node["nova"]["config"]["snapshot_image_format"],
