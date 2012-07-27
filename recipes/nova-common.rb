@@ -122,9 +122,3 @@ end
 execute "enable nova login" do
   command "usermod -s /bin/sh nova"
 end
-
-dsh_group "nova" do
-  user "nova"
-  admin_user "nova"
-  group "nova"
-end

@@ -26,6 +26,6 @@ recipe		  "volume", ""
   supports os
 end
 
-%w{ dsh apt database glance keystone mysql openssh rabbitmq selinux osops-utils sysctl }.each do |dep|
+%w{ apt database glance keystone mysql openssh rabbitmq selinux osops-utils sysctl }.each do |dep|
   depends dep
 end
