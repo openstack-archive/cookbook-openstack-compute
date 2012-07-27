@@ -20,7 +20,6 @@
 include_recipe "nova::nova-common"
 include_recipe "nova::api-metadata"
 include_recipe "nova::network"
-include_recipe "monitoring"
 
 platform_options = node["nova"]["platform"]
 nova_compute_packages = platform_options["nova_compute_packages"]
@@ -51,14 +50,6 @@ service "nova-compute" do
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-end
-
-monitoring_procmon "nova-compute" do
-  service_name=platform_options["nova_compute_service"]
-
-  process_name "nova-compute"
-  start_cmd "/usr/sbin/service #{service_name} start"
-  stop_cmd "/usr/sbin/service #{service_name} stop"
 end
 
 include_recipe "nova::libvirt"

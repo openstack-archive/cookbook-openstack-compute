@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe "monitoring"
-
 platform_options = node["nova"]["platform"]
 
 platform_options["libvirt_packages"].each do |pkg|
@@ -44,14 +42,6 @@ service "libvirt-bin" do
   action :enable
 end
 
-monitoring_procmon "libvirt-bin" do
-  service_name=platform_options["libvirt_service"]
-
-  process_name "libvirtd"
-  start_cmd "/usr/sbin/service #{service_name} start"
-  stop_cmd "/usr/sbin/service #{service_name} stop"
-end
-
 #
 # TODO(breu): this section needs to be rewritten to support key privisioning
 #
@@ -74,6 +64,3 @@ template "/etc/default/libvirt-bin" do
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
-monitoring_metric "libvirt" do
-  type "libvirt"
-end

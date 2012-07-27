@@ -19,7 +19,6 @@
 
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 include_recipe "nova::nova-common"
-include_recipe "monitoring"
 
 # Set a secure keystone service password
 node.set_unless['nova']['service_pass'] = secure_password
@@ -50,14 +49,6 @@ service "nova-api-os-compute" do
   supports :status => true, :restart => true
   action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
-end
-
-monitoring_procmon "nova-api-os-compute" do
-  service_name=platform_options["api_os_compute_service"]
-
-  process_name "nova-api-os-compute"
-  start_cmd "/usr/sbin/service #{service_name} start"
-  stop_cmd "/usr/sbin/service #{service_name} stop"
 end
 
 keystone = get_settings_by_role("keystone", "keystone")

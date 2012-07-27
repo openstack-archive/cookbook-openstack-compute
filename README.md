@@ -40,12 +40,6 @@ api-ec2
 -Includes recipe `nova-common`
 -Installs AWS EC2 compatible API and configures the service and endpoints in keystone
 
-api-ec2-monitoring
----
-- Includes recipe `monit::server`
-- Configures monit process monitoring for the nova-api-ec2 service
-- Included from recipe `nova::api-ec2`
-
 api-metadata
 ----
 -Includes recipe `nova-common`

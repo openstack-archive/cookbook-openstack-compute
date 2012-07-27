@@ -28,7 +28,6 @@ end
 
 include_recipe "nova::nova-common"
 include_recipe "mysql::client"
-include_recipe "monitoring"
 
 ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
 keystone = get_settings_by_role("keystone", "keystone")
@@ -65,11 +64,3 @@ if node.has_key?(:floating) and node["nova"]["network"]["floating"].has_key?(:ip
   end
 end
 
-monitoring_metric "nova-plugin" do
-  type "pyscript"
-  script "nova_plugin.py"
-  options("Username" => keystone_admin_user,
-          "Password" => keystone_admin_password,
-          "TenantName" => keystone_admin_tenant,
-          "AuthURL" => ks_service_endpoint["uri"])
-end
