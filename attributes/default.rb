@@ -49,7 +49,7 @@ default["nova"]["services"]["volume"]["port"] = 8776
 default["nova"]["services"]["volume"]["path"] = "/v1/%(tenant_id)s"
 
 # Logging stuff
-default["nova"]["syslog"]["use"] = true
+default["nova"]["syslog"]["use"] = false
 default["nova"]["syslog"]["facility"] = "LOG_LOCAL1"
 default["nova"]["syslog"]["config_facility"] = "local1"
 

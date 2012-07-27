@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe "nova::nova-rsyslog"
 include_recipe "osops-utils::autoetchosts"
 
 platform_options = node["nova"]["platform"]
