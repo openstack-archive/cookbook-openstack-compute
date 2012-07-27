@@ -29,7 +29,6 @@ The following cookbooks are dependencies:
 * openssh
 * osops-utils
 * rabbitmq
-* selinux (Fedora)
 * sysctl
 
 Recipes
@@ -75,7 +74,6 @@ network
 
 nova-common
 ----
--May include recipe `selinux` (Fedora)
 -Builds the basic nova.conf config file with details of the rabbitmq, mysql, glance and keystone servers
 -Builds a .novarc file for root with appropriate environment variables to interact with the nova client CLI
 
