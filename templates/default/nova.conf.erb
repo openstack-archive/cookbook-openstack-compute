@@ -61,13 +61,25 @@ remove_unused_base_images=true
 remove_unused_original_minimum_age_seconds=360
 
 ##### VNCPROXY #####
+<% if @novncproxy_base_url -%>
 novncproxy_base_url=<%= @novncproxy_base_url %>
+<% end -%>
+<% if @xvpvncproxy_base_url -%>
 xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
+<% end -%>
 # This is only required on the server running xvpvncproxy
+<% if @xvpvncproxy_bind_host -%>
 xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
+<% end -%>
+<% if @xvpvncproxy_bind_port -%>
 xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
+<% end -%>
+<% if @vncserver_listen -%>
 vncserver_listen=<%= @vncserver_listen %>
+<% end -%>
+<% if @vncserver_proxyclient_address -%>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
+<% end -%>
 
 ##### MISC #####
 # force backing images to raw format

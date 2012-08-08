@@ -36,7 +36,7 @@ directory "/etc/nova" do
 end
 
 mysql_info = get_settings_by_role("mysql-master", "mysql")
-rabbit_ip = IPManagement.get_ips_for_role("rabbitmq-server", "nova", node)[0] # FIXME: we need to be able to specify foreign endpoints.  Nova?
+rabbit_ip = IPManagement.get_ips_for_role("rabbitmq-server", "nova", node)[0]  # FIXME: we need to be able to specify foreign endpoints.  Nova?
 
 # nova::nova-setup does not need to be double escaped here
 nova_setup_info = get_settings_by_role("nova-setup", "nova")
@@ -45,13 +45,26 @@ keystone = get_settings_by_role("keystone", "keystone")
 # find the node attribute endpoint settings for the server holding a given role
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
-xvpvnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "xvpvnc")
-novnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "novnc-server")
+xvpvnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "xvpvnc") || {}
+novnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "novnc-server") || {}
 novnc_proxy_endpoint = get_bind_endpoint("nova", "novnc")
 
 glance_endpoint = get_access_endpoint("glance-api", "glance", "api")
-nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api")
-ec2_public_endpoint = get_access_endpoint("nova-api-ec2", "nova", "ec2-public")
+nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api") || {}
+ec2_public_endpoint = get_access_endpoint("nova-api-ec2", "nova", "ec2-public") || {}
+
+Chef::Log.debug("nova::nova-common:mysql_info|#{mysql_info}")
+Chef::Log.debug("nova::nova-common:rabbit_ip|#{rabbit_ip}")
+Chef::Log.debug("nova::nova-common:nova_setup_info|#{nova_setup_info}")
+Chef::Log.debug("nova::nova-common:keystone|#{keystone}")
+Chef::Log.debug("nova::nova-common:ks_admin_endpoint|#{ks_admin_endpoint}")
+Chef::Log.debug("nova::nova-common:ks_service_endpoint|#{ks_service_endpoint}")
+Chef::Log.debug("nova::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
+Chef::Log.debug("nova::nova-common:novnc_endpoint|#{novnc_endpoint}")
+Chef::Log.debug("nova::nova-common:novnc_proxy_endpoint|#{novnc_proxy_endpoint}")
+Chef::Log.debug("nova::nova-common:glance_endpoint|#{glance_endpoint}")
+Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{nova_api_endpoint}")
+Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint}")
 
 # TODO: need to re-evaluate this for accuracy
 template "/etc/nova/nova.conf" do
