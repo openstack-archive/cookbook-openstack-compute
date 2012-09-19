@@ -1,5 +1,5 @@
 #
-# Copyright 2012, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ def read_callback():
         logger("err", "No information received")
         return
 
-    for key in info.keys(): 
+    for key in info.keys():
         logger('verb', 'Dispatching %s : %i' % (key, int(info[key])))
         val = collectd.Values(plugin=key)
         val.type = 'gauge'

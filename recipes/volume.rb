@@ -2,7 +2,7 @@
 # Cookbook Name:: nova
 # Recipe:: volume
 #
-# Copyright 2012, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,6 +39,16 @@ service "nova-volume" do
   action :disable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
+
+# TODO(rp): need the flag on whether or not to start nova-volume service
+# this is already on backlog
+# monitoring_procmon "nova-volume" do
+#   service_name=platform_options["nova_volume_service"]
+
+#   process_name "nova-volume"
+#   start_cmd "/usr/sbin/service #{service_name} start"
+#   stop_cmd "/usr/sbin/service #{service_name} stop"
+# end
 
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")

@@ -29,6 +29,7 @@ The following cookbooks are dependencies:
 * openssh
 * osops-utils
 * rabbitmq
+* selinux (Fedora)
 * sysctl
 
 Recipes
@@ -74,8 +75,9 @@ network
 
 nova-common
 ----
+-May include recipe `selinux` (Fedora)
 -Builds the basic nova.conf config file with details of the rabbitmq, mysql, glance and keystone servers
--Builds a .novarc file for root with appropriate environment variables to interact with the nova client CLI
+-Builds a openrc file for root with appropriate environment variables to interact with the nova client CLI
 
 nova-setup
 ----
@@ -203,7 +205,7 @@ Templates
 * `libvirtd.conf.erb` - Libvirt config file
 * `local_settings.py.erb` - Dashboard (horizon) config file
 * `nova.conf.erb` - Basic nova.conf file
-* `novarc.erb` - Contains environment variable settings to enable easy use of the nova client
+* `openrc.erb` - Contains environment variable settings to enable easy use of the nova client
 * `patches/` - misc. patches for nova
 
 
@@ -219,8 +221,8 @@ Author:: Darren Birkett (<darren.birkett@rackspace.co.uk>)
 Author:: Evan Callicoat (<evan.callicoat@rackspace.com>)
 Author:: Matt Ray (<matt@opscode.com>)
 
-Copyright 2012 Rackspace, Inc.
-Copyright 2012 Opscode, Inc.
+Copyright 2012, Rackspace US, Inc.
+Copyright 2012, Opscode, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

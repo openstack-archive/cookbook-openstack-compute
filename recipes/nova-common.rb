@@ -2,7 +2,7 @@
 # Cookbook Name:: nova
 # Recipe:: nova-common
 #
-# Copyright 2012, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,10 @@
 #
 
 include_recipe "osops-utils::autoetchosts"
+
+if platform?(%w(redhat centos))
+  include_recipe "yum::epel"
+end
 
 platform_options = node["nova"]["platform"]
 
@@ -35,8 +39,8 @@ directory "/etc/nova" do
   mode "0755"
 end
 
-mysql_info = get_settings_by_role("mysql-master", "mysql")
-rabbit_ip = IPManagement.get_ips_for_role("rabbitmq-server", "nova", node)[0]  # FIXME: we need to be able to specify foreign endpoints.  Nova?
+mysql_info = get_access_endpoint("mysql-master", "mysql", "db")
+rabbit_info = get_access_endpoint("rabbitmq-server", "rabbitmq", "queue")
 
 # nova::nova-setup does not need to be double escaped here
 nova_setup_info = get_settings_by_role("nova-setup", "nova")
@@ -54,7 +58,7 @@ nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api") ||
 ec2_public_endpoint = get_access_endpoint("nova-api-ec2", "nova", "ec2-public") || {}
 
 Chef::Log.debug("nova::nova-common:mysql_info|#{mysql_info}")
-Chef::Log.debug("nova::nova-common:rabbit_ip|#{rabbit_ip}")
+Chef::Log.debug("nova::nova-common:rabbit_ip|#{rabbit_info}")
 Chef::Log.debug("nova::nova-common:nova_setup_info|#{nova_setup_info}")
 Chef::Log.debug("nova::nova-common:keystone|#{keystone}")
 Chef::Log.debug("nova::nova-common:ks_admin_endpoint|#{ks_admin_endpoint}")
@@ -75,7 +79,7 @@ template "/etc/nova/nova.conf" do
   variables(
     "use_syslog" => node["nova"]["syslog"]["use"],
     "log_facility" => node["nova"]["syslog"]["facility"],
-    "db_ipaddress" => mysql_info["bind_address"],
+    "db_ipaddress" => mysql_info["host"],
     "user" => node["nova"]["db"]["username"],
     "passwd" => nova_setup_info["db"]["password"],
     "db_name" => node["nova"]["db"]["name"],
@@ -85,18 +89,24 @@ template "/etc/nova/nova.conf" do
     "xvpvncproxy_bind_host" => xvpvnc_endpoint["host"],
     "xvpvncproxy_bind_port" => xvpvnc_endpoint["port"],
     "xvpvncproxy_base_url" => xvpvnc_endpoint["uri"],
-    "rabbit_ipaddress" => rabbit_ip,
+    "rabbit_ipaddress" => rabbit_info["host"],
+    "rabbit_port" => rabbit_info["port"],
     "keystone_api_ipaddress" => ks_admin_endpoint["host"],
     "keystone_service_port" => ks_service_endpoint["port"],
     "glance_api_ipaddress" => glance_endpoint["host"],
     "glance_api_port" => glance_endpoint["port"],
     "iscsi_helper" => platform_options["iscsi_helper"],
+    "public_interface" => node["nova"]["network"]["public_interface"],
     "network_manager" => node["nova"]["network"]["network_manager"],
     "scheduler_driver" => node["nova"]["scheduler"]["scheduler_driver"],
     "scheduler_default_filters" => node["nova"]["scheduler"]["default_filters"].join(","),
     "availability_zone" => node["nova"]["config"]["availability_zone"],
     "default_schedule_zone" => node["nova"]["config"]["default_schedule_zone"],
     "virt_type" => node["nova"]["libvirt"]["virt_type"],
+    "remove_unused_base_images" => node["nova"]["libvirt"]["remove_unused_base_images"],
+    "remove_unused_resized_minimum_age_seconds" => node["nova"]["libvirt"]["remove_unused_resized_minimum_age_seconds"],
+    "remove_unused_original_minimum_age_seconds" => node["nova"]["libvirt"]["remove_unused_original_minimum_age_seconds"],
+    "checksum_base_images" => node["nova"]["libvirt"]["checksum_base_images"],
     "fixed_range" => node["nova"]["network"]["fixed_range"],
     "force_raw_images" => node["nova"]["config"]["force_raw_images"],
     "dmz_cidr" => node["nova"]["network"]["dmz_cidr"],
@@ -106,13 +116,15 @@ template "/etc/nova/nova.conf" do
     "ram_allocation_ratio" => node["nova"]["config"]["ram_allocation_ratio"],
     "snapshot_image_format" => node["nova"]["config"]["snapshot_image_format"],
     "start_guests_on_host_boot" => node["nova"]["config"]["start_guests_on_host_boot"],
-    "resume_guests_state_on_host_boot" => node["nova"]["config"]["resume_guests_state_on_host_boot"]
+    "resume_guests_state_on_host_boot" => node["nova"]["config"]["resume_guests_state_on_host_boot"],
+    "quota_security_groups" => node["nova"]["config"]["quota_security_groups"],
+    "quota_security_group_rules" => node["nova"]["config"]["quota_security_group_rules"]
   )
 end
 
 # TODO: need to re-evaluate this for accuracy
-template "/root/.novarc" do
-  source "novarc.erb"
+template "/root/openrc" do
+  source "openrc.erb"
   owner "root"
   group "root"
   mode "0600"

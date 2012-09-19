@@ -4,8 +4,6 @@ default["enable_monit"] = false  # OS provides packages
 default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
-default["nova"]["apply_patches"] = false
-
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
 
@@ -83,6 +81,7 @@ default["nova"]["networks"] = [
 default["nova"]["network"]["fixed_range"] = default["nova"]["networks"][0]["ipv4_cidr"]
 default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 default["nova"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
+default["nova"]["network"]["public_interface"] = "eth0"
 
 default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.filter_scheduler.FilterScheduler"
 default["nova"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
@@ -95,6 +94,10 @@ default["nova"]["libvirt"]["virt_type"] = "kvm"
 default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
 default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
 default["nova"]["libvirt"]["auth_tcp"] = "none"
+default["nova"]["libvirt"]["remove_unused_base_images"] = true
+default["nova"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] = 3600
+default["nova"]["libvirt"]["remove_unused_original_minimum_age_seconds"] = 3600
+default["nova"]["libvirt"]["checksum_base_images"] = false
 default["nova"]["config"]["availability_zone"] = "nova"
 default["nova"]["config"]["default_schedule_zone"] = "nova"
 default["nova"]["config"]["force_raw_images"] = false
@@ -107,6 +110,10 @@ default["nova"]["config"]["start_guests_on_host_boot"] = true
 # requires https://review.openstack.org/#/c/8423/
 default["nova"]["config"]["resume_guests_state_on_host_boot"] = false
 
+# quota settings
+default["nova"]["config"]["quota_security_groups"] = 50
+default["nova"]["config"]["quota_security_group_rules"] = 20
+
 default["nova"]["ratelimit"]["settings"] = {
     "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
     "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
@@ -118,44 +125,52 @@ default["nova"]["ratelimit"]["api"]["enabled"] = true
 default["nova"]["ratelimit"]["volume"]["enabled"] = true
 
 case platform
-when "fedora", "redhat"
+when "fedora", "redhat", "centos"
   default["nova"]["platform"] = {
-    "api_ec2_packages" => ["openstack-nova"],
+    "api_ec2_packages" => ["openstack-nova-api"],
     "api_ec2_service" => "openstack-nova-api",
-    "api_os_compute_packages" => ["openstack-nova"],
+    "api_os_compute_packages" => ["openstack-nova-api"],
     "api_os_compute_service" => "openstack-nova-api",
-    "api_os_volume_packages" => ["openstack-nova"],
+    "api_os_compute_process_name" => "nova-api",
+    "api_os_volume_packages" => ["openstack-nova-api"],
     "api_os_volume_service" => "openstack-nova-api",
-    "nova_volume_packages" => ["openstack-nova"],
+    "nova_volume_packages" => ["openstack-nova-volume"],
     "nova_volume_service" => "openstack-nova-volume",
-    "nova_api_metadata_packages" => ["openstack-nova"],
+    "nova_api_metadata_packages" => ["openstack-nova-api"],
+    "nova_api_metadata_process_name" => "nova-api",
     "nova_api_metadata_service" => "openstack-nova-api",
-    "nova_compute_packages" => ["openstack-nova"], # seriously?
+    "nova_compute_packages" => ["openstack-nova-compute"],
     "nova_compute_service" => "openstack-nova-compute",
-    "nova_network_packages" => ["iptables", "openstack-nova"],
+    "nova_network_packages" => ["iptables", "openstack-nova-network"],
     "nova_network_service" => "openstack-nova-network",
-    "nova_scheduler_packages" => ["openstack-nova"],
+    "nova_scheduler_packages" => ["openstack-nova-scheduler"],
     "nova_scheduler_service" => "openstack-nova-scheduler",
-    "nova_vncproxy_packages" => ["openstack-nova"],
-    "nova_vncproxy_service" => "openstack-nova-vncproxy",
-    "nova_vncproxy_consoleauth_packages" => ["openstack-nova"],
+    "nova_vncproxy_packages" => ["openstack-nova-novncproxy"], # me thinks this is right?
+    "nova_vncproxy_service" => "openstack-nova-novncproxy",
+    "nova_vncproxy_consoleauth_packages" => ["openstack-nova-console"],
+    "nova_vncproxy_consoleauth_service" => "openstack-nova-console",
+    "nova_vncproxy_consoleauth_process_name" => "nova-console",
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
+    "nova_cert_packages" => ["openstack-nova-cert"],
+    "nova_cert_service" => "openstack-nova-cert",
     "mysql_service" => "mysqld",
-    "common_packages" => ["openstack-nova"],
+    "common_packages" => ["openstack-nova-common"],
     "iscsi_helper" => "ietadm",
-    "package_overrides" => "",
+    "package_overrides" => ""
   }
 when "ubuntu"
   default["nova"]["platform"] = {
     "api_ec2_packages" => ["nova-api-ec2"],
     "api_ec2_service" => "nova-api-ec2",
     "api_os_compute_packages" => ["nova-api-os-compute"],
+    "api_os_compute_process_name" => "nova-api-os-compute",
     "api_os_compute_service" => "nova-api-os-compute",
     "api_os_volume_packages" => ["nova-api-os-volume"],
     "api_os_volume_service" => "nova-api-os-volume",
     "nova_api_metadata_packages" => ["nova-api-metadata"],
     "nova_api_metadata_service" => "nova-api-metadata",
+    "nova_api_metadata_process_name" => "nova-api-metadata",
     "nova_volume_packages" => ["nova-volume"],
     "nova_volume_service" => "nova-volume",
     "nova_compute_packages" => ["nova-compute"],
@@ -168,8 +183,11 @@ when "ubuntu"
     "nova_vncproxy_service" => "novnc",
     "nova_vncproxy_consoleauth_packages" => ["nova-consoleauth"],
     "nova_vncproxy_consoleauth_service" => "nova-consoleauth",
+    "nova_vncproxy_consoleauth_process_name" => "nova-consoleauth",
     "libvirt_packages" => ["libvirt-bin"],
     "libvirt_service" => "libvirt-bin",
+    "nova_cert_packages" => ["nova-cert"],
+    "nova_cert_service" => "nova-cert",
     "mysql_service" => "mysql",
     "common_packages" => ["nova-common"],
     "iscsi_helper" => "tgtadm",

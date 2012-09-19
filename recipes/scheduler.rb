@@ -2,7 +2,7 @@
 # Cookbook Name:: nova
 # Recipe:: scheduler
 #
-# Copyright 2012, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ end
 service "nova-scheduler" do
   service_name platform_options["nova_scheduler_service"]
   supports :status => true, :restart => true
-  action :enable
+  action [:enable, :start]
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 

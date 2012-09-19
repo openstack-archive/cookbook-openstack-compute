@@ -14,18 +14,16 @@ recipe		  "default", ""
 recipe		  "libvirt", ""
 recipe		  "network", ""
 recipe		  "nova-common", ""
-recipe		  "nova-db-monitoring", ""
-recipe		  "nova-rsyslog", ""
 recipe		  "nova-scheduler-patch", ""
 recipe		  "nova-setup", ""
 recipe		  "scheduler", ""
 recipe		  "vncproxy", ""
 recipe		  "volume", ""
 
-%w{ ubuntu fedora }.each do |os|
+%w{ ubuntu fedora redhat centos }.each do |os|
   supports os
 end
 
-%w{ apt database glance keystone mysql openssh rabbitmq osops-utils sysctl }.each do |dep|
+%w{ apt database glance keystone mysql openssh osops-utils rabbitmq selinux sysctl yum }.each do |dep|
   depends dep
 end

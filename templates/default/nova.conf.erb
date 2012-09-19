@@ -25,7 +25,7 @@ rabbit_host=<%= @rabbit_ipaddress %>
 
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
-scheduler_driver=<%= @scheduler_driver %>
+compute_scheduler_driver=<%= @scheduler_driver %>
 scheduler_available_filters=nova.scheduler.filters.standard_filters
 # which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
@@ -36,11 +36,17 @@ default_schedule_zone=<%= @default_schedule_zone %>
 network_manager=<%= @network_manager %>
 #--flat_interface=eth1
 #--flat_network_dhcp_start=10.20.1.2
-#--public_interface=eth0
+public_interface=<%= @public_interface %>
 fixed_range=<%= @fixed_range %>
 dmz_cidr=<%= @dmz_cidr %>
+<% if %w(fedora redhat centos).include? node.platform -%>
+# https://bugzilla.redhat.com/show_bug.cgi?id=788485 - not released in epel yet
+force_dhcp_release=false
+<% else -%>
 force_dhcp_release=true
-send_arp_for_ha=True
+<% end -%>
+send_arp_for_ha=true
+use_single_default_gateway=true
 <% if @virt_type == "qemu" -%>
 libvirt_use_virtio_for_bridges=false
 <% else -%>
@@ -56,9 +62,16 @@ compute_manager=nova.compute.manager.ComputeManager
 sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @db_ipaddress %>/<%= @db_name %>
 connection_type=libvirt
 libvirt_type=<%= @virt_type %>
+# Command prefix to use for running commands as root (default: sudo)
 root_helper=sudo nova-rootwrap
-remove_unused_base_images=true
-remove_unused_original_minimum_age_seconds=360
+# Should unused base images be removed? (default: false)
+remove_unused_base_images=<%= @remove_unused_base_images %>
+# Unused resized base images younger than this will not be removed (default: 3600)
+remove_unused_resized_minimum_age_seconds=<%= @remove_unused_resized_minimum_age_seconds %>
+# Unused unresized base images younger than this will not be removed (default: 86400)
+remove_unused_original_minimum_age_seconds=<%= @remove_unused_original_minimum_age_seconds %>
+# Write a checksum for files in _base to disk (default: false)
+checksum_base_images=<%= @checksum_base_images %>
 
 ##### VNCPROXY #####
 <% if @novncproxy_base_url -%>
@@ -89,6 +102,10 @@ osapi_max_limit=<%= @osapi_max_limit %>
 snapshot_image_format=<%= @snapshot_image_format %>
 start_guests_on_host_boot=<%= @start_guests_on_host_boot %>
 resume_guests_state_on_host_boot=<%= @resume_guests_state_on_host_boot %>
+# number of security groups per project (default: 10)
+quota_security_groups=<%= @quota_security_groups %>
+# number of security rules per security group (default: 20)
+quota_security_group_rules=<%= @quota_security_group_rules %>
 
 <%- if /FilterScheduler/.match(@scheduler_driver) or
        /MultiScheduler/.match(@scheduler_driver) %>
@@ -107,7 +124,7 @@ ram_allocation_ratio=<%= @ram_allocation_ratio %>
 max_cores=<% @cpu_allocation_ratio.to_i * node["cpu"]["total"].to_i %>
 <%- end %>
 
-<% if node["platform"] == "fedora" -%>
+<% if %w(fedora redhat centos).include? node.platform -%>
 # Adding support for non-modded euca2ools to display ip address info
 # https://bugs.launchpad.net/nova/+bug/901594
 ec2_private_dns_show_ip=True

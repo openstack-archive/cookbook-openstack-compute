@@ -2,7 +2,7 @@
 # Cookbook Name:: nova
 # Recipe:: libvirt
 #
-# Copyright 2012, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +33,15 @@ bash "create libvirtd group" do
       groupadd -f libvirtd
       usermod -G libvirtd nova
   EOH
-  only_if { platform?(%w{fedora}) }
+  only_if { platform?(%w{fedora redhat centos}) }
+end
+
+# oh redhat
+# http://fedoraproject.org/wiki/Getting_started_with_OpenStack_EPEL#Installing_within_a_VM
+# ln -s /usr/libexec/qemu-kvm /usr/bin/qemu-system-x86_64
+link "/usr/bin/qemu-system-x86_64" do
+  to "/usr/libexec/qemu-kvm"
+  only_if { platform?(%w{fedora redhat centos}) }
 end
 
 service "libvirt-bin" do
@@ -52,7 +60,7 @@ template "/etc/libvirt/libvirtd.conf" do
   mode "0644"
   variables(
     :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
-  )
+    )
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
@@ -62,5 +70,15 @@ template "/etc/default/libvirt-bin" do
   group "root"
   mode "0644"
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
+  only_if { platform?(%w{ubuntu debian}) }
+end
+
+template "/etc/sysconfig/libvirtd" do
+  source "libvirtd.erb"
+  owner "root"
+  group "root"
+  mode "0644"
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
+  only_if { platform?(%w{fedora redhat centos}) }
 end
 

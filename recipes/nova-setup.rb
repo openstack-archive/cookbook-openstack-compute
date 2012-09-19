@@ -2,7 +2,7 @@
 # Cookbook Name:: nova
 # Recipe:: nova-setup
 #
-# Copyright 2012, Rackspace Hosting, Inc.
+# Copyright 2012, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ end
 
 include_recipe "nova::nova-common"
 include_recipe "mysql::client"
+include_recipe "mysql::ruby"
 
 ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
 keystone = get_settings_by_role("keystone", "keystone")
