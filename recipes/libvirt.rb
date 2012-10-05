@@ -44,10 +44,24 @@ link "/usr/bin/qemu-system-x86_64" do
   only_if { platform?(%w{fedora redhat centos}) }
 end
 
+service "dbus" do
+  action [:enable, :start]
+end
+
 service "libvirt-bin" do
   service_name platform_options["libvirt_service"]
   supports :status => true, :restart => true
-  action :enable
+  action [:enable, :start]
+end
+
+#remove default network if exists
+execute "Disabling default libvirt network" do
+  command "virsh net-autostart default --disable"
+end
+
+execute "Deleting default libvirt network" do
+  command "virsh net-destroy default"
+  only_if "virsh net-list | grep -q default"
 end
 
 #
