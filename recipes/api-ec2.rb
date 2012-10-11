@@ -52,7 +52,8 @@ end
 
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
-keystone = get_settings_by_role("keystone","keystone")
+keystone_service_role = node["nova"]["keystone_service_chef_role"]
+keystone = get_settings_by_role(keystone_service_role, "keystone")
 
 ec2_admin_endpoint = get_bind_endpoint("nova", "ec2-admin")
 ec2_public_endpoint = get_bind_endpoint("nova", "ec2-public")

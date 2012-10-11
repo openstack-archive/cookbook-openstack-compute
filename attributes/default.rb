@@ -4,6 +4,12 @@ default["enable_monit"] = false  # OS provides packages
 default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
+# The name of the Chef role that sets up basic Nova stuff
+default["nova"]["nova_setup_chef_role"] = "nova-setup"
+
+# The name of the Chef role that sets up the Keystone Service API
+default["nova"]["keystone_service_chef_role"] = "keystone"
+
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
 

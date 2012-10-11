@@ -51,7 +51,8 @@ service "nova-api-os-compute" do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-keystone = get_settings_by_role("keystone", "keystone")
+keystone_service_role = node["nova"]["keystone_service_chef_role"]
+keystone = get_settings_by_role(keystone_service_role, "keystone")
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
 ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
 nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api")

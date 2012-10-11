@@ -31,7 +31,8 @@ include_recipe "mysql::client"
 include_recipe "mysql::ruby"
 
 ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
-keystone = get_settings_by_role("keystone", "keystone")
+keystone_service_role = node["nova"]["keystone_service_chef_role"]
+keystone = get_settings_by_role(keystone_service_role, "keystone")
 keystone_admin_user = keystone["admin_user"]
 keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
 keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
