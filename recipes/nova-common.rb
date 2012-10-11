@@ -42,9 +42,10 @@ end
 mysql_info = get_access_endpoint("mysql-master", "mysql", "db")
 rabbit_info = get_access_endpoint("rabbitmq-server", "rabbitmq", "queue")
 
-# nova::nova-setup does not need to be double escaped here
-nova_setup_info = get_settings_by_role("nova-setup", "nova")
-keystone = get_settings_by_role("keystone", "keystone")
+nova_setup_role = node["nova"]["nova_setup_chef_role"]
+nova_setup_info = get_settings_by_role(nova_setup_role, "nova")
+keystone_service_role = node["nova"]["keystone_service_chef_role"]
+keystone = get_settings_by_role(keystone_service_role, "keystone")
 
 # find the node attribute endpoint settings for the server holding a given role
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")

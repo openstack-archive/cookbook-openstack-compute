@@ -108,7 +108,9 @@ nova-scheduler-patch
 Attributes
 ==========
 
-* `nova["patch_files_on_disk"] - Boolean for patching files on disk
+* `nova["keystone_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
+* `nova["nova_setup_chef_role"]` - The name of the Chef role that sets up Nova
+* `nova["patch_files_on_disk"]` - Boolean for patching files on disk
 * `nova["db"]["name"]` - Name of nova database
 * `nova["db"]["username"]` - Username for nova database access
 * `nova["db"]["password"]` - Password for nova database access
