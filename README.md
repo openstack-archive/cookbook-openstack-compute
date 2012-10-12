@@ -108,92 +108,154 @@ nova-scheduler-patch
 Attributes
 ==========
 
-* `nova["patch_files_on_disk"] - Boolean for patching files on disk
-* `nova["db"]["name"]` - Name of nova database
-* `nova["db"]["username"]` - Username for nova database access
-* `nova["db"]["password"]` - Password for nova database access
+* `default["nova"]["patch_files_on_disk"]` - Boolean for patching files on disk
+* `default["nova"]["db"]["name"]` - Name of nova database
+* `default["nova"]["db"]["username"]` - Username for nova database access
+* `default["nova"]["db"]["password"]` - Password for nova database access
 NOTE: db password is no longer set statically in the attributes file, but securely/randomly in the nova-common recipe
 
-* `nova["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
-* `nova["service_user"]` - User name used by nova when interacting with keystone
-* `nova["service_pass"]` - User password used by nova when interacting with keystone
-NOTE: service password is no longer set statically in the attributes file, but securely/randomly in the *api recipes
-* `nova["service_role"]` - User role used by nova when interacting with keystone
+* `default["nova"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
+* `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
+* `default["nova"]["service_pass"]` - User password used by nova when interacting with keystone
+NOTE: service password is no longer set statically in the attributes file, but securely/randomly in the `*api` recipes
+* `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
 
-* `nova["compute"]["api"]["protocol"]` - Protocol used for the OS API
-* `nova["compute"]["api"]["port"]` - Port on which OS API runs
-* `nova["compute"]["api"]["version"]` - Version of the OS API used
+* `default["nova"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
+* `default["nova"]["compute"]["api"]["port"]` - Port on which OS API runs
+* `default["nova"]["compute"]["api"]["version"]` - Version of the OS API used
 
-* `nova["compute"]["adminURL"]` - URL used to access the OS API for admin functions
-* `nova["compute"]["internalURL"]` - URL used to access the OS API for user functions from an internal network
-* `nova["compute"]["publicURL"]` - URL used to access the OS API for user functions from an external network
+* `default["nova"]["compute"]["adminURL"]` - URL used to access the OS API for admin functions
+* `default["nova"]["compute"]["internalURL"]` - URL used to access the OS API for user functions from an internal network
+* `default["nova"]["compute"]["publicURL"]` - URL used to access the OS API for user functions from an external network
 
-* `nova["config"]["availability_zone"]` - Nova availability zone.  Usually set at the node level to place a compute node in another az
-* `nova["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
-* `nova["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
-* `nova["config"]["allow_same_net_traffic"]` - Disable security groups for internal networks (we default to true)
-* `nova["config"]["osapi_max_limit"]` - The maximum number of items returned in a single response from a collection resource (default is 1000)
-* `nova["config"]["cpu_allocation_ratio"]` - Virtual CPU to Physical CPU allocation ratio (default 16.0)
-* `nova["config"]["ram_allocation_ratio"]` - Virtual RAM to Physical RAM allocation ratio (default 1.5)
-* `nova["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
-* `nova["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
-* `nova["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
+* `default["nova"]["config"]["availability_zone"]` - Nova availability zone.  Usually set at the node level to place a compute node in another az
+* `default["nova"]["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
+* `default["nova"]["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
+* `default["nova"]["config"]["allow_same_net_traffic"]` - Disable security groups for internal networks (we default to true)
+* `default["nova"]["config"]["osapi_max_limit"]` - The maximum number of items returned in a single response from a collection resource (default is 1000)
+* `default["nova"]["config"]["cpu_allocation_ratio"]` - Virtual CPU to Physical CPU allocation ratio (default 16.0)
+* `default["nova"]["config"]["ram_allocation_ratio"]` - Virtual RAM to Physical RAM allocation ratio (default 1.5)
+* `default["nova"]["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
+* `default["nova"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
+* `default["nova"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 
-* `nova["ec2"]["api"]["protocol"]` - Protocol used for the AWS EC2 compatible API
-* `nova["ec2"]["api"]["port"]` - Port on which AWS EC2 compatible API runs
-* `nova["ec2"]["api"]["admin_path"]` - Path for admin functions in the AWS EC2 compatible API
-* `nova["ec2"]["api"]["cloud_path"]` - Path for service functions in the AWS EC2 compatible API
+Service Endpoint Attributes
+---------------------------
 
-* `nova["ec2"]["adminURL"]` - URL used to access the AWS EC2 compatible API for admin functions
-* `nova["ec2"]["internalURL"]` - URL used to access the AWS EC2 compatible API for user functions from an internal network
-* `nova["ec2"]["publicURL"]` - URL used to access the AWS EC2 compatible API for user functions from an external network
+Each Nova service endpoint is listed as a Hash in the `default["nova"]["services"]` Hash. Each
+Hash that describes a service endpoint should contain **either** a `uri` key **OR** contain
+keys for `scheme`, `port`, `path`, and `network`, where `network` is something like "public" or "private" and
+refers to a Hash of network information that is used by the `osops-utils::ip_location` library to determine
+an IP address in a named network.
 
-* `nova["xvpvnc"]["proxy_bind_host"]` - IP address which the xvpvncproxy binds to
-* `nova["xvpvnc"]["proxy_bind_port"]` - Port on which the xvpvncproxy runs
-* `nova["xvpvnc"]["ip_address"]` - IP address for accessing the xvpvncproxy service
-* `nova["xvpvnc"]["proxy_base_url"]` - Base URL returned for xvpvncproxy requests
+Here are the defaults:
 
-* `nova["novnc"]["proxy_bind_port"]` - Port on which the novncproxy runs
-* `nova["novnc"]["proxy_base_url"]` - Base URL returned for novncproxy requests
+* `default["nova"]["services"]["api"]["scheme"]` = "http" - Protocol used for the OpenStack Compute API endpoint
+* `default["nova"]["services"]["api"]["port"]` = "8774" - Port on which the OpenStack Compute API runs
+* `default["nova"]["services"]["api"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["api"]["path"]` = "/v2/`%(tenant_id)s`" - The path after host to this endpoint
 
-* `nova["volume"]["api_port"]` - Port on which nova volumes API runs
-* `nova["volume"]["ipaddress"]` - IP address where nova volumes API runs
-* `nova["volume"]["adminURL"]` - URL used to access the nova volumes API for admin functions
-* `nova["volume"]["internalURL"]` - URL used to access the nova volumes API for user functions from an internal network
-* `nova["volume"]["publicURL"]` - URL used to access the nova volumes API for user functions from an external network
+* `default["nova"]["services"]["ec2-public"]["scheme"]` = "http" - Protocol used for the AWS EC2 compatible API endpoint
+* `default["nova"]["services"]["ec2-public"]["port"]` = "8773" - Port on which AWS EC2 compatible API runs
+* `default["nova"]["services"]["ec2-public"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["ec2-public"]["path"]` = "/services/Cloud" - The path after host to this endpoint
 
-* `nova["network"]["public"]["label"]` - Network label to be assigned to the public network on creation
-* `nova["network"]["public"]["ipv4_cidr"]` - Network to be created (in CIDR notation, e.g., 192.168.100.0/24)
-* `nova["network"]["public"]["num_networks"]` - Number of networks to be created
-* `nova["network"]["public"]["network_size"]` - Number of IP addresses to be used in this network
-* `nova["network"]["public"]["bridge"]` - Bridge to be created for accessing the VM network (e.g., br100)
-* `nova["network"]["public"]["bridge_dev"]` - Physical device on which the bridge device should be attached (e.g., eth2)
-* `nova["network"]["public"]["dns1"]` - DNS server 1
-* `nova["network"]["public"]["dns2"]` - DNS server 2
+* `default["nova"]["services"]["ec2-admin"]["scheme"]` = "http" - Protocol used for the AWS EC2 compatible Admin API endpoint
+* `default["nova"]["services"]["ec2-admin"]["port"]` = "8773" - Port on which AWS EC2 compatible Admin API runs
+* `default["nova"]["services"]["ec2-admin"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["ec2-admin"]["path"]` = "/services/Admin" - The path after host to this endpoint
 
-* `nova["network"]["private"]["label"]` - Network label to be assigned to the private network on creation
-* `nova["network"]["private"]["ipv4_cidr"]` - Network to be created (in CIDR notation e.g., 192.168.200.0/24)
-* `nova["network"]["private"]["num_networks"]` - Number of networks to be created
-* `nova["network"]["private"]["network_size"]` - Number of IP addresses to be used in this network
-* `nova["network"]["private"]["bridge"]` - Bridge to be created for accessing the VM network (e.g., br200)
-* `nova["network"]["private"]["bridge_dev"]` - Physical device on which the bridge device should be attached (e.g., eth3)
+* `default["nova"]["services"]["xvpvnc"]["scheme"]` = "http" - Protocol used for the xvp VNC Proxy endpoint
+* `default["nova"]["services"]["xvpvnc"]["port"]` = "6081" - Port on which xvp VNC Proxy runs
+* `default["nova"]["services"]["xvpvnc"]["network"]` = "nova" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["xvpvnc"]["path"]` = "/console" - The path after host to this endpoint
 
-* `nova["libvirt"]["virt_type"]` - What hypervisor software layer to use with libvirt (e.g., kvm, qemu)
+* `default["nova"]["services"]["novnc"]["scheme"]` = "http" - Protocol used for the noVNC Proxy endpoint
+* `default["nova"]["services"]["novnc"]["port"]` = "6080" - Port on which noVNC Proxy runs
+* `default["nova"]["services"]["novnc"]["network"]` = "nova" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["novnc"]["path"]` = `"/vnc_auto.html"` - The path after host to this endpoint
 
-* `nova["libvirt"]["vncserver_listen"]` - IP address on the hypervisor that libvirt listens for VNC requests on
-* `nova["libvirt"]["vncserver_proxyclient_address"]` - IP address on the hypervisor that libvirt exposes for VNC requests on (should be the same as vncserver_listen)
+* `default["nova"]["services"]["novnc-server"]["scheme"]` = "http" - Protocol used for the noVNC Server endpoint
+* `default["nova"]["services"]["novnc-server"]["port"]` = "6080" - Port on which noVNC Server runs
+* `default["nova"]["services"]["novnc-server"]["network"]` = "nova" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["novnc-server"]["path"]` = `"/vnc_auto.html"` - The path after host to this endpoint
 
-* `nova["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
-* `nova["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
-* `nova["libvirt"]["ssh"]["public_key"]` - Public key to use if using SSH authentication to your libvirt layer
+* `default["nova"]["services"]["volume"]["scheme"]` = "http" - Protocol used for the OpenStack Volume API endpoint
+* `default["nova"]["services"]["volume"]["port"]` = "8776" - Port on which OpenStack Volume API runs
+* `default["nova"]["services"]["volume"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
+* `default["nova"]["services"]["volume"]["path"]` = "/v1/`%(tenant_id)s`" - The path after host to this endpoint
 
-* `nova["scheduler"]["scheduler_driver"]` - the scheduler driver to use
+Networking Attributes
+---------------------
+
+Basic networking configuration is controlled with the following attributes:
+
+* `default["nova"]["network"]["network_manager"]` - Defaults to "nova.network.manager.FlatDHCPManager". Set to "nova.network.manager.VlanManager" to configure VLAN Networking.
+* `default["nova"]["network"]["fixed_range"]` - The CIDR for the network that VMs will be assigned to. In the case of VLAN Networking, this should be the network in which all VLAN networks that tenants are assigned will fit.
+* `default["nova"]["network"]["dmz_cidr"]` - A CIDR for the range of IP addresses that will NOT be SNAT'ed by the nova network controller
+* `default["nova"]["network"]["public_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses in the `fixed_range`.
+* `default["nova"]["network"]["vlan_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses when VMs are assigned in a VLAN subnet.
+
+You can have the cookbook automatically create networks in Nova for you by adding a Hash to the `default["nova"]["networks"]` Array.
+**Note**: The `nova::nova-setup` recipe contains the code that creates these pre-defined networks.
+
+Each Hash must contain the following keys:
+
+* `ipv4_cidr` - The CIDR representation of the subnet. Supplied to the nova-manage network create command as `--fixed_ipv4_range`
+* `label` - A name for the network
+
+In addition to the above required keys in the Hash, the below keys are optional:
+
+* `num_networks` - Passed as-is to `nova-manage network create` as the `--num_networks` option. This overrides the default `num_networks` nova.conf value.
+* `network_size` - Passed as-is to `nova-manage network create` as the `--network_size` option. This overrides the default `network_size` nova.conf value.
+* `bridge` - Passed as-is to `nova-manage network create` as the `--bridge` option.
+* `bridge_interface` -- Passed as-is to `nova-manage network create` as the `--bridge_interface` option. This overrides the default `vlan_interface` nova.conf value.
+* `dns1` - Passed as-is to `nova-manage network create` as the `--dns1` option.
+* `dns2` - Passed as-is to `nova-manage network create` as the `--dns2` option.
+* `multi_host` - Passed as-is to `nova-manage network create` as the `--multi_host` option. Values should be either 'T' or 'F'
+* `vlan` - Passed as-is to `nova-manage network create` as the `--vlan` option. Should be the VLAN tag ID.
+
+By default, the `default["nova"]["networks"]` array has two networks:
+
+* `default["nova"]["networks"]["public"]["label"]` - Network label to be assigned to the public network on creation
+* `default["nova"]["networks"]["public"]["ipv4_cidr"]` - Network to be created (in CIDR notation, e.g., 192.168.100.0/24)
+* `default["nova"]["networks"]["public"]["num_networks"]` - Number of networks to be created
+* `default["nova"]["networks"]["public"]["network_size"]` - Number of IP addresses to be used in this network
+* `default["nova"]["networks"]["public"]["bridge"]` - Bridge to be created for accessing the VM network (e.g., br100)
+* `default["nova"]["networks"]["public"]["bridge_dev"]` - Physical device on which the bridge device should be attached (e.g., eth2)
+* `default["nova"]["networks"]["public"]["dns1"]` - DNS server 1
+* `default["nova"]["networks"]["public"]["dns2"]` - DNS server 2
+
+* `default["nova"]["networks"]["private"]["label"]` - Network label to be assigned to the private network on creation
+* `default["nova"]["networks"]["private"]["ipv4_cidr"]` - Network to be created (in CIDR notation e.g., 192.168.200.0/24)
+* `default["nova"]["networks"]["private"]["num_networks"]` - Number of networks to be created
+* `default["nova"]["networks"]["private"]["network_size"]` - Number of IP addresses to be used in this network
+* `default["nova"]["networks"]["private"]["bridge"]` - Bridge to be created for accessing the VM network (e.g., br200)
+* `default["nova"]["networks"]["private"]["bridge_dev"]` - Physical device on which the bridge device should be attached (e.g., eth3)
+
+Libvirt Configuration Attributes
+---------------------------------
+
+* `default["nova"]["libvirt"]["virt_type"]` - What hypervisor software layer to use with libvirt (e.g., kvm, qemu)
+* `default["nova"]["libvirt"]["vncserver_listen"]` - IP address on the hypervisor that libvirt listens for VNC requests on
+* `default["nova"]["libvirt"]["vncserver_proxyclient_address"]` - IP address on the hypervisor that libvirt exposes for VNC requests on (should be the same as `vncserver_listen`)
+* `default["nova"]["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
+* `default["nova"]["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
+* `default["nova"]["libvirt"]["ssh"]["public_key"]` - Public key to use if using SSH authentication to your libvirt layer
+
+Scheduler Configuration Attributes
+----------------------------------
+
+* `default["nova"]["scheduler"]["scheduler_driver"]` - the scheduler driver to use
 NOTE: The filter scheduler currently does not work with ec2.
-* `nova["scheduler"]["default_filters"]` - a list of filters enabled for schedulers that support them.
+* `default["nova"]["scheduler"]["default_filters"]` - a list of filters enabled for schedulers that support them.
 
-* `nova["syslog"]["use"]` - Should nova log to syslog?
-* `nova["syslog"]["facility"]` - Which facility nova should use when logging in python style (for example, LOG_LOCAL1)
-* `nova["syslog"]["config_facility"]` - Which facility nova should use when logging in rsyslog style (for example, local1)
+Syslog Configuration Attributes
+-------------------------------
+
+* `default["nova"]["syslog"]["use"]` - Should nova log to syslog?
+* `default["nova"]["syslog"]["facility"]` - Which facility nova should use when logging in python style (for example, `LOG_LOCAL1`)
+* `default["nova"]["syslog"]["config_facility"]` - Which facility nova should use when logging in rsyslog style (for example, local1)
 
 Templates
 =====
