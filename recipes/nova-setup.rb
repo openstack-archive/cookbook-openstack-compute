@@ -57,23 +57,31 @@ node["nova"]["networks"].each do |net|
         cmd = "nova-manage network create --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']}"
         if net.has_key?("multi_host")
             cmd += " --multi-host='#{net['multi_host']}'"
+        end
         if net.has_key?("num_networks")
             cmd += " --num-networks=#{net['num_networks']}"
+        end
         if net.has_key?("network_size")
             cmd += " --network-size=#{net['network_size']}"
+        end
         if net.has_key?("bridge")
             cmd += " --bridge=#{net['bridge']}"
+        end
         # Older attributes have the key as "bridge_dev" instead
         # of "bridge_interface"...
         if net.has_key?("bridge_interface") or net.has_key?("bridge_dev")
             val = net.has_key?("bridge_interface") ? net["bridge_interface"] : net["bridge_dev"]
             cmd += " --bridge_interface=#{val}"
+        end
         if net.has_key?("dns1")
             cmd += " --dns1=#{net['dns1']}"
+        end
         if net.has_key?("dns2")
             cmd += " --dns2=#{net['dns2']}"
+        end
         if net.has_key?("vlan")
             cmd += " --vlan=#{net['vlan']}"
+        end
 
         command cmd
         action :run
