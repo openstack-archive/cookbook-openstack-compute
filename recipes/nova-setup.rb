@@ -52,7 +52,30 @@ end
 
 node["nova"]["networks"].each do |net|
     execute "nova-manage network create --label=#{net['label']}" do
-        command "nova-manage network create --multi_host='T' --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']} --num_networks=#{net['num_networks']} --network_size=#{net['network_size']} --bridge=#{net['bridge']} --bridge_interface=#{net['bridge_dev']} --dns1=#{net['dns1']} --dns2=#{net['dns2']}"
+        # The only two required keys in each network Hash
+        # are "label" and "ipv4_cidr".
+        cmd = "nova-manage network create --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']}"
+        if net.has_key?("multi_host")
+            cmd += " --multi-host='#{net['multi_host']}'"
+        if net.has_key?("num_networks")
+            cmd += " --num-networks=#{net['num_networks']}"
+        if net.has_key?("network_size")
+            cmd += " --network-size=#{net['network_size']}"
+        if net.has_key?("bridge")
+            cmd += " --bridge=#{net['bridge']}"
+        # Older attributes have the key as "bridge_dev" instead
+        # of "bridge_interface"...
+        if net.has_key?("bridge_interface") or net.has_key?("bridge_dev")
+            val = net.has_key?("bridge_interface") ? net["bridge_interface"] : net["bridge_dev"]
+            cmd += " --bridge_interface=#{val}"
+        if net.has_key?("dns1")
+            cmd += " --dns1=#{net['dns1']}"
+        if net.has_key?("dns2")
+            cmd += " --dns2=#{net['dns2']}"
+        if net.has_key?("vlan")
+            cmd += " --vlan=#{net['vlan']}"
+
+        command cmd
         action :run
         not_if "nova-manage network list | grep #{net['ipv4_cidr']}"
     end
@@ -65,4 +88,3 @@ if node.has_key?(:floating) and node["nova"]["network"]["floating"].has_key?(:ip
     not_if "nova-manage floating list"
   end
 end
-

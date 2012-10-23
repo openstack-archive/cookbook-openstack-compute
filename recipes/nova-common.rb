@@ -98,6 +98,7 @@ template "/etc/nova/nova.conf" do
     "glance_api_port" => glance_endpoint["port"],
     "iscsi_helper" => platform_options["iscsi_helper"],
     "public_interface" => node["nova"]["network"]["public_interface"],
+    "vlan_interface" => node["nova"]["network"]["vlan_interface"],
     "network_manager" => node["nova"]["network"]["network_manager"],
     "scheduler_driver" => node["nova"]["scheduler"]["scheduler_driver"],
     "scheduler_default_filters" => node["nova"]["scheduler"]["default_filters"].join(","),

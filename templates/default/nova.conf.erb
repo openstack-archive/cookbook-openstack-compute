@@ -34,8 +34,6 @@ default_schedule_zone=<%= @default_schedule_zone %>
 
 ##### NETWORK #####
 network_manager=<%= @network_manager %>
-#--flat_interface=eth1
-#--flat_network_dhcp_start=10.20.1.2
 public_interface=<%= @public_interface %>
 fixed_range=<%= @fixed_range %>
 dmz_cidr=<%= @dmz_cidr %>
@@ -52,6 +50,7 @@ libvirt_use_virtio_for_bridges=false
 <% else -%>
 libvirt_use_virtio_for_bridges=true
 <% end -%>
+vlan_interface=<%= @vlan_interface %>
 
 ##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService

@@ -70,7 +70,8 @@ default["nova"]["networks"] = [
                 "bridge" => "br100",
                 "bridge_dev" => "eth2",
                 "dns1" => "8.8.8.8",
-                "dns2" => "8.8.4.4"
+                "dns2" => "8.8.4.4",
+                "multi_host" => 'T'
         },
         {
                 "label" => "private",
@@ -80,14 +81,53 @@ default["nova"]["networks"] = [
                 "bridge" => "br200",
                 "bridge_dev" => "eth3",
                 "dns1" => "8.8.8.8",
-                "dns2" => "8.8.4.4"
+                "dns2" => "8.8.4.4",
+                "multi_host" => 'T'
         }
 ]
 
+# For VLAN Networking, do the following:
+#
+# default["nova"]["network"]["network_manager"] = "nova.network.manager.VlanManager"
+# default["nova"]["network"]["vlan_interface"] = "eth1"  # Or "eth2", "bond1", etc...
+# # The fixed_range setting is the **entire** subnet/network that all your VLAN
+# # networks will fit inside.
+# default["nova"]["network"]["fixed_range"] = "10.0.0.0/8"  # Or smaller for smaller deploys...
+#
+# In addition to the above, you typically either want to do one of the following:
+#
+# 1) Set default["nova"]["networks"] to an empty Array ([]) and create your
+#    VLAN networks (using nova-manage network create) **when you create a tenant**.
+#
+# 2) Set default["nova"]["networks"] to an Array of VLAN networks that get created
+#    **without a tenant assignment** for tenants to use when they are created later.
+#    Such an array might look like this:
+#
+#    default["nova"]["networks"] = [
+#       {
+#         "label": "vlan100",
+#         "vlan": "100",
+#         "ipv4_cidr": "10.0.100.0/24"
+#       },
+#       {
+#         "label": "vlan101",
+#         "vlan": "101",
+#         "ipv4_cidr": "10.0.101.0/24"
+#       },
+#       {
+#         "label": "vlan102",
+#         "vlan": "102",
+#         "ipv4_cidr": "10.0.102.0/24"
+#       },
+#    ]
+
 default["nova"]["network"]["fixed_range"] = default["nova"]["networks"][0]["ipv4_cidr"]
+# DMZ CIDR is a range of IP addresses that should not
+# have their addresses SNAT'ed by the nova network controller
 default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 default["nova"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
 default["nova"]["network"]["public_interface"] = "eth0"
+default["nova"]["network"]["vlan_interface"] = "eth0"
 
 default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.filter_scheduler.FilterScheduler"
 default["nova"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
