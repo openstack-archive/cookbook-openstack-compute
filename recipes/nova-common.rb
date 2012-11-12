@@ -39,37 +39,40 @@ directory "/etc/nova" do
   mode "0755"
 end
 
-mysql_info = get_access_endpoint("mysql-master", "mysql", "db")
-rabbit_info = get_access_endpoint("rabbitmq-server", "rabbitmq", "queue")
+rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
+rabbit_info = get_settings_by_role(rabbit_server_role, "queue")
 
+# Still need this but only to get the nova db password...
+# TODO(jaypipes): Refactor password generation/lookup into
+# openstack-common.
 nova_setup_role = node["nova"]["nova_setup_chef_role"]
 nova_setup_info = get_settings_by_role(nova_setup_role, "nova")
+
+db_user = node['db']['username']
+db_pass = nova_setup_info['db']['password']
+sql_connection = ::Openstack::db_uri("compute", db_user, db_pass)
+
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
 
 # find the node attribute endpoint settings for the server holding a given role
-ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
-ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
-xvpvnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "xvpvnc") || {}
-novnc_endpoint = get_access_endpoint("nova-vncproxy", "nova", "novnc-server") || {}
-novnc_proxy_endpoint = get_bind_endpoint("nova", "novnc")
+identity_endpoint = ::Openstack::endpoint('identity-api')
+xvpvnc_endpoint = ::Openstack::endpoint('compute-xvpvnc') || {}
+novnc_endpoint = ::Openstack::endpoint('compute-novnc-server') || {}
+novnc_proxy_endpoint = ::Openstack::endpoint('compute-novnc')
+nova_api_endpoint = ::Openstack::endpoint('compute-api') || {}
+ec2_public_endpoint = ::Openstack::endpoint('compute-ec2-api') || {}
+image_endpoint = ::Openstack::endpoint('image-api')
 
-glance_endpoint = get_access_endpoint("glance-api", "glance", "api")
-nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api") || {}
-ec2_public_endpoint = get_access_endpoint("nova-api-ec2", "nova", "ec2-public") || {}
-
-Chef::Log.debug("nova::nova-common:mysql_info|#{mysql_info}")
-Chef::Log.debug("nova::nova-common:rabbit_ip|#{rabbit_info}")
-Chef::Log.debug("nova::nova-common:nova_setup_info|#{nova_setup_info}")
+Chef::Log.debug("nova::nova-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::nova-common:keystone|#{keystone}")
-Chef::Log.debug("nova::nova-common:ks_admin_endpoint|#{ks_admin_endpoint}")
-Chef::Log.debug("nova::nova-common:ks_service_endpoint|#{ks_service_endpoint}")
+Chef::Log.debug("nova::nova-common:identity_endpoint|#{identity_endpoint}")
 Chef::Log.debug("nova::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
 Chef::Log.debug("nova::nova-common:novnc_endpoint|#{novnc_endpoint}")
 Chef::Log.debug("nova::nova-common:novnc_proxy_endpoint|#{novnc_proxy_endpoint}")
-Chef::Log.debug("nova::nova-common:glance_endpoint|#{glance_endpoint}")
 Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{nova_api_endpoint}")
 Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint}")
+Chef::Log.debug("nova::nova-common:image_endpoint|#{image_endpoint}")
 
 # TODO: need to re-evaluate this for accuracy
 template "/etc/nova/nova.conf" do
@@ -80,10 +83,7 @@ template "/etc/nova/nova.conf" do
   variables(
     "use_syslog" => node["nova"]["syslog"]["use"],
     "log_facility" => node["nova"]["syslog"]["facility"],
-    "db_ipaddress" => mysql_info["host"],
-    "user" => node["nova"]["db"]["username"],
-    "passwd" => nova_setup_info["db"]["password"],
-    "db_name" => node["nova"]["db"]["name"],
+    "sql_connection" => sql_connection,
     "vncserver_listen" => "0.0.0.0",
     "vncserver_proxyclient_address" => novnc_proxy_endpoint["host"],
     "novncproxy_base_url" => novnc_endpoint["uri"],
@@ -92,10 +92,12 @@ template "/etc/nova/nova.conf" do
     "xvpvncproxy_base_url" => xvpvnc_endpoint["uri"],
     "rabbit_ipaddress" => rabbit_info["host"],
     "rabbit_port" => rabbit_info["port"],
-    "keystone_api_ipaddress" => ks_admin_endpoint["host"],
-    "keystone_service_port" => ks_service_endpoint["port"],
-    "glance_api_ipaddress" => glance_endpoint["host"],
-    "glance_api_port" => glance_endpoint["port"],
+    "keystone_api_ipaddress" => identity_endpoint["host"],
+    "keystone_service_port" => identity_endpoint["port"],
+    # TODO(jaypipes): No support here for >1 image API servers
+    # with the glance_api_servers configuration option...
+    "glance_api_ipaddress" => image_endpoint["host"],
+    "glance_api_port" => image_endpoint["port"],
     "iscsi_helper" => platform_options["iscsi_helper"],
     "public_interface" => node["nova"]["network"]["public_interface"],
     "vlan_interface" => node["nova"]["network"]["vlan_interface"],
@@ -134,8 +136,8 @@ template "/root/openrc" do
     "user" => keystone["admin_user"],
     "tenant" => keystone["users"][keystone["admin_user"]]["default_tenant"],
     "password" => keystone["users"][keystone["admin_user"]]["password"],
-    "keystone_api_ipaddress" => ks_service_endpoint["host"],
-    "keystone_service_port" => ks_service_endpoint["port"],
+    "keystone_api_ipaddress" => identity_endpoint["host"],
+    "keystone_service_port" => identity_endpoint["port"],
     "nova_api_ipaddress" => nova_api_endpoint["host"],
     "nova_api_version" => "1.1",
     "keystone_region" => node["nova"]["compute"]["region"],
