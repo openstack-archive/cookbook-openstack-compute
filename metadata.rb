@@ -24,6 +24,16 @@ recipe		  "volume", ""
   supports os
 end
 
-%w{ apt database glance keystone mysql openssh osops-utils rabbitmq selinux sysctl yum }.each do |dep|
-  depends dep
-end
+depends     "apt"
+depends     "database"
+depends     "glance"
+depends     "keystone"
+depends     "mysql"
+depends     "openstack-utils"
+depends     "openstack-common"
+depends     "openssh"
+depends     "osops-utils"
+depends     "rabbitmq"
+depends     "selinux"
+depends     "sysctl"
+depends     "yum"

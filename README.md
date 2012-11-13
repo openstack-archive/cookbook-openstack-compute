@@ -28,9 +28,12 @@ The following cookbooks are dependencies:
 * mysql
 * openssh
 * osops-utils
+* openstack-common
+* openstack-utils
 * rabbitmq
 * selinux (Fedora)
 * sysctl
+* yum
 
 Recipes
 =======
@@ -140,52 +143,6 @@ NOTE: service password is no longer set statically in the attributes file, but s
 * `default["nova"]["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
 * `default["nova"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
 * `default["nova"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
-
-Service Endpoint Attributes
----------------------------
-
-Each Nova service endpoint is listed as a Hash in the `default["nova"]["services"]` Hash. Each
-Hash that describes a service endpoint should contain **either** a `uri` key **OR** contain
-keys for `scheme`, `port`, `path`, and `network`, where `network` is something like "public" or "private" and
-refers to a Hash of network information that is used by the `osops-utils::ip_location` library to determine
-an IP address in a named network.
-
-Here are the defaults:
-
-* `default["nova"]["services"]["api"]["scheme"]` = "http" - Protocol used for the OpenStack Compute API endpoint
-* `default["nova"]["services"]["api"]["port"]` = "8774" - Port on which the OpenStack Compute API runs
-* `default["nova"]["services"]["api"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["api"]["path"]` = "/v2/`%(tenant_id)s`" - The path after host to this endpoint
-
-* `default["nova"]["services"]["ec2-public"]["scheme"]` = "http" - Protocol used for the AWS EC2 compatible API endpoint
-* `default["nova"]["services"]["ec2-public"]["port"]` = "8773" - Port on which AWS EC2 compatible API runs
-* `default["nova"]["services"]["ec2-public"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["ec2-public"]["path"]` = "/services/Cloud" - The path after host to this endpoint
-
-* `default["nova"]["services"]["ec2-admin"]["scheme"]` = "http" - Protocol used for the AWS EC2 compatible Admin API endpoint
-* `default["nova"]["services"]["ec2-admin"]["port"]` = "8773" - Port on which AWS EC2 compatible Admin API runs
-* `default["nova"]["services"]["ec2-admin"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["ec2-admin"]["path"]` = "/services/Admin" - The path after host to this endpoint
-
-* `default["nova"]["services"]["xvpvnc"]["scheme"]` = "http" - Protocol used for the xvp VNC Proxy endpoint
-* `default["nova"]["services"]["xvpvnc"]["port"]` = "6081" - Port on which xvp VNC Proxy runs
-* `default["nova"]["services"]["xvpvnc"]["network"]` = "nova" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["xvpvnc"]["path"]` = "/console" - The path after host to this endpoint
-
-* `default["nova"]["services"]["novnc"]["scheme"]` = "http" - Protocol used for the noVNC Proxy endpoint
-* `default["nova"]["services"]["novnc"]["port"]` = "6080" - Port on which noVNC Proxy runs
-* `default["nova"]["services"]["novnc"]["network"]` = "nova" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["novnc"]["path"]` = `"/vnc_auto.html"` - The path after host to this endpoint
-
-* `default["nova"]["services"]["novnc-server"]["scheme"]` = "http" - Protocol used for the noVNC Server endpoint
-* `default["nova"]["services"]["novnc-server"]["port"]` = "6080" - Port on which noVNC Server runs
-* `default["nova"]["services"]["novnc-server"]["network"]` = "nova" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["novnc-server"]["path"]` = `"/vnc_auto.html"` - The path after host to this endpoint
-
-* `default["nova"]["services"]["volume"]["scheme"]` = "http" - Protocol used for the OpenStack Volume API endpoint
-* `default["nova"]["services"]["volume"]["port"]` = "8776" - Port on which OpenStack Volume API runs
-* `default["nova"]["services"]["volume"]["network"]` = "public" - The name of the network the IP address for this endpoint should come from
-* `default["nova"]["services"]["volume"]["path"]` = "/v1/`%(tenant_id)s`" - The path after host to this endpoint
 
 Networking Attributes
 ---------------------

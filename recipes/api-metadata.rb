@@ -46,8 +46,8 @@ service "nova-api-metadata" do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
-ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
+identity_admin_endpoint = ::Openstack::endpoint('identity-admin')
+identity_endpoint = ::Openstack::endpoint('identity-api')
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
 
@@ -57,10 +57,9 @@ template "/etc/nova/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
-    "component"  => node["package_component"],
-    "keystone_api_ipaddress" => ks_admin_endpoint["host"],
-    "admin_port" => ks_admin_endpoint["port"],
-    "service_port" => ks_service_endpoint["port"],
+    "keystone_api_ipaddress" => identity_admin_endpoint["host"],
+    "service_port" => identity_endpoint["port"],
+    "admin_port" => identity_admin_endpoint["port"],
     "admin_token" => keystone["admin_token"]
   )
   notifies :restart, resources(:service => "nova-api-metadata"), :delayed

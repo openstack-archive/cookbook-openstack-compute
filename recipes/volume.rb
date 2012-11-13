@@ -50,18 +50,18 @@ end
 #   stop_cmd "/usr/sbin/service #{service_name} stop"
 # end
 
-ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
-ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
+identity_admin_endpoint = ::Openstack::endpoint('identity-admin')
+identity_endpoint = ::Openstack::endpoint('identity-api')
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
-volume_endpoint = get_access_endpoint("nova-volume", "nova", "volume")
+volume_endpoint = ::Openstack::endpoint('compute-volume')
 
 # Register Volume Service
 keystone_register "Register Volume Service" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   service_name "Volume Service"
   service_type "volume"
@@ -71,10 +71,10 @@ end
 
 # Register Image Endpoint
 keystone_register "Register Volume Endpoint" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   service_type "volume"
   endpoint_region "RegionOne"

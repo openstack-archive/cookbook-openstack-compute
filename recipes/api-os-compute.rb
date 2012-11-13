@@ -53,16 +53,16 @@ end
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
-ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
-ks_service_endpoint = get_access_endpoint("keystone", "keystone", "service-api")
-nova_api_endpoint = get_access_endpoint("nova-api-os-compute", "nova", "api")
+identity_admin_endpoint = ::Openstack::endpoint('identity-admin')
+identity_endpoint = ::Openstack::endpoint('identity-api')
+nova_api_endpoint = ::Openstack::endpoint('compute-api')
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
@@ -72,10 +72,10 @@ end
 
 # Register Service User
 keystone_register "Register Service User" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
@@ -86,10 +86,10 @@ end
 
 ## Grant Admin role to Service User for Service Tenant ##
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
@@ -99,10 +99,10 @@ end
 
 # Register Compute Service
 keystone_register "Register Compute Service" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   service_name "nova"
   service_type "compute"
@@ -116,10 +116,9 @@ template "/etc/nova/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
-            "component"  => node["package_component"],
-            "keystone_api_ipaddress" => ks_service_endpoint["host"],
-            "service_port" => ks_service_endpoint["port"],
-            "admin_port" => ks_admin_endpoint["port"],
+            "keystone_api_ipaddress" => identity_endpoint["host"],
+            "service_port" => identity_endpoint["port"],
+            "admin_port" => identity_admin_endpoint["port"],
             "admin_token" => keystone["admin_token"]
             )
   notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
@@ -127,10 +126,10 @@ end
 
 # Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
-  auth_host ks_admin_endpoint["host"]
-  auth_port ks_admin_endpoint["port"]
-  auth_protocol ks_admin_endpoint["scheme"]
-  api_ver ks_admin_endpoint["path"]
+  auth_host identity_admin_endpoint["host"]
+  auth_port identity_admin_endpoint["port"]
+  auth_protocol identity_admin_endpoint["scheme"]
+  api_ver identity_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   service_type "compute"
   endpoint_region node["nova"]["compute"]["region"]

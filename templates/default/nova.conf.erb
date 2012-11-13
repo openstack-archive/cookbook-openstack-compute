@@ -58,7 +58,7 @@ glance_api_servers=<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
 
 ##### COMPUTE #####
 compute_manager=nova.compute.manager.ComputeManager
-sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @db_ipaddress %>/<%= @db_name %>
+sql_connection=<%= @sql_connection %>
 connection_type=libvirt
 libvirt_type=<%= @virt_type %>
 # Command prefix to use for running commands as root (default: sudo)

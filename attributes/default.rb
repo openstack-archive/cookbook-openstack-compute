@@ -4,6 +4,10 @@ default["enable_monit"] = false  # OS provides packages
 default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
+# The name of the Chef role that knows about the message queue server
+# that Nova uses
+default["nova"]["rabbit_server_chef_role"] = "rabbitmq-server"
+
 # The name of the Chef role that sets up basic Nova stuff
 default["nova"]["nova_setup_chef_role"] = "nova-setup"
 
@@ -16,41 +20,6 @@ default["nova"]["db"]["username"] = "nova"
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
 default["nova"]["service_role"] = "admin"
-
-default["nova"]["services"]["api"]["scheme"] = "http"
-default["nova"]["services"]["api"]["network"] = "public"
-default["nova"]["services"]["api"]["port"] = 8774
-default["nova"]["services"]["api"]["path"] = "/v2/%(tenant_id)s"
-
-default["nova"]["services"]["ec2-admin"]["scheme"] = "http"
-default["nova"]["services"]["ec2-admin"]["network"] = "public"
-default["nova"]["services"]["ec2-admin"]["port"] = 8773
-default["nova"]["services"]["ec2-admin"]["path"] = "/services/Admin"
-
-default["nova"]["services"]["ec2-public"]["scheme"] = "http"
-default["nova"]["services"]["ec2-public"]["network"] = "public"
-default["nova"]["services"]["ec2-public"]["port"] = 8773
-default["nova"]["services"]["ec2-public"]["path"] = "/services/Cloud"
-
-default["nova"]["services"]["xvpvnc"]["scheme"] = "http"
-default["nova"]["services"]["xvpvnc"]["network"] = "nova"
-default["nova"]["services"]["xvpvnc"]["port"] = 6081
-default["nova"]["services"]["xvpvnc"]["path"] = "/console"
-
-default["nova"]["services"]["novnc"]["scheme"] = "http"
-default["nova"]["services"]["novnc"]["network"] = "nova"
-default["nova"]["services"]["novnc"]["port"] = 6080
-default["nova"]["services"]["novnc"]["path"] = "/vnc_auto.html"
-
-default["nova"]["services"]["novnc-server"]["scheme"] = "http"
-default["nova"]["services"]["novnc-server"]["network"] = "nova"
-default["nova"]["services"]["novnc-server"]["port"] = 6080
-default["nova"]["services"]["novnc-server"]["path"] = "/vnc_auto.html"
-
-default["nova"]["services"]["volume"]["scheme"] = "http"
-default["nova"]["services"]["volume"]["network"] = "public"
-default["nova"]["services"]["volume"]["port"] = 8776
-default["nova"]["services"]["volume"]["path"] = "/v1/%(tenant_id)s"
 
 # Logging stuff
 default["nova"]["syslog"]["use"] = false
