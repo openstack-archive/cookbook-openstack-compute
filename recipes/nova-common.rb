@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+class ::Chef::Recipe
+  include ::Openstack
+end
+
 if platform?(%w(redhat centos))
   include_recipe "yum::epel"
 end
@@ -48,19 +52,19 @@ nova_setup_info = get_settings_by_role(nova_setup_role, "nova")
 
 db_user = node['db']['username']
 db_pass = nova_setup_info['db']['password']
-sql_connection = ::Openstack::db_uri("compute", db_user, db_pass)
+sql_connection = db_uri("compute", db_user, db_pass)
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_endpoint = ::Openstack::endpoint('identity-api')
-xvpvnc_endpoint = ::Openstack::endpoint('compute-xvpvnc') || {}
-novnc_endpoint = ::Openstack::endpoint('compute-novnc-server') || {}
-novnc_proxy_endpoint = ::Openstack::endpoint('compute-novnc')
-nova_api_endpoint = ::Openstack::endpoint('compute-api') || {}
-ec2_public_endpoint = ::Openstack::endpoint('compute-ec2-api') || {}
-image_endpoint = ::Openstack::endpoint('image-api')
+identity_endpoint = endpoint('identity-api')
+xvpvnc_endpoint = endpoint('compute-xvpvnc') || {}
+novnc_endpoint = endpoint('compute-novnc-server') || {}
+novnc_proxy_endpoint = endpoint('compute-novnc')
+nova_api_endpoint = endpoint('compute-api') || {}
+ec2_public_endpoint = endpoint('compute-ec2-api') || {}
+image_endpoint = endpoint('image-api')
 
 Chef::Log.debug("nova::nova-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::nova-common:keystone|#{keystone}")

@@ -39,7 +39,7 @@ keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
 #creates db and user
 #function defined in osops-utils/libraries
 # TODO(jaypipes): Replace this with a recipe in openstack-common
-# that uses the ::Openstack::db_uri() library routine to create
+# that uses the db_uri() library routine to create
 # the database
 create_db_and_user("mysql",
                    node["nova"]["db"]["name"],

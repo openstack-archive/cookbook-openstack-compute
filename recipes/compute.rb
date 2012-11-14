@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+class ::Chef::Recipe
+  include ::Openstack
+end
+
 include_recipe "nova::nova-common"
 include_recipe "nova::api-metadata"
 include_recipe "nova::network"

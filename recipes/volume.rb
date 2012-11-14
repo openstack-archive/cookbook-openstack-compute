@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+class ::Chef::Recipe
+  include ::Openstack
+end
+
 include_recipe "nova::nova-common"
 include_recipe "nova::api-os-volume"
 
@@ -50,11 +54,11 @@ end
 #   stop_cmd "/usr/sbin/service #{service_name} stop"
 # end
 
-identity_admin_endpoint = ::Openstack::endpoint('identity-admin')
-identity_endpoint = ::Openstack::endpoint('identity-api')
+identity_admin_endpoint = endpoint('identity-admin')
+identity_endpoint = endpoint('identity-api')
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
-volume_endpoint = ::Openstack::endpoint('compute-volume')
+volume_endpoint = endpoint('compute-volume')
 
 # Register Volume Service
 keystone_register "Register Volume Service" do

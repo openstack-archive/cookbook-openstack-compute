@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+class ::Chef::Recipe
+  include ::Openstack
+end
+
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 include_recipe "nova::nova-common"
 
@@ -50,13 +54,13 @@ service "nova-api-ec2" do
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
 
-identity_admin_endpoint = ::Openstack::endpoint('identity-admin')
-identity_endpoint = ::Openstack::endpoint('identity-api')
+identity_admin_endpoint = endpoint('identity-admin')
+identity_endpoint = endpoint('identity-api')
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role(keystone_service_role, "keystone")
 
-ec2_admin_endpoint = ::Openstack::endpoint('compute-ec2-admin')
-ec2_public_endpoint = ::Openstack::endpoint('compute-ec2-api')
+ec2_admin_endpoint = endpoint('compute-ec2-admin')
+ec2_public_endpoint = endpoint('compute-ec2-api')
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
