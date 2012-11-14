@@ -50,7 +50,7 @@ rabbit_info = get_settings_by_role(rabbit_server_role, "queue")
 nova_setup_role = node["nova"]["nova_setup_chef_role"]
 nova_setup_info = get_settings_by_role(nova_setup_role, "nova")
 
-db_user = node['db']['username']
+db_user = node['nova']['db']['username']
 db_pass = nova_setup_info['db']['password']
 sql_connection = db_uri("compute", db_user, db_pass)
 
