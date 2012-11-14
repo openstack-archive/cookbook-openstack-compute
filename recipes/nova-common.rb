@@ -81,6 +81,7 @@ template "/etc/nova/nova.conf" do
   group "root"
   mode "0644"
   variables(
+    "custom_template_banner" => node["nova"]["custom_template_banner"],
     "use_syslog" => node["nova"]["syslog"]["use"],
     "log_facility" => node["nova"]["syslog"]["facility"],
     "sql_connection" => sql_connection,
@@ -133,6 +134,7 @@ template "/root/openrc" do
   group "root"
   mode "0600"
   variables(
+    "custom_template_banner" => node["nova"]["custom_template_banner"],
     "user" => keystone["admin_user"],
     "tenant" => keystone["users"][keystone["admin_user"]]["default_tenant"],
     "password" => keystone["users"][keystone["admin_user"]]["password"],

@@ -116,11 +116,12 @@ template "/etc/nova/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
-            "keystone_api_ipaddress" => identity_endpoint["host"],
-            "service_port" => identity_endpoint["port"],
-            "admin_port" => identity_admin_endpoint["port"],
-            "admin_token" => keystone["admin_token"]
-            )
+    "custom_template_banner" => node["nova"]["custom_template_banner"],
+    "keystone_api_ipaddress" => identity_endpoint["host"],
+    "service_port" => identity_endpoint["port"],
+    "admin_port" => identity_admin_endpoint["port"],
+    "admin_token" => keystone["admin_token"]
+  )
   notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
 end
 

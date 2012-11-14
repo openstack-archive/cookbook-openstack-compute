@@ -57,6 +57,7 @@ template "/etc/nova/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
+    "custom_template_banner" => node["nova"]["custom_template_banner"],
     "keystone_api_ipaddress" => identity_endpoint["host"],
     "service_port" => identity_endpoint["port"],
     "admin_port" => identity_admin_endpoint["port"],
