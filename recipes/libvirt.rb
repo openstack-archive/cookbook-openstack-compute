@@ -73,8 +73,9 @@ template "/etc/libvirt/libvirtd.conf" do
   group "root"
   mode "0644"
   variables(
-    :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
-    )
+    "custom_template_banner" => node["nova"]["custom_template_banner"],
+    "auth_tcp" => node["nova"]["libvirt"]["auth_tcp"]
+  )
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
