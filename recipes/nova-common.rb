@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe "osops-utils::autoetchosts"
-
 if platform?(%w(redhat centos))
   include_recipe "yum::epel"
 end
