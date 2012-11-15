@@ -23,6 +23,7 @@ default["nova"]["keystone_service_chef_role"] = "keystone"
 
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
+default["nova"]["db"]["super_user"] = "root"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
