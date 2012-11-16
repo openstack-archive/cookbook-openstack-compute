@@ -26,10 +26,10 @@ end
 # Allow for using a well known db password
 if node["developer_mode"]
   node.set_unless["nova"]["db"]["password"] = "nova"
-  node.set_unless["nova"]["db"]["super_pass"] = "root"
+  node.set_unless["nova"]["db"]["super_password"] = "root"
 else
   node.set_unless["nova"]["db"]["password"] = secure_password
-  node.set_unless["nova"]["db"]["super_pass"] = secure_password
+  node.set_unless["nova"]["db"]["super_password"] = secure_password
 end
 
 include_recipe "nova::nova-common"
@@ -41,6 +41,8 @@ keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
 keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
 
 db_create_with_user("compute",
+                    node["nova"]["db"]["super_user"],
+                    node["nova"]["db"]["super_password"],
                     node["nova"]["db"]["username"],
                     node["nova"]["db"]["password"])
 
