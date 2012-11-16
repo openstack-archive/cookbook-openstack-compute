@@ -41,5 +41,3 @@ service "nova-scheduler" do
   action [:enable, :start]
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 end
-
-include_recipe "nova::nova-scheduler-patch"
