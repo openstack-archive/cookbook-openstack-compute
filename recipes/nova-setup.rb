@@ -41,13 +41,13 @@ node["nova"]["networks"].each do |net|
         # are "label" and "ipv4_cidr".
         cmd = "nova-manage network create --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']}"
         if net.has_key?("multi_host")
-            cmd += " --multi-host='#{net['multi_host']}'"
+            cmd += " --multi_host='#{net['multi_host']}'"
         end
         if net.has_key?("num_networks")
-            cmd += " --num-networks=#{net['num_networks']}"
+            cmd += " --num_networks=#{net['num_networks']}"
         end
         if net.has_key?("network_size")
-            cmd += " --network-size=#{net['network_size']}"
+            cmd += " --network_size=#{net['network_size']}"
         end
         if net.has_key?("bridge")
             cmd += " --bridge=#{net['bridge']}"
