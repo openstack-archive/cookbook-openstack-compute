@@ -21,15 +21,13 @@ Cookbooks
 
 The following cookbooks are dependencies:
 
-* apt
 * database
 * glance
 * keystone
 * mysql
-* openssh
-* osops-utils
 * openstack-common
 * openstack-utils
+* osops-utils
 * rabbitmq
 * selinux (Fedora)
 * sysctl
@@ -58,14 +56,14 @@ api-os-volume
 -Includes recipe `nova-common`
 -Installs the OpenStack volume service API
 
-apt
-----
--Performs an apt-get update
-
 compute
 ----
 -Includes recipes `nova-common`, `api-metadata`, `network`
 -Installs nova-compute service
+
+db
+--
+-Configures database for use with nova
 
 libvirt
 ----
@@ -102,18 +100,12 @@ volume
 -Includes recipes `nova-common`, `api-os-volume`
 -Installs nova volume service and configures the service and endpoints in keystone
 
-nova-scheduler-patch
-----
--Includes recipe osops-utils
--Patches nova-scheduler based on installed package version
-
 
 Attributes
 ==========
 
 * `default["nova"]["keystone_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
 * `default["nova"]["nova_setup_chef_role"]` - The name of the Chef role that sets up Nova
-* `default["nova"]["patch_files_on_disk"]` - Boolean for patching files on disk
 * `default["nova"]["db"]["name"]` - Name of nova database
 * `default["nova"]["db"]["username"]` - Username for nova database access
 * `default["nova"]["db"]["password"]` - Password for nova database access
@@ -227,7 +219,6 @@ Templates
 * `local_settings.py.erb` - Dashboard (horizon) config file
 * `nova.conf.erb` - Basic nova.conf file
 * `openrc.erb` - Contains environment variable settings to enable easy use of the nova client
-* `patches/` - misc. patches for nova
 
 
 License and Author
