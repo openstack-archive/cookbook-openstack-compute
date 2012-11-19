@@ -25,6 +25,7 @@ The following cookbooks are dependencies:
 * glance
 * keystone
 * mysql
+* openssl
 * openstack-common
 * openstack-utils
 * osops-utils
