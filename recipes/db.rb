@@ -22,9 +22,8 @@
 
 class ::Chef::Recipe
   include ::Openstack
+  include ::Opscode::OpenSSL::Password
 end
-
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
 # Allow for using a well known db password
 if node["developer_mode"]
