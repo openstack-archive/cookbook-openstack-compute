@@ -57,8 +57,3 @@ service "nova-compute" do
 end
 
 include_recipe "nova::libvirt"
-
-# Sysctl tunables
-sysctl_multi "nova" do
-  instructions "net.ipv4.ip_forward" => "1"
-end
