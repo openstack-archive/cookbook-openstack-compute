@@ -110,6 +110,8 @@ Attributes
 ==========
 
 * `default["nova"]["keystone_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
+* `default["nova"]["user"]` - User nova services run as
+* `default["nova"]["group"]` - Group nova services run as
 * `default["nova"]["nova_setup_chef_role"]` - The name of the Chef role that sets up Nova
 * `default["nova"]["db"]["name"]` - Name of nova database
 * `default["nova"]["db"]["username"]` - Username for nova database access

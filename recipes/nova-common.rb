@@ -36,9 +36,9 @@ platform_options["common_packages"].each do |pkg|
 end
 
 directory "/etc/nova" do
-  owner "nova"
-  group "nova"
-  mode  00755
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode  00700
 
   action :create
 end

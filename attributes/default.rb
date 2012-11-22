@@ -29,6 +29,9 @@ default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
 default["nova"]["service_role"] = "admin"
 
+default["nova"]["user"] = "nova"
+default["nova"]["group"] = "nova"
+
 # Logging stuff
 default["nova"]["syslog"]["use"] = false
 default["nova"]["syslog"]["facility"] = "LOG_LOCAL1"

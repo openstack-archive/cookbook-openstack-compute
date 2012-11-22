@@ -30,9 +30,9 @@ node.set_unless['nova']['service_pass'] = secure_password
 platform_options = node["nova"]["platform"]
 
 directory "/var/lock/nova" do
-  owner "nova"
-  group "nova"
-  mode  00755
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode  00700
 
   action :create
 end
