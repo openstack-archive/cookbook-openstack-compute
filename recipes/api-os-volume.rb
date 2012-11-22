@@ -53,8 +53,8 @@ service "nova-api-os-volume" do
   action :enable
 end
 
-identity_admin_endpoint = endpoint "identity-admin"
-identity_endpoint = endpoint "identity-api"
+identity_admin_endpoint = endpoint_uri "identity-admin"
+identity_endpoint = endpoint_uri "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
@@ -65,9 +65,8 @@ template "/etc/nova/api-paste.ini" do
   mode   00644
   variables(
     :custom_template_banner => node["nova"]["custom_template_banner"],
-    :keystone_api_ipaddress => identity_endpoint["host"],
-    :service_port => identity_endpoint["port"],
-    :admin_port => identity_admin_endpoint["port"],
+    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
     :admin_token => keystone["admin_token"]
   )
 

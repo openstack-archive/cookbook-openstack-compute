@@ -29,7 +29,6 @@ node.set_unless['nova']['service_pass'] = secure_password
 
 platform_options = node["nova"]["platform"]
 
-
 directory "/var/lock/nova" do
   owner "nova"
   group "nova"
@@ -60,17 +59,17 @@ end
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
-identity_admin_endpoint = endpoint "identity-admin"
-identity_endpoint = endpoint "identity-api"
+identity_admin_endpoint = endpoint_uri "identity-admin"
+identity_endpoint = endpoint_uri "identity-api"
 
 nova_api_endpoint = endpoint "compute-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
@@ -81,10 +80,10 @@ end
 
 # Register Service User
 keystone_register "Register Service User" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
@@ -96,10 +95,10 @@ end
 
 ## Grant Admin role to Service User for Service Tenant ##
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
@@ -110,10 +109,10 @@ end
 
 # Register Compute Service
 keystone_register "Register Compute Service" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_name "nova"
   service_type "compute"
@@ -129,9 +128,8 @@ template "/etc/nova/api-paste.ini" do
   mode   00644
   variables(
     :custom_template_banner => node["nova"]["custom_template_banner"],
-    :keystone_api_ipaddress => identity_endpoint["host"],
-    :service_port => identity_endpoint["port"],
-    :admin_port => identity_admin_endpoint["port"],
+    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
     :admin_token => keystone["admin_token"]
   )
 
@@ -140,10 +138,10 @@ end
 
 # Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_type "compute"
   endpoint_region node["nova"]["compute"]["region"]

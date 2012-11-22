@@ -57,8 +57,8 @@ service "nova-api-ec2" do
   action :enable
 end
 
-identity_admin_endpoint = endpoint "identity-admin"
-identity_endpoint = endpoint "identity-api"
+identity_admin_endpoint = endpoint_uri "identity-admin"
+identity_endpoint = endpoint_uri "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
@@ -67,10 +67,10 @@ ec2_public_endpoint = endpoint "compute-ec2-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
@@ -81,10 +81,10 @@ end
 
 # Register Service User
 keystone_register "Register Service User" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
@@ -96,10 +96,10 @@ end
 
 # Grant Admin role to Service User for Service Tenant
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
@@ -110,10 +110,10 @@ end
 
 # Register EC2 Service
 keystone_register "Register EC2 Service" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_name "ec2"
   service_type "ec2"
@@ -128,9 +128,9 @@ template "/etc/nova/api-paste.ini" do
   group  "root"
   mode   00644
   variables(
-    :keystone_api_ipaddress => identity_admin_endpoint["host"],
-    :service_port => identity_endpoint["port"],
-    :admin_port => identity_admin_endpoint["port"],
+    :custom_template_banner => node["nova"]["custom_template_banner"],
+    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
     :admin_token => keystone["admin_token"]
   )
 
@@ -139,10 +139,10 @@ end
 
 # Register EC2 Endpoint
 keystone_register "Register Compute Endpoint" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_type "ec2"
   endpoint_region node["nova"]["compute"]["region"]

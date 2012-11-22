@@ -56,20 +56,20 @@ db_user = node['nova']['db']['username']
 db_pass = nova_setup_info['db']['password']
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role(keystone_service_role, "keystone")
+keystone = get_settings_by_role keystone_service_role, "keystone"
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_endpoint = endpoint('identity-api')
-xvpvnc_endpoint = endpoint('compute-xvpvnc') || {}
-novnc_endpoint = endpoint('compute-novnc-server') || {}
-novnc_proxy_endpoint = endpoint('compute-novnc')
-nova_api_endpoint = endpoint('compute-api') || {}
-ec2_public_endpoint = endpoint('compute-ec2-api') || {}
-image_endpoint = endpoint('image-api')
+identity_endpoint = endpoint_uri "identity-api"
+xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
+novnc_endpoint = endpoint "compute-novnc-server" || {}
+novnc_proxy_endpoint = endpoint "compute-novnc"
+nova_api_endpoint = endpoint "compute-api" || {}
+ec2_public_endpoint = endpoint "compute-ec2-api" || {}
+image_endpoint = endpoint "image-api"
 
 Chef::Log.debug("nova::nova-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::nova-common:keystone|#{keystone}")
-Chef::Log.debug("nova::nova-common:identity_endpoint|#{identity_endpoint}")
+Chef::Log.debug("nova::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
 Chef::Log.debug("nova::nova-common:novnc_endpoint|#{novnc_endpoint}")
 Chef::Log.debug("nova::nova-common:novnc_proxy_endpoint|#{novnc_proxy_endpoint}")
@@ -96,8 +96,8 @@ template "/etc/nova/nova.conf" do
     :xvpvncproxy_base_url => xvpvnc_endpoint["uri"],
     :rabbit_ipaddress => rabbit_info["host"],
     :rabbit_port => rabbit_info["port"],
-    :keystone_api_ipaddress => identity_endpoint["host"],
-    :keystone_service_port => identity_endpoint["port"],
+    :keystone_api_ipaddress => identity_endpoint.host,
+    :keystone_service_port => identity_endpoint.port,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
     :glance_api_ipaddress => image_endpoint["host"],
