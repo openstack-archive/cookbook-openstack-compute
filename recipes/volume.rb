@@ -32,16 +32,18 @@ end
 
 platform_options["nova_volume_packages"].each do |pkg|
   package pkg do
-    action :upgrade
     options platform_options["package_overrides"]
+
+    action :upgrade
   end
 end
 
 service "nova-volume" do
   service_name platform_options["nova_volume_service"]
   supports :status => true, :restart => true
-  action :disable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+
+  action :disable
 end
 
 # TODO(rp): need the flag on whether or not to start nova-volume service
@@ -54,11 +56,12 @@ end
 #   stop_cmd "/usr/sbin/service #{service_name} stop"
 # end
 
-identity_admin_endpoint = endpoint('identity-admin')
-identity_endpoint = endpoint('identity-api')
+identity_admin_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role(keystone_service_role, "keystone")
-volume_endpoint = endpoint('compute-volume')
+keystone = get_settings_by_role keystone_service_role, "keystone"
+
+volume_endpoint = endpoint "compute-volume"
 
 # Register Volume Service
 keystone_register "Register Volume Service" do
@@ -70,6 +73,7 @@ keystone_register "Register Volume Service" do
   service_name "Volume Service"
   service_type "volume"
   service_description "Nova Volume Service"
+
   action :create_service
 end
 
@@ -85,5 +89,6 @@ keystone_register "Register Volume Endpoint" do
   endpoint_adminurl volume_endpoint["uri"]
   endpoint_internalurl volume_endpoint["uri"]
   endpoint_publicurl volume_endpoint["uri"]
+
   action :create_endpoint
 end

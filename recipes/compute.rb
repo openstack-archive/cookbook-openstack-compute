@@ -38,22 +38,25 @@ end
 
 nova_compute_packages.each do |pkg|
   package pkg do
-    action :upgrade
     options platform_options["package_overrides"]
+
+    action :upgrade
   end
 end
 
 cookbook_file "/etc/nova/nova-compute.conf" do
   source "nova-compute.conf"
-  mode "0644"
+  mode   00644
+
   action :create
 end
 
 service "nova-compute" do
   service_name platform_options["nova_compute_service"]
   supports :status => true, :restart => true
-  action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+
+  action :enable
 end
 
 include_recipe "nova::libvirt"

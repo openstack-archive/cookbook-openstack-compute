@@ -30,10 +30,11 @@ bash "create libvirtd group" do
   cwd "/tmp"
   user "root"
   code <<-EOH
-      groupadd -f libvirtd
-      usermod -G libvirtd nova
+    groupadd -f libvirtd
+    usermod -G libvirtd nova
   EOH
-  only_if { platform?(%w{fedora redhat centos}) }
+
+  only_if { platform? %w{fedora redhat centos} }
 end
 
 # oh redhat
@@ -41,7 +42,8 @@ end
 # ln -s /usr/libexec/qemu-kvm /usr/bin/qemu-system-x86_64
 link "/usr/bin/qemu-system-x86_64" do
   to "/usr/libexec/qemu-kvm"
-  only_if { platform?(%w{fedora redhat centos}) }
+
+  only_if { platform? %w{fedora redhat centos} }
 end
 
 service "dbus" do
@@ -51,6 +53,7 @@ end
 service "libvirt-bin" do
   service_name platform_options["libvirt_service"]
   supports :status => true, :restart => true
+
   action [:enable, :start]
 end
 
@@ -61,39 +64,42 @@ end
 
 execute "Deleting default libvirt network" do
   command "virsh net-destroy default"
+
   only_if "virsh net-list | grep -q default"
 end
 
-#
 # TODO(breu): this section needs to be rewritten to support key privisioning
-#
 template "/etc/libvirt/libvirtd.conf" do
   source "libvirtd.conf.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner  "root"
+  group  "root"
+  mode   00644
   variables(
-    "custom_template_banner" => node["nova"]["custom_template_banner"],
-    "auth_tcp" => node["nova"]["libvirt"]["auth_tcp"]
+    :custom_template_banner => node["nova"]["custom_template_banner"],
+    :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
   )
+
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
 template "/etc/default/libvirt-bin" do
   source "libvirt-bin.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner  "root"
+  group  "root"
+  mode   00644
+
   notifies :restart, resources(:service => "libvirt-bin"), :immediately
-  only_if { platform?(%w{ubuntu debian}) }
+
+  only_if { platform? %w{ubuntu debian} }
 end
 
 template "/etc/sysconfig/libvirtd" do
   source "libvirtd.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, resources(:service => "libvirt-bin"), :immediately
-  only_if { platform?(%w{fedora redhat centos}) }
-end
+  owner  "root"
+  group  "root"
+  mode   00644
 
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
+
+  only_if { platform? %w{fedora redhat centos} }
+end
