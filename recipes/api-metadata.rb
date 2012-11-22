@@ -64,7 +64,6 @@ template "/etc/nova/api-paste.ini" do
   group  "root"
   mode   00644
   variables(
-    :custom_template_banner => node["nova"]["custom_template_banner"],
     :identity_admin_endpoint => identity_admin_endpoint,
     :identity_endpoint => identity_endpoint,
     :admin_token => keystone["admin_token"]

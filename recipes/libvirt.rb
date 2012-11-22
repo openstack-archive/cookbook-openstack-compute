@@ -75,7 +75,6 @@ template "/etc/libvirt/libvirtd.conf" do
   group  "root"
   mode   00644
   variables(
-    :custom_template_banner => node["nova"]["custom_template_banner"],
     :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
   )
 

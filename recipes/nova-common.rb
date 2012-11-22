@@ -59,6 +59,7 @@ keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
 # find the node attribute endpoint settings for the server holding a given role
+identity_admin_endpoint = endpoint_uri "identity-admin"
 identity_endpoint = endpoint_uri "identity-api"
 xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
 novnc_endpoint = endpoint "compute-novnc-server" || {}
@@ -84,9 +85,6 @@ template "/etc/nova/nova.conf" do
   group  "root"
   mode   00644
   variables(
-    :custom_template_banner => node["nova"]["custom_template_banner"],
-    :use_syslog => node["nova"]["syslog"]["use"],
-    :log_facility => node["nova"]["syslog"]["facility"],
     :sql_connection => db_uri("compute", db_user, db_pass),
     :vncserver_listen => "0.0.0.0",
     :vncserver_proxyclient_address => novnc_proxy_endpoint["host"],
@@ -103,30 +101,7 @@ template "/etc/nova/nova.conf" do
     :glance_api_ipaddress => image_endpoint["host"],
     :glance_api_port => image_endpoint["port"],
     :iscsi_helper => platform_options["iscsi_helper"],
-    :public_interface => node["nova"]["network"]["public_interface"],
-    :vlan_interface => node["nova"]["network"]["vlan_interface"],
-    :network_manager => node["nova"]["network"]["network_manager"],
-    :scheduler_driver => node["nova"]["scheduler"]["scheduler_driver"],
-    :scheduler_default_filters => node["nova"]["scheduler"]["default_filters"].join(","),
-    :availability_zone => node["nova"]["config"]["availability_zone"],
-    :default_schedule_zone => node["nova"]["config"]["default_schedule_zone"],
-    :virt_type => node["nova"]["libvirt"]["virt_type"],
-    :remove_unused_base_images => node["nova"]["libvirt"]["remove_unused_base_images"],
-    :remove_unused_resized_minimum_age_seconds => node["nova"]["libvirt"]["remove_unused_resized_minimum_age_seconds"],
-    :remove_unused_original_minimum_age_seconds => node["nova"]["libvirt"]["remove_unused_original_minimum_age_seconds"],
-    :checksum_base_images => node["nova"]["libvirt"]["checksum_base_images"],
-    :fixed_range => node["nova"]["network"]["fixed_range"],
-    :force_raw_images => node["nova"]["config"]["force_raw_images"],
-    :dmz_cidr => node["nova"]["network"]["dmz_cidr"],
-    :allow_same_net_traffic => node["nova"]["config"]["allow_same_net_traffic"],
-    :osapi_max_limit => node["nova"]["config"]["osapi_max_limit"],
-    :cpu_allocation_ratio => node["nova"]["config"]["cpu_allocation_ratio"],
-    :ram_allocation_ratio => node["nova"]["config"]["ram_allocation_ratio"],
-    :snapshot_image_format => node["nova"]["config"]["snapshot_image_format"],
-    :start_guests_on_host_boot => node["nova"]["config"]["start_guests_on_host_boot"],
-    :resume_guests_state_on_host_boot => node["nova"]["config"]["resume_guests_state_on_host_boot"],
-    :quota_security_groups => node["nova"]["config"]["quota_security_groups"],
-    :quota_security_group_rules => node["nova"]["config"]["quota_security_group_rules"]
+    :scheduler_default_filters => node["nova"]["scheduler"]["default_filters"].join(",")
   )
 end
 
@@ -137,19 +112,14 @@ template "/root/openrc" do
   group  "root"
   mode   00600
   variables(
-    :custom_template_banner => node["nova"]["custom_template_banner"],
     :user => keystone["admin_user"],
     :tenant => keystone["users"][keystone["admin_user"]]["default_tenant"],
     :password => keystone["users"][keystone["admin_user"]]["password"],
-    :keystone_api_ipaddress => identity_endpoint["host"],
-    :keystone_service_port => identity_endpoint["port"],
+    :identity_admin_endpoint => identity_admin_endpoint,
     :nova_api_ipaddress => nova_api_endpoint["host"],
     :nova_api_version => "1.1",
-    :keystone_region => node["nova"]["compute"]["region"],
     :auth_strategy => "keystone",
-    :ec2_url => ec2_public_endpoint["uri"],
-    :ec2_access_key => node["credentials"]["EC2"]["admin"]["access"],
-    :ec2_secret_key => node["credentials"]["EC2"]["admin"]["secret"]
+    :ec2_url => ec2_public_endpoint["uri"]
   )
 end
 

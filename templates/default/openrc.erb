@@ -1,10 +1,10 @@
-<%= @custom_template_banner %>
+<%= node["nova"]["custom_template_banner"] %>
 
 # COMMON OPENSTACK ENVS
 export OS_USERNAME=<%= @user %>
 export OS_PASSWORD=<%= @password %>
 export OS_TENANT_NAME=<%= @tenant %>
-export OS_AUTH_URL=http://<%= @keystone_api_ipaddress %>:<%= @keystone_service_port %>/v2.0/
+export OS_AUTH_URL=<%= @identity_admin_endpoint.to_s %>
 export OS_AUTH_STRATEGY=<%= @auth_strategy %>
 
 # LEGACY NOVA ENVS
@@ -14,9 +14,9 @@ export NOVA_PASSWORD=${OS_PASSWORD}
 export NOVA_API_KEY=${OS_PASSWORD}
 export NOVA_URL=${OS_AUTH_URL}
 export NOVA_VERSION=<%= @nova_api_version %>
-export NOVA_REGION_NAME=<%= @keystone_region %>
+export NOVA_REGION_NAME=<%= node["nova"]["compute"]["region"] %>
 
 # EUCA2OOLs ENV VARIABLES
-export EC2_ACCESS_KEY=<%= @ec2_access_key %>
-export EC2_SECRET_KEY=<%= @ec2_secret_key %>
+export EC2_ACCESS_KEY=<%= node["credentials"]["EC2"]["admin"]["access"] %>
+export EC2_SECRET_KEY=<%= node["credentials"]["EC2"]["admin"]["secret"] %>
 export EC2_URL=<%= @ec2_url %>
