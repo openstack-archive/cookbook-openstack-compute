@@ -62,22 +62,22 @@ keystone = get_settings_by_role keystone_service_role, "keystone"
 # find the node attribute endpoint settings for the server holding a given role
 identity_admin_endpoint = endpoint_uri "identity-admin"
 identity_endpoint = endpoint_uri "identity-api"
-xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
-novnc_endpoint = endpoint "compute-novnc-server" || {}
-novnc_proxy_endpoint = endpoint "compute-novnc"
-nova_api_endpoint = endpoint "compute-api" || {}
-ec2_public_endpoint = endpoint "compute-ec2-api" || {}
-image_endpoint = endpoint "image-api"
+xvpvnc_endpoint = endpoint_uri "compute-xvpvnc" || {}
+novnc_endpoint = endpoint_uri "compute-novnc-server" || {}
+novnc_proxy_endpoint = endpoint_uri "compute-novnc"
+nova_api_endpoint = endpoint_uri "compute-api" || {}
+ec2_public_endpoint = endpoint_uri "compute-ec2-api" || {}
+image_endpoint = endpoint_uri "image-api"
 
 Chef::Log.debug("nova::nova-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::nova-common:keystone|#{keystone}")
 Chef::Log.debug("nova::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
-Chef::Log.debug("nova::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
-Chef::Log.debug("nova::nova-common:novnc_endpoint|#{novnc_endpoint}")
-Chef::Log.debug("nova::nova-common:novnc_proxy_endpoint|#{novnc_proxy_endpoint}")
-Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{nova_api_endpoint}")
-Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint}")
-Chef::Log.debug("nova::nova-common:image_endpoint|#{image_endpoint}")
+Chef::Log.debug("nova::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
+Chef::Log.debug("nova::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")
+Chef::Log.debug("nova::nova-common:novnc_proxy_endpoint|#{novnc_proxy_endpoint.to_s}")
+Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{nova_api_endpoint.to_s}")
+Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
+Chef::Log.debug("nova::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
 # TODO: need to re-evaluate this for accuracy
 template "/etc/nova/nova.conf" do
@@ -88,19 +88,19 @@ template "/etc/nova/nova.conf" do
   variables(
     :sql_connection => sql_connection,
     :vncserver_listen => "0.0.0.0",
-    :vncserver_proxyclient_address => novnc_proxy_endpoint["host"],
-    :novncproxy_base_url => novnc_endpoint["uri"],
-    :xvpvncproxy_bind_host => xvpvnc_endpoint["host"],
-    :xvpvncproxy_bind_port => xvpvnc_endpoint["port"],
-    :xvpvncproxy_base_url => xvpvnc_endpoint["uri"],
+    :vncserver_proxyclient_address => novnc_proxy_endpoint.host,
+    :novncproxy_base_url => novnc_endpoint.to_s,
+    :xvpvncproxy_bind_host => xvpvnc_endpoint.host,
+    :xvpvncproxy_bind_port => xvpvnc_endpoint.port,
+    :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
     :rabbit_ipaddress => rabbit_info["host"],
     :rabbit_port => rabbit_info["port"],
     :keystone_api_ipaddress => identity_endpoint.host,
     :keystone_service_port => identity_endpoint.port,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
-    :glance_api_ipaddress => image_endpoint["host"],
-    :glance_api_port => image_endpoint["port"],
+    :glance_api_ipaddress => image_endpoint.host,
+    :glance_api_port => image_endpoint.port,
     :iscsi_helper => platform_options["iscsi_helper"],
     :scheduler_default_filters => node["nova"]["scheduler"]["default_filters"].join(",")
   )
@@ -117,10 +117,10 @@ template "/root/openrc" do
     :tenant => keystone["users"][keystone["admin_user"]]["default_tenant"],
     :password => keystone["users"][keystone["admin_user"]]["password"],
     :identity_admin_endpoint => identity_admin_endpoint,
-    :nova_api_ipaddress => nova_api_endpoint["host"],
+    :nova_api_ipaddress => nova_api_endpoint.host,
     :nova_api_version => "1.1",
     :auth_strategy => "keystone",
-    :ec2_url => ec2_public_endpoint["uri"]
+    :ec2_url => ec2_public_endpoint.to_s
   )
 end
 
