@@ -38,5 +38,6 @@ else
 end
 
 db_create_with_user("compute",
-                    node["nova"]["db"]["username"],
-                    node["nova"]["db"]["password"])
+  node["nova"]["db"]["username"],
+  node["nova"]["db"]["password"]
+)

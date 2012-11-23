@@ -19,21 +19,22 @@
 
 class ::Chef::Recipe
   include ::Openstack
+  include ::Opscode::OpenSSL::Password
 end
 
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 include_recipe "nova::nova-common"
 
-platform_options=node["nova"]["platform"]
+platform_options = node["nova"]["platform"]
 
 # Set a secure keystone service password
 node.set_unless['nova']['service_pass'] = secure_password
 
 directory "/var/lock/nova" do
-    owner "nova"
-    group "nova"
-    mode "0755"
-    action :create
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode  00700
+
+  action :create
 end
 
 package "python-keystone" do
@@ -42,104 +43,111 @@ end
 
 platform_options["api_ec2_packages"].each do |pkg|
   package pkg do
-    action :upgrade
     options platform_options["package_overrides"]
+
+    action :upgrade
   end
 end
 
 service "nova-api-ec2" do
   service_name platform_options["api_ec2_service"]
   supports :status => true, :restart => true
-  action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+
+  action :enable
 end
 
-identity_admin_endpoint = endpoint('identity-admin')
-identity_endpoint = endpoint('identity-api')
+identity_admin_endpoint = endpoint_uri "identity-admin"
+identity_endpoint = endpoint_uri "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role(keystone_service_role, "keystone")
+keystone = get_settings_by_role keystone_service_role, "keystone"
 
-ec2_admin_endpoint = endpoint('compute-ec2-admin')
-ec2_public_endpoint = endpoint('compute-ec2-api')
+ec2_admin_endpoint = endpoint "compute-ec2-admin"
+ec2_public_endpoint = endpoint "compute-ec2-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
   tenant_enabled "true" # Not required as this is the default
+
   action :create_tenant
 end
 
 # Register Service User
 keystone_register "Register Service User" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   user_pass node["nova"]["service_pass"]
   user_enabled "true" # Not required as this is the default
+
   action :create_user
 end
 
-## Grant Admin role to Service User for Service Tenant ##
+# Grant Admin role to Service User for Service Tenant
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   role_name node["nova"]["service_role"]
+
   action :grant_role
 end
 
 # Register EC2 Service
 keystone_register "Register EC2 Service" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_name "ec2"
   service_type "ec2"
   service_description "EC2 Compatibility Layer"
+
   action :create_service
 end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner  "root"
+  group  "root"
+  mode   00644
   variables(
-    "keystone_api_ipaddress" => identity_admin_endpoint["host"],
-    "service_port" => identity_endpoint["port"],
-    "admin_port" => identity_admin_endpoint["port"],
-    "admin_token" => keystone["admin_token"]
+    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
+    :admin_token => keystone["admin_token"]
   )
+
   notifies :restart, resources(:service => "nova-api-ec2"), :delayed
 end
 
 # Register EC2 Endpoint
 keystone_register "Register Compute Endpoint" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_type "ec2"
   endpoint_region node["nova"]["compute"]["region"]
   endpoint_adminurl ec2_admin_endpoint["uri"]
   endpoint_internalurl ec2_public_endpoint["uri"]
   endpoint_publicurl ec2_public_endpoint["uri"]
+
   action :create_endpoint
 end

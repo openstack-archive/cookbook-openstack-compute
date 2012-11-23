@@ -22,14 +22,16 @@ platform_options=node["nova"]["platform"]
 
 platform_options["nova_cert_packages"].each do |pkg|
   package pkg do
-    action :upgrade
     options platform_options["package_overrides"]
+
+    action :upgrade
   end
 end
 
 service "nova-cert" do
   service_name platform_options["nova_cert_service"]
   supports :status => true, :restart => true
-  action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+
+  action :enable
 end

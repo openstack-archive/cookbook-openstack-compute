@@ -1,4 +1,0 @@
-<%= @custom_template_banner %>
-Host *
-   StrictHostKeyChecking no
-   UserKnownHostsFile=/dev/null

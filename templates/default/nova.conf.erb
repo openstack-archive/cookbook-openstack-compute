@@ -1,4 +1,4 @@
-<%= @custom_template_banner %>
+<%= node["nova"]["custom_template_banner"] %>
 [DEFAULT]
 
 # LOGS/STATE
@@ -7,9 +7,9 @@ auth_strategy=keystone
 dhcpbridge_flagfile=/etc/nova/nova.conf
 dhcpbridge=/usr/bin/nova-dhcpbridge
 logdir=/var/log/nova
-<% if @use_syslog == true %>
-use_syslog=<%= @use_syslog %>
-syslog_log_facility=<%= @log_facility %>
+<% if node["nova"]["syslog"]["use"] == true %>
+use_syslog=<%= node["nova"]["syslog"]["use"] %>
+syslog_log_facility=<%= node["nova"]["syslog"]["facility"] %>
 <% end %>
 state_path=/var/lib/nova
 lock_path=/var/lock/nova
@@ -21,18 +21,18 @@ rabbit_host=<%= @rabbit_ipaddress %>
 
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
-compute_scheduler_driver=<%= @scheduler_driver %>
+compute_scheduler_driver=<%= node["nova"]["scheduler"]["scheduler_driver"] %>
 scheduler_available_filters=nova.scheduler.filters.standard_filters
 # which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
-node_availability_zone=<%= @availability_zone %>
-default_schedule_zone=<%= @default_schedule_zone %>
+node_availability_zone=<%= node["nova"]["config"]["availability_zone"] %>
+default_schedule_zone=<%= node["nova"]["config"]["default_schedule_zone"] %>
 
 ##### NETWORK #####
-network_manager=<%= @network_manager %>
-public_interface=<%= @public_interface %>
-fixed_range=<%= @fixed_range %>
-dmz_cidr=<%= @dmz_cidr %>
+network_manager=<%= node["nova"]["network"]["network_manager"] %>
+public_interface=<%= node["nova"]["network"]["public_interface"] %>
+fixed_range=<%= node["nova"]["network"]["fixed_range"] %>
+dmz_cidr=<%= node["nova"]["network"]["dmz_cidr"] %>
 <% if %w(fedora redhat centos).include? node.platform -%>
 # https://bugzilla.redhat.com/show_bug.cgi?id=788485 - not released in epel yet
 force_dhcp_release=false
@@ -41,12 +41,12 @@ force_dhcp_release=true
 <% end -%>
 send_arp_for_ha=true
 use_single_default_gateway=true
-<% if @virt_type == "qemu" -%>
+<% if node["nova"]["libvirt"]["virt_type"] == "qemu" -%>
 libvirt_use_virtio_for_bridges=false
 <% else -%>
 libvirt_use_virtio_for_bridges=true
 <% end -%>
-vlan_interface=<%= @vlan_interface %>
+vlan_interface=<%= node["nova"]["network"]["vlan_interface"] %>
 
 ##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService
@@ -56,17 +56,17 @@ glance_api_servers=<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
 compute_manager=nova.compute.manager.ComputeManager
 sql_connection=<%= @sql_connection %>
 connection_type=libvirt
-libvirt_type=<%= @virt_type %>
+libvirt_type=<%= node["nova"]["libvirt"]["virt_type"] %>
 # Command prefix to use for running commands as root (default: sudo)
 root_helper=sudo nova-rootwrap
 # Should unused base images be removed? (default: false)
-remove_unused_base_images=<%= @remove_unused_base_images %>
+remove_unused_base_images=<%= node["nova"]["libvirt"]["remove_unused_base_images"] %>
 # Unused resized base images younger than this will not be removed (default: 3600)
-remove_unused_resized_minimum_age_seconds=<%= @remove_unused_resized_minimum_age_seconds %>
+remove_unused_resized_minimum_age_seconds=<%= node["nova"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] %>
 # Unused unresized base images younger than this will not be removed (default: 86400)
-remove_unused_original_minimum_age_seconds=<%= @remove_unused_original_minimum_age_seconds %>
+remove_unused_original_minimum_age_seconds=<%= node["nova"]["libvirt"]["remove_unused_original_minimum_age_seconds"] %>
 # Write a checksum for files in _base to disk (default: false)
-checksum_base_images=<%= @checksum_base_images %>
+checksum_base_images=<%= node["nova"]["libvirt"]["checksum_base_images"] %>
 
 ##### VNCPROXY #####
 <% if @novncproxy_base_url -%>
@@ -91,32 +91,32 @@ vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
 ##### MISC #####
 # force backing images to raw format
-force_raw_images=<%= @force_raw_images %>
-allow_same_net_traffic=<%= @allow_same_net_traffic %>
-osapi_max_limit=<%= @osapi_max_limit %>
-snapshot_image_format=<%= @snapshot_image_format %>
-start_guests_on_host_boot=<%= @start_guests_on_host_boot %>
-resume_guests_state_on_host_boot=<%= @resume_guests_state_on_host_boot %>
+force_raw_images=<%= node["nova"]["config"]["force_raw_images"] %>
+allow_same_net_traffic=<%= node["nova"]["config"]["allow_same_net_traffic"] %>
+osapi_max_limit=<%= node["nova"]["config"]["osapi_max_limit"] %>
+snapshot_image_format=<%= node["nova"]["config"]["snapshot_image_format"] %>
+start_guests_on_host_boot=<%= node["nova"]["config"]["start_guests_on_host_boot"] %>
+resume_guests_state_on_host_boot=<%= node["nova"]["config"]["resume_guests_state_on_host_boot"] %>
 # number of security groups per project (default: 10)
-quota_security_groups=<%= @quota_security_groups %>
+quota_security_groups=<%= node["nova"]["config"]["quota_security_groups"] %>
 # number of security rules per security group (default: 20)
-quota_security_group_rules=<%= @quota_security_group_rules %>
+quota_security_group_rules=<%= node["nova"]["config"]["quota_security_group_rules"] %>
 
-<%- if /FilterScheduler/.match(@scheduler_driver) or
-       /MultiScheduler/.match(@scheduler_driver) %>
+<%- if /FilterScheduler/.match(node["nova"]["scheduler"]["scheduler_driver"]) or
+       /MultiScheduler/.match(node["nova"]["scheduler"]["scheduler_driver"]) %>
 # FilterScheduler Only Options
 <%- if /ComputeFilter/.match(@scheduler_default_filters) %>
 # virtual CPU to Physical CPU allocation ratio (default: 16.0)
-cpu_allocation_ratio=<%= @cpu_allocation_ratio %>
+cpu_allocation_ratio=<%= node["nova"]["config"]["cpu_allocation_ratio"] %>
 <%- end %>
 <%- if /RamFilter/.match(@scheduler_default_filters) %>
 # virtual ram to physical ram allocation ratio (default: 1.5)
-ram_allocation_ratio=<%= @ram_allocation_ratio %>
+ram_allocation_ratio=<%= node["nova"]["config"]["ram_allocation_ratio"] %>
 <%- end %>
-<%- elsif /SimpleScheduler/.match(@scheduler_driver) %>
+<%- elsif /SimpleScheduler/.match(node["nova"]["scheduler"]["scheduler_driver"]) %>
 # SimpleScheduler Only Options
 # maximum number of instance cores to allow per host
-max_cores=<% @cpu_allocation_ratio.to_i * node["cpu"]["total"].to_i %>
+max_cores=<% node["nova"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"]["total"].to_i %>
 <%- end %>
 
 <% if %w(fedora redhat centos).include? node.platform -%>

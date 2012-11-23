@@ -29,11 +29,11 @@ node.set_unless['nova']['service_pass'] = secure_password
 
 platform_options = node["nova"]["platform"]
 
-
 directory "/var/lock/nova" do
-  owner "nova"
-  group "nova"
-  mode "0755"
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode  00700
+
   action :create
 end
 
@@ -43,103 +43,110 @@ end
 
 platform_options["api_os_compute_packages"].each do |pkg|
   package pkg do
-    action :upgrade
     options platform_options["package_overrides"]
+
+    action :upgrade
   end
 end
 
 service "nova-api-os-compute" do
   service_name platform_options["api_os_compute_service"]
   supports :status => true, :restart => true
-  action :enable
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+
+  action :enable
 end
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role(keystone_service_role, "keystone")
-identity_admin_endpoint = endpoint('identity-admin')
-identity_endpoint = endpoint('identity-api')
-nova_api_endpoint = endpoint('compute-api')
+keystone = get_settings_by_role keystone_service_role, "keystone"
+identity_admin_endpoint = endpoint_uri "identity-admin"
+identity_endpoint = endpoint_uri "identity-api"
+
+nova_api_endpoint = endpoint "compute-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
   tenant_enabled "true" # Not required as this is the default
+
   action :create_tenant
 end
 
 # Register Service User
 keystone_register "Register Service User" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   user_pass node["nova"]["service_pass"]
   user_enabled "true" # Not required as this is the default
+
   action :create_user
 end
 
 ## Grant Admin role to Service User for Service Tenant ##
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   role_name node["nova"]["service_role"]
+
   action :grant_role
 end
 
 # Register Compute Service
 keystone_register "Register Compute Service" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_name "nova"
   service_type "compute"
   service_description "Nova Compute Service"
+
   action :create_service
 end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+  owner  "root"
+  group  "root"
+  mode   00644
   variables(
-    "custom_template_banner" => node["nova"]["custom_template_banner"],
-    "keystone_api_ipaddress" => identity_endpoint["host"],
-    "service_port" => identity_endpoint["port"],
-    "admin_port" => identity_admin_endpoint["port"],
-    "admin_token" => keystone["admin_token"]
+    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
+    :admin_token => keystone["admin_token"]
   )
+
   notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
 end
 
 # Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
-  auth_host identity_admin_endpoint["host"]
-  auth_port identity_admin_endpoint["port"]
-  auth_protocol identity_admin_endpoint["scheme"]
-  api_ver identity_admin_endpoint["path"]
+  auth_host identity_admin_endpoint.host
+  auth_port identity_admin_endpoint.port.to_s
+  auth_protocol identity_admin_endpoint.scheme
+  api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
   service_type "compute"
   endpoint_region node["nova"]["compute"]["region"]
   endpoint_adminurl nova_api_endpoint["uri"]
   endpoint_internalurl nova_api_endpoint["uri"]
   endpoint_publicurl nova_api_endpoint["uri"]
+
   action :create_endpoint
 end

@@ -22,22 +22,25 @@ include_recipe "nova::nova-common"
 platform_options = node["nova"]["platform"]
 
 directory "/var/lock/nova" do
-    owner "nova"
-    group "nova"
-    mode "0755"
-    action :create
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode  00700
+
+  action :create
 end
 
 platform_options["nova_scheduler_packages"].each do |pkg|
   package pkg do
-    action :upgrade
     options platform_options["package_overrides"]
+
+    action :upgrade
   end
 end
 
 service "nova-scheduler" do
   service_name platform_options["nova_scheduler_service"]
   supports :status => true, :restart => true
-  action [:enable, :start]
   subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+
+  action [:enable, :start]
 end
