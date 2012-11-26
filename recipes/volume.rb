@@ -56,11 +56,11 @@ end
 #   stop_cmd "/usr/sbin/service #{service_name} stop"
 # end
 
-identity_admin_endpoint = endpoint_uri "identity-admin"
+identity_admin_endpoint = endpoint "identity-admin"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
-volume_endpoint = endpoint_uri "compute-volume"
+volume_endpoint = endpoint "compute-volume"
 
 # Register Volume Service
 keystone_register "Register Volume Service" do
