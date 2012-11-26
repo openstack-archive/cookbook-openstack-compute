@@ -62,8 +62,8 @@ identity_endpoint = endpoint_uri "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
-ec2_admin_endpoint = endpoint "compute-ec2-admin"
-ec2_public_endpoint = endpoint "compute-ec2-api"
+ec2_admin_endpoint = endpoint_uri "compute-ec2-admin"
+ec2_public_endpoint = endpoint_uri "compute-ec2-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
@@ -145,9 +145,9 @@ keystone_register "Register Compute Endpoint" do
   auth_token keystone["admin_token"]
   service_type "ec2"
   endpoint_region node["nova"]["compute"]["region"]
-  endpoint_adminurl ec2_admin_endpoint["uri"]
-  endpoint_internalurl ec2_public_endpoint["uri"]
-  endpoint_publicurl ec2_public_endpoint["uri"]
+  endpoint_adminurl ec2_admin_endpoint.to_s
+  endpoint_internalurl ec2_public_endpoint.to_s
+  endpoint_publicurl ec2_public_endpoint.to_s
 
   action :create_endpoint
 end

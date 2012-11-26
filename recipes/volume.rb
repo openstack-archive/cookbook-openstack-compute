@@ -60,7 +60,7 @@ identity_admin_endpoint = endpoint_uri "identity-admin"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
-volume_endpoint = endpoint "compute-volume"
+volume_endpoint = endpoint_uri "compute-volume"
 
 # Register Volume Service
 keystone_register "Register Volume Service" do
@@ -85,9 +85,9 @@ keystone_register "Register Volume Endpoint" do
   auth_token keystone["admin_token"]
   service_type "volume"
   endpoint_region "RegionOne"
-  endpoint_adminurl volume_endpoint["uri"]
-  endpoint_internalurl volume_endpoint["uri"]
-  endpoint_publicurl volume_endpoint["uri"]
+  endpoint_adminurl volume_endpoint.to_s
+  endpoint_internalurl volume_endpoint.to_s
+  endpoint_publicurl volume_endpoint.to_s
 
   action :create_endpoint
 end
