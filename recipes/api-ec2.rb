@@ -57,13 +57,13 @@ service "nova-api-ec2" do
   action :enable
 end
 
-identity_admin_endpoint = endpoint_uri "identity-admin"
-identity_endpoint = endpoint_uri "identity-api"
+identity_admin_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
-ec2_admin_endpoint = endpoint_uri "compute-ec2-admin"
-ec2_public_endpoint = endpoint_uri "compute-ec2-api"
+ec2_admin_endpoint = endpoint "compute-ec2-admin"
+ec2_public_endpoint = endpoint "compute-ec2-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do

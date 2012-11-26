@@ -60,14 +60,14 @@ keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_admin_endpoint = endpoint_uri "identity-admin"
-identity_endpoint = endpoint_uri "identity-api"
-xvpvnc_endpoint = endpoint_uri "compute-xvpvnc" || {}
-novnc_endpoint = endpoint_uri "compute-novnc-server" || {}
-novnc_proxy_endpoint = endpoint_uri "compute-novnc"
-nova_api_endpoint = endpoint_uri "compute-api" || {}
-ec2_public_endpoint = endpoint_uri "compute-ec2-api" || {}
-image_endpoint = endpoint_uri "image-api"
+identity_admin_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity-api"
+xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
+novnc_endpoint = endpoint "compute-novnc-server" || {}
+novnc_proxy_endpoint = endpoint "compute-novnc"
+nova_api_endpoint = endpoint "compute-api" || {}
+ec2_public_endpoint = endpoint "compute-ec2-api" || {}
+image_endpoint = endpoint "image-api"
 
 Chef::Log.debug("nova::nova-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::nova-common:keystone|#{keystone}")

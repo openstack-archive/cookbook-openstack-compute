@@ -59,10 +59,10 @@ end
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
-identity_admin_endpoint = endpoint_uri "identity-admin"
-identity_endpoint = endpoint_uri "identity-api"
+identity_admin_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity-api"
 
-nova_api_endpoint = endpoint_uri "compute-api"
+nova_api_endpoint = endpoint "compute-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
