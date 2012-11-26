@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require "uri"
+
 class ::Chef::Recipe
   include ::Openstack
 end
@@ -75,7 +77,7 @@ Chef::Log.debug("nova::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:novnc_proxy_endpoint|#{novnc_proxy_endpoint.to_s}")
-Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{nova_api_endpoint.to_s}")
+Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{::URI.decode nova_api_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:image_endpoint|#{image_endpoint.to_s}")
 

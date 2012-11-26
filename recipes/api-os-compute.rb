@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require "uri"
+
 class ::Chef::Recipe
   include ::Openstack
 end
@@ -144,9 +146,9 @@ keystone_register "Register Compute Endpoint" do
   auth_token keystone["admin_token"]
   service_type "compute"
   endpoint_region node["nova"]["compute"]["region"]
-  endpoint_adminurl nova_api_endpoint.to_s
-  endpoint_internalurl nova_api_endpoint.to_s
-  endpoint_publicurl nova_api_endpoint.to_s
+  endpoint_adminurl ::URI.decode nova_api_endpoint.to_s
+  endpoint_internalurl ::URI.decode nova_api_endpoint.to_s
+  endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
 
   action :create_endpoint
 end

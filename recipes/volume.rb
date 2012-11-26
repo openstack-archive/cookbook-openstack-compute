@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require "uri"
+
 class ::Chef::Recipe
   include ::Openstack
 end
@@ -85,9 +87,9 @@ keystone_register "Register Volume Endpoint" do
   auth_token keystone["admin_token"]
   service_type "volume"
   endpoint_region "RegionOne"
-  endpoint_adminurl volume_endpoint.to_s
-  endpoint_internalurl volume_endpoint.to_s
-  endpoint_publicurl volume_endpoint.to_s
+  endpoint_adminurl ::URI.decode volume_endpoint.to_s
+  endpoint_internalurl ::URI.decode volume_endpoint.to_s
+  endpoint_publicurl ::URI.decode volume_endpoint.to_s
 
   action :create_endpoint
 end
