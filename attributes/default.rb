@@ -101,6 +101,7 @@ default["nova"]["networks"] = [
 #       },
 #    ]
 
+default["nova"]["network"]["multi_host"] = false
 default["nova"]["network"]["fixed_range"] = default["nova"]["networks"][0]["ipv4_cidr"]
 # DMZ CIDR is a range of IP addresses that should not
 # have their addresses SNAT'ed by the nova network controller
@@ -125,6 +126,7 @@ default["nova"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] = 3600
 default["nova"]["libvirt"]["remove_unused_original_minimum_age_seconds"] = 3600
 default["nova"]["libvirt"]["checksum_base_images"] = false
 default["nova"]["config"]["availability_zone"] = "nova"
+default["nova"]["config"]["storage_availability_zone"] = "nova"
 default["nova"]["config"]["default_schedule_zone"] = "nova"
 default["nova"]["config"]["force_raw_images"] = false
 default["nova"]["config"]["allow_same_net_traffic"] = true
