@@ -27,8 +27,10 @@ scheduler_available_filters=nova.scheduler.filters.standard_filters
 scheduler_default_filters=<%= @scheduler_default_filters %>
 node_availability_zone=<%= node["nova"]["config"]["availability_zone"] %>
 default_schedule_zone=<%= node["nova"]["config"]["default_schedule_zone"] %>
+storage_availability_zone=<%= node["nova"]["config"]["storage_availability_zone"] %>
 
 ##### NETWORK #####
+multi_host=<%= node["nova"]["network"]["multi_host"] %>
 network_manager=<%= node["nova"]["network"]["network_manager"] %>
 public_interface=<%= node["nova"]["network"]["public_interface"] %>
 fixed_range=<%= node["nova"]["network"]["fixed_range"] %>
