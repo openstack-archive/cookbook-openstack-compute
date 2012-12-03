@@ -97,8 +97,7 @@ template "/etc/nova/nova.conf" do
     :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
     :rabbit_ipaddress => rabbit_info["host"],
     :rabbit_port => rabbit_info["port"],
-    :keystone_api_ipaddress => identity_endpoint.host,
-    :keystone_service_port => identity_endpoint.port,
+    :identity_endpoint => identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
     :glance_api_ipaddress => image_endpoint.host,
