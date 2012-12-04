@@ -1,3 +1,5 @@
+<%= node["nova"]["custom_template_banner"] %>
+
 # nova-rootwrap command filters for api-metadata nodes
 # This is needed on nova-api hosts running with "metadata" in enabled_apis
 # or when running nova-api-metadata
