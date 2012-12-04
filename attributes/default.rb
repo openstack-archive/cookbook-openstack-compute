@@ -207,7 +207,8 @@ when "ubuntu"
     "nova_network_service" => "nova-network",
     "nova_scheduler_packages" => ["nova-scheduler"],
     "nova_scheduler_service" => "nova-scheduler",
-    "nova_vncproxy_packages" => ["novnc"],
+    # Websockify is needed due to https://bugs.launchpad.net/ubuntu/+source/nova/+bug/1076442
+    "nova_vncproxy_packages" => ["novnc", "websockify", "nova-novncproxy"],
     "nova_vncproxy_service" => "novnc",
     "nova_vncproxy_consoleauth_packages" => ["nova-consoleauth"],
     "nova_vncproxy_consoleauth_service" => "nova-consoleauth",
