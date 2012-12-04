@@ -45,6 +45,14 @@ directory "/etc/nova" do
   action :create
 end
 
+directory "/etc/nova/rootwrap.d" do
+  owner "root"
+  group "root"
+  mode  00700
+
+  action :create
+end
+
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
 rabbit_info = get_settings_by_role rabbit_server_role, "queue"
 
@@ -105,6 +113,34 @@ template "/etc/nova/nova.conf" do
     :iscsi_helper => platform_options["iscsi_helper"],
     :scheduler_default_filters => node["nova"]["scheduler"]["default_filters"].join(",")
   )
+end
+
+template "/etc/nova/rootwrap.conf" do
+  source "rootwrap.conf"
+  owner  "root"
+  group  "root"
+  mode   00644
+end
+
+template "/etc/nova/rootwrap.d/api-metadata.filters" do
+  source "rootwrap.d/api-metadata.filters"
+  owner  "root"
+  group  "root"
+  mode   00644
+end
+
+template "/etc/nova/rootwrap.d/compute.filters" do
+  source "rootwrap.d/compute.filters"
+  owner  "root"
+  group  "root"
+  mode   00644
+end
+
+template "/etc/nova/rootwrap.d/network.filters" do
+  source "rootwrap.d/network.filters"
+  owner  "root"
+  group  "root"
+  mode   00644
 end
 
 # TODO: need to re-evaluate this for accuracy
