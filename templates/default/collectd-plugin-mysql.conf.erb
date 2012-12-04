@@ -1,6 +1,6 @@
 <%= node["nova"]["custom_template_banner"] %>
-LoadPlugin "<%= @name %>"
 
+LoadPlugin "<%= @name %>"
 <% if not @options.empty? %>
 <Plugin "<%= @name %>">
   <% @options[:databases].each_pair do |db, vars| %>
