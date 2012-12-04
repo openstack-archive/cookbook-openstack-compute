@@ -60,7 +60,7 @@ sql_connection=<%= @sql_connection %>
 connection_type=libvirt
 libvirt_type=<%= node["nova"]["libvirt"]["virt_type"] %>
 # Command prefix to use for running commands as root (default: sudo)
-root_helper=sudo nova-rootwrap
+rootwrap_config=/etc/nova/rootwrap.conf
 # Should unused base images be removed? (default: false)
 remove_unused_base_images=<%= node["nova"]["libvirt"]["remove_unused_base_images"] %>
 # Unused resized base images younger than this will not be removed (default: 3600)
