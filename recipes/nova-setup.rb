@@ -36,6 +36,7 @@ execute "nova-manage db sync" do
   action :run
 end
 
+next_vlan = 100
 node["nova"]["networks"].each do |net|
   execute "nova-manage network create --label=#{net['label']}" do
     # The only two required keys in each network Hash
@@ -67,6 +68,9 @@ node["nova"]["networks"].each do |net|
     end
     if net.has_key?("vlan")
         cmd += " --vlan=#{net['vlan']}"
+    elsif node["nova"]["network"]["network_manager"] == "nova.network.manager.VlanManager"
+        cmd += " --vlan=#{next_vlan}"
+        next_vlan = next_vlan + 1
     end
 
     command cmd
