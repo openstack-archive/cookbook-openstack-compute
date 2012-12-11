@@ -109,6 +109,8 @@ default["nova"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 default["nova"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
 default["nova"]["network"]["public_interface"] = "eth0"
 default["nova"]["network"]["vlan_interface"] = "eth0"
+# https://bugs.launchpad.net/nova/+bug/1075859
+default["nova"]["network"]["use_single_default_gateway"] = false
 
 default["nova"]["scheduler"]["scheduler_driver"] = "nova.scheduler.filter_scheduler.FilterScheduler"
 default["nova"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
@@ -134,9 +136,11 @@ default["nova"]["config"]["osapi_max_limit"] = 1000
 default["nova"]["config"]["cpu_allocation_ratio"] = 16.0
 default["nova"]["config"]["ram_allocation_ratio"] = 1.5
 default["nova"]["config"]["snapshot_image_format"] = "qcow2"
-default["nova"]["config"]["start_guests_on_host_boot"] = true
+# `start` will cause nova-compute to error out if a VM is already running, where
+# `resume` checks to see if it is running first.
+default["nova"]["config"]["start_guests_on_host_boot"] = false
 # requires https://review.openstack.org/#/c/8423/
-default["nova"]["config"]["resume_guests_state_on_host_boot"] = false
+default["nova"]["config"]["resume_guests_state_on_host_boot"] = true
 
 # quota settings
 default["nova"]["config"]["quota_security_groups"] = 50
