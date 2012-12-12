@@ -31,7 +31,6 @@ keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
 
 execute "nova-manage db sync" do
   command "nova-manage db sync"
-  not_if "nova-manage db version && test $(nova-manage db version) -gt 0"
 
   action :run
 end
