@@ -119,7 +119,7 @@ ram_allocation_ratio=<%= node["nova"]["config"]["ram_allocation_ratio"] %>
 <%- elsif /SimpleScheduler/.match(node["nova"]["scheduler"]["scheduler_driver"]) %>
 # SimpleScheduler Only Options
 # maximum number of instance cores to allow per host
-max_cores=<% node["nova"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"]["total"].to_i %>
+max_cores=<%= node["nova"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"]["total"].to_i %>
 <%- end %>
 
 <% if %w(fedora redhat centos).include? node.platform -%>
@@ -134,3 +134,4 @@ keystone_ec2_url=<%= @identity_endpoint.scheme %>://<%= @identity_endpoint.host 
 ##### VOLUMES #####
 # iscsi target user-land tool to use
 iscsi_helper=<%= @iscsi_helper %>
+volume_api_class=<%= node["nova"]["config"]["volume_api_class"] %>

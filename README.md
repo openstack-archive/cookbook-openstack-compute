@@ -124,6 +124,8 @@ NOTE: db password is no longer set statically in the attributes file, but secure
 NOTE: service password is no longer set statically in the attributes file, but securely/randomly in the `*api` recipes
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
 
+* `default["nova"]["config"]["volume_api_class"]` - API Class used for Volume support
+
 * `default["nova"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
 * `default["nova"]["compute"]["api"]["port"]` - Port on which OS API runs
 * `default["nova"]["compute"]["api"]["version"]` - Version of the OS API used
