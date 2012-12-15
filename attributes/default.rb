@@ -157,7 +157,6 @@ default["nova"]["ratelimit"]["settings"] = {
     "generic-delete-limit" => { "verb" => "DELETE", "uri" => "*", "regex" => ".*", "limit" => "100", "interval" => "MINUTE" }
 }
 default["nova"]["ratelimit"]["api"]["enabled"] = true
-default["nova"]["ratelimit"]["volume"]["enabled"] = true
 
 case platform
 when "fedora", "redhat", "centos"
@@ -167,10 +166,6 @@ when "fedora", "redhat", "centos"
     "api_os_compute_packages" => ["openstack-nova-api"],
     "api_os_compute_service" => "openstack-nova-api",
     "api_os_compute_process_name" => "nova-api",
-    "api_os_volume_packages" => ["openstack-nova-api"],
-    "api_os_volume_service" => "openstack-nova-api",
-    "nova_volume_packages" => ["openstack-nova-volume"],
-    "nova_volume_service" => "openstack-nova-volume",
     "nova_api_metadata_packages" => ["openstack-nova-api"],
     "nova_api_metadata_process_name" => "nova-api",
     "nova_api_metadata_service" => "openstack-nova-api",
@@ -201,13 +196,9 @@ when "ubuntu"
     "api_os_compute_packages" => ["nova-api-os-compute"],
     "api_os_compute_process_name" => "nova-api-os-compute",
     "api_os_compute_service" => "nova-api-os-compute",
-    "api_os_volume_packages" => ["nova-api-os-volume"],
-    "api_os_volume_service" => "nova-api-os-volume",
     "nova_api_metadata_packages" => ["nova-api-metadata"],
     "nova_api_metadata_service" => "nova-api-metadata",
     "nova_api_metadata_process_name" => "nova-api-metadata",
-    "nova_volume_packages" => ["nova-volume"],
-    "nova_volume_service" => "nova-volume",
     "nova_compute_packages" => ["nova-compute"],
     "nova_compute_service" => "nova-compute",
     "nova_network_packages" => ["iptables", "nova-network"],
