@@ -18,16 +18,17 @@
 #
 
 class ::Chef::Recipe
-  include ::Openstack
+  include ::Opscode::OpenSSL::Password
+end
+
+# Allow for using a well known service user password
+if node["developer_mode"]
+  node.set_unless["nova"]["service_password"] = "nova"
+else
+  node.set_unless["nova"]["service_password"] = secure_password
 end
 
 include_recipe "nova::nova-common"
-
-keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role keystone_service_role, "keystone"
-keystone_admin_user = keystone["admin_user"]
-keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
-keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
 
 execute "nova-manage db sync" do
   command "nova-manage db sync"

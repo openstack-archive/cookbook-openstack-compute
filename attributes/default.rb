@@ -15,7 +15,14 @@ default["nova"]["custom_template_banner"] = "
 # that Nova uses
 default["nova"]["rabbit_server_chef_role"] = "rabbitmq-server"
 
-# The name of the Chef role that sets up basic Nova stuff
+# The name of the Chef role that creates the Nova database. Other
+# recipes need to look up this node to get the value of the nova
+# db user and password.
+default["nova"]["nova_db_chef_role"] = "nova-setup"
+
+# The name of the Chef role that sets up basic Nova stuff. Other
+# recipes need to look up this node to get the value of the
+# password for the Keystone nova service user.
 default["nova"]["nova_setup_chef_role"] = "nova-setup"
 
 # The name of the Chef role that sets up the Keystone Service API
@@ -23,7 +30,6 @@ default["nova"]["keystone_service_chef_role"] = "keystone"
 
 default["nova"]["db"]["name"] = "nova"
 default["nova"]["db"]["username"] = "nova"
-default["nova"]["db"]["super_user"] = "root"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
@@ -37,8 +43,7 @@ default["nova"]["syslog"]["use"] = false
 default["nova"]["syslog"]["facility"] = "LOG_LOCAL1"
 default["nova"]["syslog"]["config_facility"] = "local1"
 
-# can this be wedged into the "api" endpoint?
-default["nova"]["compute"]["region"] = "RegionOne"
+default["nova"]["region"] = "RegionOne"
 
 # TODO(shep): This should probably be ['nova']['network']['fixed']
 default["nova"]["networks"] = [
