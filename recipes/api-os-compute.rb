@@ -23,11 +23,12 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 include_recipe "nova::nova-common"
 
-# Set a secure keystone service password
-node.set_unless['nova']['service_pass'] = secure_password
+# The node that runs the nova-setup recipe first
+# will create a secure service password
+nova_setup_role = node["nova"]["nova_setup_chef_role"]
+nova_setup_info = config_by_role nova_setup_role, "nova"
 
 platform_options = node["nova"]["platform"]
 
@@ -123,20 +124,6 @@ keystone_register "Register Compute Service" do
   action :create_service
 end
 
-template "/etc/nova/api-paste.ini" do
-  source "api-paste.ini.erb"
-  owner  "root"
-  group  "root"
-  mode   00644
-  variables(
-    :identity_admin_endpoint => identity_admin_endpoint,
-    :identity_endpoint => identity_endpoint,
-    :admin_token => keystone["admin_token"]
-  )
-
-  notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
-end
-
 # Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
   auth_host identity_admin_endpoint.host
@@ -151,4 +138,17 @@ keystone_register "Register Compute Endpoint" do
   endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
 
   action :create_endpoint
+end
+
+template "/etc/nova/api-paste.ini" do
+  source "api-paste.ini.erb"
+  owner  "root"
+  group  "root"
+  mode   00644
+  variables(
+    "identity_admin_endpoint" => identity_admin_endpoint,
+    "nova_setup_info" => nova_setup_info
+  )
+
+  notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
 end

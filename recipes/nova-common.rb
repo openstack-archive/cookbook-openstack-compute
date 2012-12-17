@@ -59,11 +59,11 @@ rabbit_info = get_settings_by_role rabbit_server_role, "queue"
 # Still need this but only to get the nova db password...
 # TODO(jaypipes): Refactor password generation/lookup into
 # openstack-common.
-nova_setup_role = node["nova"]["nova_setup_chef_role"]
-nova_setup_info = get_settings_by_role nova_setup_role, "nova"
+nova_db_role = node["nova"]["nova_db_chef_role"]
+nova_db_info = config_by_role nova_db_role, "nova"
 
-db_user = node['nova']['db']['username']
-db_pass = nova_setup_info['db']['password']
+db_user = nova_db_info['db']['username']
+db_pass = nova_db_info['db']['password']
 sql_connection = db_uri("compute", db_user, db_pass)
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
