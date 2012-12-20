@@ -57,7 +57,7 @@ end
 # PKI Keystone requires a directory to hold the signed X509 certs
 directory node["nova"]["api"]["signing_dir"] do
 	owner node['nova']['user']
-	owner node['nova']['user']
+	group node['nova']['group']
 	mode  00700
 	action :create
 end
