@@ -29,10 +29,8 @@ The following cookbooks are dependencies:
 * glance
 * keystone
 * mysql
-* openssl
 * openstack-common
 * openstack-utils
-* osops-utils
 * rabbitmq
 * selinux (Fedora)
 * sysctl
@@ -87,8 +85,8 @@ nova-common
 
 nova-setup
 ----
--Includes recipes `nova-common`, `mysql:client`
--Sets up the nova database on the mysql server, including the initial schema and subsequent creation of the appropriate networks
+-Includes recipes `nova-common`
+-Sets up the nova networks with `nova-manage`
 
 scheduler
 ----
@@ -112,16 +110,10 @@ Attributes
 * `default["nova"]["keystone_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
 * `default["nova"]["user"]` - User nova services run as
 * `default["nova"]["group"]` - Group nova services run as
-* `default["nova"]["nova_setup_chef_role"]` - The name of the Chef role that sets up Nova
 * `default["nova"]["db"]["name"]` - Name of nova database
 * `default["nova"]["db"]["username"]` - Username for nova database access
-* `default["nova"]["db"]["password"]` - Password for nova database access
-NOTE: db password is no longer set statically in the attributes file, but securely/randomly in the nova-common recipe
-
 * `default["nova"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
-* `default["nova"]["service_pass"]` - User password used by nova when interacting with keystone
-NOTE: service password is no longer set statically in the attributes file, but securely/randomly in the `*api` recipes
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
 
 * `default["nova"]["config"]["volume_api_class"]` - API Class used for Volume support
