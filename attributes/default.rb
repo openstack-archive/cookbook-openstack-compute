@@ -1,7 +1,6 @@
 ########################################################################
 # Toggles - These can be overridden at the environment level
 default["enable_monit"] = false  # OS provides packages
-default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
 # Set to some text value if you want templated config files
@@ -14,16 +13,6 @@ default["nova"]["custom_template_banner"] = "
 # The name of the Chef role that knows about the message queue server
 # that Nova uses
 default["nova"]["rabbit_server_chef_role"] = "rabbitmq-server"
-
-# The name of the Chef role that creates the Nova database. Other
-# recipes need to look up this node to get the value of the nova
-# db user and password.
-default["nova"]["nova_db_chef_role"] = "nova-setup"
-
-# The name of the Chef role that sets up basic Nova stuff. Other
-# recipes need to look up this node to get the value of the
-# password for the Keystone nova service user.
-default["nova"]["nova_setup_chef_role"] = "nova-setup"
 
 # The name of the Chef role that sets up the Keystone Service API
 default["nova"]["keystone_service_chef_role"] = "keystone"

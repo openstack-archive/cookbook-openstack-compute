@@ -46,6 +46,7 @@ directory "/etc/nova" do
 end
 
 directory "/etc/nova/rootwrap.d" do
+  # Must be root!
   owner "root"
   group "root"
   mode  00700
@@ -56,18 +57,16 @@ end
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
 rabbit_info = get_settings_by_role rabbit_server_role, "queue"
 
-# Still need this but only to get the nova db password...
-# TODO(jaypipes): Refactor password generation/lookup into
-# openstack-common.
-nova_db_role = node["nova"]["nova_db_chef_role"]
-nova_db_info = config_by_role nova_db_role, "nova"
-
 db_user = nova_db_info['db']['username']
-db_pass = nova_db_info['db']['password']
+db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role keystone_service_role, "keystone"
+keystone = config_by_role keystone_service_role, "keystone"
+
+ksadmin_tenant_name = keystone["admin_tenant_name"]
+ksadmin_user = keystone["admin_user"]
+ksadmin_pass = user_password ksadmin_user
 
 # find the node attribute endpoint settings for the server holding a given role
 identity_admin_endpoint = endpoint "identity-admin"
@@ -89,12 +88,11 @@ Chef::Log.debug("nova::nova-common:nova_api_endpoint|#{::URI.decode nova_api_end
 Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("nova::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
-# TODO: need to re-evaluate this for accuracy
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
-  owner  "root"
-  group  "root"
-  mode   00644
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode 00644
   variables(
     :sql_connection => sql_connection,
     :vncserver_listen => "0.0.0.0",
@@ -117,6 +115,7 @@ end
 
 template "/etc/nova/rootwrap.conf" do
   source "rootwrap.conf"
+  # Must be root!
   owner  "root"
   group  "root"
   mode   00644
@@ -124,6 +123,7 @@ end
 
 template "/etc/nova/rootwrap.d/api-metadata.filters" do
   source "rootwrap.d/api-metadata.filters"
+  # Must be root!
   owner  "root"
   group  "root"
   mode   00644
@@ -131,6 +131,7 @@ end
 
 template "/etc/nova/rootwrap.d/compute.filters" do
   source "rootwrap.d/compute.filters"
+  # Must be root!
   owner  "root"
   group  "root"
   mode   00644
@@ -138,21 +139,25 @@ end
 
 template "/etc/nova/rootwrap.d/network.filters" do
   source "rootwrap.d/network.filters"
+  # Must be root!
   owner  "root"
   group  "root"
   mode   00644
 end
 
 # TODO: need to re-evaluate this for accuracy
+# TODO(jaypipes): This should be moved into openstack-common
+# and evaluated only on nodes with admin privs.
 template "/root/openrc" do
   source "openrc.erb"
+  # Must be root!
   owner  "root"
   group  "root"
   mode   00600
   variables(
-    :user => keystone["admin_user"],
-    :tenant => keystone["users"][keystone["admin_user"]]["default_tenant"],
-    :password => keystone["users"][keystone["admin_user"]]["password"],
+    :user => ksadmin_user,
+    :tenant => ksadmin_tenant_name,
+    :password => ksadmin_pass,
     :identity_admin_endpoint => identity_admin_endpoint,
     :nova_api_ipaddress => nova_api_endpoint.host,
     :nova_api_version => "1.1",

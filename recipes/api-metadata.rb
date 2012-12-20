@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require "uri"
+
 class ::Chef::Recipe
   include ::Openstack
 end
@@ -54,19 +56,20 @@ service "nova-api-metadata" do
 end
 
 identity_admin_endpoint = endpoint "identity-admin"
-identity_endpoint = endpoint "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role keystone_service_role, "keystone"
+keystone = config_by_role keystone_service_role, "keystone"
+
+auth_uri = ::URI.decode identity_admin_endpoint.to_s
+service_pass = service_password "nova"
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner  "root"
-  group  "root"
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
   mode   00644
   variables(
-    :identity_admin_endpoint => identity_admin_endpoint,
-    :identity_endpoint => identity_endpoint,
-    :admin_token => keystone["admin_token"]
+    "auth_uri" => auth_uri,
+    "service_password" => service_pass
   )
 
   notifies :restart, resources(:service => "nova-api-metadata"), :delayed
