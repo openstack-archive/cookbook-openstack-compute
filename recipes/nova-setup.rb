@@ -18,14 +18,7 @@
 #
 
 class ::Chef::Recipe
-  include ::Opscode::OpenSSL::Password
-end
-
-# Allow for using a well known service user password
-if node["developer_mode"]
-  node.set_unless["nova"]["service_password"] = "nova"
-else
-  node.set_unless["nova"]["service_password"] = secure_password
+  include ::Openstack
 end
 
 include_recipe "nova::nova-common"

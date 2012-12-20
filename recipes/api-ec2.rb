@@ -17,10 +17,10 @@
 # limitations under the License.
 #
 
+require "uri"
 
 class ::Chef::Recipe
   include ::Openstack
-  include ::Opscode::OpenSSL::Password
 end
 
 include_recipe "nova::nova-common"
@@ -55,27 +55,27 @@ service "nova-api-ec2" do
   action :enable
 end
 
-# The node that runs the nova-setup recipe first
-# will create a secure service password
-nova_setup_role = node["nova"]["nova_setup_chef_role"]
-nova_setup_info = config_by_role nova_setup_role, "nova"
+service_pass = service_password "nova"
 
 identity_admin_endpoint = endpoint "identity-admin"
-identity_endpoint = endpoint "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role keystone_service_role, "keystone"
+keystone = config_by_role keystone_service_role, "keystone"
 
 ec2_admin_endpoint = endpoint "compute-ec2-admin"
 ec2_public_endpoint = endpoint "compute-ec2-api"
 
+auth_uri = ::URI.decode identity_admin_endpoint.to_s
+ksadmin_tenant_name = keystone["admin_tenant_name"]
+ksadmin_user = keystone["admin_user"]
+ksadmin_pass = user_password ksadmin_user
+
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
-  tenant_name nova_setup_info["service_tenant_name"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
+  tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
 
   action :create_tenant
@@ -83,39 +83,36 @@ end
 
 # Register Service User
 keystone_register "Register Service User" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
-  tenant_name nova_setup_info["service_tenant_name"]
-  user_name nova_setup_info["service_user"]
-  user_pass nova_setup_info["service_pass"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
+  tenant_name node["nova"]["service_tenant_name"]
+  user_name node["nova"]["service_user"]
+  user_pass service_pass
 
   action :create_user
 end
 
 # Grant Admin role to Service User for Service Tenant
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
-  tenant_name nova_setup_info["service_tenant_name"]
-  user_name nova_setup_info["service_user"]
-  role_name nova_setup_info["service_role"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
+  tenant_name node["nova"]["service_tenant_name"]
+  user_name node["nova"]["service_user"]
+  role_name node["nova"]["service_role"]
 
   action :grant_role
 end
 
 # Register EC2 Service
 keystone_register "Register EC2 Service" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
   service_name "ec2"
   service_type "ec2"
   service_description "EC2 Compatibility Layer"
@@ -125,11 +122,10 @@ end
 
 # Register EC2 Endpoint
 keystone_register "Register Compute Endpoint" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
   service_type "ec2"
   endpoint_region node["nova"]["region"]
   endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
@@ -141,12 +137,12 @@ end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner  "root"
-  group  "root"
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
   mode   00644
   variables(
-    "identity_admin_endpoint" => identity_admin_endpoint,
-    "nova_setup_info" => nova_setup_info
+    "auth_uri" => auth_uri,
+    "service_password" => service_pass
   )
 
   notifies :restart, resources(:service => "nova-api-ec2"), :delayed

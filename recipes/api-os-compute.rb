@@ -25,11 +25,6 @@ end
 
 include_recipe "nova::nova-common"
 
-# The node that runs the nova-setup recipe first
-# will create a secure service password
-nova_setup_role = node["nova"]["nova_setup_chef_role"]
-nova_setup_info = config_by_role nova_setup_role, "nova"
-
 platform_options = node["nova"]["platform"]
 
 directory "/var/lock/nova" do
@@ -61,22 +56,25 @@ service "nova-api-os-compute" do
 end
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role keystone_service_role, "keystone"
+keystone = config_by_role keystone_service_role, "keystone"
 identity_admin_endpoint = endpoint "identity-admin"
-identity_endpoint = endpoint "identity-api"
+
+auth_uri = ::URI.decode identity_admin_endpoint.to_s
+ksadmin_tenant_name = keystone["admin_tenant_name"]
+ksadmin_user = keystone["admin_user"]
+ksadmin_pass = user_password ksadmin_user
+service_pass = service_password "nova"
 
 nova_api_endpoint = endpoint "compute-api"
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
-  tenant_enabled "true" # Not required as this is the default
 
   action :create_tenant
 end
@@ -98,11 +96,10 @@ end
 
 ## Grant Admin role to Service User for Service Tenant ##
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   role_name node["nova"]["service_role"]
@@ -112,11 +109,10 @@ end
 
 # Register Compute Service
 keystone_register "Register Compute Service" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
   service_name "nova"
   service_type "compute"
   service_description "Nova Compute Service"
@@ -126,13 +122,12 @@ end
 
 # Register Compute Endpoing
 keystone_register "Register Compute Endpoint" do
-  auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port.to_s
-  auth_protocol identity_admin_endpoint.scheme
-  api_ver identity_admin_endpoint.path
-  auth_token keystone["admin_token"]
+  auth_uri auth_uri
+  admin_tenant_name ksadmin_tenant_name
+  admin_user ksadmin_user
+  admin_password ksadmin_pass
   service_type "compute"
-  endpoint_region node["nova"]["compute"]["region"]
+  endpoint_region node["nova"]["region"]
   endpoint_adminurl ::URI.decode nova_api_endpoint.to_s
   endpoint_internalurl ::URI.decode nova_api_endpoint.to_s
   endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
@@ -142,12 +137,12 @@ end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner  "root"
-  group  "root"
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
   mode   00644
   variables(
-    "identity_admin_endpoint" => identity_admin_endpoint,
-    "nova_setup_info" => nova_setup_info
+    "auth_uri" => auth_uri,
+    "service_password" => service_pass
   )
 
   notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
