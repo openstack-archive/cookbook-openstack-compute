@@ -127,3 +127,4 @@ auth_uri = <%= @auth_uri %>
 admin_tenant_name = <%= node["nova"]["service_tenant_name"] %>
 admin_user = <%= node["nova"]["service_user"] %>
 admin_password = <%= @service_password %>
+signing_dir = <% node["nova"]["api"]["signing_dir"] %>

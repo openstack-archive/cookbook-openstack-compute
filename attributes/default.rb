@@ -152,6 +152,10 @@ default["nova"]["ratelimit"]["settings"] = {
 }
 default["nova"]["ratelimit"]["api"]["enabled"] = true
 
+# Keystone PKI signing directory
+# Is /tmp the best location for these directories?
+default["nova"]["api"]["signing_dir"] = "/tmp/keystone-sign-nova"
+
 case platform
 when "fedora", "redhat", "centos"
   default["nova"]["platform"] = {
