@@ -137,6 +137,8 @@ Attributes
 * `default["nova"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
 * `default["nova"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 
+* `default["nova"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
+
 Networking Attributes
 ---------------------
 
