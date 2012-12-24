@@ -17,7 +17,9 @@ default["nova"]["rabbit_server_chef_role"] = "rabbitmq-server"
 # The name of the Chef role that sets up the Keystone Service API
 default["nova"]["keystone_service_chef_role"] = "keystone"
 
-default["nova"]["db"]["name"] = "nova"
+# This user's password is stored in an encrypted databag
+# and accessed with openstack-common cookbook library's
+# db_password routine.
 default["nova"]["db"]["username"] = "nova"
 
 default["nova"]["service_tenant_name"] = "service"
