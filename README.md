@@ -77,6 +77,10 @@ network
 -Includes recipe `nova-common`
 -Installs nova network service
 
+nova-cert
+----
+- Installs nova-cert service
+
 nova-common
 ----
 -May include recipe `selinux` (Fedora)
