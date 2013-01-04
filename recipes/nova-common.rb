@@ -23,7 +23,7 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-if platform?(%w(redhat centos))
+if platform?(%w(fedora redhat centos)) # :pragma-foodcritic: ~FC024 - won't fix this
   include_recipe "yum::epel"
 end
 
@@ -103,13 +103,14 @@ template "/etc/nova/nova.conf" do
   mode 00644
   variables(
     :sql_connection => sql_connection,
-    :vncserver_listen => "0.0.0.0",
     :vncserver_proxyclient_address => novnc_proxy_endpoint.host,
     :novncproxy_base_url => novnc_endpoint.to_s,
     :xvpvncproxy_bind_host => xvpvnc_endpoint.host,
     :xvpvncproxy_bind_port => xvpvnc_endpoint.port,
     :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
     :rabbit_ipaddress => rabbit_info["host"],
+    #TODO(retr0h): Will be changed with our HA work
+    :rabbit_password => "guest",
     :rabbit_port => rabbit_info["port"],
     :identity_endpoint => identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
@@ -122,7 +123,7 @@ template "/etc/nova/nova.conf" do
 end
 
 template "/etc/nova/rootwrap.conf" do
-  source "rootwrap.conf"
+  source "rootwrap.conf.erb"
   # Must be root!
   owner  "root"
   group  "root"
@@ -130,7 +131,7 @@ template "/etc/nova/rootwrap.conf" do
 end
 
 template "/etc/nova/rootwrap.d/api-metadata.filters" do
-  source "rootwrap.d/api-metadata.filters"
+  source "rootwrap.d/api-metadata.filters.erb"
   # Must be root!
   owner  "root"
   group  "root"
@@ -138,7 +139,7 @@ template "/etc/nova/rootwrap.d/api-metadata.filters" do
 end
 
 template "/etc/nova/rootwrap.d/compute.filters" do
-  source "rootwrap.d/compute.filters"
+  source "rootwrap.d/compute.filters.erb"
   # Must be root!
   owner  "root"
   group  "root"
@@ -146,7 +147,7 @@ template "/etc/nova/rootwrap.d/compute.filters" do
 end
 
 template "/etc/nova/rootwrap.d/network.filters" do
-  source "rootwrap.d/network.filters"
+  source "rootwrap.d/network.filters.erb"
   # Must be root!
   owner  "root"
   group  "root"
@@ -167,13 +168,11 @@ template "/root/openrc" do
     :tenant => ksadmin_tenant_name,
     :password => ksadmin_pass,
     :identity_admin_endpoint => identity_admin_endpoint,
-    :nova_api_ipaddress => nova_api_endpoint.host,
     :nova_api_version => "1.1",
     :auth_strategy => "keystone",
     :ec2_url => ec2_public_endpoint.to_s
   )
 end
-
 
 execute "enable nova login" do
   command "usermod -s /bin/sh nova"

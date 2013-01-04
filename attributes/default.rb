@@ -159,7 +159,7 @@ default["nova"]["ratelimit"]["api"]["enabled"] = true
 default["nova"]["api"]["signing_dir"] = "/tmp/keystone-sign-nova"
 
 case platform
-when "fedora", "redhat", "centos"
+when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
   default["nova"]["platform"] = {
     "api_ec2_packages" => ["openstack-nova-api"],
     "api_ec2_service" => "openstack-nova-api",
