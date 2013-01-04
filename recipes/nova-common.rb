@@ -23,7 +23,7 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-if platform?(%w(redhat centos))
+if platform?(%w(fedora redhat centos)) # :pragma-foodcritic: ~FC024 - won't fix this
   include_recipe "yum::epel"
 end
 
