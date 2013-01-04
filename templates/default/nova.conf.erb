@@ -16,8 +16,8 @@ state_path=/var/lib/nova
 lock_path=/var/lock/nova
 
 ##### RABBITMQ #####
-rabbit_password=guest
-rabbit_port=5672
+rabbit_password=<%= @rabbit_password %>
+rabbit_port=<%= @rabbit_port %>
 rabbit_host=<%= @rabbit_ipaddress %>
 
 ##### SCHEDULER #####
