@@ -63,9 +63,9 @@ directory node["nova"]["api"]["signing_dir"] do
 end
 
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
-rabbit_info = get_settings_by_role rabbit_server_role, "queue"
+rabbit_info = config_by_role rabbit_server_role, "queue"
 
-db_user = nova_db_info['db']['username']
+db_user = node['nova']['db']['username']
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
