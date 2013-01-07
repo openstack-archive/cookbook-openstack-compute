@@ -54,7 +54,7 @@ end
 service "nova-compute" do
   service_name platform_options["nova_compute_service"]
   supports :status => true, :restart => true
-  subscribes :restart, resources("template['/etc/nova/nova.conf']")
+  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
 
   action :enable
 end
