@@ -78,7 +78,7 @@ template "/etc/libvirt/libvirtd.conf" do
     :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
   )
 
-  notifies :restart, service['libvirt-bin'], :immediately
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
 end
 
 template "/etc/default/libvirt-bin" do
@@ -87,7 +87,7 @@ template "/etc/default/libvirt-bin" do
   group  "root"
   mode   00644
 
-  notifies :restart, service['libvirt-bin'], :immediately
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
 
   only_if { platform? %w{ubuntu debian} }
 end
@@ -98,7 +98,7 @@ template "/etc/sysconfig/libvirtd" do
   group  "root"
   mode   00644
 
-  notifies :restart, service['libvirt-bin'], :immediately
+  notifies :restart, resources(:service => "libvirt-bin"), :immediately
 
   only_if { platform? %w{fedora redhat centos} }
 end
