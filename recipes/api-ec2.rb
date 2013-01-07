@@ -64,7 +64,8 @@ keystone = config_by_role keystone_service_role, "keystone"
 ec2_admin_endpoint = endpoint "compute-ec2-admin"
 ec2_public_endpoint = endpoint "compute-ec2-api"
 
-auth_uri = ::URI.decode identity_admin_endpoint.to_s
+raw_auth_uri = ::URI.decode identity_admin_endpoint
+auth_uri = raw_auth_uri.to_s
 ksadmin_tenant_name = keystone["admin_tenant_name"]
 ksadmin_user = keystone["admin_user"]
 ksadmin_pass = user_password ksadmin_user
@@ -137,12 +138,13 @@ end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner node["nova"]["user"]
-  group node["nova"]["group"]
+  owner  node["nova"]["user"]
+  group  node["nova"]["group"]
   mode   00644
   variables(
-    "auth_uri" => auth_uri,
-    "service_password" => service_pass
+    :raw_auth_uri => raw_auth_uri,
+    :auth_uri => auth_uri,
+    :service_pass => service_pass
   )
 
   notifies :restart, resources(:service => "nova-api-ec2"), :delayed

@@ -123,8 +123,11 @@ paste.filter_factory = nova.api.auth:NovaKeystoneContext.factory
 
 [filter:authtoken]
 paste.filter_factory = keystone.middleware.auth_token:filter_factory
+auth_host = <%= @raw_auth_uri.host %>
+auth_port = <%= @raw_auth_uri.port %>
+auth_protocol = <%= @raw_auth_uri.scheme %>
 auth_uri = <%= @auth_uri %>
 admin_tenant_name = <%= node["nova"]["service_tenant_name"] %>
 admin_user = <%= node["nova"]["service_user"] %>
-admin_password = <%= @service_password %>
+admin_password = <%= @service_pass %>
 signing_dir = <% node["nova"]["api"]["signing_dir"] %>
