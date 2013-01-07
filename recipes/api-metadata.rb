@@ -68,8 +68,7 @@ template "/etc/nova/api-paste.ini" do
   group  node["nova"]["group"]
   mode   00644
   variables(
-    :raw_auth_uri => raw_auth_uri,
-    :auth_uri => auth_uri,
+    :identity_admin_endpoint => identity_admin_endpoint,
     :service_pass => service_pass
   )
 
