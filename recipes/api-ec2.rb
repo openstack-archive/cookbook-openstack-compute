@@ -50,7 +50,7 @@ end
 service "nova-api-ec2" do
   service_name platform_options["api_ec2_service"]
   supports :status => true, :restart => true
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
   action :enable
 end
@@ -145,5 +145,5 @@ template "/etc/nova/api-paste.ini" do
     "service_password" => service_pass
   )
 
-  notifies :restart, resources(:service => "nova-api-ec2"), :delayed
+  notifies :restart, "service[nova-api-ec2]"
 end
