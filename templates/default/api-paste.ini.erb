@@ -129,4 +129,6 @@ auth_protocol = <%= @identity_admin_endpoint.scheme %>
 admin_tenant_name = <%= node["nova"]["service_tenant_name"] %>
 admin_user = <%= node["nova"]["service_user"] %>
 admin_password = <%= @service_pass %>
-signing_dir = <% node["nova"]["api"]["signing_dir"] %>
+<% if node["nova"]["pki"]["enabled"] %>
+signing_dir = <%= node["nova"]["pki"]["signing_dir"] %>
+<% end %>
