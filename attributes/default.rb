@@ -22,6 +22,11 @@ default["nova"]["keystone_service_chef_role"] = "keystone"
 # db_password routine.
 default["nova"]["db"]["username"] = "nova"
 
+# This user's password is stored in an encrypted databag
+# and accessed with openstack-common cookbook library's
+# user_password routine.
+default["nova"]["messaging"]["username"] = "rabbit"
+
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
 default["nova"]["service_role"] = "admin"
