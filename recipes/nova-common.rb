@@ -69,7 +69,7 @@ db_user = node['nova']['db']['username']
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-rabbit_user = default["nova"]["messaging"]["username"]
+rabbit_user = node["nova"]["messaging"]["username"]
 rabbit_pass = user_password "rabbit"
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
