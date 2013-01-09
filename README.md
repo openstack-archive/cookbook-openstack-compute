@@ -114,12 +114,14 @@ Attributes
 * `default["nova"]["keystone_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
 * `default["nova"]["user"]` - User nova services run as
 * `default["nova"]["group"]` - Group nova services run as
-* `default["nova"]["db"]["name"]` - Name of nova database
 * `default["nova"]["db"]["username"]` - Username for nova database access
 * `default["nova"]["messaging"]["username"]` - Username for nova rabbit access
 * `default["nova"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
+
+* `default["nova"]["pki"]["enabled"]` - Defaults to false. Set to true to enable PKI in `auth_token` middleware
+* `default["nova"]["pki"]["signing_dir"]` - Defaults to `/tmp/nova-signing-dir`. Directory where `auth_token` middleware writes certificate
 
 * `default["nova"]["config"]["volume_api_class"]` - API Class used for Volume support
 

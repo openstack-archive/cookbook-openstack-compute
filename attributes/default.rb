@@ -31,6 +31,11 @@ default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
 default["nova"]["service_role"] = "admin"
 
+# Controls for the PKI options in the auth_token middleware
+# that is in the paste INI files.
+default["nova"]["pki"]["enabled"] = false
+default["nova"]["pki"]["signing_dir"] = "/tmp/nova-signing-dir"
+
 default["nova"]["user"] = "nova"
 default["nova"]["group"] = "nova"
 
