@@ -32,7 +32,7 @@ end
 service "nova-network" do
   service_name platform_options["nova_network_service"]
   supports :status => true, :restart => true
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
   action :enable
 end

@@ -50,7 +50,7 @@ end
 service "nova-api-os-compute" do
   service_name platform_options["api_os_compute_service"]
   supports :status => true, :restart => true
-  subscribes :restart, resources(:template => "/etc/nova/nova.conf"), :delayed
+  subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
   action :enable
 end
@@ -144,5 +144,5 @@ template "/etc/nova/api-paste.ini" do
     :service_pass => service_pass
   )
 
-  notifies :restart, resources(:service => "nova-api-os-compute"), :delayed
+  notifies :restart, "service[nova-api-os-compute]"
 end
