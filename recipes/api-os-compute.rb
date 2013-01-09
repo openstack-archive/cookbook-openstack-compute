@@ -87,7 +87,7 @@ keystone_register "Register Service User" do
   admin_password ksadmin_pass
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
-  user_pass node["nova"]["service_pass"]
+  user_pass service_pass
   user_enabled "true" # Not required as this is the default
 
   action :create_user
