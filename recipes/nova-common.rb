@@ -56,10 +56,10 @@ end
 
 # PKI Keystone requires a directory to hold the signed X509 certs
 directory node["nova"]["api"]["signing_dir"] do
-	owner node['nova']['user']
-	group node['nova']['group']
-	mode  00700
-	action :create
+  owner node['nova']['user']
+  group node['nova']['group']
+  mode  00700
+  action :create
 end
 
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
@@ -69,8 +69,9 @@ db_user = node['nova']['db']['username']
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-rabbit_user = node["nova"]["messaging"]["username"]
+rabbit_user = node["nova"]["rabbit"]["username"]
 rabbit_pass = user_password "rabbit"
+rabbit_vhost = node["nova"]["rabbit"]["vhost"]
 
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = config_by_role keystone_service_role, "keystone"
@@ -115,6 +116,7 @@ template "/etc/nova/nova.conf" do
     :rabbit_user => rabbit_user,
     :rabbit_password => rabbit_pass,
     :rabbit_port => rabbit_info["port"],
+    :rabbit_virtual_host => rabbit_vhost,
     :identity_endpoint => identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...

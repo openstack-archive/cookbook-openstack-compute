@@ -116,7 +116,8 @@ Attributes
 * `default["nova"]["group"]` - Group nova services run as
 * `default["nova"]["db"]["name"]` - Name of nova database
 * `default["nova"]["db"]["username"]` - Username for nova database access
-* `default["nova"]["messaging"]["username"]` - Username for nova rabbit access
+* `default["nova"]["rabbit"]["username"]` - Username for nova rabbit access
+* `default["nova"]["rabbit"]["vhost"]` - The rabbit vhost to use
 * `default["nova"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
