@@ -69,6 +69,9 @@ db_user = node['nova']['db']['username']
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
+rabbit_user = default["nova"]["messaging"]["username"]
+rabbit_pass = db_password "rabbit"
+
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = config_by_role keystone_service_role, "keystone"
 
@@ -109,8 +112,8 @@ template "/etc/nova/nova.conf" do
     :xvpvncproxy_bind_port => xvpvnc_endpoint.port,
     :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
     :rabbit_ipaddress => rabbit_info["host"],
-    #TODO(retr0h): Will be changed with our HA work
-    :rabbit_password => "guest",
+    :rabbit_user => rabbit_user,
+    :rabbit_password => rabbit_pass,
     :rabbit_port => rabbit_info["port"],
     :identity_endpoint => identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
