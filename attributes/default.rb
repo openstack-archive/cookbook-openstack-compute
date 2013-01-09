@@ -24,8 +24,10 @@ default["nova"]["db"]["username"] = "nova"
 
 # This user's password is stored in an encrypted databag
 # and accessed with openstack-common cookbook library's
-# user_password routine.
-default["nova"]["messaging"]["username"] = "rabbit"
+# user_password routine.  You are expected to create
+# the user, pass, vhost in a wrapper rabbitmq cookbook.
+default["nova"]["rabbit"]["username"] = "rabbit"
+default["nova"]["rabbit"]["vhost"] = "/nova"
 
 default["nova"]["service_tenant_name"] = "service"
 default["nova"]["service_user"] = "nova"
