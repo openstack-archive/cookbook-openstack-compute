@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "uri"
 
 class ::Chef::Recipe
   include ::Openstack
@@ -51,22 +52,29 @@ end
 
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
 rabbit_info = config_by_role rabbit_server_role, "queue"
-
-nova_setup_role = node["nova"]["nova_setup_chef_role"]
-nova_setup_info = config_by_role nova_setup_role, "nova"
+rabbit_port = rabbit_info["port"]
+rabbit_ipaddress = rabbit_info["host"]
+rabbit_user = node["nova"]["rabbit"]["username"]
+rabbit_pass = user_password "rabbit"
+rabbit_vhost = node["nova"]["rabbit"]["vhost"]
 
 db_user = node['nova']['db']['username']
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = config_by_role keystone_service_role, "keystone"
+service_user = node["nova"]["service_username"]
+service_pass = service_password "nova"
+service_tenant = node["nova"]["service_tenant_name"]
 
 # find the node attribute endpoint settings for the server holding a given role
+identity_endpoint = endpoint "identity-api"
 identity_admin_endpoint = endpoint "identity-admin"
+auth_uri = ::URI.decode identity_admin_endpoint.to_s
 
 Chef::Log.debug("nova::ceilometer-common:rabbit_info|#{rabbit_info}")
-Chef::Log.debug("nova::ceilometer-common:keystone|#{keystone}")
+Chef::Log.debug("nova::ceilometer-common:service_user|#{service_user}")
+Chef::Log.debug("nova::ceilometer-common:service_tenant|#{service_tenant}")
+Chef::Log.debug("nova::ceilometer-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("nova::ceilometer-common:identity_admin_endpoint|#{identity_admin_endpoint.to_s}")
 
 template "/etc/ceilometer/ceilometer.conf" do
@@ -75,13 +83,17 @@ template "/etc/ceilometer/ceilometer.conf" do
   group  nova_group
   mode   00644
   variables(
-    :sql_connection => sql_connection,
-    :rabbit_ipaddress => rabbit_info["host"],
-    :rabbit_port => rabbit_info["port"],
-    :user => keystone["admin_user"],
-    :tenant => keystone["users"][keystone["admin_user"]]["default_tenant"],
-    :password => keystone["users"][keystone["admin_user"]]["password"],
-    :identity_admin_endpoint => identity_admin_endpoint
+    :auth_uri => auth_uri,
+    :identity_endpoint => identity_endpoint,
+    :rabbit_ipaddress => rabbit_ipaddress,
+    :rabbit_pass => rabbit_pass,
+    :rabbit_port => rabbit_port,
+    :rabbit_user => rabbit_user,
+    :rabbit_vhost => rabbit_vhost,
+    :service_pass => service_pass,
+    :service_tenant_name => service_tenant_name,
+    :service_user => service_user,
+    :sql_connection => sql_connection
   )
 end
 

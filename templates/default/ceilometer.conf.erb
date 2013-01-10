@@ -1,19 +1,26 @@
 [DEFAULT]
-os_auth_url = <%= @identity_admin_endpoint %>
-os_tenant_name = <%= @tenant %>
-os_password = <%= @password %>
-os_username = <%= @user %>
+os_auth_url = <%= @auth_uri %>
+os_tenant_name = <%= @service_tenant_name %>
+os_password = <%= @service_pass %>
+os_username = <%= @service_user %>
 policy_file = /etc/ceilometer/policy.json
 sql_connection = <%= @sql_connection %>
-rabbit_password = guest
+rabbit_userid = <%= @rabbit_user %>
+rabbit_password = <%= @rabbit_password %>
 rabbit_port = <%= @rabbit_port %>
 rabbit_host = <%= @rabbit_ipaddress %>
+rabbit_virtual_host = <%= @rabbit_virtual_host %>
 verbose = True
 notification_topics = notifications,glance_notifications
 rpc_backend = ceilometer.openstack.common.rpc.impl_kombu
 
 [keystone_authtoken]
-admin_tenant_name = <%= @tenant %>
-admin_password = <%= @password %>
-admin_user = <%= @user %>
+auth_host = <%= @identity_endpoint.host %>
+auth_port = <%= @identity_endpoint.port %>
 auth_protocol = <%= @identity_endpoint.scheme %>
+admin_tenant_name = <%= @service_tenant_name %>
+admin_user = <%= @service_user %>
+admin_password = <%= @service_pass %>
+<% if node["nova"]["pki"]["enabled"] %>
+signing_dir = <%= node["nova"]["pki"]["signing_dir"] %>
+<% end %>

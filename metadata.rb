@@ -26,7 +26,7 @@ end
 depends "database"
 depends "glance"
 depends "keystone"
-depends "mongodb"
+depends "mongodb", ">= 0.1.5"
 depends "mysql"
 depends "openstack-utils"
 depends "openstack-common", ">= 0.1.4"
