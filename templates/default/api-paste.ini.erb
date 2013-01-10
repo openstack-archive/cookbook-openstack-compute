@@ -129,6 +129,6 @@ auth_protocol = <%= @identity_admin_endpoint.scheme %>
 admin_tenant_name = <%= node["nova"]["service_tenant_name"] %>
 admin_user = <%= node["nova"]["service_user"] %>
 admin_password = <%= @service_pass %>
-<% if node["openstack"]["signing"]["pki"] -%>
+<% if node["openstack"]["auth"]["strategy"] == "pki" -%>
 signing_dir = <%= node["nova"]["pki"]["signing_dir"] %>
 <% end -%>
