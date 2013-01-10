@@ -121,7 +121,6 @@ Attributes
 * `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
 
-* `default["nova"]["pki"]["enabled"]` - Defaults to false. Set to true to enable PKI in `auth_token` middleware
 * `default["nova"]["pki"]["signing_dir"]` - Defaults to `/tmp/nova-signing-dir`. Directory where `auth_token` middleware writes certificate
 
 * `default["nova"]["config"]["volume_api_class"]` - API Class used for Volume support
