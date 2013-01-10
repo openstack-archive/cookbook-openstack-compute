@@ -67,14 +67,12 @@ service_pass = service_password "nova"
 service_tenant = node["nova"]["service_tenant_name"]
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_endpoint = endpoint "identity-api"
 identity_admin_endpoint = endpoint "identity-admin"
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
 
 Chef::Log.debug("nova::ceilometer-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::ceilometer-common:service_user|#{service_user}")
 Chef::Log.debug("nova::ceilometer-common:service_tenant|#{service_tenant}")
-Chef::Log.debug("nova::ceilometer-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("nova::ceilometer-common:identity_admin_endpoint|#{identity_admin_endpoint.to_s}")
 
 template "/etc/ceilometer/ceilometer.conf" do
@@ -84,7 +82,7 @@ template "/etc/ceilometer/ceilometer.conf" do
   mode   00644
   variables(
     :auth_uri => auth_uri,
-    :identity_endpoint => identity_endpoint,
+    :identity_endpoint => identity_admin_endpoint,
     :rabbit_ipaddress => rabbit_ipaddress,
     :rabbit_pass => rabbit_pass,
     :rabbit_port => rabbit_port,
