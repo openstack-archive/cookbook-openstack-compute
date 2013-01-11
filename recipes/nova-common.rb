@@ -54,14 +54,6 @@ directory "/etc/nova/rootwrap.d" do
   action :create
 end
 
-# PKI Keystone requires a directory to hold the signed X509 certs
-directory node["nova"]["api"]["signing_dir"] do
-  owner node['nova']['user']
-  group node['nova']['group']
-  mode  00700
-  action :create
-end
-
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
 rabbit_info = config_by_role rabbit_server_role, "queue"
 
