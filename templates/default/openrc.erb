@@ -6,6 +6,7 @@ export OS_PASSWORD=<%= @password %>
 export OS_TENANT_NAME=<%= @tenant %>
 export OS_AUTH_URL=<%= @identity_admin_endpoint.to_s %>
 export OS_AUTH_STRATEGY=<%= @auth_strategy %>
+export OS_REGION_NAME=<%= node["nova"]["region"] %>
 
 # LEGACY NOVA ENVS
 export NOVA_USERNAME=${OS_USERNAME}
@@ -14,7 +15,7 @@ export NOVA_PASSWORD=${OS_PASSWORD}
 export NOVA_API_KEY=${OS_PASSWORD}
 export NOVA_URL=${OS_AUTH_URL}
 export NOVA_VERSION=<%= @nova_api_version %>
-export NOVA_REGION_NAME=<%= node["nova"]["compute"]["region"] %>
+export NOVA_REGION_NAME=<%= node["nova"]["region"] %>
 
 # EUCA2OOLs ENV VARIABLES
 export EC2_ACCESS_KEY=<%= node["credentials"]["EC2"]["admin"]["access"] %>

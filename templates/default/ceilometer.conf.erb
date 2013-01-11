@@ -15,12 +15,13 @@ notification_topics = notifications,glance_notifications
 rpc_backend = ceilometer.openstack.common.rpc.impl_kombu
 
 [keystone_authtoken]
+paste.filter_factory = keystone.middleware.auth_token:filter_factory
 auth_host = <%= @identity_endpoint.host %>
 auth_port = <%= @identity_endpoint.port %>
 auth_protocol = <%= @identity_endpoint.scheme %>
 admin_tenant_name = <%= @service_tenant_name %>
 admin_user = <%= @service_user %>
 admin_password = <%= @service_pass %>
-<% if node["nova"]["pki"]["enabled"] %>
-signing_dir = <%= node["nova"]["pki"]["signing_dir"] %>
-<% end %>
+<% if node["openstack"]["auth"]["strategy"] == "pki" -%>
+signing_dir = <%= node["nova"]["ceilometer-api"]["auth"]["cache_dir"] %>
+<% end -%>

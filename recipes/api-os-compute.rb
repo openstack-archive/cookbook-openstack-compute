@@ -35,6 +35,15 @@ directory "/var/lock/nova" do
   action :create
 end
 
+directory node["nova"]["api"]["auth"]["cache_dir"] do
+  owner node["nova"]["user"]
+  group node["nova"]["group"]
+  mode 00700
+
+  action :create
+  only_if { node["openstack"]["auth"]["strategy"] == "pki" }
+end
+
 package "python-keystone" do
   action :upgrade
 end
@@ -143,6 +152,5 @@ template "/etc/nova/api-paste.ini" do
     :identity_admin_endpoint => identity_admin_endpoint,
     :service_pass => service_pass
   )
-
   notifies :restart, "service[nova-api-os-compute]"
 end
