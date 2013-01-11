@@ -130,5 +130,5 @@ admin_tenant_name = <%= node["nova"]["service_tenant_name"] %>
 admin_user = <%= node["nova"]["service_user"] %>
 admin_password = <%= @service_pass %>
 <% if node["openstack"]["auth"]["strategy"] == "pki" -%>
-signing_dir = <%= node["nova"]["pki"]["signing_dir"] %>
+signing_dir = <%= node["nova"]["api"]["auth"]["cache_dir"] %>
 <% end -%>

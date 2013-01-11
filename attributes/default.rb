@@ -165,9 +165,10 @@ default["nova"]["ratelimit"]["settings"] = {
 }
 default["nova"]["ratelimit"]["api"]["enabled"] = true
 
-# Keystone PKI signing directory
-# Is /tmp the best location for these directories?
-default["nova"]["api"]["signing_dir"] = "/tmp/keystone-sign-nova"
+# Keystone PKI signing directory. Only written to the filter:authtoken section
+# of the api-paste.ini when node["openstack"]["auth"]["strategy"] == "pki"
+default["nova"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
+default["nova"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
 
 case platform
 when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
