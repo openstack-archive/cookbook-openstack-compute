@@ -35,7 +35,7 @@ directory "/var/lock/nova" do
   action :create
 end
 
-directory node["nova"]["api"]["auth"]["cache_dir"] do
+directory ::File.dirname(node["nova"]["api"]["auth"]["cache_dir"]) do
   owner node["nova"]["user"]
   group node["nova"]["group"]
   mode 00700
