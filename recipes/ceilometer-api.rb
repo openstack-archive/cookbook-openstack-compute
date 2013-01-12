@@ -28,7 +28,6 @@ directory ::File.dirname(node["nova"]["ceilomer-api"]["auth"]["cache_dir"]) do
   group node["nova"]["group"]
   mode 00700
 
-  action :create
   only_if { node["openstack"]["auth"]["strategy"] == "pki" }
 end
 
