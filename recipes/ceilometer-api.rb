@@ -23,12 +23,11 @@ end
 
 include_recipe "nova::ceilometer-common"
 
-directory node["nova"]["ceilomer-api"]["auth"]["cache_dir"] do
+directory ::File.dirname(node["nova"]["ceilomer-api"]["auth"]["cache_dir"]) do
   owner node["nova"]["user"]
   group node["nova"]["group"]
   mode 00700
 
-  action :create
   only_if { node["openstack"]["auth"]["strategy"] == "pki" }
 end
 
