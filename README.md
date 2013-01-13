@@ -30,7 +30,6 @@ The following cookbooks are dependencies:
 * keystone
 * mysql
 * openstack-common
-* openstack-utils
 * rabbitmq
 * selinux (Fedora)
 * sysctl
