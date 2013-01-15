@@ -46,9 +46,7 @@ bin_names.each do |bin_name|
 end
 
 # install source
-#install_dir = ::File.dirname(node["nova"]["ceilometer"]["cache_dir"])
-install_dir = '/var/cache/nova/ceilometer'
-puts "\n\n\n\nINSTALLED_DIR #{install_dir} \n\n\n\n"
+install_dir = node["nova"]["ceilometer"]["cache_dir"]
 
 nova_owner = node["nova"]["user"]
 nova_group = node["nova"]["group"]
