@@ -22,23 +22,54 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "mongodb"
 include_recipe "nova::nova-common"
 include_recipe "python::pip"
 
-api_logdir = '/var/log/ceilometer-api'
+dep_packages = ['libxslt-dev', 'libxml2-dev']
+
+dep_packages.each do |pkg|
+  package pkg do
+    action :upgrade
+  end
+end
+
+#  Cleanup old installation
+python_pip "ceilometer" do
+  action :remove
+end
+
+bin_names = ['agent-compute', 'agent-central', 'collector', 'dbsync', 'api']
+bin_names.each do |bin_name|
+  file "ceilometer-#{bin_name}" do
+    action :delete
+  end
+end
+
+# install source
+#install_dir = ::File.dirname(node["nova"]["ceilometer"]["cache_dir"])
+install_dir = '/var/cache/nova/ceilometer'
+puts "\n\n\n\nINSTALLED_DIR #{install_dir} \n\n\n\n"
+
 nova_owner = node["nova"]["user"]
 nova_group = node["nova"]["group"]
 
-directory api_logdir do
+directory install_dir do
   owner nova_owner
   group nova_group
   mode  00755
+  recursive true
 
   action :create
 end
 
-python_pip "ceilometer" do
+branch = node["nova"]["ceilometer"]["branch"]
+git install_dir do
+  repo "git://github.com/openstack/ceilometer.git"
+  reference branch
+  action :sync
+end
+
+python_pip install_dir do
   action :install
 end
 
@@ -58,9 +89,13 @@ rabbit_user = node["nova"]["rabbit"]["username"]
 rabbit_pass = user_password "rabbit"
 rabbit_vhost = node["nova"]["rabbit"]["vhost"]
 
+# nova db
 db_user = node['nova']['db']['username']
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
+
+# ceilometer db
+database_connection = node["nova"]["ceilometer"]["database_connection"] # TO BE FIXED FOR NOW IS NIL
 
 service_user = node["nova"]["service_username"]
 service_pass = service_password "nova"
@@ -75,13 +110,16 @@ Chef::Log.debug("nova::ceilometer-common:service_user|#{service_user}")
 Chef::Log.debug("nova::ceilometer-common:service_tenant|#{service_tenant}")
 Chef::Log.debug("nova::ceilometer-common:identity_admin_endpoint|#{identity_admin_endpoint.to_s}")
 
-template "/etc/ceilometer/ceilometer.conf" do
+ceilometer_conf = "/etc/ceilometer/ceilometer.conf"
+
+template ceilometer_conf do
   source "ceilometer.conf.erb"
   owner  nova_owner
   group  nova_group
   mode   00644
   variables(
     :auth_uri => auth_uri,
+    :database_connection => database_connection,
     :identity_endpoint => identity_admin_endpoint,
     :rabbit_ipaddress => rabbit_ipaddress,
     :rabbit_pass => rabbit_pass,
@@ -89,7 +127,7 @@ template "/etc/ceilometer/ceilometer.conf" do
     :rabbit_user => rabbit_user,
     :rabbit_vhost => rabbit_vhost,
     :service_pass => service_pass,
-    :service_tenant_name => service_tenant_name,
+    :service_tenant_name => service_tenant,
     :service_user => service_user,
     :sql_connection => sql_connection
   )

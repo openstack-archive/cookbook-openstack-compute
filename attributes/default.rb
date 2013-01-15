@@ -169,6 +169,7 @@ default["nova"]["ratelimit"]["api"]["enabled"] = true
 # of the api-paste.ini when node["openstack"]["auth"]["strategy"] == "pki"
 default["nova"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 default["nova"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
+default["nova"]["ceilometer"]["cache_dir"] = "/var/cache/nova/ceilometer"
 
 case platform
 when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
@@ -233,3 +234,7 @@ when "ubuntu"
     "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end
+
+# ceilometer specific attrs
+default["nova"]["ceilometer"]["branch"] = "folsom"				# git branch
+default["nova"]["ceilometer"]["database_connection"] = nil			# ceilometer db
