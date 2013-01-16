@@ -46,7 +46,7 @@ bin_names.each do |bin_name|
 end
 
 # install source
-install_dir = node["nova"]["ceilometer"]["cache_dir"]
+install_dir = node["nova"]["ceilometer"]["install_dir"]
 
 nova_owner = node["nova"]["user"]
 nova_group = node["nova"]["group"]

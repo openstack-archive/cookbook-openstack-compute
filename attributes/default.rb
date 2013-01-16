@@ -169,7 +169,7 @@ default["nova"]["ratelimit"]["api"]["enabled"] = true
 # of the api-paste.ini when node["openstack"]["auth"]["strategy"] == "pki"
 default["nova"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 default["nova"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
-default["nova"]["ceilometer"]["cache_dir"] = "/var/cache/nova/ceilometer"
+default["nova"]["ceilometer"]["install_dir"] = "/opt/ceilometer"
 
 case platform
 when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
