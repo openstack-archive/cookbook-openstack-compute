@@ -28,7 +28,7 @@ conf_switch = '--config-file /etc/ceilometer/ceilometer.conf'
 
 service "ceilometer-agent-compute" do
   service_name "ceilometer-agent-compute"
-  action [:enable, :start]
+  action [:start]
   start_command "nohup #{bindir}/ceilometer-agent-compute  #{conf_switch}&"
   stop_command "pkill -f ceilometer-agent-compute"
 end

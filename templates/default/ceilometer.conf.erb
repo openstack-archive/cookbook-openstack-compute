@@ -5,6 +5,7 @@ os_password = <%= @service_pass %>
 os_username = <%= @service_user %>
 policy_file = /etc/ceilometer/policy.json
 sql_connection = <%= @sql_connection %>
+<%= @database_connection ? "database_connection = #{@database_connection}" : nil %>
 rabbit_userid = <%= @rabbit_user %>
 rabbit_password = <%= @rabbit_password %>
 rabbit_port = <%= @rabbit_port %>
