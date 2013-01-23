@@ -4,7 +4,7 @@
 export OS_USERNAME=<%= @user %>
 export OS_PASSWORD=<%= @password %>
 export OS_TENANT_NAME=<%= @tenant %>
-export OS_AUTH_URL=<%= @identity_admin_endpoint.to_s %>
+export OS_AUTH_URL=<%= @identity_endpoint.to_s %>
 export OS_AUTH_STRATEGY=<%= @auth_strategy %>
 export OS_REGION_NAME=<%= node["nova"]["region"] %>
 
