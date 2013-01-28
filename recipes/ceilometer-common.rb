@@ -34,9 +34,6 @@ dependent_pkgs.each do |pkg|
   end
 end
 
-nova_owner = node["nova"]["user"]
-nova_group = node["nova"]["group"]
-
 #  Cleanup old installation
 python_pip "ceilometer" do
   action :remove
@@ -51,6 +48,9 @@ end
 
 # install source
 install_dir = node["nova"]["ceilometer"]["install_dir"]
+
+nova_owner = node["nova"]["user"]
+nova_group = node["nova"]["group"]
 
 directory install_dir do
   owner nova_owner

@@ -164,7 +164,7 @@ template "/root/openrc" do
     :user => ksadmin_user,
     :tenant => ksadmin_tenant_name,
     :password => ksadmin_pass,
-    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
     :nova_api_version => "1.1",
     :auth_strategy => "keystone",
     :ec2_url => ec2_public_endpoint.to_s

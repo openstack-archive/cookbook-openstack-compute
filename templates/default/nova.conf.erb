@@ -130,6 +130,11 @@ max_cores=<%= node["nova"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"][
 ec2_private_dns_show_ip=True
 <% end -%>
 
+##### WORKERS ######
+ec2_workers=<%= node["cpu"]["total"] %>
+osapi_compute_workers=<%= node["cpu"]["total"] %>
+metadata_workers=<%= node["cpu"]["total"] %>
+
 ##### KEYSTONE #####
 keystone_ec2_url=<%= @identity_endpoint.scheme %>://<%= @identity_endpoint.host %>:<%= @identity_endpoint.port %>/v2.0/ec2tokens
 
