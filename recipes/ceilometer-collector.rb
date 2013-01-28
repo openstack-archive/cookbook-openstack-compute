@@ -21,26 +21,28 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "mongodb"
+::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
+
+include_recipe "nova::ceilometer-db"
 include_recipe "nova::ceilometer-common"
 
-bindir = '/usr/local/bin'
-conf_switch = '--config-file /etc/ceilometer/ceilometer.conf'
+release = node["openstack"]["release"] || 'folsom'
 
-# ceilometer db
-database_connection = node["nova"]["ceilometer"]["database_connection"] # TO BE FIXED FOR NOW IS NIL
+bindir = '/usr/local/bin'
+install_dir = node["nova"]["ceilometer"]["install_dir"]
+ceilometer_conf = node["nova"]["ceilometer"]["conf"]
+conf_switch = "--config-file #{ceilometer_conf}"
 
 # db migration
 bash "migration" do
-  break unless database_connection and !database_connection.match(/^mongo/)
-  case branch
+  case release
   when 'folsom'
     code <<-EOF
-      #{tmpdir}/tools/dbsync --config-file=#{ceilometer_conf}
+      #{install_dir}/tools/dbsync #{conf_switch}
     EOF
   else
     code <<-EOF
-      ceilometer-dbsync --config-file=#{ceilometer_conf}
+      ceilometer-dbsync #{conf_switch}
     EOF
   end
 end

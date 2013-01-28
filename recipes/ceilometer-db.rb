@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: nova
-# Recipe:: ceilometer-agent-central
+# Cookbook Name:: ceilometer
+# Recipe:: ceilometer-db
 #
 # Copyright 2012, AT&T
 #
@@ -17,19 +17,17 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe
-  include ::Openstack
-end
+::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
-include_recipe "nova::ceilometer-common"
+db_info = db 'ceilometer'
+if db_info['db_type'] == 'mysql'
+  include_recipe "mysql::client"
+  include_recipe "mysql::ruby"
 
-bindir = '/usr/local/bin'
-ceilometer_conf = node["nova"]["ceilometer"]["conf"]
-conf_switch = "--config-file #{ceilometer_conf}"
+  db_password = db_password "ceilometer"
 
-service "ceilometer-agent-central" do
-  service_name "ceilometer-agent-central"
-  action [:start]
-  start_command "nohup #{bindir}/ceilometer-agent-central #{conf_switch} &"
-  stop_command "pkill -f ceilometer-agent-central"
+  # method only supports mysql
+  db_create_with_user( node["nova"]["ceilometer"]["db"]["name"],
+                       node["nova"]["ceilometer"]["db"]["username"],
+                       db_password)
 end
