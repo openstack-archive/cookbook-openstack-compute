@@ -17,9 +17,7 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
-
-db_info = db 'ceilometer'
+db_info = db 'metering'
 if db_info['db_type'] == 'mysql'
   include_recipe "mysql::client"
   include_recipe "mysql::ruby"
@@ -27,7 +25,7 @@ if db_info['db_type'] == 'mysql'
   db_password = db_password "ceilometer"
 
   # method only supports mysql
-  db_create_with_user( node["nova"]["ceilometer"]["db"]["name"],
+  db_create_with_user( db_info["name"],
                        node["nova"]["ceilometer"]["db"]["username"],
                        db_password)
 end

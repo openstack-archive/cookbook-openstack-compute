@@ -21,8 +21,6 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
-
 include_recipe "nova::ceilometer-db"
 include_recipe "nova::ceilometer-common"
 

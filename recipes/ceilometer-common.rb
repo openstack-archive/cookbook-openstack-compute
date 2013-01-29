@@ -91,7 +91,7 @@ rabbit_vhost = node["nova"]["rabbit"]["vhost"]
 # nova db
 nova_db_user = node['nova']['db']['username']
 nova_db_pass = db_password "nova"
-nova_uri = db_uri("compute", nova_db_user, nova_db_pass)
+nova_uri = db_uri("metering", nova_db_user, nova_db_pass)
 
 # ceilometer db
 ceilo_db_info = db 'ceilometer'
