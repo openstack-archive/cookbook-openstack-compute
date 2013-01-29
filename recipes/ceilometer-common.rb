@@ -91,14 +91,14 @@ rabbit_vhost = node["nova"]["rabbit"]["vhost"]
 # nova db
 nova_db_user = node['nova']['db']['username']
 nova_db_pass = db_password "nova"
-nova_uri = db_uri("metering", nova_db_user, nova_db_pass)
+nova_uri = db_uri("compute", nova_db_user, nova_db_pass)
 
 # ceilometer db
 ceilo_db_info = db 'ceilometer'
 ceilo_db_user = node['nova']['ceilometer']['db']['username']
 ceilo_db_pass = db_password "ceilometer"
 ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : nil
-ceilo_db_uri = db_uri("ceilometer", ceilo_db_user, ceilo_db_pass).to_s + ceilo_db_query
+ceilo_db_uri = db_uri("metering", ceilo_db_user, ceilo_db_pass).to_s + ceilo_db_query
 
 service_user = node["nova"]["service_username"]
 service_pass = service_password "nova"
