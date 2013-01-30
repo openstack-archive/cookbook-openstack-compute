@@ -94,7 +94,7 @@ nova_db_pass = db_password "nova"
 nova_uri = db_uri("compute", nova_db_user, nova_db_pass)
 
 # ceilometer db
-ceilo_db_info = db 'ceilometer'
+ceilo_db_info = db 'metering'
 ceilo_db_user = node['nova']['ceilometer']['db']['username']
 ceilo_db_pass = db_password "ceilometer"
 ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : nil
