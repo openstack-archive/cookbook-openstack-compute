@@ -24,7 +24,8 @@ end
 include_recipe "nova::ceilometer-common"
 
 bindir = '/usr/local/bin'
-conf_switch = '--config-file /etc/ceilometer/ceilometer.conf'
+ceilometer_conf = node["nova"]["ceilometer"]["conf"]
+conf_switch = "--config-file #{ceilometer_conf}"
 
 service "ceilometer-agent-compute" do
   service_name "ceilometer-agent-compute"

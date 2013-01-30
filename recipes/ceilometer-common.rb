@@ -25,9 +25,10 @@ end
 include_recipe "nova::nova-common"
 include_recipe "python::pip"
 
-dep_packages = ['libxslt-dev', 'libxml2-dev']
+ceilometer_conf = node["nova"]["ceilometer"]["conf"]
 
-dep_packages.each do |pkg|
+dependent_pkgs = node["nova"]["ceilometer"]["dependent_pkgs"]
+dependent_pkgs.each do |pkg|
   package pkg do
     action :upgrade
   end
@@ -71,7 +72,7 @@ python_pip install_dir do
   action :install
 end
 
-directory "/etc/ceilometer" do
+directory ::File.dirname(ceilometer_conf) do
   owner nova_owner
   group nova_group
   mode  00755
@@ -88,12 +89,16 @@ rabbit_pass = user_password "rabbit"
 rabbit_vhost = node["nova"]["rabbit"]["vhost"]
 
 # nova db
-db_user = node['nova']['db']['username']
-db_pass = db_password "nova"
-sql_connection = db_uri("compute", db_user, db_pass)
+nova_db_user = node['nova']['db']['username']
+nova_db_pass = db_password "nova"
+nova_uri = db_uri("compute", nova_db_user, nova_db_pass)
 
 # ceilometer db
-database_connection = node["nova"]["ceilometer"]["database_connection"] # TO BE FIXED FOR NOW IS NIL
+ceilo_db_info = db 'metering'
+ceilo_db_user = node['nova']['ceilometer']['db']['username']
+ceilo_db_pass = db_password "ceilometer"
+ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : nil
+ceilo_db_uri = db_uri("metering", ceilo_db_user, ceilo_db_pass).to_s + ceilo_db_query
 
 service_user = node["nova"]["service_username"]
 service_pass = service_password "nova"
@@ -108,8 +113,6 @@ Chef::Log.debug("nova::ceilometer-common:service_user|#{service_user}")
 Chef::Log.debug("nova::ceilometer-common:service_tenant|#{service_tenant}")
 Chef::Log.debug("nova::ceilometer-common:identity_admin_endpoint|#{identity_admin_endpoint.to_s}")
 
-ceilometer_conf = "/etc/ceilometer/ceilometer.conf"
-
 template ceilometer_conf do
   source "ceilometer.conf.erb"
   owner  nova_owner
@@ -117,7 +120,7 @@ template ceilometer_conf do
   mode   00644
   variables(
     :auth_uri => auth_uri,
-    :database_connection => database_connection,
+    :database_connection => ceilo_db_uri,
     :identity_endpoint => identity_admin_endpoint,
     :rabbit_ipaddress => rabbit_ipaddress,
     :rabbit_pass => rabbit_pass,
@@ -127,7 +130,7 @@ template ceilometer_conf do
     :service_pass => service_pass,
     :service_tenant_name => service_tenant,
     :service_user => service_user,
-    :sql_connection => sql_connection
+    :sql_connection => nova_uri 
   )
 end
 

@@ -169,7 +169,6 @@ default["nova"]["ratelimit"]["api"]["enabled"] = true
 # of the api-paste.ini when node["openstack"]["auth"]["strategy"] == "pki"
 default["nova"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 default["nova"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
-default["nova"]["ceilometer"]["install_dir"] = "/opt/ceilometer"
 
 case platform
 when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
@@ -236,5 +235,9 @@ when "ubuntu"
 end
 
 # ceilometer specific attrs
-default["nova"]["ceilometer"]["branch"] = "folsom"				# git branch
-default["nova"]["ceilometer"]["database_connection"] = nil			# ceilometer db
+default["nova"]["ceilometer"]["api_logdir"] = "/var/log/ceilometer-api"
+default["nova"]["ceilometer"]["branch"] = 'stable/folsom'
+default["nova"]["ceilometer"]["conf"] = "/etc/ceilometer/ceilometer.conf"
+default["nova"]["ceilometer"]["db"]["username"] = 'ceilometer'
+default["nova"]["ceilometer"]["dependent_pkgs"] = ['libxslt-dev', 'libxml2-dev']
+default["nova"]["ceilometer"]["install_dir"] = '/opt/ceilometer'
