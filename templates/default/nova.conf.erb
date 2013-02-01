@@ -87,12 +87,8 @@ xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
 <% if @xvpvncproxy_bind_port -%>
 xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 <% end -%>
-<% if @vncserver_listen -%>
-vncserver_listen=<%= @vncserver_listen %>
-<% end -%>
-<% if @vncserver_proxyclient_address -%>
-vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
-<% end -%>
+vncserver_listen=<%= node["nova"]["libvirt"]["vncserver_listen"] %>
+vncserver_proxyclient_address=<%= node["nova"]["libvirt"]["vncserver_proxyclient_address"] %>
 
 ##### MISC #####
 # force backing images to raw format
