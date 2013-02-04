@@ -44,6 +44,9 @@ force_dhcp_release=false
 <% else -%>
 force_dhcp_release=true
 <% end -%>
+<% if node["nova"]["dhcp_domain"] -%>
+dhcp_domain=<%= node["nova"]["dhcp_domain"] %>
+<% end %>
 send_arp_for_ha=true
 use_single_default_gateway=<%= node["nova"]["network"]["use_single_default_gateway"] %>
 <% if node["nova"]["libvirt"]["virt_type"] == "qemu" -%>
