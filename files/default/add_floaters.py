@@ -33,6 +33,10 @@ class FloatingAddress(object):
     TODO(retr0h): This should really be added to nova-manage.
     """
 
+    def __init__(self, args):
+        self._pool = args.pool
+        self._interface = args.interface
+
     def _add_cidr(self, cidr):
         """
         Validates the provided cider address, and passes it to nova-manage.
@@ -59,13 +63,20 @@ class FloatingAddress(object):
 
     def _add_floating(self, ip):
         cmd = "nova-manage floating create --ip_range={0}".format(ip)
+        if self._pool:
+            cmd += ' --pool={0}'.format(self._pool)
+        if self._interface:
+            cmd += ' --interface={0}'.format(self._interface)
 
         subprocess.check_call(cmd, shell=True)
 
 def _parse_args():
     ap = argparse.ArgumentParser(description=DESCRIPTION)
-    ap.add_argument('-d', '--dry_run', action='store_true',
-                    default=False, help='Show dry run output')
+    ap.add_argument('--pool',
+                       help="Name of the floating pool")
+    ap.add_argument('--interface',
+                       help="Network interface to bring the floating "
+                            "addresses up on")
     group = ap.add_mutually_exclusive_group()
     group.add_argument('--cidr',
                        help="A CIDR notation of addresses to add "
@@ -77,7 +88,7 @@ def _parse_args():
 
 if __name__ == '__main__':
     args = _parse_args()
-    fa = FloatingAddress()
+    fa = FloatingAddress(args)
 
     if args.cidr:
         fa._add_cidr(args.cidr)
