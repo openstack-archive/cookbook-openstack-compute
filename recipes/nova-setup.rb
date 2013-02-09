@@ -73,6 +73,13 @@ node["nova"]["networks"].each do |net|
   end
 end
 
+cookbook_file node["nova"]["floating_cmd"] do
+  source "add_floaters.py"
+  mode   00755
+
+  action :create
+end
+
 floating = node["nova"]["network"]["floating"]
 if floating && floating["ipv4_cidr"] || floating["ipv4_range"]
   cmd = ""
