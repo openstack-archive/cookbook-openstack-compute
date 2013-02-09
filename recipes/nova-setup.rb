@@ -73,9 +73,25 @@ node["nova"]["networks"].each do |net|
   end
 end
 
-if node.has_key?(:floating) and node["nova"]["network"]["floating"].has_key?(:ipv4_cidr)
+cookbook_file node["nova"]["floating_cmd"] do
+  source "add_floaters.py"
+  mode   00755
+
+  action :create
+end
+
+floating = node["nova"]["network"]["floating"]
+if floating && floating["ipv4_cidr"] || floating["ipv4_range"]
+  cmd = ""
+  if floating["ipv4_cidr"]
+    cmd = "#{node["nova"]["floating_cmd"]} --cidr=#{floating["ipv4_cidr"]}"
+  elsif floating["ipv4_range"]
+    cmd = "#{node["nova"]["floating_cmd"]} --ip_range=#{floating["ipv4_range"]}"
+  end
+
   execute "nova-manage floating create" do
-    command "nova-manage floating create --ip_range=#{node["nova"]["network"]["floating"]["ipv4_cidr"]}"
+    command cmd
+
     not_if "nova-manage floating list"
 
     action :run
