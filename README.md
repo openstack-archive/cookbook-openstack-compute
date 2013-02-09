@@ -119,6 +119,7 @@ Attributes
 * `default["nova"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
+* `default["nova"]["floating_cmd"]` - Path to the `nova-manage floating create` wrapper script.
 
 * `default["nova"]["pki"]["signing_dir"]` - Defaults to `/tmp/nova-signing-dir`. Directory where `auth_token` middleware writes certificate
 
@@ -143,6 +144,7 @@ Attributes
 * `default["nova"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
 * `default["nova"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 
+* `default["nova"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `default["nova"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 
 Networking Attributes

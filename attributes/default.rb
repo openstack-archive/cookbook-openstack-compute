@@ -47,6 +47,8 @@ default["nova"]["syslog"]["config_facility"] = "local1"
 
 default["nova"]["region"] = "RegionOne"
 
+default["nova"]["floating_cmd"] = "/usr/local/bin/add_floaters.py"
+
 # TODO(shep): This should probably be ['nova']['network']['fixed']
 default["nova"]["networks"] = [
         {
