@@ -86,13 +86,13 @@ if floating && (floating["ipv4_cidr"] || floating["ipv4_range"])
   if floating["ipv4_cidr"]
     cmd = "#{node["nova"]["floating_cmd"]} --cidr=#{floating["ipv4_cidr"]}"
   elsif floating["ipv4_range"]
-    cmd = "#{node["nova"]["floating_cmd"]} --ip_range=#{floating["ipv4_range"]}"
+    cmd = "#{node["nova"]["floating_cmd"]} --ip-range=#{floating["ipv4_range"]}"
   end
 
   execute "nova-manage floating create" do
     command cmd
 
-    not_if "nova-manage floating list"
+    not_if "nova-manage floating list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'"
 
     action :run
   end
