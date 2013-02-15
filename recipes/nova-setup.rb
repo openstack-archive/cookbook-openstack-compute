@@ -81,7 +81,7 @@ cookbook_file node["nova"]["floating_cmd"] do
 end
 
 floating = node["nova"]["network"]["floating"]
-if floating && floating["ipv4_cidr"] || floating["ipv4_range"]
+if floating && (floating["ipv4_cidr"] || floating["ipv4_range"])
   cmd = ""
   if floating["ipv4_cidr"]
     cmd = "#{node["nova"]["floating_cmd"]} --cidr=#{floating["ipv4_cidr"]}"
