@@ -58,7 +58,6 @@ class FloatingAddress(object):
         """
         ip_list = list(netaddr.iter_iprange(start, end))
         for ip in ip_list:
-            ip = '{0}/32'.format(ip)
             self._add_floating(ip)
 
     def _add_floating(self, ip):
