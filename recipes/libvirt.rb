@@ -76,6 +76,7 @@ template "/etc/libvirt/libvirtd.conf" do
   )
 
   notifies :restart, "service[libvirt-bin]", :immediately
+  not_if { platform? "suse" }
 end
 
 template "/etc/default/libvirt-bin" do

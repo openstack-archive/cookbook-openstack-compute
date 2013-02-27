@@ -20,7 +20,7 @@ recipe "openstack-compute::nova-setup", "Sets up the nova database on the mysql 
 recipe "openstack-compute::scheduler", "Installs nova scheduler service"
 recipe "openstack-compute::vncproxy", "Installs and configures the vncproxy service for console access to VMs"
 
-%w{ ubuntu fedora redhat centos }.each do |os|
+%w{ ubuntu fedora redhat centos suse }.each do |os|
   supports os
 end
 

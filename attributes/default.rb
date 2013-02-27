@@ -37,8 +37,14 @@ default["openstack-compute"]["service_role"] = "admin"
 # that is in the paste INI files.
 default["openstack-compute"]["pki"]["signing_dir"] = "/tmp/nova-signing-dir"
 
-default["openstack-compute"]["user"] = "nova"
-default["openstack-compute"]["group"] = "nova"
+case platform
+when "fedora", "redhat", "centos", "ubuntu"
+  default["openstack-compute"]["user"] = "nova"
+  default["openstack-compute"]["group"] = "nova"
+when "suse"
+  default["openstack-compute"]["user"] = "openstack-nova"
+  default["openstack-compute"]["group"] = "openstack-nova"
+end
 
 # Logging stuff
 default["openstack-compute"]["syslog"]["use"] = false
@@ -179,7 +185,7 @@ default["openstack-compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 default["openstack-compute"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
 
 case platform
-when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
+when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't fix this
   default["openstack-compute"]["platform"] = {
     "api_ec2_packages" => ["openstack-nova-api"],
     "api_ec2_service" => "openstack-nova-api",
@@ -210,6 +216,10 @@ when "fedora", "redhat", "centos" # :pragma-foodcritic: ~FC024 - won't fix this
     "iscsi_helper" => "ietadm",
     "package_overrides" => ""
   }
+  if platform == "suse"
+    default["openstack-compute"]["platform"]["common_packages"] = ["openstack-nova"]
+  end
+
 when "ubuntu"
   default["openstack-compute"]["platform"] = {
     "api_ec2_packages" => ["nova-api-ec2"],
