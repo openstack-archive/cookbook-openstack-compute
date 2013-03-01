@@ -49,11 +49,6 @@ api-os-compute
 -Includes recipe `nova-common`
 -Installs OS API and configures the service and endpoints in keystone
 
-api-os-volume
-----
--Includes recipe `nova-common`
--Installs the OpenStack volume service API
-
 compute
 ----
 -Includes recipes `nova-common`, `api-metadata`, `network`
@@ -96,11 +91,6 @@ vncproxy
 ----
 -Includes recipe `nova-common`
 -Installs and configures the vncproxy service for console access to VMs
-
-volume
-----
--Includes recipes `nova-common`, `api-os-volume`
--Installs nova volume service and configures the service and endpoints in keystone
 
 
 Attributes
