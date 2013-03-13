@@ -14,6 +14,9 @@ rabbit_virtual_host = <%= @rabbit_virtual_host %>
 verbose = True
 notification_topics = notifications,glance_notifications
 rpc_backend = ceilometer.openstack.common.rpc.impl_kombu
+<% if node["ceilometer"]["syslog"]["use"] %>
+log_config = /etc/openstack/logging.conf
+<% end %>
 
 [keystone_authtoken]
 paste.filter_factory = keystone.middleware.auth_token:filter_factory

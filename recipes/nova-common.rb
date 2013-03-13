@@ -26,6 +26,9 @@ end
 if platform?(%w(fedora redhat centos)) # :pragma-foodcritic: ~FC024 - won't fix this
   include_recipe "yum::epel"
 end
+if node["nova"]["syslog"]["use"]
+  include_recipe "openstack-common::logging"
+end
 
 platform_options = node["nova"]["platform"]
 
