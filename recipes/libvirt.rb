@@ -74,7 +74,8 @@ template "/etc/libvirt/libvirtd.conf" do
   group  "root"
   mode   00644
   variables(
-    :auth_tcp => node["openstack"]["compute"]["libvirt"]["auth_tcp"]
+    :auth_tcp => node["openstack"]["compute"]["libvirt"]["auth_tcp"],
+    :unix_sock_group => node["openstack"]["compute"]["libvirt"]["unix_sock_group"]
   )
 
   notifies :restart, "service[libvirt-bin]", :immediately
