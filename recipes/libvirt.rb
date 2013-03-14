@@ -26,6 +26,85 @@ platform_options["libvirt_packages"].each do |pkg|
   end
 end
 
+def set_boot_kernel_and_trigger_reboot(flavor='default')
+  # only default and xen flavor is supported by this helper right now
+  default_boot, current_default = 0, nil
+
+  # parse menu.lst, to find boot index for selected flavor
+  File.open('/boot/grub/menu.lst') do |f|
+    f.lines.each do |line|
+      current_default = line.scan(/\d/).first.to_i if line.start_with?('default')
+
+      if line.start_with?('title')
+        if flavor.eql?('xen')
+          # found boot index
+          break if line.include?('Xen')
+        else
+          # take first kernel as default, unless we are searching for xen
+          # kernel
+          break
+        end
+        default_boot += 1
+      end
+    end
+  end
+
+  # change default option for /boot/grub/menu.lst
+  unless current_default.eql?(default_boot)
+    puts "changed grub default to #{default_boot}"
+    %x[sed -i -e "s;^default.*;default #{default_boot};" /boot/grub/menu.lst]
+  end
+
+  # trigger reboot through reboot_handler, if kernel-$flavor is not yet
+  # running
+  unless %x[uname -r].include?(flavor)
+    node.run_state["reboot"] = true
+  end
+end
+
+# on suse nova-compute don't depends on any virtualization mechanism
+case node["platform"]
+when "suse"
+  case node["openstack"]["compute"]["libvirt"]["virt_type"]
+  when "kvm"
+    node["openstack"]["compute"]["platform"]["kvm_packages"].each do |pkg|
+      package pkg do
+        action :install
+      end
+    end
+    execute "loading kvm modules" do
+      command "grep -q vmx /proc/cpuinfo && /sbin/modprobe kvm-intel; grep -q svm /proc/cpuinfo && /sbin/modprobe kvm-amd; /sbin/modprobe vhost-net"
+    end
+    # NOTE(saschpe): Allow switching from XEN to KVM:
+    set_boot_kernel_and_trigger_reboot
+
+  when "xen"
+    node["openstack"]["compute"]["platform"]["xen_packages"].each do |pkg|
+      package pkg do
+        action :install
+      end
+    end
+    set_boot_kernel_and_trigger_reboot('xen')
+
+  when "qemu"
+    node["openstack"]["compute"]["platform"]["kvm_packages"].each do |pkg|
+      package pkg do
+        action :install
+      end
+    end
+
+  when "lxc"
+    node["openstack"]["compute"]["platform"]["lxc_packages"].each do |pkg|
+      package pkg do
+        action :install
+      end
+    end
+    service "boot.cgroup" do
+      action [:enable, :start]
+    end
+  end
+end
+
 group node["openstack"]["compute"]["libvirt"]["group"] do
   append true
   members [node["openstack"]["compute"]["group"]]

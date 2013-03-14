@@ -223,6 +223,9 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
   if platform == "suse"
     default["openstack"]["compute"]["platform"]["common_packages"] = ["openstack-nova"]
     default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/ceilometer"
+    default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
+    default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
+    default["openstack"]["compute"]["platform"]["lxc_packages"] = ["lxc"]
   end
 
 when "ubuntu"
