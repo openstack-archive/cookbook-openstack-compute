@@ -101,7 +101,7 @@ Attributes
 * `default["openstack-compute"]["service_user"]` - User name used by nova when interacting with keystone
 * `default["openstack-compute"]["service_role"]` - User role used by nova when interacting with keystone
 * `default["openstack-compute"]["floating_cmd"]` - Path to the `nova-manage floating create` wrapper script.
-* `default["openstack-compute"]["pki"]["signing_dir"]` - Defaults to `/tmp/nova-signing-dir`. Directory where `auth_token` middleware writes certificate
+* `default["openstack-compute"]["api"]["auth"]["cache_dir"]` - Directory where `auth_token` middleware writes certificate
 * `default["openstack-compute"]["config"]["volume_api_class"]` - API Class used for Volume support
 * `default["openstack-compute"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
 * `default["openstack-compute"]["compute"]["api"]["port"]` - Port on which OS API runs
@@ -119,8 +119,6 @@ Attributes
 * `default["openstack-compute"]["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
 * `default["openstack-compute"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
 * `default["openstack-compute"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
-* `default["openstack-compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
-* `default["openstack-compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 
 Networking Attributes
 ---------------------

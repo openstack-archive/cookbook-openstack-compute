@@ -33,10 +33,6 @@ default["openstack-compute"]["service_tenant_name"] = "service"
 default["openstack-compute"]["service_user"] = "nova"
 default["openstack-compute"]["service_role"] = "admin"
 
-# Controls for the PKI options in the auth_token middleware
-# that is in the paste INI files.
-default["openstack-compute"]["pki"]["signing_dir"] = "/tmp/nova-signing-dir"
-
 case platform
 when "fedora", "redhat", "centos", "ubuntu"
   default["openstack-compute"]["user"] = "nova"
@@ -180,8 +176,7 @@ default["openstack-compute"]["ratelimit"]["settings"] = {
 }
 default["openstack-compute"]["ratelimit"]["api"]["enabled"] = true
 
-# Keystone PKI signing directory. Only written to the filter:authtoken section
-# of the api-paste.ini when node["openstack"]["auth"]["strategy"] == "pki"
+# Keystone PKI signing directories
 default["openstack-compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 default["openstack-compute"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
 
