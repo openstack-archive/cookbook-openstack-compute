@@ -32,5 +32,9 @@ describe "openstack-compute::compute" do
       expected = "openstack-nova-compute"
       expect(@chef_run).to set_service_to_start_on_boot expected
     end
+
+    it "starts nova compute" do
+      expect(@chef_run).to start_service "openstack-nova-compute"
+    end
   end
 end
