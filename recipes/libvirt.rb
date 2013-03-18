@@ -26,8 +26,7 @@ platform_options["libvirt_packages"].each do |pkg|
   end
 end
 
-def set_boot_kernel_and_trigger_reboot(flavor='default')
-  # only default and xen flavor is supported by this helper right now
+def set_grub_default_kernel(flavor='default')
   default_boot, current_default = 0, nil
 
   # parse menu.lst, to find boot index for selected flavor
@@ -51,8 +50,30 @@ def set_boot_kernel_and_trigger_reboot(flavor='default')
 
   # change default option for /boot/grub/menu.lst
   unless current_default.eql?(default_boot)
-    puts "changed grub default to #{default_boot}"
+    ::Chef::Log.info("Changed grub default to #{default_boot}")
     %x[sed -i -e "s;^default.*;default #{default_boot};" /boot/grub/menu.lst]
+  end
+end
+
+def set_grub2_default_kernel(flavor='default')
+  boot_entry = "'openSUSE GNU/Linux, with Xen hypervisor'"
+  if system("grub2-set-default #{boot_entry}")
+    ::Chef::Log.info("Changed grub2 default to #{boot_entry}")
+  else
+    ::Chef::Application.fatal!(
+      "Unable to change grub2 default to #{boot_entry}")
+  end
+end
+
+def set_boot_kernel_and_trigger_reboot(flavor='default')
+  # only default and xen flavor is supported by this helper right now
+  if File.exists?("/boot/grub/menu.lst")
+    set_grub_default_kernel(flavor)
+  elsif File.exists?("/etc/default/grub")
+    set_grub2_default_kernel(flavor)
+  else
+    ::Chef::Application.fatal!(
+      "Unknown bootloader. Could not change boot kernel.")
   end
 
   # trigger reboot through reboot_handler, if kernel-$flavor is not yet
