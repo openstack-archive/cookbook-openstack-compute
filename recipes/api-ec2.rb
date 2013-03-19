@@ -64,17 +64,13 @@ keystone = config_by_role keystone_service_role, "keystone"
 ec2_admin_endpoint = endpoint "compute-ec2-admin"
 ec2_public_endpoint = endpoint "compute-ec2-api"
 
+bootstrap_token = secret "secrets", "keystone_bootstrap_token"
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
-ksadmin_tenant_name = keystone["admin_tenant_name"]
-ksadmin_user = keystone["admin_user"]
-ksadmin_pass = user_password ksadmin_user
 
 # Register Service Tenant
 keystone_register "Register Service Tenant" do
   auth_uri auth_uri
-  admin_tenant_name ksadmin_tenant_name
-  admin_user ksadmin_user
-  admin_password ksadmin_pass
+  bootstrap_token bootstrap_token
   tenant_name node["nova"]["service_tenant_name"]
   tenant_description "Service Tenant"
 
@@ -84,9 +80,7 @@ end
 # Register Service User
 keystone_register "Register Service User" do
   auth_uri auth_uri
-  admin_tenant_name ksadmin_tenant_name
-  admin_user ksadmin_user
-  admin_password ksadmin_pass
+  bootstrap_token bootstrap_token
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   user_pass service_pass
@@ -97,9 +91,7 @@ end
 # Grant Admin role to Service User for Service Tenant
 keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
   auth_uri auth_uri
-  admin_tenant_name ksadmin_tenant_name
-  admin_user ksadmin_user
-  admin_password ksadmin_pass
+  bootstrap_token bootstrap_token
   tenant_name node["nova"]["service_tenant_name"]
   user_name node["nova"]["service_user"]
   role_name node["nova"]["service_role"]
@@ -110,9 +102,7 @@ end
 # Register EC2 Service
 keystone_register "Register EC2 Service" do
   auth_uri auth_uri
-  admin_tenant_name ksadmin_tenant_name
-  admin_user ksadmin_user
-  admin_password ksadmin_pass
+  bootstrap_token bootstrap_token
   service_name "ec2"
   service_type "ec2"
   service_description "EC2 Compatibility Layer"
@@ -123,9 +113,7 @@ end
 # Register EC2 Endpoint
 keystone_register "Register Compute Endpoint" do
   auth_uri auth_uri
-  admin_tenant_name ksadmin_tenant_name
-  admin_user ksadmin_user
-  admin_password ksadmin_pass
+  bootstrap_token bootstrap_token
   service_type "ec2"
   endpoint_region node["nova"]["region"]
   endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
