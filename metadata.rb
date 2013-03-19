@@ -25,7 +25,7 @@ end
 
 depends "database"
 depends "glance"
-depends "keystone"
+depends "keystone", ">= 2012.2.1"
 depends "mysql"
 depends "openstack-common", ">= 0.1.7"
 depends "rabbitmq"
