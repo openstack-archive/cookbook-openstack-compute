@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-require "uri"
-
 class ::Chef::Recipe
   include ::Openstack
 end
@@ -61,73 +59,8 @@ service "nova-api-os-compute" do
   action :enable
 end
 
-keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = config_by_role keystone_service_role, "keystone"
 identity_admin_endpoint = endpoint "identity-admin"
-
-bootstrap_token = secret "secrets", "keystone_bootstrap_token"
-auth_uri = ::URI.decode identity_admin_endpoint.to_s
-
 service_pass = service_password "nova"
-
-nova_api_endpoint = endpoint "compute-api"
-
-# Register Service Tenant
-keystone_register "Register Service Tenant" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  tenant_description "Service Tenant"
-
-  action :create_tenant
-end
-
-# Register Service User
-keystone_register "Register Service User" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  user_name node["nova"]["service_user"]
-  user_pass service_pass
-  user_enabled "true" # Not required as this is the default
-
-  action :create_user
-end
-
-## Grant Admin role to Service User for Service Tenant ##
-keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  user_name node["nova"]["service_user"]
-  role_name node["nova"]["service_role"]
-
-  action :grant_role
-end
-
-# Register Compute Service
-keystone_register "Register Compute Service" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_name "nova"
-  service_type "compute"
-  service_description "Nova Compute Service"
-
-  action :create_service
-end
-
-# Register Compute Endpoing
-keystone_register "Register Compute Endpoint" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_type "compute"
-  endpoint_region node["nova"]["region"]
-  endpoint_adminurl ::URI.decode nova_api_endpoint.to_s
-  endpoint_internalurl ::URI.decode nova_api_endpoint.to_s
-  endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
-
-  action :create_endpoint
-end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
