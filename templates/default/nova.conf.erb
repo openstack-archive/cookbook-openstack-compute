@@ -9,8 +9,7 @@ dhcpbridge_flagfile=/etc/nova/nova.conf
 dhcpbridge=/usr/bin/nova-dhcpbridge
 logdir=/var/log/nova
 <% if node["nova"]["syslog"]["use"] %>
-use_syslog=<%= node["nova"]["syslog"]["use"] %>
-syslog_log_facility=<%= node["nova"]["syslog"]["facility"] %>
+log_config = /etc/openstack/logging.conf
 <% end %>
 state_path=/var/lib/nova
 lock_path=/var/lock/nova
