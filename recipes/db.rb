@@ -25,11 +25,6 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-# TODO(jaypipes): This is retarded, but nothing runs without this. The
-# database cookbook should handle this crap, but it doesn't. :(
-include_recipe "mysql::client"
-include_recipe "mysql::ruby"
-
 db_pass = db_password "nova"
 
 db_create_with_user("compute",
