@@ -130,3 +130,5 @@ admin_tenant_name = <%= node["openstack-compute"]["service_tenant_name"] %>
 admin_user = <%= node["openstack-compute"]["service_user"] %>
 admin_password = <%= @service_pass %>
 signing_dir = <%= node["openstack-compute"]["api"]["auth"]["cache_dir"] %>
+# Workaround for https://bugs.launchpad.net/nova/+bug/1154809
+auth_version = v2.0
