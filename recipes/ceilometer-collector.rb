@@ -21,7 +21,6 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "nova::ceilometer-db"
 include_recipe "nova::ceilometer-common"
 
 release = node["openstack"]["release"] || 'folsom'
@@ -33,16 +32,9 @@ conf_switch = "--config-file #{ceilometer_conf}"
 
 # db migration
 bash "migration" do
-  case release
-  when 'folsom'
-    code <<-EOF
-      #{install_dir}/tools/dbsync #{conf_switch}
-    EOF
-  else
-    code <<-EOF
-      ceilometer-dbsync #{conf_switch}
-    EOF
-  end
+  code <<-EOF
+    ceilometer-dbsync #{conf_switch}
+  EOF
 end
 
 service "ceilometer-collector" do

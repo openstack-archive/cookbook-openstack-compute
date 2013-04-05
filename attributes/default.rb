@@ -239,7 +239,10 @@ end
 # ceilometer specific attrs
 default["nova"]["ceilometer"]["api_logdir"] = "/var/log/ceilometer-api"
 default["nova"]["ceilometer"]["branch"] = 'stable/folsom'
+default["nova"]["ceilometer"]["repo"] = "git://github.com/openstack/ceilometer.git"
 default["nova"]["ceilometer"]["conf"] = "/etc/ceilometer/ceilometer.conf"
 default["nova"]["ceilometer"]["db"]["username"] = 'ceilometer'
 default["nova"]["ceilometer"]["dependent_pkgs"] = ['libxslt-dev', 'libxml2-dev']
 default["nova"]["ceilometer"]["install_dir"] = '/opt/ceilometer'
+default["nova"]["ceilometer"]["periodic_interval"] = 60
+default["nova"]["ceilometer"]["syslog"]["use"] = false

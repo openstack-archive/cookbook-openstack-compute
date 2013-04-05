@@ -23,18 +23,8 @@ end
 
 include_recipe "nova::ceilometer-common"
 
-api_logdir = node["nova"]["ceilometer"]["api_logdir"]
 nova_owner = node["nova"]["user"]
 nova_group = node["nova"]["group"]
-
-directory api_logdir do
-  owner nova_owner
-  group nova_group
-  mode  00755
-  recursive true
-
-  action :create
-end
 
 directory ::File.dirname(node["nova"]["api"]["auth"]["cache_dir"]) do
   owner node["nova"]["user"]
@@ -51,6 +41,6 @@ conf_switch = "--config-file #{ceilometer_conf}"
 service "ceilometer-api" do
   service_name "ceilometer-api"
   action [:start]
-  start_command "nohup #{bindir}/ceilometer-api -d --log-dir=#{api_logdir} #{conf_switch} &"
+  start_command "nohup #{bindir}/ceilometer-api #{conf_switch} &"
   stop_command "pkill -f ceilometer-api"
 end

@@ -64,10 +64,11 @@ directory install_dir do
   action :create
 end
 
-branch = node["nova"]["ceilometer"]["branch"]
+git_branch = node["nova"]["ceilometer"]["branch"]
+git_repo = node["nova"]["ceilometer"]["repo"]
 git install_dir do
-  repo "git://github.com/openstack/ceilometer.git"
-  reference branch
+  repo git_repo
+  reference git_branch
   action :sync
 end
 
@@ -103,13 +104,15 @@ ceilo_db_pass = db_password "ceilometer"
 ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : nil
 ceilo_db_uri = db_uri("metering", ceilo_db_user, ceilo_db_pass).to_s + ceilo_db_query
 
-service_user = node["nova"]["service_username"]
+service_user = node["nova"]["service_user"]
 service_pass = service_password "nova"
 service_tenant = node["nova"]["service_tenant_name"]
 
 # find the node attribute endpoint settings for the server holding a given role
 identity_admin_endpoint = endpoint "identity-admin"
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
+
+image_endpoint = endpoint "image-api"
 
 Chef::Log.debug("nova::ceilometer-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("nova::ceilometer-common:service_user|#{service_user}")
@@ -124,6 +127,7 @@ template ceilometer_conf do
   variables(
     :auth_uri => auth_uri,
     :database_connection => ceilo_db_uri,
+    :image_endpoint_host => image_endpoint.host,
     :identity_endpoint => identity_admin_endpoint,
     :rabbit_ipaddress => rabbit_ipaddress,
     :rabbit_pass => rabbit_pass,
