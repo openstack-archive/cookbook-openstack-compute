@@ -7,16 +7,18 @@ policy_file = /etc/ceilometer/policy.json
 sql_connection = <%= @sql_connection %>
 <%= @database_connection ? "database_connection = #{@database_connection}" : nil %>
 rabbit_userid = <%= @rabbit_user %>
-rabbit_password = <%= @rabbit_password %>
+rabbit_password = <%= @rabbit_pass %>
 rabbit_port = <%= @rabbit_port %>
 rabbit_host = <%= @rabbit_ipaddress %>
 rabbit_virtual_host = <%= @rabbit_virtual_host %>
 verbose = True
 notification_topics = notifications,glance_notifications
 rpc_backend = ceilometer.openstack.common.rpc.impl_kombu
-<% if node["ceilometer"]["syslog"]["use"] %>
+<% if node["nova"]["ceilometer"]["syslog"]["use"] %>
 log_config = /etc/openstack/logging.conf
 <% end %>
+glance_registry_host = <%= @image_endpoint_host %>
+periodic_interval = <%= node["nova"]["ceilometer"]["periodic_interval"] %>
 
 [keystone_authtoken]
 paste.filter_factory = keystone.middleware.auth_token:filter_factory
