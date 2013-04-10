@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+  ServerName <%= @vhost_server_name %>
+  ServerAdmin <%= node["apache"]["contact"] %>
+
+  <Location "/">
+    Order allow,deny
+    AuthType Basic
+    AuthName "Password Required"
+    AuthUserFile <%= @htpasswd_path %>
+    require valid-user
+    Allow from all
+  </Location>
+
+  ProxyPreserveHost On
+  ProxyPass / http://localhost:9000/
+  ProxyPassReverse / http://localhost:9000/
+</VirtualHost>

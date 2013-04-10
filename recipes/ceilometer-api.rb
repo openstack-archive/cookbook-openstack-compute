@@ -38,6 +38,40 @@ bindir = '/usr/local/bin'
 ceilometer_conf = node["nova"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
+include_recipe "apache2"
+include_recipe "apache2::mod_proxy"
+include_recipe "apache2::mod_proxy_http"
+
+apache_module "proxy"
+apache_module "proxy_http"
+
+vhost_server_name = node['nova']['ceilometer']['api']['vhost_server_name']
+htpasswd_path     = "#{node['apache']['dir']}/htpasswd"
+htpasswd_user     = node['nova']['ceilometer']['api']['auth']['user']
+htpasswd_password = node['nova']['ceilometer']['api']['auth']['password']
+
+template "#{node['apache']['dir']}/sites-available/meter" do
+  source "meter-site.conf.erb"
+  owner  'root'
+  group  'root'
+  variables(:vhost_server_name => vhost_server_name,
+            :htpasswd_path => htpasswd_path)
+end
+
+apache_site "meter", :enabled => true
+
+file htpasswd_path do
+  owner 'root'
+  group 'root'
+  mode "0755"
+end
+
+execute "add htpasswd file" do
+  command "/usr/bin/htpasswd -b #{htpasswd_path} #{htpasswd_user} #{htpasswd_password}"
+end
+
+service "apache2"
+
 service "ceilometer-api" do
   service_name "ceilometer-api"
   action [:start]

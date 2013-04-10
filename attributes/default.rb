@@ -237,7 +237,9 @@ when "ubuntu"
 end
 
 # ceilometer specific attrs
-default["nova"]["ceilometer"]["api_logdir"] = "/var/log/ceilometer-api"
+default["nova"]["ceilometer"]["api"]["vhost_server_name"] = "127.0.0.1"
+default["nova"]["ceilometer"]["api"]["auth"]["user"] = "admin"
+default["nova"]["ceilometer"]["api"]["auth"]["password"] = "adminpass"
 default["nova"]["ceilometer"]["branch"] = 'stable/folsom'
 default["nova"]["ceilometer"]["repo"] = "git://github.com/openstack/ceilometer.git"
 default["nova"]["ceilometer"]["conf"] = "/etc/ceilometer/ceilometer.conf"
