@@ -24,7 +24,7 @@ end
 
 include_recipe "nova::nova-common"
 include_recipe "python::pip"
-if node["ceilometer"]["syslog"]["use"]
+if node["nova"]["ceilometer"]["syslog"]["use"]
   include_recipe "openstack-common::logging"
 end
 
