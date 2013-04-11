@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-  ServerName <%= @vhost_server_name %>
+  ServerName <%= node['nova']['ceilometer']['api']['server_hostname'] %>
   ServerAdmin <%= node["apache"]["contact"] %>
 
   <Location "/">

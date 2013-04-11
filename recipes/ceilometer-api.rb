@@ -45,7 +45,6 @@ include_recipe "apache2::mod_proxy_http"
 apache_module "proxy"
 apache_module "proxy_http"
 
-vhost_server_name = node['nova']['ceilometer']['api']['vhost_server_name']
 htpasswd_path     = "#{node['apache']['dir']}/htpasswd"
 htpasswd_user     = node['nova']['ceilometer']['api']['auth']['user']
 htpasswd_password = node['nova']['ceilometer']['api']['auth']['password']
@@ -54,8 +53,7 @@ template "#{node['apache']['dir']}/sites-available/meter" do
   source "meter-site.conf.erb"
   owner  'root'
   group  'root'
-  variables(:vhost_server_name => vhost_server_name,
-            :htpasswd_path => htpasswd_path)
+  variables(:htpasswd_path => htpasswd_path)
 end
 
 apache_site "meter", :enabled => true
