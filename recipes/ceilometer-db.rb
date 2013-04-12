@@ -17,15 +17,21 @@
 # limitations under the License.
 #
 
-db_info = db 'metering'
-if db_info['db_type'] == 'mysql'
-  include_recipe "mysql::client"
-  include_recipe "mysql::ruby"
+# This recipe should be placed in the run_list of the node that
+# runs the database server that houses the Nova main database
 
-  db_password = db_password "ceilometer"
-
-  # method only supports mysql
-  db_create_with_user( db_info["name"],
-                       node["nova"]["ceilometer"]["db"]["username"],
-                       db_password)
+class ::Chef::Recipe
+  include ::Openstack
 end
+
+# TODO(jaypipes): This is retarded, but nothing runs without this. The
+# database cookbook should handle this crap, but it doesn't. :(
+include_recipe "mysql::client"
+include_recipe "mysql::ruby"
+
+db_pass = db_password "ceilometer"
+
+db_create_with_user("metering",
+  node["nova"]["db"]["username"],
+  db_pass
+)
