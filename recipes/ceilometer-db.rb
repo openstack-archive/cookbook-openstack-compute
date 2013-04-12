@@ -32,6 +32,6 @@ include_recipe "mysql::ruby"
 db_pass = db_password "ceilometer"
 
 db_create_with_user("metering",
-  node["nova"]["db"]["username"],
+  node["nova"]["ceilometer"]["db"]["username"],
   db_pass
 )
