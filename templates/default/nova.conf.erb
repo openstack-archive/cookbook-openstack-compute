@@ -140,3 +140,10 @@ keystone_ec2_url=<%= @identity_endpoint.scheme %>://<%= @identity_endpoint.host 
 # iscsi target user-land tool to use
 iscsi_helper=<%= @iscsi_helper %>
 volume_api_class=<%= node["nova"]["config"]["volume_api_class"] %>
+
+##### THIRD PARTY ADDITIONS #####
+<% if node["nova"]["plugins"] %>
+<% node["nova"]["plugins"].each do |p| %>
+--osapi_compute_extension=<%= p %>
+<% end %>
+<% end %>
