@@ -219,6 +219,10 @@ Syslog Configuration Attributes
 * `default["nova"]["syslog"]["facility"]` - Which facility nova should use when logging in python style (for example, `LOG_LOCAL1`)
 * `default["nova"]["syslog"]["config_facility"]` - Which facility nova should use when logging in rsyslog style (for example, local1)
 
+OSAPI Compute Extentions
+------------------------
+* `default["nova"]["plugins"]` - Array of osapi compute exntesions to add to nova
+
 Templates
 =====
 * `api-paste.ini.erb` - Paste config for nova API middleware
