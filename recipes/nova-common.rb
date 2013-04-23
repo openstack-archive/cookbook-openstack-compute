@@ -96,6 +96,8 @@ Chef::Log.debug("nova::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_
 Chef::Log.debug("nova::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
 vnc_bind_ip = node["network"]["ipaddress_#{node["nova"]["libvirt"]["bind_interface"]}"]
+xvpvnc_proxy_ip = node["network"]["ipaddress_#{node["nova"]["xvpvnc_proxy"]["bind_interface"]}"]
+novnc_proxy_ip = node["network"]["ipaddress_#{node["nova"]["novnc_proxy"]["bind_interface"]}"]
 
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
@@ -106,9 +108,9 @@ template "/etc/nova/nova.conf" do
     :sql_connection => sql_connection,
     :novncproxy_base_url => novnc_endpoint.to_s,
     :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
-    :xvpvncproxy_bind_host => node["network"]["ipaddress_#{node["nova"]["xvpvnc_proxy"]["bind_interface"]}"],
+    :xvpvncproxy_bind_host => xvpvnc_proxy_ip,
     :xvpvncproxy_bind_port => xvpvnc_endpoint.port,
-    :novncproxy_bind_host => node["network"]["ipaddress_#{node["nova"]["novnc_proxy"]["bind_interface"]}"],
+    :novncproxy_bind_host => novnc_proxy_ip,
     :novncproxy_bind_port => novnc_endpoint.port,
     :vncserver_listen => vnc_bind_ip,
     :vncserver_proxyclient_address => vnc_bind_ip,
