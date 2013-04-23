@@ -8,9 +8,9 @@ sql_connection = <%= @sql_connection %>
 <%= @database_connection ? "database_connection = #{@database_connection}" : nil %>
 rabbit_userid = <%= @rabbit_user %>
 rabbit_password = <%= @rabbit_pass %>
-rabbit_port = <%= @rabbit_port %>
+<%= "rabbit_port = #{@rabbit_port}" if @rabbit_port %>
 rabbit_host = <%= @rabbit_ipaddress %>
-rabbit_virtual_host = <%= @rabbit_virtual_host %>
+<%= "rabbit_virtual_host = #{@rabbit_virtual_host}" if @rabbit_virtual_host %>
 verbose = True
 notification_topics = notifications,glance_notifications
 rpc_backend = ceilometer.openstack.common.rpc.impl_kombu
