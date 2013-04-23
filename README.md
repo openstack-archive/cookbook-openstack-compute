@@ -195,12 +195,23 @@ By default, the `default["nova"]["networks"]` array has two networks:
 * `default["nova"]["networks"]["private"]["bridge"]` - Bridge to be created for accessing the VM network (e.g., br200)
 * `default["nova"]["networks"]["private"]["bridge_dev"]` - Physical device on which the bridge device should be attached (e.g., eth3)
 
+VNC Configuration Attributes
+----------------------------
+
+Requires [network_addr](https://gist.github.com/jtimberman/1040543) Ohai plugin.
+
+* `default["nova"]["xvpvnc_proxy"]["service_port"]` - Port on which XvpVNC runs
+* `default["nova"]["xvpvnc_proxy"]["bind_interface"]` - Determine the interface's IP address to bind to
+* `default["nova"]["novnc_proxy"]["service_port"]` - Port on which NoVNC runs
+* `default["nova"]["novnc_proxy"]["bind_interface"]` - Determine the interface's IP address to bind to
+
 Libvirt Configuration Attributes
 ---------------------------------
 
+Requires [network_addr](https://gist.github.com/jtimberman/1040543) Ohai plugin.
+
 * `default["nova"]["libvirt"]["virt_type"]` - What hypervisor software layer to use with libvirt (e.g., kvm, qemu)
-* `default["nova"]["libvirt"]["vncserver_listen"]` - IP address on the hypervisor that libvirt listens for VNC requests on
-* `default["nova"]["libvirt"]["vncserver_proxyclient_address"]` - IP address on the hypervisor that libvirt exposes for VNC requests on (should be the same as `vncserver_listen`)
+* `default["nova"]["libvirt"]["bind_interface"]` - Determine the interface's IP address (used for VNC).  IP address on the hypervisor that libvirt listens for VNC requests on, and IP address on the hypervisor that libvirt exposes for VNC requests on.
 * `default["nova"]["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
 * `default["nova"]["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
 * `default["nova"]["libvirt"]["ssh"]["public_key"]` - Public key to use if using SSH authentication to your libvirt layer
