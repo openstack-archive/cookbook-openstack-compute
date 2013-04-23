@@ -128,9 +128,15 @@ default["nova"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
                                                    "CoreFilter",
                                                    "SameHostFilter",
                                                    "DifferentHostFilter"]
+
+
+default["nova"]["xvpvnc_proxy"]["service_port"] = "6081"
+default["nova"]["xvpvnc_proxy"]["bind_interface"] = "lo"
+default["nova"]["novnc_proxy"]["service_port"] = "6080"
+default["nova"]["novnc_proxy"]["bind_interface"] = "lo"
+
 default["nova"]["libvirt"]["virt_type"] = "kvm"
-default["nova"]["libvirt"]["vncserver_listen"] = node["ipaddress"]
-default["nova"]["libvirt"]["vncserver_proxyclient_address"] = node["ipaddress"]
+default["nova"]["libvirt"]["bind_interface"] = "lo"
 default["nova"]["libvirt"]["auth_tcp"] = "none"
 default["nova"]["libvirt"]["remove_unused_base_images"] = true
 default["nova"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] = 3600

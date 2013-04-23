@@ -76,21 +76,19 @@ remove_unused_original_minimum_age_seconds=<%= node["nova"]["libvirt"]["remove_u
 checksum_base_images=<%= node["nova"]["libvirt"]["checksum_base_images"] %>
 
 ##### VNCPROXY #####
-<% if @novncproxy_base_url -%>
 novncproxy_base_url=<%= @novncproxy_base_url %>
-<% end -%>
-<% if @xvpvncproxy_base_url -%>
 xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
-<% end -%>
+
 # This is only required on the server running xvpvncproxy
-<% if @xvpvncproxy_bind_host -%>
 xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
-<% end -%>
-<% if @xvpvncproxy_bind_port -%>
-xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
-<% end -%>
-vncserver_listen=<%= node["nova"]["libvirt"]["vncserver_listen"] %>
-vncserver_proxyclient_address=<%= node["nova"]["libvirt"]["vncserver_proxyclient_address"] %>
+xvpvncproxy_port=<%= node["nova"]["xvpvnc_proxy"]["service_port"] %>
+
+# This is only required on the server running novncproxy
+novncproxy_host=<%= @novncproxy_bind_host %>
+novncproxy_port=<%= node["nova"]["novnc_proxy"]["service_port"] %>
+
+vncserver_listen=<%= @vncserver_listen %>
+vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
 ##### MISC #####
 # force backing images to raw format
