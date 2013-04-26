@@ -29,6 +29,13 @@ platform_options["nova_vncproxy_packages"].each do |pkg|
   end
 end
 
+# required to run more than one consoleauth process
+platform_options["memcache_python_packages"].each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 # required for vnc console authentication
 platform_options["nova_vncproxy_consoleauth_packages"].each do |pkg|
   package pkg do

@@ -90,6 +90,9 @@ novncproxy_port=<%= node["nova"]["novnc_proxy"]["service_port"] %>
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
+# store consoleauth tokens in memcached
+memcached_servers=<%= @memcache_servers %>
+
 ##### MISC #####
 # force backing images to raw format
 force_raw_images=<%= node["nova"]["config"]["force_raw_images"] %>

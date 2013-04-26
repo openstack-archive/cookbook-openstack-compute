@@ -75,6 +75,8 @@ ksadmin_tenant_name = keystone["admin_tenant_name"]
 ksadmin_user = keystone["admin_user"]
 ksadmin_pass = user_password ksadmin_user
 
+memcache_servers = memcached_servers.join ","
+
 # find the node attribute endpoint settings for the server holding a given role
 identity_admin_endpoint = endpoint "identity-admin"
 identity_endpoint = endpoint "identity-api"
@@ -110,6 +112,7 @@ template "/etc/nova/nova.conf" do
     :novncproxy_bind_host => novnc_proxy_ip,
     :vncserver_listen => vnc_bind_ip,
     :vncserver_proxyclient_address => vnc_bind_ip,
+    :memcache_servers => memcache_servers,
     :rabbit_ipaddress => rabbit_info["host"],
     :rabbit_user => rabbit_user,
     :rabbit_password => rabbit_pass,
