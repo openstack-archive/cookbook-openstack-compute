@@ -21,7 +21,7 @@ glance_registry_host = <%= @image_endpoint_host %>
 periodic_interval = <%= node["openstack"]["compute"]["ceilometer"]["periodic_interval"] %>
 
 [keystone_authtoken]
-paste.filter_factory = keystone.middleware.auth_token:filter_factory
+paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
 auth_host = <%= @identity_endpoint.host %>
 auth_port = <%= @identity_endpoint.port %>
 auth_protocol = <%= @identity_endpoint.scheme %>
