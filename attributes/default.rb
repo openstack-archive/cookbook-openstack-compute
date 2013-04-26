@@ -178,7 +178,7 @@ default["openstack-compute"]["ratelimit"]["api"]["enabled"] = true
 
 # Keystone PKI signing directories
 default["openstack-compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
-default["openstack-compute"]["ceilometer-api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
+default["openstack-compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
 
 case platform
 when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't fix this
@@ -216,6 +216,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
   }
   if platform == "suse"
     default["openstack-compute"]["platform"]["common_packages"] = ["openstack-nova"]
+    default["openstack-compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/ceilometer"
   end
 
 when "ubuntu"
