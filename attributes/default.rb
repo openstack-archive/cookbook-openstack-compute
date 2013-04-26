@@ -43,6 +43,7 @@ default["openstack"]["compute"]["ceilometer"]["syslog"]["use"] = false
 default["openstack"]["compute"]["ceilometer"]["api"]["server_hostname"] = "127.0.0.1"
 default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"] = "admin"
 default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"] = "adminpass"
+default["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] = "#{node['apache']['dir']}/sites-available/meter"
 
 # ceilometer specific attrs used if installing from source
 default["openstack"]["compute"]["platform"]["ceilometer_packages"] = nil
@@ -240,10 +241,11 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
   }
   if platform == "suse"
     default["openstack"]["compute"]["platform"]["common_packages"] = ["openstack-nova"]
-    default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/ceilometer"
     default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
     default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
     default["openstack"]["compute"]["platform"]["lxc_packages"] = ["lxc"]
+    default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/ceilometer"
+    default["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] = "#{node['apache']['dir']}/conf.d/ceilometer-api.conf"
     default["openstack"]["compute"]["platform"]["ceilometer_packages"] = {
       "common" => ["openstack-ceilometer"],
       "agent-central" => ["openstack-ceilometer-agent-central"],
