@@ -40,6 +40,13 @@ platform_options["common_packages"].each do |pkg|
   end
 end
 
+# required to run more than one consoleauth process
+platform_options["memcache_python_packages"].each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 directory "/etc/nova" do
   owner node["nova"]["user"]
   group node["nova"]["group"]
