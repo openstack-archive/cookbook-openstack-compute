@@ -20,7 +20,7 @@ keyboardVisible: false,
 
 // Render default UI and initialize settings menu
 load: function() {
-    var html = '', i, sheet, sheets, llevels;
+    var html = '', i, sheet, sheets, llevels, port;
 
     // Stylesheet selection dropdown
     sheet = WebUtil.selectStylesheet();
@@ -44,9 +44,21 @@ load: function() {
     // call twice to get around webkit bug
     WebUtil.selectStylesheet(UI.getSetting('stylesheet'));
 
+    // if port == 80 (or 443) then it won't be present and should be
+    // set manually
+    port = window.location.port;
+    if (!port) {
+        if (window.location.protocol.substring(0,5) == 'https') {            
+            port = 443;
+        }
+        else if (window.location.protocol.substring(0,4) == 'http') {            
+            port = 80;
+        }
+    }
+
     /* Populate the controls if defaults are provided in the URL */
     UI.initSetting('host', window.location.hostname);
-    UI.initSetting('port', window.location.port);
+    //UI.initSetting('port', window.location.port);
     UI.initSetting('port', port);
     UI.initSetting('password', '');
     UI.initSetting('encrypt', (window.location.protocol === "https:"));
