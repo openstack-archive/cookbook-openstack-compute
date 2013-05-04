@@ -1,4 +1,0 @@
-cookbook "cookbook-nova" do
-  lint(:ignore => ["FC024"])
-  runtimes []
-end

@@ -14,12 +14,6 @@ Requirements
 
 Chef 0.10.0 or higher required (for Chef environment use).
 
-Platforms
---------
-
-* Ubuntu-12.04
-* Fedora-17
-
 Cookbooks
 ---------
 
@@ -35,8 +29,8 @@ The following cookbooks are dependencies:
 * sysctl
 * yum
 
-Recipes
-=======
+Usage
+=====
 
 api-ec2
 ----
@@ -120,19 +114,14 @@ Attributes
 * `default["nova"]["service_user"]` - User name used by nova when interacting with keystone
 * `default["nova"]["service_role"]` - User role used by nova when interacting with keystone
 * `default["nova"]["floating_cmd"]` - Path to the `nova-manage floating create` wrapper script.
-
 * `default["nova"]["pki"]["signing_dir"]` - Defaults to `/tmp/nova-signing-dir`. Directory where `auth_token` middleware writes certificate
-
 * `default["nova"]["config"]["volume_api_class"]` - API Class used for Volume support
-
 * `default["nova"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
 * `default["nova"]["compute"]["api"]["port"]` - Port on which OS API runs
 * `default["nova"]["compute"]["api"]["version"]` - Version of the OS API used
-
 * `default["nova"]["compute"]["adminURL"]` - URL used to access the OS API for admin functions
 * `default["nova"]["compute"]["internalURL"]` - URL used to access the OS API for user functions from an internal network
 * `default["nova"]["compute"]["publicURL"]` - URL used to access the OS API for user functions from an external network
-
 * `default["nova"]["config"]["availability_zone"]` - Nova availability zone.  Usually set at the node level to place a compute node in another az
 * `default["nova"]["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
 * `default["nova"]["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
@@ -143,7 +132,6 @@ Attributes
 * `default["nova"]["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
 * `default["nova"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
 * `default["nova"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
-
 * `default["nova"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `default["nova"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 
@@ -232,20 +220,17 @@ Syslog Configuration Attributes
 
 OSAPI Compute Extentions
 ------------------------
+
 * `default["nova"]["plugins"]` - Array of osapi compute exntesions to add to nova
 
-Templates
+Testing
 =====
-* `api-paste.ini.erb` - Paste config for nova API middleware
-* `libvirt-bin.erb` - Initscript for starting libvirtd
-* `libvirtd-ssh-config` - Config file for libvirt SSH auth
-* `libvirtd-ssh-private-key.erb` - Private SSH key for libvirt SSH
-* `libvirtd-ssh-public-key.erb` - Public SSH key for libvirt SSH auth
-* `libvirtd.conf.erb` - Libvirt config file
-* `local_settings.py.erb` - Dashboard (horizon) config file
-* `nova.conf.erb` - Basic nova.conf file
-* `openrc.erb` - Contains environment variable settings to enable easy use of the nova client
 
+This cookbook is using [ChefSpec](https://github.com/acrmp/chefspec) for
+testing. Run the following before commiting. It will run your tests,
+and check for lint errors.
+
+    $ ./run_tests.bash
 
 License and Author
 ==================
@@ -258,9 +243,12 @@ Author:: William Kelly (<william.kelly@rackspace.com>)
 Author:: Darren Birkett (<darren.birkett@rackspace.co.uk>)
 Author:: Evan Callicoat (<evan.callicoat@rackspace.com>)
 Author:: Matt Ray (<matt@opscode.com>)
+Author:: Jay Pipes (<jaypipes@att.com>)
+Author:: John Dewey (<jdewey@att.com>)
 
 Copyright 2012, Rackspace US, Inc.
 Copyright 2012, Opscode, Inc.
+Copyright 2012-2013, AT&T Services, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
