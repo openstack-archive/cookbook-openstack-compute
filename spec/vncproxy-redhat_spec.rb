@@ -4,10 +4,8 @@ describe "nova::vncproxy" do
   describe "redhat" do
     before do
       nova_common_stubs
-      @chef_run = ::ChefSpec::ChefRunner.new(
-        :platform  => "redhat",
-        :log_level => ::LOG_LEVEL
-      ).converge "nova::vncproxy"
+      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run.converge "nova::vncproxy"
     end
 
     it "starts nova vncproxy on boot" do

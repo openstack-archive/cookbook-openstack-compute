@@ -4,10 +4,8 @@ describe "nova::libvirt" do
   describe "redhat" do
     before do
       nova_common_stubs
-      @chef_run = ::ChefSpec::ChefRunner.new(
-        :platform  => "redhat",
-        :log_level => ::LOG_LEVEL
-      ).converge "nova::libvirt"
+      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run.converge "nova::libvirt"
     end
 
     it "installs libvirt packages" do

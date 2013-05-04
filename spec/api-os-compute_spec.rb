@@ -4,11 +4,8 @@ describe "nova::api-os-compute" do
   describe "ubuntu" do
     before do
       nova_common_stubs
-      @chef_run = ::ChefSpec::ChefRunner.new(
-        :platform  => "ubuntu",
-        :version   => "12.04",
-        :log_level => ::LOG_LEVEL
-      ).converge "nova::api-os-compute"
+      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run.converge "nova::api-os-compute"
     end
 
     expect_runs_nova_common_recipe

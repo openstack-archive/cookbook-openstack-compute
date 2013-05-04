@@ -1,6 +1,15 @@
 require "chefspec"
 
 ::LOG_LEVEL = :fatal
+::REDHAT_OPTS = {
+    :platform  => "redhat",
+    :log_level => ::LOG_LEVEL
+}
+::UBUNTU_OPTS = {
+    :platform  => "ubuntu",
+    :version   => "12.04",
+    :log_level => ::LOG_LEVEL
+}
 
 def nova_common_stubs
   ::Chef::Recipe.any_instance.stub(:config_by_role).

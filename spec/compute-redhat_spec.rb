@@ -4,10 +4,8 @@ describe "nova::compute" do
   describe "redhat" do
     before do
       nova_common_stubs
-      @chef_run = ::ChefSpec::ChefRunner.new(
-        :platform  => "redhat",
-        :log_level => ::LOG_LEVEL
-      ).converge "nova::compute"
+      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run.converge "nova::compute"
     end
 
     it "does not install kvm when virt_type is 'kvm'" do

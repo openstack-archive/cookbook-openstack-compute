@@ -4,11 +4,8 @@ describe "nova::api-metadata" do
   describe "ubuntu" do
     before do
       nova_common_stubs
-      @chef_run = ::ChefSpec::ChefRunner.new(
-        :platform  => "ubuntu",
-        :version   => "12.04",
-        :log_level => ::LOG_LEVEL
-      ).converge "nova::api-metadata"
+      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run.converge "nova::api-metadata"
     end
 
     expect_runs_nova_common_recipe
