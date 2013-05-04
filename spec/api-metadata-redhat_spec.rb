@@ -7,7 +7,7 @@ describe "nova::api-metadata" do
       @chef_run = ::ChefSpec::ChefRunner.new(
         :platform  => "redhat",
         :log_level => ::LOG_LEVEL
-      ).converge "nova::api-ec2"
+      ).converge "nova::api-metadata"
     end
 
     it "installs metadata api packages" do

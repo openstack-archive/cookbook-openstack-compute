@@ -44,7 +44,7 @@ describe "nova::api-os-compute" do
 
     expect_creates_api_paste
 
-    it "notifies nova-api-metadata restart" do
+    it "notifies nova-api-os-compute restart" do
       @file = @chef_run.template "/etc/nova/api-paste.ini"
       expect(@file).to notify "service[nova-api-os-compute]", :restart
     end

@@ -10,6 +10,14 @@ describe "nova::compute" do
       ).converge "nova::compute"
     end
 
+    it "does not install kvm when virt_type is 'kvm'" do
+      pending "TODO: how to test this"
+    end
+
+    it "does not install qemu when virt_type is 'qemu'" do
+      pending "TODO: how to test this"
+    end
+
     it "installs nova compute packages" do
       expect(@chef_run).to upgrade_package "openstack-nova-compute"
     end
