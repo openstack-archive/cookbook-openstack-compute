@@ -4,8 +4,7 @@ describe "nova::compute" do
   describe "ubuntu" do
     before do
       nova_common_stubs
-      @chef_run_opts = ::UBUNTU_OPTS
-      @chef_run = ::ChefSpec::ChefRunner.new @chef_run_opts
+      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @chef_run.converge "nova::compute"
     end
 
@@ -24,7 +23,7 @@ describe "nova::compute" do
     end
 
     it "installs kvm when virt_type is 'kvm'" do
-      chef_run = ::ChefSpec::ChefRunner.new @chef_run_opts
+      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set["nova"]["libvirt"]["virt_type"] = "kvm"
       chef_run.converge "nova::compute"
@@ -34,7 +33,7 @@ describe "nova::compute" do
     end
 
     it "installs qemu when virt_type is 'qemu'" do
-      chef_run = ::ChefSpec::ChefRunner.new @chef_run_opts
+      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set["nova"]["libvirt"]["virt_type"] = "qemu"
       chef_run.converge "nova::compute"

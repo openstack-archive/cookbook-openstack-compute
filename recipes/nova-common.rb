@@ -188,5 +188,5 @@ template "/root/openrc" do
 end
 
 execute "enable nova login" do
-  command "usermod -s /bin/sh nova"
+  command "usermod -s /bin/sh #{node["nova"]["user"]}"
 end
