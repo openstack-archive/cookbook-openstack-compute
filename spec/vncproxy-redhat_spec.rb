@@ -9,7 +9,8 @@ describe "nova::vncproxy" do
     end
 
     it "starts nova vncproxy on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "openstack-nova-novncproxy"
+      expected = "openstack-nova-novncproxy"
+      expect(@chef_run).to set_service_to_start_on_boot expected
     end
 
     it "starts nova consoleauth" do
@@ -17,7 +18,8 @@ describe "nova::vncproxy" do
     end
 
     it "starts nova consoleauth on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "openstack-nova-console"
+      expected = "openstack-nova-console"
+      expect(@chef_run).to set_service_to_start_on_boot expected
     end
   end
 end

@@ -17,7 +17,8 @@ describe "nova::scheduler" do
     end
 
     it "starts nova scheduler on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "openstack-nova-scheduler"
+      expected = "openstack-nova-scheduler"
+      expect(@chef_run).to set_service_to_start_on_boot expected
     end
   end
 end

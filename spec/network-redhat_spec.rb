@@ -14,7 +14,8 @@ describe "nova::network" do
     end
 
     it "starts nova network on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "openstack-nova-network"
+      expected = "openstack-nova-network"
+      expect(@chef_run).to set_service_to_start_on_boot expected
     end
   end
 end

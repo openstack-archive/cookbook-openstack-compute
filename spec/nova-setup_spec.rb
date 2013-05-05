@@ -46,7 +46,11 @@ describe "nova::nova-setup" do
     it "adds range of floating ipv4 addresses" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["nova"]["network"]["floating"]["ipv4_range"] = "10.10.10.1,10.10.10.5"
+      node.set["nova"]["network"] = {
+        "floating" => {
+          "ipv4_range" => "10.10.10.1,10.10.10.5"
+        }
+      }
       chef_run.converge "nova::nova-setup"
 
       cmd = "/usr/local/bin/add_floaters.py --ip-range=10.10.10.1,10.10.10.5"
