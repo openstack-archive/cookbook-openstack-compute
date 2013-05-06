@@ -26,7 +26,9 @@ include_recipe "nova::api-metadata"
 include_recipe "nova::network"
 
 platform_options = node["nova"]["platform"]
-nova_compute_packages = platform_options["nova_compute_packages"]
+# Note(maoy): Make sure nova_compute_packages is not a node object.
+# so that this is compatible with chef 11 when being changed later.
+nova_compute_packages = Array(platform_options["nova_compute_packages"])
 
 if platform?(%w(ubuntu))
   if node["nova"]["libvirt"]["virt_type"] == "kvm"
