@@ -19,6 +19,7 @@ Cookbooks
 
 The following cookbooks are dependencies:
 
+* apache2
 * database
 * glance
 * keystone
