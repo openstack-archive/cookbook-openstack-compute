@@ -54,7 +54,7 @@ def expect_creates_nova_lock_dir
   end
 end
 
-def expect_creates_api_paste
+def expect_creates_api_paste service, action=:restart
   describe "api-paste.ini" do
     before do
       @file = @chef_run.template "/etc/nova/api-paste.ini"
@@ -70,6 +70,10 @@ def expect_creates_api_paste
 
     it "template contents" do
       pending "TODO: implement"
+    end
+
+    it "notifies nova-api-ec2 restart" do
+      expect(@file).to notify service, action
     end
   end
 end

@@ -22,11 +22,6 @@ describe "nova::api-ec2" do
       expect(@chef_run).to set_service_to_start_on_boot "nova-api-ec2"
     end
 
-    expect_creates_api_paste
-
-    it "notifies nova-api-ec2 restart" do
-      @file = @chef_run.template "/etc/nova/api-paste.ini"
-      expect(@file).to notify "service[nova-api-ec2]", :restart
-    end
+    expect_creates_api_paste "service[nova-api-ec2]"
   end
 end

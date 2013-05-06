@@ -22,11 +22,6 @@ describe "nova::api-metadata" do
       expect(@chef_run).to set_service_to_start_on_boot "nova-api-metadata"
     end
 
-    expect_creates_api_paste
-
-    it "notifies nova-api-metadata restart" do
-      @file = @chef_run.template "/etc/nova/api-paste.ini"
-      expect(@file).to notify "service[nova-api-metadata]", :restart
-    end
+    expect_creates_api_paste "service[nova-api-metadata]"
   end
 end

@@ -39,11 +39,6 @@ describe "nova::api-os-compute" do
       expect(@chef_run).to set_service_to_start_on_boot "nova-api-os-compute"
     end
 
-    expect_creates_api_paste
-
-    it "notifies nova-api-os-compute restart" do
-      @file = @chef_run.template "/etc/nova/api-paste.ini"
-      expect(@file).to notify "service[nova-api-os-compute]", :restart
-    end
+    expect_creates_api_paste "service[nova-api-os-compute]"
   end
 end
