@@ -26,6 +26,7 @@ platform_options["libvirt_packages"].each do |pkg|
 end
 
 execute "create libvirtd group" do
+  # Trim preceding whitespace from lines.
   command <<-EOH.gsub /^\s+/, ""
     groupadd -f libvirtd
     usermod -G libvirtd nova
