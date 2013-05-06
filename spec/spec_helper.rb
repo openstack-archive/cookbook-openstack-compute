@@ -20,9 +20,9 @@ def nova_common_stubs
     with("keystone", "keystone").and_return(
       {'admin_tenant_name' => 'admin-tenant', 'admin_user' => 'admin-user'}
     )
-  ::Chef::Recipe.any_instance.stub(:db_password).and_return []
-  ::Chef::Recipe.any_instance.stub(:user_password).and_return []
-  ::Chef::Recipe.any_instance.stub(:service_password).and_return []
+  ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new
+  ::Chef::Recipe.any_instance.stub(:user_password).and_return String.new
+  ::Chef::Recipe.any_instance.stub(:service_password).and_return String.new
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
 end
 
