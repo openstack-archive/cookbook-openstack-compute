@@ -12,14 +12,14 @@ describe "nova::api-os-compute" do
 
     expect_creates_nova_lock_dir
 
-    describe "/var/cache/nova/api" do
+    ##
+    #TODO: ChefSpec needs to handle guards better.  This
+    #      should only be created when pki is enabled.
+    describe "/var/cache/nova" do
       before do
         @dir = @chef_run.directory "/var/cache/nova"
       end
 
-      ##
-      #TODO: ChefSpec needs to handle guards better.  This
-      #      should only be created when pki is enabled.
       it "has proper owner" do
         expect(@dir).to be_owned_by "nova", "nova"
       end
