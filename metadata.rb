@@ -24,6 +24,7 @@ recipe "nova::vncproxy", "Installs and configures the vncproxy service for conso
   supports os
 end
 
+depends "apache2"
 depends "database"
 depends "glance"
 depends "keystone", ">= 2012.2.1"

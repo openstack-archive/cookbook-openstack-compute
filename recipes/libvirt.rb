@@ -25,11 +25,9 @@ platform_options["libvirt_packages"].each do |pkg|
   end
 end
 
-# oh fedora...
-bash "create libvirtd group" do
-  cwd "/tmp"
-  user "root"
-  code <<-EOH
+execute "create libvirtd group" do
+  # Trim preceding whitespace from lines.
+  command <<-EOH.gsub /^\s+/, ""
     groupadd -f libvirtd
     usermod -G libvirtd nova
   EOH
@@ -37,7 +35,6 @@ bash "create libvirtd group" do
   only_if { platform? %w{fedora redhat centos} }
 end
 
-# oh redhat
 # http://fedoraproject.org/wiki/Getting_started_with_OpenStack_EPEL#Installing_within_a_VM
 # ln -s /usr/libexec/qemu-kvm /usr/bin/qemu-system-x86_64
 link "/usr/bin/qemu-system-x86_64" do
