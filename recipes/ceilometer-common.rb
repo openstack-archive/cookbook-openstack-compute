@@ -133,6 +133,7 @@ template ceilometer_conf do
     :rabbit_pass => rabbit_pass,
     :rabbit_port => rabbit_port,
     :rabbit_user => rabbit_user,
+    :rabbit_virtual_host=> rabbit_vhost,
     :service_pass => service_pass,
     :service_tenant_name => service_tenant,
     :service_user => service_user,
