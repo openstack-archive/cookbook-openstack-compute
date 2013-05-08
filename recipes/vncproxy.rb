@@ -36,22 +36,24 @@ platform_options["nova_vncproxy_consoleauth_packages"].each do |pkg|
   end
 end
 
-# Brought in these patches, until we get an updated novnc package.
-# This allows vncproxy to run on port 80 and 443 (useful when fronting
-# it with a load balancer.
-# https://github.com/kanaka/noVNC/pull/245
-cookbook_file "/usr/share/novnc/vnc_auto.html" do
-  source "vnc_auto.html"
-  owner "root"
-  group "root"
-  mode 0644
-end
+if node["nova"]["apply_novnc_patch"]
+  # Brought in these patches, until we get an updated novnc package.
+  # This allows vncproxy to run on port 80 and 443 (useful when fronting
+  # it with a load balancer.
+  # https://github.com/kanaka/noVNC/pull/245
+  cookbook_file "/usr/share/novnc/vnc_auto.html" do
+    source "vnc_auto.html"
+    owner "root"
+    group "root"
+    mode 0644
+  end
 
-cookbook_file "/usr/share/novnc/include/ui.js" do
-  source "ui.js"
-  owner "root"
-  group "root"
-  mode 0644
+  cookbook_file "/usr/share/novnc/include/ui.js" do
+    source "ui.js"
+    owner "root"
+    group "root"
+    mode 0644
+  end
 end
 
 service "nova-vncproxy" do
