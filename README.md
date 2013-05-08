@@ -12,7 +12,8 @@ http://nova.openstack.org
 Requirements
 ============
 
-Chef 0.10.0 or higher required (for Chef environment use).
+* Chef 0.10.0 or higher required (for Chef environment use).
+* [Network Addr](https://gist.github.com/jtimberman/1040543) Ohai plugin.
 
 Cookbooks
 ---------
@@ -196,8 +197,6 @@ Requires [network_addr](https://gist.github.com/jtimberman/1040543) Ohai plugin.
 
 Libvirt Configuration Attributes
 ---------------------------------
-
-Requires [network_addr](https://gist.github.com/jtimberman/1040543) Ohai plugin.
 
 * `default["nova"]["libvirt"]["virt_type"]` - What hypervisor software layer to use with libvirt (e.g., kvm, qemu)
 * `default["nova"]["libvirt"]["bind_interface"]` - Determine the interface's IP address (used for VNC).  IP address on the hypervisor that libvirt listens for VNC requests on, and IP address on the hypervisor that libvirt exposes for VNC requests on.
