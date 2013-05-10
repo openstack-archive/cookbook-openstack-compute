@@ -5,6 +5,8 @@ describe "nova::nova-common" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @node = @chef_run.node
+      @node.set["nova"]["syslog"]["use"] = true
       @chef_run.converge "nova::nova-common"
     end
 
@@ -13,12 +15,14 @@ describe "nova::nova-common" do
     end
 
     it "runs logging recipe if node attributes say to" do
+      expect(@chef_run).to include_recipe "openstack-common::logging"
+    end
+
+    it "doesn't run logging recipe" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      node = chef_run.node
-      node.set["nova"]["syslog"]["use"] = true
       chef_run.converge "nova::nova-common"
 
-      expect(chef_run).to include_recipe "openstack-common::logging"
+      expect(chef_run).not_to include_recipe "openstack-common::logging"
     end
 
     it "installs nova common packages" do
