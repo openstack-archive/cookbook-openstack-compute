@@ -262,4 +262,3 @@ default["nova"]["plugins"] = nil
 
 # novnc patch
 default["nova"]["apply_novnc_patch"] = true
-

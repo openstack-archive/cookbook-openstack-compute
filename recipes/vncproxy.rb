@@ -45,14 +45,14 @@ if node["nova"]["apply_novnc_patch"]
     source "vnc_auto.html"
     owner "root"
     group "root"
-    mode 0644
+    mode 00644
   end
 
   cookbook_file "/usr/share/novnc/include/ui.js" do
     source "ui.js"
     owner "root"
     group "root"
-    mode 0644
+    mode 00644
   end
 end
 
