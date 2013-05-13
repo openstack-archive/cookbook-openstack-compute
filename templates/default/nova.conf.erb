@@ -98,6 +98,12 @@ memcached_servers=<%= @memcache_servers %>
 force_raw_images=<%= node["nova"]["config"]["force_raw_images"] %>
 allow_same_net_traffic=<%= node["nova"]["config"]["allow_same_net_traffic"] %>
 osapi_max_limit=<%= node["nova"]["config"]["osapi_max_limit"] %>
+# If you terminate SSL with a load balancer, the HTTP_HOST environ
+# variable that generates the request_uri in webob.Request will lack
+# the HTTPS scheme. Setting this overrides the default and allows
+# URIs returned in the various links collections to contain the proper
+# HTTPS endpoint.
+osapi_compute_link_prefix = <%= @osapi_compute_link_prefix %>
 snapshot_image_format=<%= node["nova"]["config"]["snapshot_image_format"] %>
 start_guests_on_host_boot=<%= node["nova"]["config"]["start_guests_on_host_boot"] %>
 resume_guests_state_on_host_boot=<%= node["nova"]["config"]["resume_guests_state_on_host_boot"] %>
