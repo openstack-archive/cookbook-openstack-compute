@@ -259,6 +259,3 @@ default["nova"]["ceilometer"]["syslog"]["use"] = false
 
 # plugins
 default["nova"]["plugins"] = nil
-
-# novnc patch
-default["nova"]["apply_novnc_patch"] = true
