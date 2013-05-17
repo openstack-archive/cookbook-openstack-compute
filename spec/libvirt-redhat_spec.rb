@@ -12,12 +12,10 @@ describe "openstack-compute::libvirt" do
       expect(@chef_run).to install_package "libvirt"
     end
 
-    it "creates libvirtd group and adds to nova" do
-      cmd = <<-EOH.gsub /^\s+/, ""
-        groupadd -f libvirtd
-        usermod -G libvirtd nova
-      EOH
-      expect(@chef_run).to execute_command cmd
+    it "creates libvirtd group and adds nova as a member" do
+      expect(@chef_run).to create_group "libvirtd"
+      libvirt_group = @chef_run.group("libvirtd")
+      libvirt_group.members.should == ["nova"]
     end
 
     it "symlinks qemu-kvm" do
