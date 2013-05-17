@@ -1,4 +1,4 @@
 require "spec_helper"
 
-describe "nova::default" do
+describe "openstack-compute::default" do
 end

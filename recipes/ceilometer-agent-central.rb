@@ -21,10 +21,10 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "nova::ceilometer-common"
+include_recipe "openstack-compute::ceilometer-common"
 
 bindir = '/usr/local/bin'
-ceilometer_conf = node["nova"]["ceilometer"]["conf"]
+ceilometer_conf = node["openstack-compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
 service "ceilometer-agent-central" do

@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::scheduler" do
+describe "openstack-compute::scheduler" do
   describe "ubuntu" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      @chef_run.converge "nova::scheduler"
+      @chef_run.converge "openstack-compute::scheduler"
     end
 
     expect_runs_nova_common_recipe

@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::nova-cert" do
+describe "openstack-compute::nova-cert" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::nova-cert"
+      @chef_run.converge "openstack-compute::nova-cert"
     end
 
     it "installs nova cert packages" do

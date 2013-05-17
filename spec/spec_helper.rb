@@ -28,7 +28,7 @@ end
 
 def expect_runs_nova_common_recipe
   it "installs nova-common" do
-    expect(@chef_run).to include_recipe "nova::nova-common"
+    expect(@chef_run).to include_recipe "openstack-compute::nova-common"
   end
 end
 

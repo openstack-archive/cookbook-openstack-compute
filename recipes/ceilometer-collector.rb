@@ -21,13 +21,13 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "nova::ceilometer-common"
+include_recipe "openstack-compute::ceilometer-common"
 
 release = node["openstack"]["release"] || 'folsom'
 
 bindir = '/usr/local/bin'
-install_dir = node["nova"]["ceilometer"]["install_dir"]
-ceilometer_conf = node["nova"]["ceilometer"]["conf"]
+install_dir = node["openstack-compute"]["ceilometer"]["install_dir"]
+ceilometer_conf = node["openstack-compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
 # db migration

@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::libvirt" do
+describe "openstack-compute::libvirt" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::libvirt"
+      @chef_run.converge "openstack-compute::libvirt"
     end
 
     it "installs libvirt packages" do

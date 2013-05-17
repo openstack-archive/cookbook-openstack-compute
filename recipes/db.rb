@@ -32,6 +32,6 @@ include_recipe "mysql::ruby"
 db_pass = db_password "nova"
 
 db_create_with_user("compute",
-  node["nova"]["db"]["username"],
+  node["openstack-compute"]["db"]["username"],
   db_pass
 )

@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::vncproxy" do
+describe "openstack-compute::vncproxy" do
   describe "ubuntu" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      @chef_run.converge "nova::vncproxy"
+      @chef_run.converge "openstack-compute::vncproxy"
     end
 
     expect_runs_nova_common_recipe

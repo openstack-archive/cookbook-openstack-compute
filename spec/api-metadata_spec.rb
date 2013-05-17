@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::api-metadata" do
+describe "openstack-compute::api-metadata" do
   describe "ubuntu" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      @chef_run.converge "nova::api-metadata"
+      @chef_run.converge "openstack-compute::api-metadata"
     end
 
     expect_runs_nova_common_recipe

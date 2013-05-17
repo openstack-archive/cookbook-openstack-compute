@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::nova-setup" do
+describe "openstack-compute::nova-setup" do
   describe "ubuntu" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      @chef_run.converge "nova::nova-setup"
+      @chef_run.converge "openstack-compute::nova-setup"
     end
 
     expect_runs_nova_common_recipe
@@ -36,8 +36,8 @@ describe "nova::nova-setup" do
     it "adds cidr range of floating ipv4 addresses" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["nova"]["network"]["floating"]["ipv4_cidr"] = "10.10.10.0/24"
-      chef_run.converge "nova::nova-setup"
+      node.set["openstack-compute"]["network"]["floating"]["ipv4_cidr"] = "10.10.10.0/24"
+      chef_run.converge "openstack-compute::nova-setup"
 
       cmd = "/usr/local/bin/add_floaters.py --cidr=10.10.10.0/24"
       expect(chef_run).to execute_command cmd
@@ -46,12 +46,12 @@ describe "nova::nova-setup" do
     it "adds range of floating ipv4 addresses" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["nova"]["network"] = {
+      node.set["openstack-compute"]["network"] = {
         "floating" => {
           "ipv4_range" => "10.10.10.1,10.10.10.5"
         }
       }
-      chef_run.converge "nova::nova-setup"
+      chef_run.converge "openstack-compute::nova-setup"
 
       cmd = "/usr/local/bin/add_floaters.py --ip-range=10.10.10.1,10.10.10.5"
       expect(chef_run).to execute_command cmd

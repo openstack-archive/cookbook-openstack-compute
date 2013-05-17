@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::nova-common" do
+describe "openstack-compute::nova-common" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::nova-common"
+      @chef_run.converge "openstack-compute::nova-common"
     end
 
     it "runs epel recipe" do

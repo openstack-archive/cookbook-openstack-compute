@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::network" do
+describe "openstack-compute::network" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::network"
+      @chef_run.converge "openstack-compute::network"
     end
 
     it "installs nova network packages" do

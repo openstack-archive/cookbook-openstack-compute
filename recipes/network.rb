@@ -17,9 +17,9 @@
 # limitations under the License.
 #
 
-include_recipe "nova::nova-common"
+include_recipe "openstack-compute::nova-common"
 
-platform_options = node["nova"]["platform"]
+platform_options = node["openstack-compute"]["platform"]
 
 platform_options["nova_network_packages"].each do |pkg|
   package pkg do

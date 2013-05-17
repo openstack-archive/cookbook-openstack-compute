@@ -1,13 +1,13 @@
 require "spec_helper"
 
-describe "nova::nova-common" do
+describe "openstack-compute::nova-common" do
   describe "ubuntu" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @node = @chef_run.node
-      @node.set["nova"]["syslog"]["use"] = true
-      @chef_run.converge "nova::nova-common"
+      @node.set["openstack-compute"]["syslog"]["use"] = true
+      @chef_run.converge "openstack-compute::nova-common"
     end
 
     it "doesn't run epel recipe" do
@@ -20,7 +20,7 @@ describe "nova::nova-common" do
 
     it "doesn't run logging recipe" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      chef_run.converge "nova::nova-common"
+      chef_run.converge "openstack-compute::nova-common"
 
       expect(chef_run).not_to include_recipe "openstack-common::logging"
     end

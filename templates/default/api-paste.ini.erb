@@ -1,4 +1,4 @@
-<%= node["nova"]["custom_template_banner"] %>
+<%= node["openstack-compute"]["custom_template_banner"] %>
 
 ############
 # Metadata #
@@ -82,7 +82,7 @@ use = call:nova.api.openstack.urlmap:urlmap_factory
 # NOTE(vish): use the following pipeline for deprecated auth
 # pipeline = faultwrap auth ratelimit osapi_compute_app_v2
 # NOTE(vish): use the following pipeline for keystone auth
-<% if node["nova"]["ratelimit"]["api"]["enabled"] -%>
+<% if node["openstack-compute"]["ratelimit"]["api"]["enabled"] -%>
 pipeline = faultwrap authtoken keystonecontext ratelimit osapi_compute_app_v2
 <% else -%>
 pipeline = faultwrap authtoken keystonecontext osapi_compute_app_v2
@@ -100,7 +100,7 @@ paste.filter_factory = nova.api.openstack.auth:NoAuthMiddleware.factory
 [filter:ratelimit]
 paste.filter_factory = nova.api.openstack.compute.limits:RateLimitingMiddleware.factory
 limits =
-<%= node["nova"]["ratelimit"]["settings"].values.inject([]) { |output,v| output << "  ( #{v['verb']}, #{v['uri']}, #{v['regex']}, #{v['limit']}, #{v['interval']} )" }.join(";\n") %>
+<%= node["openstack-compute"]["ratelimit"]["settings"].values.inject([]) { |output,v| output << "  ( #{v['verb']}, #{v['uri']}, #{v['regex']}, #{v['limit']}, #{v['interval']} )" }.join(";\n") %>
 
 [app:osapi_compute_app_v2]
 paste.app_factory = nova.api.openstack.compute:APIRouter.factory
@@ -126,9 +126,9 @@ paste.filter_factory = keystone.middleware.auth_token:filter_factory
 auth_host = <%= @identity_admin_endpoint.host %>
 auth_port = <%= @identity_admin_endpoint.port %>
 auth_protocol = <%= @identity_admin_endpoint.scheme %>
-admin_tenant_name = <%= node["nova"]["service_tenant_name"] %>
-admin_user = <%= node["nova"]["service_user"] %>
+admin_tenant_name = <%= node["openstack-compute"]["service_tenant_name"] %>
+admin_user = <%= node["openstack-compute"]["service_user"] %>
 admin_password = <%= @service_pass %>
 <% if node["openstack"]["auth"]["strategy"] == "pki" -%>
-signing_dir = <%= node["nova"]["api"]["auth"]["cache_dir"] %>
+signing_dir = <%= node["openstack-compute"]["api"]["auth"]["cache_dir"] %>
 <% end -%>

@@ -21,19 +21,19 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "nova::nova-common"
+include_recipe "openstack-compute::nova-common"
 
-platform_options = node["nova"]["platform"]
+platform_options = node["openstack-compute"]["platform"]
 
 directory "/var/lock/nova" do
-  owner node["nova"]["user"]
-  group node["nova"]["group"]
+  owner node["openstack-compute"]["user"]
+  group node["openstack-compute"]["group"]
   mode  00700
 end
 
-directory ::File.dirname(node["nova"]["api"]["auth"]["cache_dir"]) do
-  owner node["nova"]["user"]
-  group node["nova"]["group"]
+directory ::File.dirname(node["openstack-compute"]["api"]["auth"]["cache_dir"]) do
+  owner node["openstack-compute"]["user"]
+  group node["openstack-compute"]["group"]
   mode 00700
 
   only_if { node["openstack"]["auth"]["strategy"] == "pki" }
@@ -64,8 +64,8 @@ service_pass = service_password "nova"
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner  node["nova"]["user"]
-  group  node["nova"]["group"]
+  owner  node["openstack-compute"]["user"]
+  group  node["openstack-compute"]["group"]
   mode   00644
   variables(
     :identity_admin_endpoint => identity_admin_endpoint,

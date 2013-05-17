@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::scheduler" do
+describe "openstack-compute::scheduler" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::scheduler"
+      @chef_run.converge "openstack-compute::scheduler"
     end
 
     it "installs nova scheduler packages" do

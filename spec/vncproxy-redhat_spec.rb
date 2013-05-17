@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::vncproxy" do
+describe "openstack-compute::vncproxy" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::vncproxy"
+      @chef_run.converge "openstack-compute::vncproxy"
     end
 
     it "starts nova vncproxy on boot" do

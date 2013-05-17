@@ -32,39 +32,39 @@ ec2_admin_endpoint = endpoint "compute-ec2-admin"
 ec2_public_endpoint = endpoint "compute-ec2-api"
 
 # Register Service Tenant
-keystone_register "Register Service Tenant" do
+openstack_identity_register "Register Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
+  tenant_name node["openstack-compute"]["service_tenant_name"]
   tenant_description "Service Tenant"
 
   action :create_tenant
 end
 
 # Register Service User
-keystone_register "Register Service User" do
+openstack_identity_register "Register Service User" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  user_name node["nova"]["service_user"]
+  tenant_name node["openstack-compute"]["service_tenant_name"]
+  user_name node["openstack-compute"]["service_user"]
   user_pass service_pass
 
   action :create_user
 end
 
 ## Grant Admin role to Service User for Service Tenant ##
-keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
+openstack_identity_register "Grant 'admin' Role to Service User for Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  user_name node["nova"]["service_user"]
-  role_name node["nova"]["service_role"]
+  tenant_name node["openstack-compute"]["service_tenant_name"]
+  user_name node["openstack-compute"]["service_user"]
+  role_name node["openstack-compute"]["service_role"]
 
   action :grant_role
 end
 
 # Register Compute Service
-keystone_register "Register Compute Service" do
+openstack_identity_register "Register Compute Service" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   service_name "nova"
@@ -75,11 +75,11 @@ keystone_register "Register Compute Service" do
 end
 
 # Register Compute Endpoint
-keystone_register "Register Compute Endpoint" do
+openstack_identity_register "Register Compute Endpoint" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   service_type "compute"
-  endpoint_region node["nova"]["region"]
+  endpoint_region node["openstack-compute"]["region"]
   endpoint_adminurl ::URI.decode nova_api_endpoint.to_s
   endpoint_internalurl ::URI.decode nova_api_endpoint.to_s
   endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
@@ -88,39 +88,39 @@ keystone_register "Register Compute Endpoint" do
 end
 
 # Register Service Tenant
-keystone_register "Register Service Tenant" do
+openstack_identity_register "Register Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
+  tenant_name node["openstack-compute"]["service_tenant_name"]
   tenant_description "Service Tenant"
 
   action :create_tenant
 end
 
 # Register Service User
-keystone_register "Register Service User" do
+openstack_identity_register "Register Service User" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  user_name node["nova"]["service_user"]
+  tenant_name node["openstack-compute"]["service_tenant_name"]
+  user_name node["openstack-compute"]["service_user"]
   user_pass service_pass
 
   action :create_user
 end
 
 # Grant Admin role to Service User for Service Tenant
-keystone_register "Grant 'admin' Role to Service User for Service Tenant" do
+openstack_identity_register "Grant 'admin' Role to Service User for Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["nova"]["service_tenant_name"]
-  user_name node["nova"]["service_user"]
-  role_name node["nova"]["service_role"]
+  tenant_name node["openstack-compute"]["service_tenant_name"]
+  user_name node["openstack-compute"]["service_user"]
+  role_name node["openstack-compute"]["service_role"]
 
   action :grant_role
 end
 
 # Register EC2 Service
-keystone_register "Register EC2 Service" do
+openstack_identity_register "Register EC2 Service" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   service_name "ec2"
@@ -131,11 +131,11 @@ keystone_register "Register EC2 Service" do
 end
 
 # Register EC2 Endpoint
-keystone_register "Register Compute Endpoint" do
+openstack_identity_register "Register Compute Endpoint" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   service_type "ec2"
-  endpoint_region node["nova"]["region"]
+  endpoint_region node["openstack-compute"]["region"]
   endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
   endpoint_internalurl ::URI.decode ec2_public_endpoint.to_s
   endpoint_publicurl ::URI.decode ec2_public_endpoint.to_s

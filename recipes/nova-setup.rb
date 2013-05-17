@@ -21,7 +21,7 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "nova::nova-common"
+include_recipe "openstack-compute::nova-common"
 
 execute "nova-manage db sync" do
   command "nova-manage db sync"
@@ -30,7 +30,7 @@ execute "nova-manage db sync" do
 end
 
 next_vlan = 100
-node["nova"]["networks"].each do |net|
+node["openstack-compute"]["networks"].each do |net|
   execute "nova-manage network create --label=#{net['label']}" do
     # The only two required keys in each network Hash
     # are "label" and "ipv4_cidr".
@@ -61,7 +61,7 @@ node["nova"]["networks"].each do |net|
     end
     if net.has_key?("vlan")
         cmd += " --vlan=#{net['vlan']}"
-    elsif node["nova"]["network"]["network_manager"] == "nova.network.manager.VlanManager"
+    elsif node["openstack-compute"]["network"]["network_manager"] == "nova.network.manager.VlanManager"
         cmd += " --vlan=#{next_vlan}"
         next_vlan = next_vlan + 1
     end
@@ -73,20 +73,20 @@ node["nova"]["networks"].each do |net|
   end
 end
 
-cookbook_file node["nova"]["floating_cmd"] do
+cookbook_file node["openstack-compute"]["floating_cmd"] do
   source "add_floaters.py"
   mode   00755
 
   action :create
 end
 
-floating = node["nova"]["network"]["floating"]
+floating = node["openstack-compute"]["network"]["floating"]
 if floating && (floating["ipv4_cidr"] || floating["ipv4_range"])
   cmd = ""
   if floating["ipv4_cidr"]
-    cmd = "#{node["nova"]["floating_cmd"]} --cidr=#{floating["ipv4_cidr"]}"
+    cmd = "#{node["openstack-compute"]["floating_cmd"]} --cidr=#{floating["ipv4_cidr"]}"
   elsif floating["ipv4_range"]
-    cmd = "#{node["nova"]["floating_cmd"]} --ip-range=#{floating["ipv4_range"]}"
+    cmd = "#{node["openstack-compute"]["floating_cmd"]} --ip-range=#{floating["ipv4_range"]}"
   end
 
   execute "nova-manage floating create" do

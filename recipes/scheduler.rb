@@ -17,13 +17,13 @@
 # limitations under the License.
 #
 
-include_recipe "nova::nova-common"
+include_recipe "openstack-compute::nova-common"
 
-platform_options = node["nova"]["platform"]
+platform_options = node["openstack-compute"]["platform"]
 
 directory "/var/lock/nova" do
-  owner node["nova"]["user"]
-  group node["nova"]["group"]
+  owner node["openstack-compute"]["user"]
+  group node["openstack-compute"]["group"]
   mode  00700
 
   action :create

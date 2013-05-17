@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "nova::ceilometer-db" do
+describe "openstack-compute::ceilometer-db" do
   it "installs mysql packages" do
     @chef_run = converge
 
@@ -19,6 +19,6 @@ describe "nova::ceilometer-db" do
     ::Chef::Recipe.any_instance.stub(:db_password).with("ceilometer").
       and_return "test-pass"
 
-    ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS).converge "nova::ceilometer-db"
+    ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS).converge "openstack-compute::ceilometer-db"
   end
 end

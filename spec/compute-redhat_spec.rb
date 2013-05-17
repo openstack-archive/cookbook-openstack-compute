@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe "nova::compute" do
+describe "openstack-compute::compute" do
   describe "redhat" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
-      @chef_run.converge "nova::compute"
+      @chef_run.converge "openstack-compute::compute"
     end
 
     it "does not install kvm when virt_type is 'kvm'" do

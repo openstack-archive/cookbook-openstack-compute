@@ -1,21 +1,21 @@
 require "spec_helper"
 
-describe "nova::compute" do
+describe "openstack-compute::compute" do
   describe "ubuntu" do
     before do
       nova_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      @chef_run.converge "nova::compute"
+      @chef_run.converge "openstack-compute::compute"
     end
 
     expect_runs_nova_common_recipe
 
     it "runs api-metadata recipe" do
-      expect(@chef_run).to include_recipe "nova::api-metadata"
+      expect(@chef_run).to include_recipe "openstack-compute::api-metadata"
     end
 
     it "runs network recipe" do
-      expect(@chef_run).to include_recipe "nova::network"
+      expect(@chef_run).to include_recipe "openstack-compute::network"
     end
 
     it "installs nova compute packages" do
@@ -25,8 +25,8 @@ describe "nova::compute" do
     it "installs kvm when virt_type is 'kvm'" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["nova"]["libvirt"]["virt_type"] = "kvm"
-      chef_run.converge "nova::compute"
+      node.set["openstack-compute"]["libvirt"]["virt_type"] = "kvm"
+      chef_run.converge "openstack-compute::compute"
 
       expect(chef_run).to upgrade_package "nova-compute-kvm"
       expect(chef_run).not_to upgrade_package "nova-compute-qemu"
@@ -35,8 +35,8 @@ describe "nova::compute" do
     it "installs qemu when virt_type is 'qemu'" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["nova"]["libvirt"]["virt_type"] = "qemu"
-      chef_run.converge "nova::compute"
+      node.set["openstack-compute"]["libvirt"]["virt_type"] = "qemu"
+      chef_run.converge "openstack-compute::compute"
 
       expect(chef_run).to upgrade_package "nova-compute-qemu"
       expect(chef_run).not_to upgrade_package "nova-compute-kvm"
@@ -61,7 +61,7 @@ describe "nova::compute" do
     end
 
     it "runs libvirt recipe" do
-      expect(@chef_run).to include_recipe "nova::libvirt"
+      expect(@chef_run).to include_recipe "openstack-compute::libvirt"
     end
   end
 end

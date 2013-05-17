@@ -21,21 +21,21 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "nova::ceilometer-common"
+include_recipe "openstack-compute::ceilometer-common"
 
-nova_owner = node["nova"]["user"]
-nova_group = node["nova"]["group"]
+nova_owner = node["openstack-compute"]["user"]
+nova_group = node["openstack-compute"]["group"]
 
-directory ::File.dirname(node["nova"]["api"]["auth"]["cache_dir"]) do
-  owner node["nova"]["user"]
-  group node["nova"]["group"]
+directory ::File.dirname(node["openstack-compute"]["api"]["auth"]["cache_dir"]) do
+  owner node["openstack-compute"]["user"]
+  group node["openstack-compute"]["group"]
   mode 00700
 
   only_if { node["openstack"]["auth"]["strategy"] == "pki" }
 end
 
 bindir = '/usr/local/bin'
-ceilometer_conf = node["nova"]["ceilometer"]["conf"]
+ceilometer_conf = node["openstack-compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
 include_recipe "apache2"
@@ -46,8 +46,8 @@ apache_module "proxy"
 apache_module "proxy_http"
 
 htpasswd_path     = "#{node['apache']['dir']}/htpasswd"
-htpasswd_user     = node['nova']['ceilometer']['api']['auth']['user']
-htpasswd_password = node['nova']['ceilometer']['api']['auth']['password']
+htpasswd_user     = node["openstack-compute"]["ceilometer"]["api"]["auth"]["user"]
+htpasswd_password = node["openstack-compute"]["ceilometer"]["api"]["auth"]["password"]
 
 template "#{node['apache']['dir']}/sites-available/meter" do
   source "meter-site.conf.erb"

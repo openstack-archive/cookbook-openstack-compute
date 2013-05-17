@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "nova::db" do
+describe "openstack-compute::db" do
   it "installs mysql packages" do
     @chef_run = converge
 
@@ -19,6 +19,6 @@ describe "nova::db" do
     ::Chef::Recipe.any_instance.stub(:db_password).with("nova").
       and_return "test-pass"
 
-    ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS).converge "nova::db"
+    ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS).converge "openstack-compute::db"
   end
 end

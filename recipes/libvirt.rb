@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-platform_options = node["nova"]["platform"]
+platform_options = node["openstack-compute"]["platform"]
 
 platform_options["libvirt_packages"].each do |pkg|
   package pkg do
@@ -72,7 +72,7 @@ template "/etc/libvirt/libvirtd.conf" do
   group  "root"
   mode   00644
   variables(
-    :auth_tcp => node["nova"]["libvirt"]["auth_tcp"]
+    :auth_tcp => node["openstack-compute"]["libvirt"]["auth_tcp"]
   )
 
   notifies :restart, "service[libvirt-bin]", :immediately
