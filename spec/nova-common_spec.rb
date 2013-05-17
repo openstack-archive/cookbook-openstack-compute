@@ -3,7 +3,7 @@ require "spec_helper"
 describe "openstack-compute::nova-common" do
   describe "ubuntu" do
     before do
-      nova_common_stubs
+      compute_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @node = @chef_run.node
       @node.set["openstack-compute"]["syslog"]["use"] = true

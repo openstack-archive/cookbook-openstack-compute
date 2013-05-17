@@ -3,7 +3,7 @@ require "spec_helper"
 describe "openstack-compute::api-ec2" do
   describe "redhat" do
     before do
-      nova_common_stubs
+      compute_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::api-ec2"
     end

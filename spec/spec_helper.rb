@@ -11,13 +11,13 @@ require "chefspec"
     :log_level => ::LOG_LEVEL
 }
 
-def nova_common_stubs
+def compute_common_stubs
   ::Chef::Recipe.any_instance.stub(:config_by_role).
     with("rabbitmq-server", "queue").and_return(
       {'host' => 'rabbit-host', 'port' => 'rabbit-port'}
     )
   ::Chef::Recipe.any_instance.stub(:config_by_role).
-    with("keystone", "keystone").and_return(
+    with("os-identity", "openstack-identity").and_return(
       {'admin_tenant_name' => 'admin-tenant', 'admin_user' => 'admin-user'}
     )
   ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new

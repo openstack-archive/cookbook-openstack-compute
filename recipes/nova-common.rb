@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: nova-common
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,8 +76,8 @@ rabbit_user = node["openstack-compute"]["rabbit"]["username"]
 rabbit_pass = user_password "rabbit"
 rabbit_vhost = node["openstack-compute"]["rabbit"]["vhost"]
 
-keystone_service_role = node["openstack-compute"]["keystone_service_chef_role"]
-keystone = config_by_role keystone_service_role, "keystone"
+identity_service_role = node["openstack-compute"]["identity_service_chef_role"]
+keystone = config_by_role identity_service_role, "openstack-identity"
 
 ksadmin_tenant_name = keystone["admin_tenant_name"]
 ksadmin_user = keystone["admin_user"]
@@ -89,7 +90,7 @@ identity_admin_endpoint = endpoint "identity-admin"
 identity_endpoint = endpoint "identity-api"
 xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
 novnc_endpoint = endpoint "compute-novnc" || {}
-nova_api_endpoint = endpoint "compute-api" || {}
+compute_api_endpoint = endpoint "compute-api" || {}
 ec2_public_endpoint = endpoint "compute-ec2-api" || {}
 image_endpoint = endpoint "image-api"
 
@@ -98,7 +99,7 @@ Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:nova_api_endpoint|#{::URI.decode nova_api_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
@@ -132,7 +133,7 @@ template "/etc/nova/nova.conf" do
     :glance_api_port => image_endpoint.port,
     :iscsi_helper => platform_options["iscsi_helper"],
     :scheduler_default_filters => node["openstack-compute"]["scheduler"]["default_filters"].join(","),
-    :osapi_compute_link_prefix => nova_api_endpoint.to_s
+    :osapi_compute_link_prefix => compute_api_endpoint.to_s
   )
 end
 
@@ -182,7 +183,6 @@ template "/root/openrc" do
     :tenant => ksadmin_tenant_name,
     :password => ksadmin_pass,
     :identity_endpoint => identity_endpoint,
-    :nova_api_version => "1.1",
     :auth_strategy => "keystone",
     :ec2_url => ec2_public_endpoint.to_s
   )

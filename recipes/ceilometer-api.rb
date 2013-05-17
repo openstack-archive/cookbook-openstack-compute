@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: ceilometer-api
 #
 # Copyright 2012, AT&T
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,8 +24,8 @@ end
 
 include_recipe "openstack-compute::ceilometer-common"
 
-nova_owner = node["openstack-compute"]["user"]
-nova_group = node["openstack-compute"]["group"]
+compute_owner = node["openstack-compute"]["user"]
+compute_group = node["openstack-compute"]["group"]
 
 directory ::File.dirname(node["openstack-compute"]["api"]["auth"]["cache_dir"]) do
   owner node["openstack-compute"]["user"]

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: ceilometer-agent-central
 #
 # Copyright 2012, AT&T

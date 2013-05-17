@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: ceilometer-common
 #
 # Copyright 2012, AT&T
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,12 +53,12 @@ end
 # install source
 install_dir = node["openstack-compute"]["ceilometer"]["install_dir"]
 
-nova_owner = node["openstack-compute"]["user"]
-nova_group = node["openstack-compute"]["group"]
+compute_owner = node["openstack-compute"]["user"]
+compute_group = node["openstack-compute"]["group"]
 
 directory install_dir do
-  owner nova_owner
-  group nova_group
+  owner compute_owner
+  group compute_group
   mode  00755
   recursive true
 
@@ -77,8 +78,8 @@ python_pip install_dir do
 end
 
 directory ::File.dirname(ceilometer_conf) do
-  owner nova_owner
-  group nova_group
+  owner compute_owner
+  group compute_group
   mode  00755
 
   action :create
@@ -93,9 +94,9 @@ rabbit_pass = user_password "rabbit"
 rabbit_vhost = node["openstack-compute"]["rabbit"]["vhost"]
 
 # nova db
-nova_db_user = node["openstack-compute"]["db"]["username"]
-nova_db_pass = db_password "nova"
-nova_uri = db_uri("compute", nova_db_user, nova_db_pass)
+compute_db_user = node['openstack-compute']['db']['username']
+compute_db_pass = db_password "nova"
+compute_uri = db_uri("compute", compute_db_user, compute_db_pass)
 
 # ceilometer db
 ceilo_db_info = db 'metering'
@@ -121,8 +122,8 @@ Chef::Log.debug("openstack-compute::ceilometer-common:identity_admin_endpoint|#{
 
 template ceilometer_conf do
   source "ceilometer.conf.erb"
-  owner  nova_owner
-  group  nova_group
+  owner  compute_owner
+  group  compute_group
   mode   00644
   variables(
     :auth_uri => auth_uri,
@@ -137,13 +138,13 @@ template ceilometer_conf do
     :service_pass => service_pass,
     :service_tenant_name => service_tenant,
     :service_user => service_user,
-    :sql_connection => nova_uri 
+    :sql_connection => compute_uri
   )
 end
 
 cookbook_file "/etc/ceilometer/policy.json" do
   source "policy.json"
   mode 0755
-  owner nova_owner
-  group nova_group
+  owner compute_owner
+  group compute_group
 end

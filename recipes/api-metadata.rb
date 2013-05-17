@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: api-metadata
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ package "python-keystone" do
   action :upgrade
 end
 
-platform_options["nova_api_metadata_packages"].each do |pkg|
+platform_options["compute_api_metadata_packages"].each do |pkg|
   package pkg do
     options platform_options["package_overrides"]
 
@@ -48,7 +49,7 @@ platform_options["nova_api_metadata_packages"].each do |pkg|
 end
 
 service "nova-api-metadata" do
-  service_name platform_options["nova_api_metadata_service"]
+  service_name platform_options["compute_api_metadata_service"]
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
@@ -56,8 +57,7 @@ service "nova-api-metadata" do
 end
 
 identity_admin_endpoint = endpoint "identity-admin"
-keystone_service_role = node["openstack-compute"]["keystone_service_chef_role"]
-keystone = config_by_role keystone_service_role, "keystone"
+identity_service_role = node["openstack-compute"]["identity_service_chef_role"]
 
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
 service_pass = service_password "nova"

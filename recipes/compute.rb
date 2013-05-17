@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: compute
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,19 +27,19 @@ include_recipe "openstack-compute::api-metadata"
 include_recipe "openstack-compute::network"
 
 platform_options = node["openstack-compute"]["platform"]
-# Note(maoy): Make sure nova_compute_packages is not a node object.
+# Note(maoy): Make sure compute_compute_packages is not a node object.
 # so that this is compatible with chef 11 when being changed later.
-nova_compute_packages = Array(platform_options["nova_compute_packages"])
+compute_compute_packages = Array(platform_options["compute_compute_packages"])
 
 if platform?(%w(ubuntu))
   if node["openstack-compute"]["libvirt"]["virt_type"] == "kvm"
-    nova_compute_packages << "nova-compute-kvm"
+    compute_compute_packages << "nova-compute-kvm"
   elsif node["openstack-compute"]["libvirt"]["virt_type"] == "qemu"
-    nova_compute_packages << "nova-compute-qemu"
+    compute_compute_packages << "nova-compute-qemu"
   end
 end
 
-nova_compute_packages.each do |pkg|
+compute_compute_packages.each do |pkg|
   package pkg do
     options platform_options["package_overrides"]
 
@@ -54,7 +55,7 @@ cookbook_file "/etc/nova/nova-compute.conf" do
 end
 
 service "nova-compute" do
-  service_name platform_options["nova_compute_service"]
+  service_name platform_options["compute_compute_service"]
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
