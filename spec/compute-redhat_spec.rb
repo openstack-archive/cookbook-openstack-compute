@@ -9,11 +9,19 @@ describe "openstack-compute::compute" do
     end
 
     it "does not install kvm when virt_type is 'kvm'" do
-      pending "TODO: how to test this"
+      chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      node = chef_run.node
+      node.set["openstack-compute"]["libvirt"]["virt_type"] = "kvm"
+      chef_run.converge "openstack-compute::compute"
+      expect(chef_run).to_not upgrade_package "nova-compute-kvm"
     end
 
     it "does not install qemu when virt_type is 'qemu'" do
-      pending "TODO: how to test this"
+      chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      node = chef_run.node
+      node.set["openstack-compute"]["libvirt"]["virt_type"] = "qemu"
+      chef_run.converge "openstack-compute::compute"
+      expect(chef_run).to_not upgrade_package "nova-compute-qemu"
     end
 
     it "installs nova compute packages" do
