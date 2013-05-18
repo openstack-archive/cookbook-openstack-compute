@@ -1,6 +1,7 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: scheduler
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Copyright 2012, Rackspace US, Inc.
 #
@@ -29,7 +30,7 @@ directory "/var/lock/nova" do
   action :create
 end
 
-platform_options["nova_scheduler_packages"].each do |pkg|
+platform_options["compute_scheduler_packages"].each do |pkg|
   package pkg do
     options platform_options["package_overrides"]
 
@@ -38,7 +39,7 @@ platform_options["nova_scheduler_packages"].each do |pkg|
 end
 
 service "nova-scheduler" do
-  service_name platform_options["nova_scheduler_service"]
+  service_name platform_options["compute_scheduler_service"]
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 

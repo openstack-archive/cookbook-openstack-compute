@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: vncproxy
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ include_recipe "openstack-compute::nova-common"
 
 platform_options = node["openstack-compute"]["platform"]
 
-platform_options["nova_vncproxy_packages"].each do |pkg|
+platform_options["compute_vncproxy_packages"].each do |pkg|
   package pkg do
     options platform_options["package_overrides"]
 
@@ -30,14 +31,14 @@ platform_options["nova_vncproxy_packages"].each do |pkg|
 end
 
 # required for vnc console authentication
-platform_options["nova_vncproxy_consoleauth_packages"].each do |pkg|
+platform_options["compute_vncproxy_consoleauth_packages"].each do |pkg|
   package pkg do
     action :upgrade
   end
 end
 
 service "nova-vncproxy" do
-  service_name platform_options["nova_vncproxy_service"]
+  service_name platform_options["compute_vncproxy_service"]
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
@@ -45,7 +46,7 @@ service "nova-vncproxy" do
 end
 
 service "nova-consoleauth" do
-  service_name platform_options["nova_vncproxy_consoleauth_service"]
+  service_name platform_options["compute_vncproxy_consoleauth_service"]
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 

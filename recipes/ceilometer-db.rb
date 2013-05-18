@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: ceilometer
+# Cookbook Name:: openstack-compute
 # Recipe:: ceilometer-db
 #
 # Copyright 2012, AT&T

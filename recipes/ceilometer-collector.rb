@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: ceilometer-collector
 #
 # Copyright 2012, AT&T
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ end
 
 include_recipe "openstack-compute::ceilometer-common"
 
-release = node["openstack"]["release"] || 'folsom'
+release = node["openstack"]["release"] || 'grizzly'
 
 bindir = '/usr/local/bin'
 install_dir = node["openstack-compute"]["ceilometer"]["install_dir"]

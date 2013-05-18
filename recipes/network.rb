@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: network
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ include_recipe "openstack-compute::nova-common"
 
 platform_options = node["openstack-compute"]["platform"]
 
-platform_options["nova_network_packages"].each do |pkg|
+platform_options["compute_network_packages"].each do |pkg|
   package pkg do
     options platform_options["package_overrides"]
 
@@ -30,7 +31,7 @@ platform_options["nova_network_packages"].each do |pkg|
 end
 
 service "nova-network" do
-  service_name platform_options["nova_network_service"]
+  service_name platform_options["compute_network_service"]
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 

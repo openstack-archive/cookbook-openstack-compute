@@ -18,8 +18,8 @@ The following cookbooks are dependencies:
 
 * apache2
 * database
-* glance
-* keystone
+* openstack-image
+* openstack-identity
 * mysql
 * openstack-common
 * rabbitmq
@@ -91,7 +91,7 @@ vncproxy
 Attributes
 ==========
 
-* `default["openstack-compute"]["keystone_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
+* `default["openstack-compute"]["identity_service_chef_role"]` - The name of the Chef role that sets up the Keystone Service API
 * `default["openstack-compute"]["user"]` - User nova services run as
 * `default["openstack-compute"]["group"]` - Group nova services run as
 * `default["openstack-compute"]["db"]["username"]` - Username for nova database access
@@ -134,7 +134,7 @@ Basic networking configuration is controlled with the following attributes:
 * `default["openstack-compute"]["network"]["vlan_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses when VMs are assigned in a VLAN subnet.
 
 You can have the cookbook automatically create networks in Nova for you by adding a Hash to the `default["openstack-compute"]["networks"]` Array.
-**Note**: The `nova::nova-setup` recipe contains the code that creates these pre-defined networks.
+**Note**: The `openstack-compute::nova-setup` recipe contains the code that creates these pre-defined networks.
 
 Each Hash must contain the following keys:
 
@@ -232,10 +232,12 @@ License and Author
 | **Author**           |  Matt Ray (<matt@opscode.com>)                     |
 | **Author**           |  Jay Pipes (<jaypipes@att.com>)                    |
 | **Author**           |  John Dewey (<jdewey@att.com>)                     |
+| **Author**           |  Craig Tracey (<craigtracey@gmail.com>)            |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |
 | **Copyright**        |  Copyright (c) 2012-2013, AT&T Services, Inc.      |
+| **Copyright**        |  Copyright (c) 2013, Craig Tracey                  |
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: libvirt
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

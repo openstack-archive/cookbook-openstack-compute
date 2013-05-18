@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: nova
-# Recipe:: keystone_registration
+# Cookbook Name:: openstack-compute
+# Recipe:: identity_registration
 #
 # Copyright 2013, AT&T
 #

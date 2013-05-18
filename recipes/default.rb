@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: default
 #
 # Copyright 2012, Opscode, Inc.

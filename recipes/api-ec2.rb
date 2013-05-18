@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: nova
+# Cookbook Name:: openstack-compute
 # Recipe:: api-ec2
 #
 # Copyright 2012, Rackspace US, Inc.
