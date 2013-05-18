@@ -27,8 +27,8 @@ include_recipe "openstack-compute::ceilometer-common"
 release = node["openstack"]["release"] || 'grizzly'
 
 bindir = '/usr/local/bin'
-install_dir = node["openstack-compute"]["ceilometer"]["install_dir"]
-ceilometer_conf = node["openstack-compute"]["ceilometer"]["conf"]
+install_dir = node["openstack"]["compute"]["ceilometer"]["install_dir"]
+ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
 # db migration

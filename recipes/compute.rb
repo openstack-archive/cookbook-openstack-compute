@@ -26,15 +26,15 @@ include_recipe "openstack-compute::nova-common"
 include_recipe "openstack-compute::api-metadata"
 include_recipe "openstack-compute::network"
 
-platform_options = node["openstack-compute"]["platform"]
+platform_options = node["openstack"]["compute"]["platform"]
 # Note(maoy): Make sure compute_compute_packages is not a node object.
 # so that this is compatible with chef 11 when being changed later.
 compute_compute_packages = Array(platform_options["compute_compute_packages"])
 
 if platform?(%w(ubuntu))
-  if node["openstack-compute"]["libvirt"]["virt_type"] == "kvm"
+  if node["openstack"]["compute"]["libvirt"]["virt_type"] == "kvm"
     compute_compute_packages << "nova-compute-kvm"
-  elsif node["openstack-compute"]["libvirt"]["virt_type"] == "qemu"
+  elsif node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu"
     compute_compute_packages << "nova-compute-qemu"
   end
 end

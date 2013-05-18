@@ -24,7 +24,7 @@ end
 include_recipe "openstack-compute::ceilometer-common"
 
 bindir = '/usr/local/bin'
-ceilometer_conf = node["openstack-compute"]["ceilometer"]["conf"]
+ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
 service "ceilometer-agent-central" do

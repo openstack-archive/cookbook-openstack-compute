@@ -24,19 +24,19 @@ end
 
 include_recipe "openstack-compute::ceilometer-common"
 
-compute_owner = node["openstack-compute"]["user"]
-compute_group = node["openstack-compute"]["group"]
+compute_owner = node["openstack"]["compute"]["user"]
+compute_group = node["openstack"]["compute"]["group"]
 
-directory ::File.dirname(node["openstack-compute"]["api"]["auth"]["cache_dir"]) do
-  owner node["openstack-compute"]["user"]
-  group node["openstack-compute"]["group"]
+directory ::File.dirname(node["openstack"]["compute"]["api"]["auth"]["cache_dir"]) do
+  owner node["openstack"]["compute"]["user"]
+  group node["openstack"]["compute"]["group"]
   mode 00700
 
   only_if { node["openstack"]["auth"]["strategy"] == "pki" }
 end
 
 bindir = '/usr/local/bin'
-ceilometer_conf = node["openstack-compute"]["ceilometer"]["conf"]
+ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
 
 include_recipe "apache2"
@@ -47,8 +47,8 @@ apache_module "proxy"
 apache_module "proxy_http"
 
 htpasswd_path     = "#{node['apache']['dir']}/htpasswd"
-htpasswd_user     = node["openstack-compute"]["ceilometer"]["api"]["auth"]["user"]
-htpasswd_password = node["openstack-compute"]["ceilometer"]["api"]["auth"]["password"]
+htpasswd_user     = node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"]
+htpasswd_password = node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"]
 
 template "#{node['apache']['dir']}/sites-available/meter" do
   source "meter-site.conf.erb"

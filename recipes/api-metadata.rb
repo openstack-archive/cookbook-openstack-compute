@@ -26,11 +26,11 @@ end
 
 include_recipe "openstack-compute::nova-common"
 
-platform_options = node["openstack-compute"]["platform"]
+platform_options = node["openstack"]["compute"]["platform"]
 
 directory "/var/lock/nova" do
-  owner node["openstack-compute"]["user"]
-  group node["openstack-compute"]["group"]
+  owner node["openstack"]["compute"]["user"]
+  group node["openstack"]["compute"]["group"]
   mode  00700
 
   action :create
@@ -57,15 +57,15 @@ service "nova-api-metadata" do
 end
 
 identity_admin_endpoint = endpoint "identity-admin"
-identity_service_role = node["openstack-compute"]["identity_service_chef_role"]
+identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
 service_pass = service_password "nova"
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
-  owner  node["openstack-compute"]["user"]
-  group  node["openstack-compute"]["group"]
+  owner  node["openstack"]["compute"]["user"]
+  group  node["openstack"]["compute"]["group"]
   mode   00644
   variables(
     :identity_admin_endpoint => identity_admin_endpoint,

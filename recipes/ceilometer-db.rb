@@ -27,6 +27,6 @@ end
 db_pass = db_password "ceilometer"
 
 db_create_with_user("metering",
-  node["openstack-compute"]["ceilometer"]["db"]["username"],
+  node["openstack"]["compute"]["ceilometer"]["db"]["username"],
   db_pass
 )

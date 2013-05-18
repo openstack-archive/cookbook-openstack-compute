@@ -6,7 +6,7 @@ describe "openstack-compute::nova-common" do
       compute_common_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @node = @chef_run.node
-      @node.set["openstack-compute"]["syslog"]["use"] = true
+      @node.set["openstack"]["compute"]["syslog"]["use"] = true
       @chef_run.converge "openstack-compute::nova-common"
     end
 

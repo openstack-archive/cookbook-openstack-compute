@@ -27,11 +27,11 @@ end
 if platform?(%w(fedora redhat centos)) # :pragma-foodcritic: ~FC024 - won't fix this
   include_recipe "yum::epel"
 end
-if node["openstack-compute"]["syslog"]["use"]
+if node["openstack"]["compute"]["syslog"]["use"]
   include_recipe "openstack-common::logging"
 end
 
-platform_options = node["openstack-compute"]["platform"]
+platform_options = node["openstack"]["compute"]["platform"]
 
 platform_options["common_packages"].each do |pkg|
   package pkg do
@@ -49,8 +49,8 @@ platform_options["memcache_python_packages"].each do |pkg|
 end
 
 directory "/etc/nova" do
-  owner node["openstack-compute"]["user"]
-  group node["openstack-compute"]["group"]
+  owner node["openstack"]["compute"]["user"]
+  group node["openstack"]["compute"]["group"]
   mode  00700
 
   action :create
@@ -65,18 +65,18 @@ directory "/etc/nova/rootwrap.d" do
   action :create
 end
 
-rabbit_server_role = node["openstack-compute"]["rabbit_server_chef_role"]
+rabbit_server_role = node["openstack"]["compute"]["rabbit_server_chef_role"]
 rabbit_info = config_by_role rabbit_server_role, "queue"
 
-db_user = node["openstack-compute"]["db"]["username"]
+db_user = node["openstack"]["compute"]["db"]["username"]
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-rabbit_user = node["openstack-compute"]["rabbit"]["username"]
+rabbit_user = node["openstack"]["compute"]["rabbit"]["username"]
 rabbit_pass = user_password "rabbit"
-rabbit_vhost = node["openstack-compute"]["rabbit"]["vhost"]
+rabbit_vhost = node["openstack"]["compute"]["rabbit"]["vhost"]
 
-identity_service_role = node["openstack-compute"]["identity_service_chef_role"]
+identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 keystone = config_by_role identity_service_role, "openstack-identity"
 
 ksadmin_tenant_name = keystone["admin_tenant_name"]
@@ -103,14 +103,14 @@ Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.dec
 Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
-vnc_bind_ip = node["network"]["ipaddress_#{node["openstack-compute"]["libvirt"]["bind_interface"]}"]
-xvpvnc_proxy_ip = node["network"]["ipaddress_#{node["openstack-compute"]["xvpvnc_proxy"]["bind_interface"]}"]
-novnc_proxy_ip = node["network"]["ipaddress_#{node["openstack-compute"]["novnc_proxy"]["bind_interface"]}"]
+vnc_bind_ip = node["network"]["ipaddress_#{node["openstack"]["compute"]["libvirt"]["bind_interface"]}"]
+xvpvnc_proxy_ip = node["network"]["ipaddress_#{node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]}"]
+novnc_proxy_ip = node["network"]["ipaddress_#{node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]}"]
 
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
-  owner node["openstack-compute"]["user"]
-  group node["openstack-compute"]["group"]
+  owner node["openstack"]["compute"]["user"]
+  group node["openstack"]["compute"]["group"]
   mode 00644
   variables(
     :sql_connection => sql_connection,
@@ -132,7 +132,7 @@ template "/etc/nova/nova.conf" do
     :glance_api_ipaddress => image_endpoint.host,
     :glance_api_port => image_endpoint.port,
     :iscsi_helper => platform_options["iscsi_helper"],
-    :scheduler_default_filters => node["openstack-compute"]["scheduler"]["default_filters"].join(","),
+    :scheduler_default_filters => node["openstack"]["compute"]["scheduler"]["default_filters"].join(","),
     :osapi_compute_link_prefix => compute_api_endpoint.to_s
   )
 end
@@ -189,5 +189,5 @@ template "/root/openrc" do
 end
 
 execute "enable nova login" do
-  command "usermod -s /bin/sh #{node["openstack-compute"]["user"]}"
+  command "usermod -s /bin/sh #{node["openstack"]["compute"]["user"]}"
 end

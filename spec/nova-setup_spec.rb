@@ -36,7 +36,7 @@ describe "openstack-compute::nova-setup" do
     it "adds cidr range of floating ipv4 addresses" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack-compute"]["network"]["floating"]["ipv4_cidr"] = "10.10.10.0/24"
+      node.set["openstack"]["compute"]["network"]["floating"]["ipv4_cidr"] = "10.10.10.0/24"
       chef_run.converge "openstack-compute::nova-setup"
 
       cmd = "/usr/local/bin/add_floaters.py --cidr=10.10.10.0/24"
@@ -46,7 +46,7 @@ describe "openstack-compute::nova-setup" do
     it "adds range of floating ipv4 addresses" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack-compute"]["network"] = {
+      node.set["openstack"]["compute"]["network"] = {
         "floating" => {
           "ipv4_range" => "10.10.10.1,10.10.10.5"
         }

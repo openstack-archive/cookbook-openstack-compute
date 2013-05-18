@@ -25,7 +25,7 @@ describe "openstack-compute::compute" do
     it "installs kvm when virt_type is 'kvm'" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack-compute"]["libvirt"]["virt_type"] = "kvm"
+      node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "kvm"
       chef_run.converge "openstack-compute::compute"
 
       expect(chef_run).to upgrade_package "nova-compute-kvm"
@@ -35,7 +35,7 @@ describe "openstack-compute::compute" do
     it "installs qemu when virt_type is 'qemu'" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack-compute"]["libvirt"]["virt_type"] = "qemu"
+      node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "qemu"
       chef_run.converge "openstack-compute::compute"
 
       expect(chef_run).to upgrade_package "nova-compute-qemu"

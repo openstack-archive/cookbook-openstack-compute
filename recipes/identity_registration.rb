@@ -35,7 +35,7 @@ ec2_public_endpoint = endpoint "compute-ec2-api"
 openstack_identity_register "Register Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["openstack-compute"]["service_tenant_name"]
+  tenant_name node["openstack"]["compute"]["service_tenant_name"]
   tenant_description "Service Tenant"
 
   action :create_tenant
@@ -45,8 +45,8 @@ end
 openstack_identity_register "Register Service User" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["openstack-compute"]["service_tenant_name"]
-  user_name node["openstack-compute"]["service_user"]
+  tenant_name node["openstack"]["compute"]["service_tenant_name"]
+  user_name node["openstack"]["compute"]["service_user"]
   user_pass service_pass
 
   action :create_user
@@ -56,9 +56,9 @@ end
 openstack_identity_register "Grant 'admin' Role to Service User for Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["openstack-compute"]["service_tenant_name"]
-  user_name node["openstack-compute"]["service_user"]
-  role_name node["openstack-compute"]["service_role"]
+  tenant_name node["openstack"]["compute"]["service_tenant_name"]
+  user_name node["openstack"]["compute"]["service_user"]
+  role_name node["openstack"]["compute"]["service_role"]
 
   action :grant_role
 end
@@ -79,7 +79,7 @@ openstack_identity_register "Register Compute Endpoint" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   service_type "compute"
-  endpoint_region node["openstack-compute"]["region"]
+  endpoint_region node["openstack"]["compute"]["region"]
   endpoint_adminurl ::URI.decode nova_api_endpoint.to_s
   endpoint_internalurl ::URI.decode nova_api_endpoint.to_s
   endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
@@ -91,7 +91,7 @@ end
 openstack_identity_register "Register Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["openstack-compute"]["service_tenant_name"]
+  tenant_name node["openstack"]["compute"]["service_tenant_name"]
   tenant_description "Service Tenant"
 
   action :create_tenant
@@ -101,8 +101,8 @@ end
 openstack_identity_register "Register Service User" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["openstack-compute"]["service_tenant_name"]
-  user_name node["openstack-compute"]["service_user"]
+  tenant_name node["openstack"]["compute"]["service_tenant_name"]
+  user_name node["openstack"]["compute"]["service_user"]
   user_pass service_pass
 
   action :create_user
@@ -112,9 +112,9 @@ end
 openstack_identity_register "Grant 'admin' Role to Service User for Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
-  tenant_name node["openstack-compute"]["service_tenant_name"]
-  user_name node["openstack-compute"]["service_user"]
-  role_name node["openstack-compute"]["service_role"]
+  tenant_name node["openstack"]["compute"]["service_tenant_name"]
+  user_name node["openstack"]["compute"]["service_user"]
+  role_name node["openstack"]["compute"]["service_role"]
 
   action :grant_role
 end
@@ -135,7 +135,7 @@ openstack_identity_register "Register Compute Endpoint" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   service_type "ec2"
-  endpoint_region node["openstack-compute"]["region"]
+  endpoint_region node["openstack"]["compute"]["region"]
   endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
   endpoint_internalurl ::URI.decode ec2_public_endpoint.to_s
   endpoint_publicurl ::URI.decode ec2_public_endpoint.to_s

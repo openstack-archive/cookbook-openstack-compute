@@ -20,7 +20,7 @@
 
 include_recipe "openstack-compute::nova-common"
 
-platform_options = node["openstack-compute"]["platform"]
+platform_options = node["openstack"]["compute"]["platform"]
 
 platform_options["compute_vncproxy_packages"].each do |pkg|
   package pkg do

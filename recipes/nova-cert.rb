@@ -19,7 +19,7 @@
 
 include_recipe "openstack-compute::nova-common"
 
-platform_options=node["openstack-compute"]["platform"]
+platform_options=node["openstack"]["compute"]["platform"]
 
 platform_options["compute_cert_packages"].each do |pkg|
   package pkg do

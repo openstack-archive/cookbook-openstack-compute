@@ -20,11 +20,11 @@
 
 include_recipe "openstack-compute::nova-common"
 
-platform_options = node["openstack-compute"]["platform"]
+platform_options = node["openstack"]["compute"]["platform"]
 
 directory "/var/lock/nova" do
-  owner node["openstack-compute"]["user"]
-  group node["openstack-compute"]["group"]
+  owner node["openstack"]["compute"]["user"]
+  group node["openstack"]["compute"]["group"]
   mode  00700
 
   action :create

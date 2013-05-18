@@ -28,6 +28,6 @@ end
 db_pass = db_password "nova"
 
 db_create_with_user("compute",
-  node["openstack-compute"]["db"]["username"],
+  node["openstack"]["compute"]["db"]["username"],
   db_pass
 )

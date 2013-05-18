@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-  ServerName <%= node["openstack-compute"]["ceilometer"]["api"]["server_hostname"] %>
+  ServerName <%= node["openstack"]["compute"]["ceilometer"]["api"]["server_hostname"] %>
   ServerAdmin <%= node["apache"]["contact"] %>
 
   <Location "/">
