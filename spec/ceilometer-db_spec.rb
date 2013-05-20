@@ -1,13 +1,6 @@
 require "spec_helper"
 
 describe "openstack-compute::ceilometer-db" do
-  it "installs mysql packages" do
-    @chef_run = converge
-
-    expect(@chef_run).to include_recipe "mysql::client"
-    expect(@chef_run).to include_recipe "mysql::ruby"
-  end
-
   it "creates database and user" do
     ::Chef::Recipe.any_instance.should_receive(:db_create_with_user).
       with "metering", "ceilometer", "test-pass"
