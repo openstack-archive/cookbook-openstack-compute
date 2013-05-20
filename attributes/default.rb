@@ -198,6 +198,8 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "compute_network_service" => "openstack-nova-network",
     "compute_scheduler_packages" => ["openstack-nova-scheduler"],
     "compute_scheduler_service" => "openstack-nova-scheduler",
+    "compute_conductor_packages" => ["openstack-nova-conductor"],
+    "compute_conductor_service" => "openstack-nova-conductor",
     "compute_vncproxy_packages" => ["openstack-nova-novncproxy"], # me thinks this is right?
     "compute_vncproxy_service" => "openstack-nova-novncproxy",
     "compute_vncproxy_consoleauth_packages" => ["openstack-nova-console"],
@@ -233,6 +235,8 @@ when "ubuntu"
     "compute_network_service" => "nova-network",
     "compute_scheduler_packages" => ["nova-scheduler"],
     "compute_scheduler_service" => "nova-scheduler",
+    "compute_conductor_packages" => ["nova-conductor"],
+    "compute_conductor_service" => "nova-conductor",
     # Websockify is needed due to https://bugs.launchpad.net/ubuntu/+source/nova/+bug/1076442
     "compute_vncproxy_packages" => ["novnc", "websockify", "nova-novncproxy"],
     "compute_vncproxy_service" => "nova-novncproxy",
