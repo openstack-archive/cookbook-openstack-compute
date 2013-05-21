@@ -28,6 +28,4 @@ auth_protocol = <%= @identity_endpoint.scheme %>
 admin_tenant_name = <%= @service_tenant_name %>
 admin_user = <%= @service_user %>
 admin_password = <%= @service_pass %>
-<% if node["openstack"]["auth"]["strategy"] == "pki" -%>
-signing_dir = <%= node["openstack-compute"]["ceilometer-api"]["auth"]["cache_dir"] %>
-<% end -%>
+signing_dir = <%= node["openstack-compute"]["ceilometer"]["api"]["auth"]["cache_dir"] %>
