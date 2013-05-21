@@ -102,7 +102,7 @@ compute_uri = db_uri("compute", compute_db_user, compute_db_pass)
 ceilo_db_info = db 'metering'
 ceilo_db_user = node["openstack-compute"]["ceilometer"]["db"]["username"]
 ceilo_db_pass = db_password "ceilometer"
-ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : nil
+ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : ''
 ceilo_db_uri = db_uri("metering", ceilo_db_user, ceilo_db_pass).to_s + ceilo_db_query
 
 service_user = node["openstack-compute"]["service_user"]
