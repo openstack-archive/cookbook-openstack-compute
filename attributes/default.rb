@@ -167,6 +167,7 @@ default["openstack"]["compute"]["config"]["volume_api_class"] = "nova.volume.cin
 default["openstack"]["compute"]["config"]["quota_security_groups"] = 50
 default["openstack"]["compute"]["config"]["quota_security_group_rules"] = 20
 
+default["openstack"]["compute"]["api"]["auth_strategy"] = "keystone"
 default["openstack"]["compute"]["ratelimit"]["settings"] = {
     "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
     "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
@@ -174,7 +175,6 @@ default["openstack"]["compute"]["ratelimit"]["settings"] = {
     "changes-since-limit" => { "verb" => "GET", "uri" => "*changes-since*", "regex" => ".*changes-since.*", "limit" => "3", "interval" => "MINUTE" },
     "generic-delete-limit" => { "verb" => "DELETE", "uri" => "*", "regex" => ".*", "limit" => "100", "interval" => "MINUTE" }
 }
-default["openstack"]["compute"]["ratelimit"]["api"]["enabled"] = true
 
 # Keystone PKI signing directories
 default["openstack"]["compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
