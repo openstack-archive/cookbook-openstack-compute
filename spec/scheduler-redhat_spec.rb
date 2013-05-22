@@ -3,7 +3,7 @@ require "spec_helper"
 describe "openstack-compute::scheduler" do
   describe "redhat" do
     before do
-      compute_common_stubs
+      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::scheduler"
     end

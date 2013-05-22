@@ -3,7 +3,7 @@ require "spec_helper"
 describe "openstack-compute::conductor" do
   describe "ubuntu" do
     before do
-      compute_common_stubs
+      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @chef_run.converge "openstack-compute::conductor"
     end
