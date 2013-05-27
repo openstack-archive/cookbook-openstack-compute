@@ -27,9 +27,9 @@ include_recipe "openstack-compute::ceilometer-common"
 compute_owner = node["openstack"]["compute"]["user"]
 compute_group = node["openstack"]["compute"]["group"]
 
-directory ::File.dirname(node["openstack"]["compute"]["api"]["auth"]["cache_dir"]) do
-  owner node["openstack"]["compute"]["user"]
-  group node["openstack"]["compute"]["group"]
+directory ::File.dirname(node["openstack"]["compute"]["ceilometer-api"]["auth"]["cache_dir"]) do
+  owner compute_owner
+  group compute_group
   mode 00700
 
   only_if { node["openstack"]["auth"]["strategy"] == "pki" }
