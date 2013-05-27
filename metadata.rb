@@ -27,7 +27,7 @@ end
 depends "apache2"
 depends "database"
 depends "openstack-image"
-depends "openstack-identity", ">= 2012.2.1"
+depends "openstack-identity", ">= 7.0.0"
 depends "mysql"
 depends "openstack-common", ">= 0.1.7"
 depends "rabbitmq"
