@@ -11,7 +11,7 @@ require "chefspec"
     :log_level => ::LOG_LEVEL
 }
 
-def compute_common_stubs
+def compute_stubs
   ::Chef::Recipe.any_instance.stub(:config_by_role).
     with("rabbitmq-server", "queue").and_return(
       {'host' => 'rabbit-host', 'port' => 'rabbit-port'}
@@ -20,9 +20,13 @@ def compute_common_stubs
     with("os-identity", "openstack-identity").and_return(
       {'admin_tenant_name' => 'admin-tenant', 'admin_user' => 'admin-user'}
     )
+  ::Chef::Recipe.any_instance.stub(:secret).
+    with("secrets", "openstack_identity_bootstrap_token").
+    and_return "bootstrap-token"
   ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new
   ::Chef::Recipe.any_instance.stub(:user_password).and_return String.new
-  ::Chef::Recipe.any_instance.stub(:service_password).and_return String.new
+  ::Chef::Recipe.any_instance.stub(:service_password).with("nova").
+    and_return "nova-pass"
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
 end
 
