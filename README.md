@@ -18,10 +18,10 @@ The following cookbooks are dependencies:
 
 * apache2
 * database
-* openstack-image
-* openstack-identity
 * mysql
 * openstack-common
+* openstack-identity
+* openstack-image
 * rabbitmq
 * selinux (Fedora)
 * sysctl
