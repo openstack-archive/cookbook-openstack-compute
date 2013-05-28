@@ -4,7 +4,7 @@
 
 # LOGS/STATE
 verbose=true
-auth_strategy=keystone
+auth_strategy=<%= node["openstack"]["compute"]["api"]["auth_strategy"] %>
 dhcpbridge_flagfile=/etc/nova/nova.conf
 dhcpbridge=/usr/bin/nova-dhcpbridge
 logdir=/var/log/nova
