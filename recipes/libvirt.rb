@@ -26,14 +26,12 @@ platform_options["libvirt_packages"].each do |pkg|
   end
 end
 
-execute "create libvirtd group" do
-  # Trim preceding whitespace from lines.
-  command <<-EOH.gsub /^\s+/, ""
-    groupadd -f libvirtd
-    usermod -G libvirtd nova
-  EOH
+group node["openstack"]["compute"]["libvirt"]["group"] do
+  append true
+  members [node["openstack"]["compute"]["group"]]
 
-  only_if { platform? %w{fedora redhat centos} }
+  action :create
+  only_if { platform? %w{suse fedora redhat centos} }
 end
 
 # http://fedoraproject.org/wiki/Getting_started_with_OpenStack_EPEL#Installing_within_a_VM
@@ -75,7 +73,7 @@ template "/etc/libvirt/libvirtd.conf" do
   mode   00644
   variables(
     :auth_tcp => node["openstack"]["compute"]["libvirt"]["auth_tcp"],
-    :unix_sock_group => node["openstack"]["compute"]["libvirt"]["unix_sock_group"]
+    :libvirt_group => node["openstack"]["compute"]["libvirt"]["group"]
   )
 
   notifies :restart, "service[libvirt-bin]", :immediately
