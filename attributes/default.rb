@@ -145,6 +145,11 @@ default["openstack"]["compute"]["libvirt"]["remove_unused_base_images"] = true
 default["openstack"]["compute"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] = 3600
 default["openstack"]["compute"]["libvirt"]["remove_unused_original_minimum_age_seconds"] = 3600
 default["openstack"]["compute"]["libvirt"]["checksum_base_images"] = false
+if node["platform"] == "suse"
+  default["openstack"]["compute"]["libvirt"]["unix_sock_group"] = "libvirt"
+else
+  default["openstack"]["compute"]["libvirt"]["unix_sock_group"] = "libvirtd"
+end
 default["openstack"]["compute"]["config"]["availability_zone"] = "nova"
 default["openstack"]["compute"]["config"]["storage_availability_zone"] = "nova"
 default["openstack"]["compute"]["config"]["default_schedule_zone"] = "nova"
