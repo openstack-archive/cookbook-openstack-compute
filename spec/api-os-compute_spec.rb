@@ -39,6 +39,10 @@ describe "openstack-compute::api-os-compute" do
       expect(@chef_run).to set_service_to_start_on_boot "nova-api-os-compute"
     end
 
+    it "starts openstack api now" do
+      expect(@chef_run).to start_service "nova-api-os-compute"
+    end
+
     expect_creates_api_paste "service[nova-api-os-compute]"
   end
 end
