@@ -37,12 +37,12 @@ describe "openstack-compute::libvirt" do
     end
 
     it "disables default libvirt network" do
-      cmd = "virsh net-autostart default --disable" 
+      cmd = "virsh net-autostart default --disable"
       expect(@chef_run).to execute_command cmd
     end
 
     it "deletes default libvirt network" do
-      cmd = "virsh net-destroy default" 
+      cmd = "virsh net-destroy default"
       expect(@chef_run).to execute_command cmd
     end
 

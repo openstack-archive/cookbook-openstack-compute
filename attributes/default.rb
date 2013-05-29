@@ -53,28 +53,28 @@ default["openstack"]["compute"]["floating_cmd"] = "/usr/local/bin/add_floaters.p
 
 # TODO(shep): This should probably be ["openstack"]["compute"]["network"]["fixed"]
 default["openstack"]["compute"]["networks"] = [
-        {
-                "label" => "public",
-                "ipv4_cidr" => "192.168.100.0/24",
-                "num_networks" => "1",
-                "network_size" => "255",
-                "bridge" => "br100",
-                "bridge_dev" => "eth2",
-                "dns1" => "8.8.8.8",
-                "dns2" => "8.8.4.4",
-                "multi_host" => 'T'
-        },
-        {
-                "label" => "private",
-                "ipv4_cidr" => "192.168.200.0/24",
-                "num_networks" => "1",
-                "network_size" => "255",
-                "bridge" => "br200",
-                "bridge_dev" => "eth3",
-                "dns1" => "8.8.8.8",
-                "dns2" => "8.8.4.4",
-                "multi_host" => 'T'
-        }
+  {
+    "label" => "public",
+    "ipv4_cidr" => "192.168.100.0/24",
+    "num_networks" => "1",
+    "network_size" => "255",
+    "bridge" => "br100",
+    "bridge_dev" => "eth2",
+    "dns1" => "8.8.8.8",
+    "dns2" => "8.8.4.4",
+    "multi_host" => 'T'
+  },
+  {
+    "label" => "private",
+    "ipv4_cidr" => "192.168.200.0/24",
+    "num_networks" => "1",
+    "network_size" => "255",
+    "bridge" => "br200",
+    "bridge_dev" => "eth3",
+    "dns1" => "8.8.8.8",
+    "dns2" => "8.8.4.4",
+    "multi_host" => 'T'
+  }
 ]
 
 # For VLAN Networking, do the following:
@@ -110,7 +110,7 @@ default["openstack"]["compute"]["networks"] = [
 #         "vlan": "102",
 #         "ipv4_cidr": "10.0.102.0/24"
 #       },
-#    ]
+#   ]
 
 default["openstack"]["compute"]["network"]["multi_host"] = false
 default["openstack"]["compute"]["network"]["fixed_range"] = default["openstack"]["compute"]["networks"][0]["ipv4_cidr"]
@@ -124,13 +124,14 @@ default["openstack"]["compute"]["network"]["vlan_interface"] = "eth0"
 default["openstack"]["compute"]["network"]["use_single_default_gateway"] = false
 
 default["openstack"]["compute"]["scheduler"]["scheduler_driver"] = "nova.scheduler.filter_scheduler.FilterScheduler"
-default["openstack"]["compute"]["scheduler"]["default_filters"] = ["AvailabilityZoneFilter",
-                                                   "RamFilter",
-                                                   "ComputeFilter",
-                                                   "CoreFilter",
-                                                   "SameHostFilter",
-                                                   "DifferentHostFilter"]
-
+default["openstack"]["compute"]["scheduler"]["default_filters"] = [
+  "AvailabilityZoneFilter",
+  "RamFilter",
+  "ComputeFilter",
+  "CoreFilter",
+  "SameHostFilter",
+  "DifferentHostFilter"
+]
 
 default["openstack"]["compute"]["xvpvnc_proxy"]["service_port"] = "6081"
 default["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"] = "lo"
@@ -174,11 +175,11 @@ default["openstack"]["compute"]["config"]["quota_security_group_rules"] = 20
 
 default["openstack"]["compute"]["api"]["auth_strategy"] = "keystone"
 default["openstack"]["compute"]["ratelimit"]["settings"] = {
-    "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
-    "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
-    "generic-put-limit" => { "verb" => "PUT", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
-    "changes-since-limit" => { "verb" => "GET", "uri" => "*changes-since*", "regex" => ".*changes-since.*", "limit" => "3", "interval" => "MINUTE" },
-    "generic-delete-limit" => { "verb" => "DELETE", "uri" => "*", "regex" => ".*", "limit" => "100", "interval" => "MINUTE" }
+  "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
+  "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
+  "generic-put-limit" => { "verb" => "PUT", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
+  "changes-since-limit" => { "verb" => "GET", "uri" => "*changes-since*", "regex" => ".*changes-since.*", "limit" => "3", "interval" => "MINUTE" },
+  "generic-delete-limit" => { "verb" => "DELETE", "uri" => "*", "regex" => ".*", "limit" => "100", "interval" => "MINUTE" }
 }
 
 # Keystone PKI signing directories
@@ -193,7 +194,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "api_os_compute_packages" => ["openstack-nova-api"],
     "api_os_compute_service" => "openstack-nova-api",
     "api_os_compute_process_name" => "nova-api",
-    "memcache_python_packages" => [ "python-memcached" ],
+    "memcache_python_packages" => ["python-memcached"],
     "compute_api_metadata_packages" => ["openstack-nova-api"],
     "compute_api_metadata_process_name" => "nova-api",
     "compute_api_metadata_service" => "openstack-nova-api",
@@ -231,7 +232,7 @@ when "ubuntu"
     "api_os_compute_packages" => ["nova-api-os-compute"],
     "api_os_compute_process_name" => "nova-api-os-compute",
     "api_os_compute_service" => "nova-api-os-compute",
-    "memcache_python_packages" => [ "python-memcache" ],
+    "memcache_python_packages" => ["python-memcache"],
     "compute_api_metadata_packages" => ["nova-api-metadata"],
     "compute_api_metadata_service" => "nova-api-metadata",
     "compute_api_metadata_process_name" => "nova-api-metadata",

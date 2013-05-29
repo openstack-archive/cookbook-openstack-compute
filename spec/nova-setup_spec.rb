@@ -16,15 +16,15 @@ describe "openstack-compute::nova-setup" do
     end
 
     it "adds nova network ipv4 addresses" do
-      cmd = "nova-manage network create --label=public" \
-            " --fixed_range_v4=192.168.100.0/24" \
-            " --multi_host='T'" \
-            " --num_networks=1" \
-            " --network_size=255" \
-            " --bridge=br100" \
-            " --bridge_interface=eth2" \
-            " --dns1=8.8.8.8" \
-            " --dns2=8.8.4.4"
+      cmd = ["nova-manage network create --label=public",
+        "--fixed_range_v4=192.168.100.0/24",
+        "--multi_host='T'",
+        "--num_networks=1",
+        "--network_size=255",
+        "--bridge=br100",
+        "--bridge_interface=eth2",
+        "--dns1=8.8.8.8",
+        "--dns2=8.8.4.4"].join(' ')
       expect(@chef_run).to execute_command cmd
     end
 

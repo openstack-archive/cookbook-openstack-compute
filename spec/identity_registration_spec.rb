@@ -22,7 +22,7 @@ describe "openstack-compute::identity_registration" do
           with :create_tenant
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -47,7 +47,7 @@ describe "openstack-compute::identity_registration" do
           with :create_user
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -72,7 +72,7 @@ describe "openstack-compute::identity_registration" do
           with :grant_role
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -97,7 +97,7 @@ describe "openstack-compute::identity_registration" do
           with :create_service
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -126,7 +126,7 @@ describe "openstack-compute::identity_registration" do
           with :create_endpoint
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -151,7 +151,7 @@ describe "openstack-compute::identity_registration" do
           with :create_service
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -180,7 +180,7 @@ describe "openstack-compute::identity_registration" do
           with :create_endpoint
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -205,7 +205,7 @@ describe "openstack-compute::identity_registration" do
           with :create_service
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"
@@ -234,7 +234,7 @@ describe "openstack-compute::identity_registration" do
           with :create_endpoint
 
         @identity_register_mock.instance_eval &arg
-      end
+    end
 
     chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
     chef_run.converge "openstack-compute::identity_registration"

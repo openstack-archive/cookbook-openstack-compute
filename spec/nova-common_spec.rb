@@ -64,9 +64,9 @@ describe "openstack-compute::nova-common" do
     describe "nova.conf" do
       before do
         @file = @chef_run.template "/etc/nova/nova.conf"
-	# README(shep) need this to evaluate nova.conf.erb template
-	@chef_run.node['cpu'] = Hash.new()
-	@chef_run.node.cpu.total = "2"
+        # README(shep) need this to evaluate nova.conf.erb template
+        @chef_run.node['cpu'] = Hash.new()
+        @chef_run.node.cpu.total = "2"
       end
 
       it "has proper owner" do
@@ -79,18 +79,17 @@ describe "openstack-compute::nova-common" do
 
       it "has correct force_dhcp_release value" do
         expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
-	  "force_dhcp_release=true"
+          "force_dhcp_release=true"
       end
 
       it "has virtio enabled" do
-	expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
-	  "libvirt_use_virtio_for_bridges=true"
+        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+          "libvirt_use_virtio_for_bridges=true"
       end
 
       it "does not have ec2_private_dns_show_ip option" do
-        expect(
-	  @chef_run).to_not create_file_with_content "/etc/nova/nova.conf",
-	    "ec2_private_dns_show_ip"
+        expect(@chef_run).to_not create_file_with_content "/etc/nova/nova.conf",
+          "ec2_private_dns_show_ip"
       end
     end
 

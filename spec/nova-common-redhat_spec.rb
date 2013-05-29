@@ -23,19 +23,19 @@ describe "openstack-compute::nova-common" do
     describe "nova.conf" do
       before do
         @file = @chef_run.template "/etc/nova/nova.conf"
-	# README(shep) need this to evaluate nova.conf.erb template
-	@chef_run.node['cpu'] = Hash.new()
-	@chef_run.node.cpu.total = "2"
+        # README(shep) need this to evaluate nova.conf.erb template
+        @chef_run.node['cpu'] = Hash.new()
+        @chef_run.node.cpu.total = "2"
       end
 
       it "has correct force_dhcp_release value" do
         expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
-	  "force_dhcp_release=false"
+          "force_dhcp_release=false"
       end
 
       it "has ec2_private_dns_show_ip enabled" do
         expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
-	  "ec2_private_dns_show_ip=True"
+          "ec2_private_dns_show_ip=True"
       end
     end
   end
