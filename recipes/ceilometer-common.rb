@@ -4,6 +4,7 @@
 #
 # Copyright 2012, AT&T
 # Copyright 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright 2013, SUSE Linux GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,72 +18,85 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require "uri"
 
 class ::Chef::Recipe
   include ::Openstack
 end
 
 include_recipe "openstack-compute::nova-common"
-include_recipe "python::pip"
 if node["openstack"]["compute"]["ceilometer"]["syslog"]["use"]
   include_recipe "openstack-common::logging"
 end
 
 ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
 
-dependent_pkgs = node["openstack"]["compute"]["ceilometer"]["dependent_pkgs"]
-dependent_pkgs.each do |pkg|
-  package pkg do
-    action :upgrade
+if node["openstack"]["compute"]["platform"]["ceilometer_packages"]
+  node["openstack"]["compute"]["platform"]["ceilometer_packages"]["common"].each do |pkg|
+    package pkg
   end
-end
 
-#  Cleanup old installation
-python_pip "ceilometer" do
-  action :remove
-end
+  # do not override the permissions from the packages
+  compute_owner = nil
+  compute_group = nil
 
-bin_names = ['agent-compute', 'agent-central', 'collector', 'dbsync', 'api']
-bin_names.each do |bin_name|
-  file "ceilometer-#{bin_name}" do
-    action :delete
+else  # install from source
+  require "uri"
+
+  include_recipe "python::pip"
+
+  dependent_pkgs = node["openstack"]["compute"]["ceilometer"]["dependent_pkgs"]
+  dependent_pkgs.each do |pkg|
+    package pkg do
+      action :upgrade
+    end
   end
-end
 
-# install source
-install_dir = node["openstack"]["compute"]["ceilometer"]["install_dir"]
+  #  Cleanup old installation
+  python_pip "ceilometer" do
+    action :remove
+  end
 
-compute_owner = node["openstack"]["compute"]["user"]
-compute_group = node["openstack"]["compute"]["group"]
+  bin_names = ['agent-compute', 'agent-central', 'collector', 'dbsync', 'api']
+  bin_names.each do |bin_name|
+    file "ceilometer-#{bin_name}" do
+      action :delete
+    end
+  end
 
-directory install_dir do
-  owner compute_owner
-  group compute_group
-  mode  00755
-  recursive true
+  # install source
+  install_dir = node["openstack"]["compute"]["ceilometer"]["install_dir"]
 
-  action :create
-end
+  compute_owner = node["openstack"]["compute"]["user"]
+  compute_group = node["openstack"]["compute"]["group"]
 
-git_branch = node["openstack"]["compute"]["ceilometer"]["branch"]
-git_repo = node["openstack"]["compute"]["ceilometer"]["repo"]
-git install_dir do
-  repo git_repo
-  reference git_branch
-  action :sync
-end
+  directory install_dir do
+    owner compute_owner
+    group compute_group
+    mode  00755
+    recursive true
 
-python_pip install_dir do
-  action :install
-end
+    action :create
+  end
 
-directory ::File.dirname(ceilometer_conf) do
-  owner compute_owner
-  group compute_group
-  mode  00755
+  git_branch = node["openstack"]["compute"]["ceilometer"]["branch"]
+  git_repo = node["openstack"]["compute"]["ceilometer"]["repo"]
+  git install_dir do
+    repo git_repo
+    reference git_branch
+    action :sync
+  end
 
-  action :create
+  python_pip install_dir do
+    action :install
+  end
+
+  directory ::File.dirname(ceilometer_conf) do
+    owner compute_owner
+    group compute_group
+    mode  00755
+
+    action :create
+  end
 end
 
 rabbit_server_role = node["openstack"]["compute"]["rabbit_server_chef_role"]
