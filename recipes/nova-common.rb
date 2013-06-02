@@ -72,9 +72,9 @@ db_user = node["openstack"]["compute"]["db"]["username"]
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-rabbit_user = node["openstack"]["compute"]["rabbit"]["username"]
-rabbit_pass = user_password "rabbit"
-rabbit_vhost = node["openstack"]["compute"]["rabbit"]["vhost"]
+rabbit_user = rabbit_info && rabbit_info["username"] || node["openstack"]["compute"]["rabbit"]["username"]
+rabbit_pass = user_password rabbit_user
+rabbit_vhost = rabbit_info && rabbit_info["vhost"] || node["openstack"]["compute"]["rabbit"]["vhost"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 keystone = config_by_role identity_service_role, "openstack-identity"
