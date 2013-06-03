@@ -31,8 +31,6 @@ directory ::File.dirname(node["openstack"]["compute"]["ceilometer-api"]["auth"][
   owner compute_owner
   group compute_group
   mode 00700
-
-  only_if { node["openstack"]["auth"]["strategy"] == "pki" }
 end
 
 bindir = '/usr/local/bin'

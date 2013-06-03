@@ -12,9 +12,6 @@ describe "openstack-compute::api-os-compute" do
 
     expect_creates_nova_lock_dir
 
-    ##
-    #TODO: ChefSpec needs to handle guards better.  This
-    #      should only be created when pki is enabled.
     describe "/var/cache/nova" do
       before do
         @dir = @chef_run.directory "/var/cache/nova"

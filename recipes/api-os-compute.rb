@@ -35,8 +35,6 @@ directory ::File.dirname(node["openstack"]["compute"]["api"]["auth"]["cache_dir"
   owner node["openstack"]["compute"]["user"]
   group node["openstack"]["compute"]["group"]
   mode 00700
-
-  only_if { node["openstack"]["auth"]["strategy"] == "pki" }
 end
 
 package "python-keystone" do
