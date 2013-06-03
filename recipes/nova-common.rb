@@ -77,10 +77,10 @@ rabbit_pass = user_password rabbit_user
 rabbit_vhost = rabbit_info && rabbit_info["vhost"] || node["openstack"]["compute"]["rabbit"]["vhost"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
-keystone = config_by_role identity_service_role, "openstack-identity"
+keystone = config_by_role identity_service_role
 
-ksadmin_tenant_name = keystone["admin_tenant_name"]
-ksadmin_user = keystone["admin_user"]
+ksadmin_tenant_name = keystone["openstack"]["identity"]["admin_tenant_name"]
+ksadmin_user = keystone["openstack"]["identity"]["admin_user"]
 ksadmin_pass = user_password ksadmin_user
 
 memcache_servers = memcached_servers.join ","
