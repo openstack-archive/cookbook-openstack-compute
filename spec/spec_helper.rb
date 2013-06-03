@@ -33,7 +33,7 @@ def compute_stubs
     and_return "bootstrap-token"
   ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new
   ::Chef::Recipe.any_instance.stub(:user_password).and_return String.new
-  ::Chef::Recipe.any_instance.stub(:service_password).with("nova").
+  ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-compute").
     and_return "nova-pass"
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
 end

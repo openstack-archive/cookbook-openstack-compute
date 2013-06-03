@@ -60,7 +60,7 @@ identity_admin_endpoint = endpoint "identity-admin"
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
-service_pass = service_password "nova"
+service_pass = service_password "openstack-compute"
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"

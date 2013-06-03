@@ -60,7 +60,7 @@ service "nova-api-os-compute" do
 end
 
 identity_admin_endpoint = endpoint "identity-admin"
-service_pass = service_password "nova"
+service_pass = service_password "openstack-compute"
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
