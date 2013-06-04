@@ -3,7 +3,7 @@ require "chefspec"
 ::LOG_LEVEL = :fatal
 ::REDHAT_OPTS = {
   :platform  => "redhat",
-  :version => "6.3",
+  :version   => "6.3",
   :log_level => ::LOG_LEVEL
 }
 ::UBUNTU_OPTS = {
