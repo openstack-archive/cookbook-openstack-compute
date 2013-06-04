@@ -106,7 +106,7 @@ ceilo_db_query = ceilo_db_info['db_type'] == 'mysql' ? '?charset=utf8' : ''
 ceilo_db_uri = db_uri("metering", ceilo_db_user, ceilo_db_pass).to_s + ceilo_db_query
 
 service_user = node["openstack"]["compute"]["service_user"]
-service_pass = service_password "nova"
+service_pass = service_password "openstack-compute"
 service_tenant = node["openstack"]["compute"]["service_tenant_name"]
 
 # find the node attribute endpoint settings for the server holding a given role
