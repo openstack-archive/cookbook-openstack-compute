@@ -4,6 +4,7 @@
 #
 # Copyright 2012, AT&T
 # Copyright 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright 2013, SUSE Linux GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ include_recipe "openstack-compute::ceilometer-common"
 compute_owner = node["openstack"]["compute"]["user"]
 compute_group = node["openstack"]["compute"]["group"]
 
-directory ::File.dirname(node["openstack"]["compute"]["ceilometer-api"]["auth"]["cache_dir"]) do
+directory ::File.dirname(node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"]) do
   owner compute_owner
   group compute_group
   mode 00700
