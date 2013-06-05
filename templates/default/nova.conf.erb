@@ -92,7 +92,9 @@ vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
 # store consoleauth tokens in memcached
+<% unless @memcache_servers.empty? -%>
 memcached_servers=<%= @memcache_servers %>
+<% end -%>
 
 ##### MISC #####
 # force backing images to raw format
