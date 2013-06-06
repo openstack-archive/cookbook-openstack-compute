@@ -24,7 +24,7 @@ rabbit_virtual_host=<%= @rabbit_virtual_host %>
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
 compute_scheduler_driver=<%= node["openstack"]["compute"]["scheduler"]["scheduler_driver"] %>
-scheduler_available_filters=nova.scheduler.filters.standard_filters
+scheduler_available_filters=nova.scheduler.filters.all_filters
 # which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
 node_availability_zone=<%= node["openstack"]["compute"]["config"]["availability_zone"] %>
