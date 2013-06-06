@@ -33,6 +33,24 @@ default["openstack"]["compute"]["service_tenant_name"] = "service"
 default["openstack"]["compute"]["service_user"] = "nova"
 default["openstack"]["compute"]["service_role"] = "admin"
 
+# ceilometer specific attrs
+default["openstack"]["compute"]["ceilometer"]["conf"] = "/etc/ceilometer/ceilometer.conf"
+default["openstack"]["compute"]["ceilometer"]["db"]["username"] = 'ceilometer'
+default["openstack"]["compute"]["ceilometer"]["periodic_interval"] = 600
+default["openstack"]["compute"]["ceilometer"]["syslog"]["use"] = false
+
+# attrs used in httpd configuration
+default["openstack"]["compute"]["ceilometer"]["api"]["server_hostname"] = "127.0.0.1"
+default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"] = "admin"
+default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"] = "adminpass"
+
+# ceilometer specific attrs used if installing from source
+default["openstack"]["compute"]["platform"]["ceilometer_packages"] = nil
+default["openstack"]["compute"]["ceilometer"]["branch"] = 'stable/grizzly'
+default["openstack"]["compute"]["ceilometer"]["repo"] = "git://github.com/openstack/ceilometer.git"
+default["openstack"]["compute"]["ceilometer"]["dependent_pkgs"] = ['libxslt-dev', 'libxml2-dev']
+default["openstack"]["compute"]["ceilometer"]["install_dir"] = '/opt/ceilometer'
+
 case platform
 when "fedora", "redhat", "centos", "ubuntu"
   default["openstack"]["compute"]["user"] = "nova"
@@ -226,6 +244,9 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
     default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
     default["openstack"]["compute"]["platform"]["lxc_packages"] = ["lxc"]
+    default["openstack"]["compute"]["platform"]["ceilometer_packages"] = {
+      "common" => ["openstack-ceilometer"],
+    }
   end
 
 when "ubuntu"
@@ -263,19 +284,6 @@ when "ubuntu"
     "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end
-
-# ceilometer specific attrs
-default["openstack"]["compute"]["ceilometer"]["api"]["server_hostname"] = "127.0.0.1"
-default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"] = "admin"
-default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"] = "adminpass"
-default["openstack"]["compute"]["ceilometer"]["branch"] = 'stable/grizzly'
-default["openstack"]["compute"]["ceilometer"]["repo"] = "git://github.com/openstack/ceilometer.git"
-default["openstack"]["compute"]["ceilometer"]["conf"] = "/etc/ceilometer/ceilometer.conf"
-default["openstack"]["compute"]["ceilometer"]["db"]["username"] = 'ceilometer'
-default["openstack"]["compute"]["ceilometer"]["dependent_pkgs"] = ['libxslt-dev', 'libxml2-dev']
-default["openstack"]["compute"]["ceilometer"]["install_dir"] = '/opt/ceilometer'
-default["openstack"]["compute"]["ceilometer"]["periodic_interval"] = 600
-default["openstack"]["compute"]["ceilometer"]["syslog"]["use"] = false
 
 # plugins
 default["openstack"]["compute"]["plugins"] = nil
