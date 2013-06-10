@@ -212,11 +212,15 @@ OSAPI Compute Extentions
 Testing
 =====
 
-This cookbook is using [ChefSpec](https://github.com/acrmp/chefspec) for
-testing. Run the following before commiting. It will run your tests,
-and check for lint errors.
+This cookbook uses [bundler](http://gembundler.com/), [berkshelf](http://berkshelf.com/), and [strainer](https://github.com/customink/strainer) to isolate dependencies and run tests.
 
-    $ ./run_tests.bash
+Tests are defined in Strainerfile.
+
+To run tests:
+
+    $ bundle install # install gem dependencies
+    $ bundle exec berks install # install cookbook dependencies
+    $ bundle exec strainer test # run tests
 
 License and Author
 ==================
@@ -234,6 +238,7 @@ License and Author
 | **Author**           |  Jay Pipes (<jaypipes@att.com>)                    |
 | **Author**           |  John Dewey (<jdewey@att.com>)                     |
 | **Author**           |  Craig Tracey (<craigtracey@gmail.com>)            |
+| **Author**           |  Sean Gallagher (<sean.gallagher@att.com>)         |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |

@@ -1,4 +1,4 @@
-require "spec_helper"
+require_relative "spec_helper"
 
 describe "openstack-compute::ceilometer-common" do
   describe "ubuntu" do
