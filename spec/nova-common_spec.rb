@@ -65,8 +65,8 @@ describe "openstack-compute::nova-common" do
       before do
         @file = @chef_run.template "/etc/nova/nova.conf"
         # README(shep) need this to evaluate nova.conf.erb template
-        @chef_run.node['cpu'] = Hash.new()
-        @chef_run.node.cpu.total = "2"
+        @chef_run.node.set['cpu'] = Hash.new()
+        @chef_run.node.set.cpu.total = "2"
       end
 
       it "has proper owner" do
