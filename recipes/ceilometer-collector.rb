@@ -4,6 +4,7 @@
 #
 # Copyright 2012, AT&T
 # Copyright 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright 2013, SUSE Linux GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,29 +19,35 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe
-  include ::Openstack
-end
-
 include_recipe "openstack-compute::ceilometer-common"
 
-release = node["openstack"]["release"] || 'grizzly'
-
-bindir = '/usr/local/bin'
-install_dir = node["openstack"]["compute"]["ceilometer"]["install_dir"]
 ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
 conf_switch = "--config-file #{ceilometer_conf}"
+platform = node["openstack"]["compute"]["platform"]
 
-# db migration
-bash "migration" do
-  code <<-EOF
-    ceilometer-dbsync #{conf_switch}
-  EOF
+
+execute "database migration" do
+  command "ceilometer-dbsync #{conf_switch}"
 end
 
-service "ceilometer-collector" do
-  service_name "ceilometer-collector"
-  action [:start]
-  start_command "nohup #{bindir}/ceilometer-collector #{conf_switch} &"
-  stop_command "pkill -f ceilometer-collector"
+if platform["ceilometer_packages"]
+  platform["ceilometer_packages"]["collector"].each do |pkg|
+    package pkg
+  end
+
+  service platform["ceilometer_services"]["collector"] do
+    action :start
+  end
+else
+  class ::Chef::Recipe
+    include ::Openstack
+  end
+
+  bindir = "/usr/local/bin"
+
+  service "ceilometer-collector" do
+    action [:start]
+    start_command "nohup #{bindir}/ceilometer-collector #{conf_switch} &"
+    stop_command "pkill -f ceilometer-collector"
+  end
 end
