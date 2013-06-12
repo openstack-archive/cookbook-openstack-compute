@@ -3,6 +3,7 @@
 # Recipe:: ceilometer-agent-compute
 #
 # Copyright 2012, AT&T
+# Copyright 2013, SUSE Linux GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,19 +18,30 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe
-  include ::Openstack
-end
-
 include_recipe "openstack-compute::ceilometer-common"
 
-bindir = '/usr/local/bin'
-ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
-conf_switch = "--config-file #{ceilometer_conf}"
+platform = node["openstack"]["compute"]["platform"]
 
-service "ceilometer-agent-compute" do
-  service_name "ceilometer-agent-compute"
-  action [:start]
-  start_command "nohup #{bindir}/ceilometer-agent-compute  #{conf_switch}&"
-  stop_command "pkill -f ceilometer-agent-compute"
+if platform["ceilometer_packages"]
+  platform["ceilometer_packages"]["agent-compute"].each do |pkg|
+    package pkg
+  end
+
+  service platform["ceilometer_services"]["agent-compute"] do
+    action :start
+  end
+else
+  class ::Chef::Recipe
+    include ::Openstack
+  end
+
+  bindir = "/usr/local/bin"
+  ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
+  conf_switch = "--config-file #{ceilometer_conf}"
+
+  service "ceilometer-agent-compute" do
+    action [:start]
+    start_command "nohup #{bindir}/ceilometer-agent-compute  #{conf_switch}&"
+    stop_command "pkill -f ceilometer-agent-compute"
+  end
 end
