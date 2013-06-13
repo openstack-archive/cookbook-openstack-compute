@@ -48,7 +48,7 @@ htpasswd_path     = "#{node['apache']['dir']}/htpasswd"
 htpasswd_user     = node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"]
 htpasswd_password = node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"]
 
-template "#{node['apache']['dir']}/sites-available/meter" do
+template node["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] do
   source "meter-site.conf.erb"
   owner  'root'
   group  'root'
@@ -64,7 +64,11 @@ file htpasswd_path do
 end
 
 execute "add htpasswd file" do
-  command "/usr/bin/htpasswd -b #{htpasswd_path} #{htpasswd_user} #{htpasswd_password}"
+  if node['platform'] == 'suse'
+    command "/usr/bin/htpasswd2 -b #{htpasswd_path} #{htpasswd_user} #{htpasswd_password}"
+  else
+    command "/usr/bin/htpasswd -b #{htpasswd_path} #{htpasswd_user} #{htpasswd_password}"
+  end
 end
 
 service "apache2"
