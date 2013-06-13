@@ -1,9 +1,9 @@
 require_relative "spec_helper"
 
 describe "openstack-compute::nova-cert" do
+  before { compute_stubs }
   describe "ubuntu" do
     before do
-      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @chef_run.converge "openstack-compute::nova-cert"
     end

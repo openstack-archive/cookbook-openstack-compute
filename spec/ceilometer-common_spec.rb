@@ -1,9 +1,9 @@
 require_relative "spec_helper"
 
 describe "openstack-compute::ceilometer-common" do
+  before { compute_stubs }
   describe "ubuntu" do
     before do
-      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @node = @chef_run.node
       @node.set["openstack"]["compute"]["ceilometer"]["syslog"]["use"] = true

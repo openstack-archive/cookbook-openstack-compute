@@ -1,9 +1,9 @@
 require_relative "spec_helper"
 
 describe "openstack-compute::conductor" do
+  before { compute_stubs }
   describe "redhat" do
     before do
-      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::conductor"
     end

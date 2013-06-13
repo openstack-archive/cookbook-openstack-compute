@@ -2,6 +2,7 @@ require_relative "spec_helper"
 
 describe "openstack-compute::libvirt" do
   before do
+    compute_stubs
     # This is stubbed b/c systems without '/boot/grub/menul.lst`,
     # fail to pass tests.  This can be removed if a check verifies
     # the files existence prior to File#open.
@@ -11,7 +12,6 @@ describe "openstack-compute::libvirt" do
 
   describe "suse" do
     before do
-      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::OPENSUSE_OPTS
       @chef_run.converge "openstack-compute::libvirt"
     end
