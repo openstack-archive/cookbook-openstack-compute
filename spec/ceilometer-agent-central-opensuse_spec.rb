@@ -1,4 +1,4 @@
-require "spec_helper"
+require_relative "spec_helper"
 
 describe "openstack-compute::ceilometer-agent-central" do
   describe "opensuse" do
