@@ -250,11 +250,13 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
       "common" => ["openstack-ceilometer"],
       "agent-central" => ["openstack-ceilometer-agent-central"],
       "agent-compute" => ["openstack-ceilometer-agent-compute"],
+      "api" => ["openstack-ceilometer-api"],
       "collector" => ["openstack-ceilometer-collector"]
     }
     default["openstack"]["compute"]["platform"]["ceilometer_services"] = {
       "agent-central" => "openstack-ceilometer-agent-central",
       "agent-compute" => "openstack-ceilometer-agent-compute",
+      "api" => "openstack-ceilometer-api",
       "collector" => "openstack-ceilometer-collector",
     }
   end

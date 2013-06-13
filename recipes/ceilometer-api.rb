@@ -34,10 +34,6 @@ directory ::File.dirname(node["openstack"]["compute"]["ceilometer"]["api"]["auth
   mode 00700
 end
 
-bindir = '/usr/local/bin'
-ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
-conf_switch = "--config-file #{ceilometer_conf}"
-
 include_recipe "apache2"
 include_recipe "apache2::mod_proxy"
 include_recipe "apache2::mod_proxy_http"
@@ -45,27 +41,27 @@ include_recipe "apache2::mod_proxy_http"
 apache_module "proxy"
 apache_module "proxy_http"
 
-htpasswd_path     = "#{node['apache']['dir']}/htpasswd"
+htpasswd_path     = "#{node["apache"]["dir"]}/htpasswd"
 htpasswd_user     = node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"]
 htpasswd_password = node["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"]
 
 template node["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] do
   source "meter-site.conf.erb"
-  owner  'root'
-  group  'root'
+  owner  "root"
+  group  "root"
   variables(:htpasswd_path => htpasswd_path)
 end
 
 apache_site "meter", :enabled => true
 
 file htpasswd_path do
-  owner 'root'
-  group 'root'
+  owner "root"
+  group "root"
   mode "0755"
 end
 
 execute "add htpasswd file" do
-  if node['platform'] == 'suse'
+  if node["platform"] == "suse"
     command "/usr/bin/htpasswd2 -b #{htpasswd_path} #{htpasswd_user} #{htpasswd_password}"
   else
     command "/usr/bin/htpasswd -b #{htpasswd_path} #{htpasswd_user} #{htpasswd_password}"
@@ -73,10 +69,22 @@ execute "add htpasswd file" do
 end
 
 service "apache2"
+if node["openstack"]["compute"]["platform"]["ceilometer_packages"]
+  node["openstack"]["compute"]["platform"]["ceilometer_packages"]["api"].each do |pkg|
+    package pkg
+  end
 
-service "ceilometer-api" do
-  service_name "ceilometer-api"
-  action [:start]
-  start_command "nohup #{bindir}/ceilometer-api #{conf_switch} &"
-  stop_command "pkill -f ceilometer-api"
+  service node["openstack"]["compute"]["platform"]["ceilometer_services"]["api"] do
+    action :start
+  end
+else
+  ceilometer_conf = node["openstack"]["compute"]["ceilometer"]["conf"]
+  conf_switch = "--config-file #{ceilometer_conf}"
+
+  service "ceilometer-api" do
+    service_name "ceilometer-api"
+    action [:start]
+    start_command "nohup /usr/local/bin/ceilometer-api #{conf_switch} &"
+    stop_command "pkill -f ceilometer-api"
+  end
 end
