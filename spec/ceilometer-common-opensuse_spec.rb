@@ -1,9 +1,9 @@
 require_relative "spec_helper"
 
 describe "openstack-compute::ceilometer-common" do
+  before { compute_stubs }
   describe "opensuse" do
     before do
-      compute_stubs
       @chef_run = ::ChefSpec::ChefRunner.new ::OPENSUSE_OPTS
       @chef_run.converge "openstack-compute::ceilometer-common"
     end
