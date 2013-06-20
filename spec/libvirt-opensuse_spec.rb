@@ -3,6 +3,10 @@ require_relative "spec_helper"
 describe "openstack-compute::libvirt" do
   before do
     compute_stubs
+    ::Chef::Recipe.any_instance.stub(:system).
+      with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'").
+      and_return true
+
     # This is stubbed b/c systems without '/boot/grub/menul.lst`,
     # fail to pass tests.  This can be removed if a check verifies
     # the files existence prior to File#open.
