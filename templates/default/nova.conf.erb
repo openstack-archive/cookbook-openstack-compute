@@ -3,7 +3,8 @@
 [DEFAULT]
 
 # LOGS/STATE
-verbose=true
+debug=<%= node["openstack"]["compute"]["debug"] %>
+verbose=<%= node["openstack"]["compute"]["verbose"] %>
 auth_strategy=<%= node["openstack"]["compute"]["api"]["auth_strategy"] %>
 dhcpbridge_flagfile=/etc/nova/nova.conf
 dhcpbridge=/usr/bin/nova-dhcpbridge
