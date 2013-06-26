@@ -49,6 +49,7 @@ template node["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] do
   source "meter-site.conf.erb"
   owner  "root"
   group  "root"
+  mode   00600
   variables(:htpasswd_path => htpasswd_path)
 end
 

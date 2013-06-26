@@ -138,7 +138,7 @@ template ceilometer_conf do
   source "ceilometer.conf.erb"
   owner  compute_owner
   group  compute_group
-  mode   00644
+  mode   00600
   variables(
     :auth_uri => auth_uri,
     :database_connection => ceilo_db_uri,

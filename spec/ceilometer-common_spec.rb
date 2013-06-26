@@ -77,7 +77,7 @@ describe "openstack-compute::ceilometer-common" do
       end
 
       it "has 644 permissions" do
-        expect(sprintf("%o", @file.mode)).to eq("644")
+        expect(sprintf("%o", @file.mode)).to eq("600")
       end
     end
 
