@@ -17,8 +17,6 @@ Cookbooks
 The following cookbooks are dependencies:
 
 * apache2
-* database
-* mysql
 * openstack-common
 * openstack-identity
 * openstack-image
@@ -49,10 +47,6 @@ compute
 ----
 - Includes recipes `nova-common`, `api-metadata`, `network`
 - Installs nova-compute service
-
-db
---
-- Configures database for use with nova
 
 libvirt
 ----

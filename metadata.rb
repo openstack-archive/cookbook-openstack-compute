@@ -10,7 +10,6 @@ recipe "openstack-compute::api-ec2", "Installs AWS EC2 compatible API"
 recipe "openstack-compute::api-metadata", "Installs the nova metadata package"
 recipe "openstack-compute::api-os-compute", "Installs OS API"
 recipe "openstack-compute::compute", "nova-compute service"
-recipe "openstack-compute::db", "Configures database for use with nova"
 recipe "openstack-compute::libvirt", "Installs libvirt, used by nova compute for management of the virtual machine environment"
 recipe "openstack-compute::identity_registration", "Registers the API and EC2 endpoints with Keystone"
 recipe "openstack-compute::network", "Installs nova network service"
@@ -25,8 +24,6 @@ recipe "openstack-compute::vncproxy", "Installs and configures the vncproxy serv
 end
 
 depends "apache2"
-depends "database"
-depends "mysql"
 depends "openstack-common", "~> 0.3.0"
 depends "openstack-identity", "~> 7.0.0"
 depends "openstack-image", "~> 7.0.0"
