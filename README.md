@@ -239,7 +239,7 @@ License and Author
 | **Author**           |  John Dewey (<jdewey@att.com>)                     |
 | **Author**           |  Craig Tracey (<craigtracey@gmail.com>)            |
 | **Author**           |  Sean Gallagher (<sean.gallagher@att.com>)         |
-| **Author**           |  Ionuț Arțăriși (<iartarisi@suse.cz>)              |
+| **Author**           |  Ionut Artarisi (<iartarisi@suse.cz>)              |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |
