@@ -77,6 +77,26 @@ describe "openstack-compute::nova-common" do
         expect(sprintf("%o", @file.mode)).to eq "644"
       end
 
+      it "has vncserver_listen" do
+        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+          "vncserver_listen=127.0.1.1"
+      end
+
+      it "has vncserver_proxyclient_address" do
+        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+          "vncserver_proxyclient_address=127.0.1.1"
+      end
+
+      it "has xvpvncproxy_host" do
+        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+          "xvpvncproxy_host=127.0.1.1"
+      end
+
+      it "has novncproxy_host" do
+        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+          "novncproxy_host=127.0.1.1"
+      end
+
       it "has correct force_dhcp_release value" do
         expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
           "force_dhcp_release=true"

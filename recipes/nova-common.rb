@@ -103,9 +103,9 @@ Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.dec
 Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
-vnc_bind_ip = node["network"]["ipaddress_#{node["openstack"]["compute"]["libvirt"]["bind_interface"]}"]
-xvpvnc_proxy_ip = node["network"]["ipaddress_#{node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]}"]
-novnc_proxy_ip = node["network"]["ipaddress_#{node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]}"]
+vnc_bind_ip = address_for node["openstack"]["compute"]["libvirt"]["bind_interface"]
+xvpvnc_proxy_ip = address_for node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]
+novnc_proxy_ip = address_for node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]
 
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
