@@ -12,7 +12,7 @@ default["openstack"]["compute"]["custom_template_banner"] = "
 
 # The name of the Chef role that knows about the message queue server
 # that Nova uses
-default["openstack"]["compute"]["rabbit_server_chef_role"] = "rabbitmq-server"
+default["openstack"]["compute"]["rabbit_server_chef_role"] = node["openstack"]["mq"]["server_role"]
 
 default["openstack"]["compute"]["verbose"] = "False"
 default["openstack"]["compute"]["debug"] = "False"
@@ -29,8 +29,12 @@ default["openstack"]["compute"]["db"]["username"] = "nova"
 # and accessed with openstack-common cookbook library's
 # user_password routine.  You are expected to create
 # the user, pass, vhost in a wrapper rabbitmq cookbook.
-default["openstack"]["compute"]["rabbit"]["username"] = "rabbit"
-default["openstack"]["compute"]["rabbit"]["vhost"] = "/nova"
+default["openstack"]["compute"]["rabbit"]["username"] = node["openstack"]["mq"]["user"]
+default["openstack"]["compute"]["rabbit"]["vhost"] = node["openstack"]["mq"]["vhost"]
+default["openstack"]["compute"]["rabbit"]["port"] = node["openstack"]["mq"]["port"]
+default["openstack"]["compute"]["rabbit"]["host"] = node["openstack"]["mq"]["host"]
+# Rabbit HA queues
+default["openstack"]["compute"]["rabbit"]["ha"] = false
 
 default["openstack"]["compute"]["service_tenant_name"] = "service"
 default["openstack"]["compute"]["service_user"] = "nova"

@@ -16,11 +16,16 @@ state_path=/var/lib/nova
 lock_path=/var/lock/nova
 
 ##### RABBITMQ #####
-rabbit_userid=<%= @rabbit_user %>
+rabbit_userid=<%= node["openstack"]["compute"]["rabbit"]["username"] %>
 rabbit_password=<%= @rabbit_password %>
-<%= "rabbit_port=#{@rabbit_port}" if @rabbit_port %>
-rabbit_host=<%= @rabbit_ipaddress %>
-rabbit_virtual_host=<%= @rabbit_virtual_host %>
+rabbit_virtual_host=<%= node["openstack"]["compute"]["rabbit"]["vhost"] %>
+<% if node["openstack"]["compute"]["rabbit"]["ha"] -%>
+rabbit_hosts=<%= @rabbit_hosts %>
+rabbit_ha_queues=True
+<% else -%>
+rabbit_host=<%= node["openstack"]["compute"]["rabbit"]["host"] %>
+rabbit_port=<%= node["openstack"]["compute"]["rabbit"]["port"] %>
+<% end -%>
 
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager

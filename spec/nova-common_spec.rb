@@ -4,9 +4,12 @@ describe "openstack-compute::nova-common" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-      @node = @chef_run.node
-      @node.set["openstack"]["compute"]["syslog"]["use"] = true
+      @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+        n.set["openstack"]["mq"] = {
+          "host" => "127.0.0.1"
+        }
+        n.set["openstack"]["compute"]["syslog"]["use"] = true
+      end
       @chef_run.converge "openstack-compute::nova-common"
     end
 
@@ -77,38 +80,105 @@ describe "openstack-compute::nova-common" do
         expect(sprintf("%o", @file.mode)).to eq "644"
       end
 
+      it "has rabbit_user" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_userid=guest"
+      end
+
+      it "has rabbit_password" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_password=rabbit-pass"
+      end
+
+      it "has rabbit_virtual_host" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_virtual_host=/"
+      end
+
+      it "has rabbit_host" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_host=127.0.0.1"
+      end
+
+      it "does not have rabbit_hosts" do
+        expect(@chef_run).not_to create_file_with_content @file.name,
+          "rabbit_hosts="
+      end
+
+      it "does not have rabbit_ha_queues" do
+        expect(@chef_run).not_to create_file_with_content @file.name,
+          "rabbit_ha_queues="
+      end
+
+      it "has rabbit_port" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_port=5672"
+      end
+
+      describe "rabbit ha" do
+        before do
+          @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+            n.set["openstack"]["compute"]["rabbit"]["ha"] = true
+            n.set["cpu"] = {
+              "total" => "2"
+            }
+          end
+          @chef_run.converge "openstack-compute::nova-common"
+        end
+
+        it "has rabbit_hosts" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "rabbit_hosts=1.1.1.1:5672,2.2.2.2:5672"
+        end
+
+        it "has rabbit_ha_queues" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "rabbit_ha_queues=True"
+        end
+
+        it "does not have rabbit_host" do
+          expect(@chef_run).not_to create_file_with_content @file.name,
+            "rabbit_host=127.0.0.1"
+        end
+
+        it "does not have rabbit_port" do
+          expect(@chef_run).not_to create_file_with_content @file.name,
+            "rabbit_port=5672"
+        end
+      end
+
       it "has vncserver_listen" do
-        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to create_file_with_content @file.name,
           "vncserver_listen=127.0.1.1"
       end
 
       it "has vncserver_proxyclient_address" do
-        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to create_file_with_content @file.name,
           "vncserver_proxyclient_address=127.0.1.1"
       end
 
       it "has xvpvncproxy_host" do
-        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to create_file_with_content @file.name,
           "xvpvncproxy_host=127.0.1.1"
       end
 
       it "has novncproxy_host" do
-        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to create_file_with_content @file.name,
           "novncproxy_host=127.0.1.1"
       end
 
       it "has correct force_dhcp_release value" do
-        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to create_file_with_content @file.name,
           "force_dhcp_release=true"
       end
 
       it "has virtio enabled" do
-        expect(@chef_run).to create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to create_file_with_content @file.name,
           "libvirt_use_virtio_for_bridges=true"
       end
 
       it "does not have ec2_private_dns_show_ip option" do
-        expect(@chef_run).to_not create_file_with_content "/etc/nova/nova.conf",
+        expect(@chef_run).to_not create_file_with_content @file.name,
           "ec2_private_dns_show_ip"
       end
     end

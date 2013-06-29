@@ -6,11 +6,11 @@ os_username = <%= @service_user %>
 policy_file = /etc/ceilometer/policy.json
 sql_connection = <%= @sql_connection %>
 <%= @database_connection ? "database_connection = #{@database_connection}" : nil %>
-rabbit_userid = <%= @rabbit_user %>
+rabbit_userid = <%= node["openstack"]["compute"]["rabbit"]["username"] %>
 rabbit_password = <%= @rabbit_pass %>
-<%= "rabbit_port = #{@rabbit_port}" if @rabbit_port %>
-rabbit_host = <%= @rabbit_ipaddress %>
-<%= "rabbit_virtual_host = #{@rabbit_virtual_host}" if @rabbit_virtual_host %>
+rabbit_port = <%= node["openstack"]["compute"]["rabbit"]["port"] %>
+rabbit_host = <%= node["openstack"]["compute"]["rabbit"]["host"] %>
+rabbit_virtual_host = <%= node["openstack"]["compute"]["rabbit"]["vhost"] %>
 verbose = True
 notification_topics = notifications,glance_notifications
 rpc_backend = ceilometer.openstack.common.rpc.impl_kombu

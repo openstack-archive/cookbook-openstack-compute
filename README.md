@@ -19,7 +19,6 @@ The following cookbooks are dependencies:
 * openstack-common
 * openstack-identity
 * openstack-image
-* rabbitmq
 * selinux (Fedora)
 * sysctl
 * yum
@@ -92,6 +91,9 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["db"]["username"]` - Username for nova database access
 * `openstack["compute"]["rabbit"]["username"]` - Username for nova rabbit access
 * `openstack["compute"]["rabbit"]["vhost"]` - The rabbit vhost to use
+* `openstack["compute"]["rabbit"]["port"]` - The rabbit port to use
+* `openstack["compute"]["rabbit"]["host"]` - The rabbit host to use (must set when `openstack["compute"]["rabbit"]["ha"]` false).
+* `openstack["compute"]["rabbit"]["ha"]` - Whether or not to use rabbit ha
 * `openstack["compute"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `openstack["compute"]["service_user"]` - User name used by nova when interacting with keystone
 * `openstack["compute"]["service_role"]` - User role used by nova when interacting with keystone

@@ -18,13 +18,11 @@ require "chefspec"
 }
 
 def compute_stubs
+  ::Chef::Recipe.any_instance.stub(:rabbit_servers).
+    and_return "1.1.1.1:5672,2.2.2.2:5672"
   ::Chef::Recipe.any_instance.stub(:address_for).
     with("lo").
     and_return "127.0.1.1"
-  ::Chef::Recipe.any_instance.stub(:config_by_role).
-    with("rabbitmq-server", "queue").and_return(
-      { 'host' => 'rabbit-host', 'port' => 'rabbit-port' }
-    )
   ::Chef::Recipe.any_instance.stub(:config_by_role).
     with("os-identity").and_return(
       {
@@ -41,6 +39,9 @@ def compute_stubs
     and_return "bootstrap-token"
   ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new
   ::Chef::Recipe.any_instance.stub(:user_password).and_return String.new
+  ::Chef::Recipe.any_instance.stub(:user_password).
+    with("guest").
+    and_return "rabbit-pass"
   ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-compute").
     and_return "nova-pass"
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
