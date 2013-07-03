@@ -10,8 +10,7 @@ describe "openstack-compute::libvirt" do
     # This is stubbed b/c systems without '/boot/grub/menul.lst`,
     # fail to pass tests.  This can be removed if a check verifies
     # the files existence prior to File#open.
-    file = double File, :lines => StringIO.new("")
-    ::File.stub(:open) { |&block| block.yield file }
+    ::File.stub(:open).and_call_original
   end
 
   describe "suse" do
