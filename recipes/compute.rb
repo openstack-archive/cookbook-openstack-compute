@@ -24,7 +24,9 @@ end
 
 include_recipe "openstack-compute::nova-common"
 include_recipe "openstack-compute::api-metadata"
-include_recipe "openstack-compute::network"
+unless node.run_list.include? "openstack-network::server"
+  include_recipe "openstack-compute::network"
+end
 
 platform_options = node["openstack"]["compute"]["platform"]
 # Note(maoy): Make sure compute_compute_packages is not a node object.
