@@ -4,9 +4,13 @@ describe "openstack-compute::ceilometer-common" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+        n.set["openstack"]["mq"] = {
+          "host" => "127.0.0.1"
+        }
+        n.set["openstack"]["compute"]["syslog"]["use"] = true
+      end
       @node = @chef_run.node
-      @node.set["openstack"]["compute"]["ceilometer"]["syslog"]["use"] = true
       @chef_run.converge "openstack-compute::ceilometer-common"
     end
 
@@ -78,6 +82,31 @@ describe "openstack-compute::ceilometer-common" do
 
       it "has 644 permissions" do
         expect(sprintf("%o", @file.mode)).to eq("600")
+      end
+
+      it "has rabbit_user" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_userid = guest"
+      end
+
+      it "has rabbit_password" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_password = rabbit-pass"
+      end
+
+      it "has rabbit_port" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_port = 5672"
+      end
+
+      it "has rabbit_host" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_host = 127.0.0.1"
+      end
+
+      it "has rabbit_virtual_host" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rabbit_virtual_host = /"
       end
     end
 

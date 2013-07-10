@@ -65,16 +65,14 @@ directory "/etc/nova/rootwrap.d" do
   action :create
 end
 
-rabbit_server_role = node["openstack"]["compute"]["rabbit_server_chef_role"]
-rabbit_info = config_by_role rabbit_server_role, "queue"
-
 db_user = node["openstack"]["compute"]["db"]["username"]
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-rabbit_user = rabbit_info && rabbit_info["username"] || node["openstack"]["compute"]["rabbit"]["username"]
-rabbit_pass = user_password rabbit_user
-rabbit_vhost = rabbit_info && rabbit_info["vhost"] || node["openstack"]["compute"]["rabbit"]["vhost"]
+if node["openstack"]["compute"]["rabbit"]["ha"]
+  rabbit_hosts = rabbit_servers
+end
+rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 keystone = config_by_role identity_service_role
@@ -94,7 +92,6 @@ compute_api_endpoint = endpoint "compute-api" || {}
 ec2_public_endpoint = endpoint "compute-ec2-api" || {}
 image_endpoint = endpoint "image-api"
 
-Chef::Log.debug("openstack-compute::nova-common:rabbit_info|#{rabbit_info}")
 Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
@@ -121,11 +118,8 @@ template "/etc/nova/nova.conf" do
     :vncserver_listen => vnc_bind_ip,
     :vncserver_proxyclient_address => vnc_bind_ip,
     :memcache_servers => memcache_servers,
-    :rabbit_ipaddress => rabbit_info["host"],
-    :rabbit_user => rabbit_user,
     :rabbit_password => rabbit_pass,
-    :rabbit_port => rabbit_info["port"],
-    :rabbit_virtual_host => rabbit_vhost,
+    :rabbit_hosts => rabbit_hosts,
     :identity_endpoint => identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
