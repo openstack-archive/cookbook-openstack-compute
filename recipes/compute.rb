@@ -49,6 +49,17 @@ compute_compute_packages.each do |pkg|
   end
 end
 
+# Installing nfs client packages because in grizzly, cinder nfs is supported
+# Never had to install iscsi packages because nova-compute package depends it
+# So volume-attach 'just worked' before - alop
+platform_options["nfs_packages"].each do |pkg|
+  package pkg do
+    options platform_options["package_overrides"]
+
+    action :upgrade
+  end
+end
+
 cookbook_file "/etc/nova/nova-compute.conf" do
   source "nova-compute.conf"
   mode   00644

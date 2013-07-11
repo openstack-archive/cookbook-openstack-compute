@@ -244,6 +244,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "mysql_service" => "mysqld",
     "common_packages" => ["openstack-nova-common"],
     "iscsi_helper" => "ietadm",
+    "nfs_packages" => ["nfs-utils", "nfs-utils-lib"],
     "package_overrides" => ""
   }
   if platform == "suse"
@@ -300,6 +301,7 @@ when "ubuntu"
     "mysql_service" => "mysql",
     "common_packages" => ["nova-common"],
     "iscsi_helper" => "tgtadm",
+    "nfs_packages" => ["nfs-common"],
     "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end

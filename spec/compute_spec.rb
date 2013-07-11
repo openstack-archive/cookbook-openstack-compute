@@ -31,6 +31,10 @@ describe "openstack-compute::compute" do
       expect(@chef_run).to upgrade_package "nova-compute"
     end
 
+    it "installs nfs client packages" do
+      expect(@chef_run).to upgrade_package "nfs-common"
+    end
+
     it "installs kvm when virt_type is 'kvm'" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
