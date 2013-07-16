@@ -252,6 +252,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
     default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
     default["openstack"]["compute"]["platform"]["lxc_packages"] = ["lxc"]
+    default["openstack"]["compute"]["platform"]["nfs_packages"] = ["nfs-utils"]
     default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/ceilometer"
     default["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] = "#{node['apache']['dir']}/conf.d/ceilometer-api.conf"
     default["openstack"]["compute"]["platform"]["ceilometer_packages"] = {
