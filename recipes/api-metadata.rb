@@ -56,7 +56,7 @@ service "nova-api-metadata" do
   action :enable
 end
 
-identity_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity-api"
 service_pass = service_password "openstack-compute"
 
 template "/etc/nova/api-paste.ini" do

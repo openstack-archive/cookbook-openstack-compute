@@ -53,7 +53,7 @@ service "nova-api-ec2" do
   action :enable
 end
 
-identity_endpoint = endpoint "identity"
+identity_endpoint = endpoint "identity-api"
 service_pass = service_password "openstack-compute"
 
 template "/etc/nova/api-paste.ini" do
