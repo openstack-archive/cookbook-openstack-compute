@@ -207,6 +207,9 @@ default["openstack"]["compute"]["ratelimit"]["settings"] = {
   "generic-delete-limit" => { "verb" => "DELETE", "uri" => "*", "regex" => ".*", "limit" => "100", "interval" => "MINUTE" }
 }
 
+# Keystone settings
+default["openstack"]["compute"]["api"]["auth"]["version"] = "v3"
+
 # Keystone PKI signing directories
 default["openstack"]["compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"

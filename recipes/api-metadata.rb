@@ -56,10 +56,7 @@ service "nova-api-metadata" do
   action :enable
 end
 
-identity_admin_endpoint = endpoint "identity-admin"
-identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
-
-auth_uri = ::URI.decode identity_admin_endpoint.to_s
+identity_endpoint = endpoint "identity-admin"
 service_pass = service_password "openstack-compute"
 
 template "/etc/nova/api-paste.ini" do
@@ -68,7 +65,7 @@ template "/etc/nova/api-paste.ini" do
   group  node["openstack"]["compute"]["group"]
   mode   00644
   variables(
-    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
     :service_pass => service_pass
   )
 

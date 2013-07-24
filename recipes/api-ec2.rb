@@ -53,7 +53,7 @@ service "nova-api-ec2" do
   action :enable
 end
 
-identity_admin_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity"
 service_pass = service_password "openstack-compute"
 
 template "/etc/nova/api-paste.ini" do
@@ -62,7 +62,7 @@ template "/etc/nova/api-paste.ini" do
   group  node["openstack"]["compute"]["group"]
   mode   00644
   variables(
-    :identity_admin_endpoint => identity_admin_endpoint,
+    :identity_endpoint => identity_endpoint,
     :service_pass => service_pass
   )
 
