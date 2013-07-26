@@ -37,8 +37,10 @@ platform_options["compute_vncproxy_consoleauth_packages"].each do |pkg|
   end
 end
 
-service "nova-vncproxy" do
-  service_name platform_options["compute_vncproxy_service"]
+proxy_service = platform_options["compute_vncproxy_service"]
+
+service proxy_service do
+  service_name proxy_service
   supports :status => true, :restart => true
   subscribes :restart, resources("template[/etc/nova/nova.conf]")
 
