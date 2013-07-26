@@ -45,6 +45,9 @@ def compute_stubs
   ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-compute").
     and_return "nova-pass"
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
+  ::Chef::Recipe.any_instance.stub(:system).
+    with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'").
+    and_return true
 end
 
 def expect_runs_nova_common_recipe
