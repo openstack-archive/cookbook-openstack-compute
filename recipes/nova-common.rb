@@ -75,7 +75,7 @@ end
 rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
-keystone = config_by_role identity_service_role
+keystone = search_for(identity_service_role).first
 
 ksadmin_tenant_name = keystone["openstack"]["identity"]["admin_tenant_name"]
 ksadmin_user = keystone["openstack"]["identity"]["admin_user"]
