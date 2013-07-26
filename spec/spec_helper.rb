@@ -23,16 +23,16 @@ def compute_stubs
   ::Chef::Recipe.any_instance.stub(:address_for).
     with("lo").
     and_return "127.0.1.1"
-  ::Chef::Recipe.any_instance.stub(:config_by_role).
+  ::Chef::Recipe.any_instance.stub(:search_for).
     with("os-identity").and_return(
-      {
+      [{
         'openstack' => {
           'identity' => {
             'admin_tenant_name' => 'admin-tenant',
             'admin_user' => 'admin-user'
           }
         }
-      }
+      }]
     )
   ::Chef::Recipe.any_instance.stub(:secret).
     with("secrets", "openstack_identity_bootstrap_token").
