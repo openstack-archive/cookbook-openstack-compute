@@ -38,6 +38,32 @@ default_schedule_zone=<%= node["openstack"]["compute"]["config"]["default_schedu
 storage_availability_zone=<%= node["openstack"]["compute"]["config"]["storage_availability_zone"] %>
 
 ##### NETWORK #####
+
+
+<% case node["openstack"]["compute"]["network"]["service_type"]
+
+when "quantum" -%>
+
+# N.B. due to https://bugs.launchpad.net/nova/+bug/1206330
+# we override the endpoint scheme below, ignore the port
+# and essentially force http
+network_api_class=<%= node["openstack"]["compute"]["network"]["quantum"]["network_api_class"]  %>
+quantum_url=http://<%= @network_endpoint.host %>:<%= @network_endpoint.port %>
+quantum_auth_strategy=<%= node["openstack"]["compute"]["network"]["quantum"]["auth_strategy"] %>
+quantum_admin_tenant_name=<%= node["openstack"]["compute"]["network"]["quantum"]["admin_tenant_name"] %>
+quantum_admin_username=<%= node["openstack"]["compute"]["network"]["quantum"]["admin_username"] %>
+quantum_admin_password=<%= @quantum_admin_password %>
+quantum_admin_auth_url=<%= @identity_endpoint.to_s %>
+libvirt_vif_driver=<%= node["openstack"]["compute"]["network"]["quantum"]["libvirt_vif_driver"] %>
+linuxnet_interface_driver=<%= node["openstack"]["compute"]["network"]["quantum"]["linuxnet_interface_driver"] %>
+firewall_driver = nova.virt.firewall.NoopFirewallDriver
+security_group_api=<%= node["openstack"]["compute"]["network"]["quantum"]["security_group_api"] %>
+service_quantum_metadata_proxy=<%= node["openstack"]["compute"]["network"]["quantum"]["service_quantum_metadata_proxy"] %>
+quantum_metadata_proxy_shared_secret=<%= @quantum_metadata_proxy_shared_secret %>
+default_floating_pool=<%= node["openstack"]["compute"]["network"]["quantum"]["public_network_name"] %>
+dns_server=<%= node["openstack"]["compute"]["network"]["quantum"]["dns_server"] %>
+
+<% when "nova" -%>
 multi_host=<%= node["openstack"]["compute"]["network"]["multi_host"] %>
 network_manager=<%= node["openstack"]["compute"]["network"]["network_manager"] %>
 public_interface=<%= node["openstack"]["compute"]["network"]["public_interface"] %>
@@ -60,6 +86,8 @@ libvirt_use_virtio_for_bridges=false
 libvirt_use_virtio_for_bridges=true
 <% end -%>
 vlan_interface=<%= node["openstack"]["compute"]["network"]["vlan_interface"] %>
+
+<% end -%>
 
 ##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService

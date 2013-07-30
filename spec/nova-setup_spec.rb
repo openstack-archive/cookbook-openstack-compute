@@ -39,7 +39,7 @@ describe "openstack-compute::nova-setup" do
       node.set["openstack"]["compute"]["network"]["floating"]["ipv4_cidr"] = "10.10.10.0/24"
       chef_run.converge "openstack-compute::nova-setup"
 
-      cmd = "/usr/local/bin/add_floaters.py --cidr=10.10.10.0/24"
+      cmd = "/usr/local/bin/add_floaters.py nova --cidr=10.10.10.0/24"
       expect(chef_run).to execute_command cmd
     end
 
@@ -53,7 +53,18 @@ describe "openstack-compute::nova-setup" do
       }
       chef_run.converge "openstack-compute::nova-setup"
 
-      cmd = "/usr/local/bin/add_floaters.py --ip-range=10.10.10.1,10.10.10.5"
+      cmd = "/usr/local/bin/add_floaters.py nova --ip-range=10.10.10.1,10.10.10.5"
+      expect(chef_run).to execute_command cmd
+    end
+
+    it "adds cidr range of floating ipv4 addresses to neutron" do
+      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      node = chef_run.node
+      node.set["openstack"]["compute"]["network"]["service_type"] = "neutron"
+      node.set["openstack"]["compute"]["network"]["floating"]["ipv4_cidr"] = "10.10.10.0/24"
+      node.set["openstack"]["compute"]["network"]["floating"]["public_network_name"] = "public"
+      chef_run.converge "openstack-compute::nova-setup"
+      cmd = ". /root/openrc && /usr/local/bin/add_floaters.py neutron --cidr=10.10.10.0/24 --pool=public"
       expect(chef_run).to execute_command cmd
     end
   end

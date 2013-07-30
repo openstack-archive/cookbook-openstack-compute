@@ -37,6 +37,9 @@ def compute_stubs
   ::Chef::Recipe.any_instance.stub(:secret).
     with("secrets", "openstack_identity_bootstrap_token").
     and_return "bootstrap-token"
+  ::Chef::Recipe.any_instance.stub(:secret).
+    with("secrets", "quantum_metadata_secret").
+    and_return "metadata-secret"
   ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new
   ::Chef::Recipe.any_instance.stub(:user_password).and_return String.new
   ::Chef::Recipe.any_instance.stub(:user_password).
@@ -44,6 +47,8 @@ def compute_stubs
     and_return "rabbit-pass"
   ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-compute").
     and_return "nova-pass"
+  ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-network").
+    and_return "quantum-pass"
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
   ::Chef::Recipe.any_instance.stub(:system).
     with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'").

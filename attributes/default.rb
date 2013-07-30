@@ -76,6 +76,27 @@ default["openstack"]["compute"]["region"] = "RegionOne"
 
 default["openstack"]["compute"]["floating_cmd"] = "/usr/local/bin/add_floaters.py"
 
+# Support multiple network types.  Default network type is "nova"
+# with the other option supported being "quantum"
+default["openstack"]["compute"]["network"]["service_type"] = "nova"
+
+# if the network type is not nova, we will load the following
+# plugins from openstack-network
+default["openstack"]["compute"]["network"]["plugins"] = ["openvswitch", "dhcp_agent"]
+
+# Quantum options
+default["openstack"]["compute"]["network"]["quantum"]["network_api_class"] = "nova.network.quantumv2.api.API"
+default["openstack"]["compute"]["network"]["quantum"]["auth_strategy"] = "keystone"
+default["openstack"]["compute"]["network"]["quantum"]["admin_tenant_name"] = "service"
+default["openstack"]["compute"]["network"]["quantum"]["admin_username"] = "quantum"
+default["openstack"]["compute"]["network"]["quantum"]["libvirt_vif_driver"] = "nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"
+default["openstack"]["compute"]["network"]["quantum"]["linuxnet_interface_driver"] = "nova.network.linux_net.LinuxOVSInterfaceDriver"
+default["openstack"]["compute"]["network"]["quantum"]["security_group_api"] = "quantum"
+default["openstack"]["compute"]["network"]["quantum"]["service_quantum_metadata_proxy"] = true
+default["openstack"]["compute"]["network"]["quantum"]["metadata_secret_name"] = "quantum_metadata_shared_secret"
+default["openstack"]["compute"]["network"]["quantum"]["public_network_name"] = "public"
+default["openstack"]["compute"]["network"]["quantum"]["dns_server"] = "8.8.8.8"
+
 # TODO(shep): This should probably be ["openstack"]["compute"]["network"]["fixed"]
 default["openstack"]["compute"]["networks"] = [
   {
