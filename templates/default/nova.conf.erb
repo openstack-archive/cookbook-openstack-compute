@@ -138,6 +138,9 @@ ram_allocation_ratio=<%= node["openstack"]["compute"]["config"]["ram_allocation_
 max_cores=<%= node["openstack"]["compute"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"]["total"].to_i %>
 <%- end %>
 
+# If true, force creation of config drive regardless of if --config-drive was specified in the API call
+force_config_drive=<% node["openstack"]["compute"]["config"]["force_config_drive"] %>
+
 <% if %w(fedora redhat centos).include? node.platform -%>
 # Adding support for non-modded euca2ools to display ip address info
 # https://bugs.launchpad.net/nova/+bug/901594

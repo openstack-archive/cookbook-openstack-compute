@@ -191,6 +191,9 @@ default["openstack"]["compute"]["config"]["start_guests_on_host_boot"] = false
 # requires https://review.openstack.org/#/c/8423/
 default["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] = true
 
+# If true, create a config drive regardless of if the user specified --config-drive true in their nova boot call
+default["openstack"]["compute"]["config"]["force_config_drive"] = "false"
+
 # Volume API class (driver)
 default["openstack"]["compute"]["config"]["volume_api_class"] = "nova.volume.cinder.API"
 
