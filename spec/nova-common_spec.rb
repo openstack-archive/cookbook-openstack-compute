@@ -189,6 +189,45 @@ describe "openstack-compute::nova-common" do
       end
     end
 
+
+#    describe "identity role local node" do
+#      before do
+#        @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+#          n.set["openstack"]["identity"]["admin_tenant_name"] = "admin-tenant"
+#          n.set["openstack"]["identity"]["admin_user"] = "admin-user"
+#        end
+#        @chef_run.converge 'role[os-identity]', "openstack-compute::nova-common"
+#      end
+#      it "has keystone_hash" do
+#        expect(@chef_run).to log 'openstack-compute::nova-common:keystone|node[???]'
+#      end
+#      it "has ksadmin_user" do
+#        expect(@chef_run).to log 'openstack-compute::nova-common:ksadmin_user|admin-user'
+#      end
+#      it "has ksadmin_tenant_name" do
+#        expect(@chef_run).to log 'openstack-compute::nova-common:ksadmin_tenant_name|admin-tenant'
+#      end
+#    end
+
+
+#    describe "identity role search" do
+#      before do
+#        @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+#          n.set["openstack"]["compute"]["identity_service_chef_role"] = "os-identity"
+#        end
+#        @chef_run.converge "openstack-compute::nova-common"
+#      end
+#      it "has keystone_hash" do
+#        expect(@chef_run).to log 'openstack-compute::nova-common:keystone|node[???]'
+#      end
+#      it "has ksadmin_user" do
+#        expect(@chef_run).to log 'openstack-compute::nova-common:ksadmin_user|admin-user'
+#      end
+#      it "has ksadmin_tenant_name" do
+#        expect(@chef_run).to log 'openstack-compute::nova-common:ksadmin_tenant_name|admin-tenant'
+#      end
+#    end
+
     describe "rootwrap.conf" do
       before do
         @file = @chef_run.template "/etc/nova/rootwrap.conf"
@@ -274,7 +313,22 @@ describe "openstack-compute::nova-common" do
         expect(sprintf("%o", @file.mode)).to eq "600"
       end
 
-      it "template contents" do
+      it "contains ksadmin_user" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "export OS_USERNAME=admin-user"
+      end
+
+      it "contains ksadmin_tenant_name" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "export OS_TENANT_NAME=admin-tenant"
+      end
+
+      it "contains ksadmin_pass" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "export OS_PASSWORD=admin-pass"
+      end
+
+      it "rest of template contents" do
         pending "TODO: implement"
       end
     end

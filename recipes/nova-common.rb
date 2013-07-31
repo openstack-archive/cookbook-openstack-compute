@@ -75,7 +75,14 @@ end
 rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
-keystone = search_for(identity_service_role).first
+
+if node.run_list.roles.include?(identity_service_role)
+  # if role is on this node,  just return the node hash
+  keystone = node
+else
+  # otherwise go searching
+  keystone = search_for(identity_service_role).first
+end
 
 ksadmin_tenant_name = keystone["openstack"]["identity"]["admin_tenant_name"]
 ksadmin_user = keystone["openstack"]["identity"]["admin_user"]
@@ -93,6 +100,8 @@ network_endpoint = endpoint "network-api" || {}
 image_endpoint = endpoint "image-api"
 
 Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
+Chef::Log.debug("openstack-compute::nova-common:ksadmin_user|#{ksadmin_user}")
+Chef::Log.debug("openstack-compute::nova-common:ksadmin_tenant_name|#{ksadmin_tenant_name}")
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")

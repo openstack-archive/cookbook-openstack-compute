@@ -45,6 +45,9 @@ def compute_stubs
   ::Chef::Recipe.any_instance.stub(:user_password).
     with("guest").
     and_return "rabbit-pass"
+  ::Chef::Recipe.any_instance.stub(:user_password).
+    with("admin-user").
+    and_return "admin-pass"
   ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-compute").
     and_return "nova-pass"
   ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-network").
