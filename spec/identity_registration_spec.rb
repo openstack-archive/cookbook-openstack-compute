@@ -11,7 +11,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register Service Tenant") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:tenant_name).
@@ -34,7 +34,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register Service User") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:tenant_name).
@@ -59,7 +59,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Grant 'admin' Role to Service User for Service Tenant") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:tenant_name).
@@ -84,7 +84,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register Compute Service") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:service_name).
@@ -109,7 +109,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register Compute Endpoint") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:service_type).
@@ -117,11 +117,11 @@ describe "openstack-compute::identity_registration" do
         @identity_register_mock.should_receive(:endpoint_region).
           with "RegionOne"
         @identity_register_mock.should_receive(:endpoint_adminurl).
-          with "https://127.0.0.1:8774/v2/%(tenant_id)s"
+          with "http://127.0.0.1:8774/v2/%(tenant_id)s"
         @identity_register_mock.should_receive(:endpoint_internalurl).
-          with "https://127.0.0.1:8774/v2/%(tenant_id)s"
+          with "http://127.0.0.1:8774/v2/%(tenant_id)s"
         @identity_register_mock.should_receive(:endpoint_publicurl).
-          with "https://127.0.0.1:8774/v2/%(tenant_id)s"
+          with "http://127.0.0.1:8774/v2/%(tenant_id)s"
         @identity_register_mock.should_receive(:action).
           with :create_endpoint
 
@@ -138,7 +138,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register Metering Service") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:service_name).
@@ -163,7 +163,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register Metering Endpoint") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:service_type).
@@ -171,11 +171,11 @@ describe "openstack-compute::identity_registration" do
         @identity_register_mock.should_receive(:endpoint_region).
           with "RegionOne"
         @identity_register_mock.should_receive(:endpoint_adminurl).
-          with "https://127.0.0.1:8777/v1"
+          with "http://127.0.0.1:8777/v1"
         @identity_register_mock.should_receive(:endpoint_internalurl).
-          with "https://127.0.0.1:8777/v1"
+          with "http://127.0.0.1:8777/v1"
         @identity_register_mock.should_receive(:endpoint_publicurl).
-          with "https://127.0.0.1:8777/v1"
+          with "http://127.0.0.1:8777/v1"
         @identity_register_mock.should_receive(:action).
           with :create_endpoint
 
@@ -192,7 +192,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register EC2 Service") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:service_name).
@@ -217,7 +217,7 @@ describe "openstack-compute::identity_registration" do
     ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
       with("Register EC2 Endpoint") do |&arg|
         @identity_register_mock.should_receive(:auth_uri).
-          with "https://127.0.0.1:35357/v2.0"
+          with "http://127.0.0.1:35357/v2.0"
         @identity_register_mock.should_receive(:bootstrap_token).
           with "bootstrap-token"
         @identity_register_mock.should_receive(:service_type).
@@ -225,11 +225,11 @@ describe "openstack-compute::identity_registration" do
         @identity_register_mock.should_receive(:endpoint_region).
           with "RegionOne"
         @identity_register_mock.should_receive(:endpoint_adminurl).
-          with "https://127.0.0.1:8773/services/Admin"
+          with "http://127.0.0.1:8773/services/Admin"
         @identity_register_mock.should_receive(:endpoint_internalurl).
-          with "https://127.0.0.1:8773/services/Cloud"
+          with "http://127.0.0.1:8773/services/Cloud"
         @identity_register_mock.should_receive(:endpoint_publicurl).
-          with "https://127.0.0.1:8773/services/Cloud"
+          with "http://127.0.0.1:8773/services/Cloud"
         @identity_register_mock.should_receive(:action).
           with :create_endpoint
 

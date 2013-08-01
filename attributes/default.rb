@@ -201,7 +201,6 @@ default["openstack"]["compute"]["config"]["volume_api_class"] = "nova.volume.cin
 default["openstack"]["compute"]["config"]["quota_security_groups"] = 50
 default["openstack"]["compute"]["config"]["quota_security_group_rules"] = 20
 
-default["openstack"]["compute"]["api"]["auth_strategy"] = "keystone"
 default["openstack"]["compute"]["ratelimit"]["settings"] = {
   "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },
   "create-servers-limit" => { "verb" => "POST", "uri" => "*/servers", "regex" => "^/servers", "limit" => "50", "interval" => "DAY" },
@@ -211,7 +210,11 @@ default["openstack"]["compute"]["ratelimit"]["settings"] = {
 }
 
 # Keystone settings
-default["openstack"]["compute"]["api"]["auth"]["version"] = "v3"
+default["openstack"]["compute"]["api"]["auth_strategy"] = "keystone"
+
+# Setting this to v2.0. See discussion on
+# https://bugs.launchpad.net/openstack-chef/+bug/1207504
+default["openstack"]["compute"]["api"]["auth"]["version"] = "v2.0"
 
 # Keystone PKI signing directories
 default["openstack"]["compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"

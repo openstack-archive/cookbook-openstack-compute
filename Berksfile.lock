@@ -1,5 +1,4 @@
 {
-  "sha": "0cb5efe2753ccc3a9f009bcc84c09551c750ae51",
   "sources": {
     "openstack-compute": {
       "path": "."
@@ -7,17 +6,17 @@
     "openstack-image": {
       "locked_version": "7.0.0",
       "git": "git://github.com/stackforge/cookbook-openstack-image.git",
-      "ref": "c4af085fd62b542fee13d3a8a4ffdc1885ce37ed"
+      "ref": "c06c440a371e4b8602a2de54b21e4c6a82a0fbf3"
     },
     "openstack-identity": {
       "locked_version": "7.0.0",
       "git": "git://github.com/stackforge/cookbook-openstack-identity.git",
-      "ref": "029fe8a648939f832f844562d0e18af2a951c783"
+      "ref": "b881af26095cfa869a6970067c49597a0ee63586"
     },
     "openstack-common": {
-      "locked_version": "0.3.0",
+      "locked_version": "0.4.2",
       "git": "git://github.com/stackforge/cookbook-openstack-common.git",
-      "ref": "25b183f2362fa501cfee4db331491b3d984a5c05"
+      "ref": "6354e0280ac91b86f244923287380d66ff2f06c6"
     },
     "sysctl": {
       "locked_version": "0.2.0",
@@ -39,6 +38,9 @@
     "build-essential": {
       "locked_version": "1.4.0"
     },
+    "apt": {
+      "locked_version": "2.0.0"
+    },
     "database": {
       "locked_version": "1.4.0"
     },
@@ -50,9 +52,6 @@
     },
     "postgresql": {
       "locked_version": "3.0.2"
-    },
-    "apt": {
-      "locked_version": "2.0.0"
     },
     "aws": {
       "locked_version": "0.101.2"

@@ -84,7 +84,6 @@ ksadmin_pass = user_password ksadmin_user
 memcache_servers = memcached_servers.join ","
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_admin_endpoint = endpoint "identity-admin"
 identity_endpoint = endpoint "identity-api"
 xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
 novnc_endpoint = endpoint "compute-novnc" || {}

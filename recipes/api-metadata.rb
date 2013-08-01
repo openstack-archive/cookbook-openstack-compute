@@ -57,7 +57,20 @@ service "nova-api-metadata" do
 end
 
 identity_endpoint = endpoint "identity-api"
+identity_admin_endpoint = endpoint "identity-admin"
 service_pass = service_password "openstack-compute"
+
+#TODO(jaypipes): Move this logic and stuff into the openstack-common
+# library cookbook.
+auth_uri = identity_endpoint.to_s
+if node["openstack"]["compute"]["api"]["auth"]["version"] != "v2.0"
+  # The auth_uri should contain /v2.0 in most cases, but if the
+  # auth_version is v3.0, we leave it off. This is only necessary
+  # for environments that need to support V3 non-default-domain
+  # tokens, which is really the only reason to set version to
+  # something other than v2.0 (the default)
+  auth_uri = auth_uri.gsub('/v2.0', '')
+end
 
 template "/etc/nova/api-paste.ini" do
   source "api-paste.ini.erb"
@@ -65,9 +78,9 @@ template "/etc/nova/api-paste.ini" do
   group  node["openstack"]["compute"]["group"]
   mode   00644
   variables(
-    :identity_endpoint => identity_endpoint,
+    :auth_uri => auth_uri,
+    :identity_admin_endpoint => identity_admin_endpoint,
     :service_pass => service_pass
   )
-
   notifies :restart, "service[nova-api-metadata]"
 end
