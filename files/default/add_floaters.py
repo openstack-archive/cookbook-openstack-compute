@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
-# Copyright 2012 AT&T
+# Copyright 2013 AT&T Services, Inc.
 # All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -21,7 +21,7 @@ import subprocess
 
 import netaddr
 
-DESCRIPTION = "A `nova-manage floating create` wrapper."
+DESCRIPTION = "A `nova-manage floating create` and `quantum net create` wrapper."
 
 
 class FloatingAddress(object):
@@ -37,19 +37,16 @@ class FloatingAddress(object):
         self._pool = args.pool
         self._interface = args.interface
 
-    def _add_cidr(self, cidr):
+    def nova_add_cidr(self, cidr):
         """
         Validates the provided cider address, and passes it to nova-manage.
 
         :param cidr: A string containing a valid CIDR address.
         """
-        try:
-            netaddr.IPNetwork(cidr)
-            self._add_floating(cidr)
-        except netaddr.core.AddrFormatError:
-            raise
+        netaddr.IPNetwork(cidr)
+        self.nova_add_floating(cidr)
 
-    def _add_range(self, start, end):
+    def nova_add_range(self, start, end):
         """
         Takes a start and end range, and creates individual host addresses.
 
@@ -58,9 +55,9 @@ class FloatingAddress(object):
         """
         ip_list = list(netaddr.iter_iprange(start, end))
         for ip in ip_list:
-            self._add_floating(ip)
+            self.nova_add_floating(ip)
 
-    def _add_floating(self, ip):
+    def nova_add_floating(self, ip):
         cmd = "nova-manage floating create --ip_range={0}".format(ip)
         if self._pool:
             cmd += ' --pool={0}'.format(self._pool)
@@ -69,28 +66,68 @@ class FloatingAddress(object):
 
         subprocess.check_call(cmd, shell=True)
 
-def _parse_args():
+    def neutron_add_floating(self, cidr):
+
+        # convert cidr string to IPNetwork object
+        cidr = netaddr.IPNetwork(cidr)
+
+        # ensure we have a public network and we only ever create one
+        cmd = "if ! quantum net-show public; then quantum net-create %s -- --router:external=True; fi" % self._pool
+        subprocess.check_call(cmd, shell=True)
+
+        # calculate the start and end values
+        ip_start = cidr.ip
+        ip_end = netaddr.IPAddress(cidr.last-1)
+
+        # create a new subnet
+        cmd = "quantum subnet-create --allocation-pool start=%s,end=%s %s %s -- --enable_dhcp=False" % \
+              (ip_start, ip_end, self._pool, cidr)
+        subprocess.check_call(cmd, shell=True)
+
+
+def parse_args():
     ap = argparse.ArgumentParser(description=DESCRIPTION)
-    ap.add_argument('--pool',
-                       help="Name of the floating pool")
-    ap.add_argument('--interface',
-                       help="Network interface to bring the floating "
-                            "addresses up on")
-    group = ap.add_mutually_exclusive_group()
+    subparsers = ap.add_subparsers(help='sub-command help')
+
+    # create the parser for the "nova" command
+    parser_nova = subparsers.add_parser('nova', help='Use Nova Backend')
+    parser_nova.add_argument('--pool',
+                             required=True,
+                             help="Name of the floating pool")
+    parser_nova.add_argument('--interface',
+                             required=False,
+                             help="Network interface to bring the floating "
+                                  "addresses up on")
+    group = parser_nova.add_mutually_exclusive_group(required=True)
     group.add_argument('--cidr',
                        help="A CIDR notation of addresses to add "
                             "(e.g. 192.168.0.0/24)")
     group.add_argument('--ip-range',
                        help="A range of addresses to add "
                             "(e.g. 192.168.0.10,192.168.0.50)")
+
+    # create the parser for the "neutron command"
+    parser_neutron = subparsers.add_parser('neutron', help='Use Neutron Backend')
+    parser_neutron.add_argument('--cidr',
+                                required=True,
+                                help="A CIDR notation of addresses to add "
+                                     "(e.g. 192.168.0.11/24 to start at .11 "
+                                     "and end at .254)")
+    parser_neutron.add_argument('--pool',
+                                required=True,
+                                help="Name of the public network")
     return ap.parse_args()
 
 if __name__ == '__main__':
-    args = _parse_args()
+    args = parse_args()
     fa = FloatingAddress(args)
 
-    if args.cidr:
-        fa._add_cidr(args.cidr)
-    elif args.ip_range:
-        start, end = args.ip_range.split(',')
-        fa._add_range(start, end)
+    if args.nova:
+        if args.cidr:
+            fa.nova_add_cidr(args.cidr)
+        elif args.ip_range:
+            start, end = args.ip_range.split(',')
+            fa.nova_add_range(start, end)
+
+    elif args.neutron:
+        fa.neutron_add_cidr(args.cidr)

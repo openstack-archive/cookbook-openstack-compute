@@ -24,8 +24,14 @@ describe "openstack-compute::nova-common" do
     it "doesn't run logging recipe" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       chef_run.converge "openstack-compute::nova-common"
-
       expect(chef_run).not_to include_recipe "openstack-common::logging"
+    end
+
+    it "can converge with quantum service type" do
+      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      node = chef_run.node
+      node.set["openstack"]["compute"]["network"]["service_type"] = "quantum"
+      chef_run.converge "openstack-compute::nova-common"
     end
 
     it "installs nova common packages" do

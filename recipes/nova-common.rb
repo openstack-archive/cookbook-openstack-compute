@@ -89,6 +89,7 @@ xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
 novnc_endpoint = endpoint "compute-novnc" || {}
 compute_api_endpoint = endpoint "compute-api" || {}
 ec2_public_endpoint = endpoint "compute-ec2-api" || {}
+network_endpoint = endpoint "network-api" || {}
 image_endpoint = endpoint "image-api"
 
 Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
@@ -97,11 +98,20 @@ Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoin
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
 vnc_bind_ip = address_for node["openstack"]["compute"]["libvirt"]["bind_interface"]
 xvpvnc_proxy_ip = address_for node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]
 novnc_proxy_ip = address_for node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]
+
+if node["openstack"]["compute"]["network"]["service_type"] == "quantum"
+  quantum_admin_password = service_password "openstack-network"
+  quantum_metadata_proxy_shared_secret = secret "secrets", "quantum_metadata_secret"
+else
+  quantum_admin_password = nil
+  quantum_metadata_proxy_shared_secret = nil
+end
 
 template "/etc/nova/nova.conf" do
   source "nova.conf.erb"
@@ -126,7 +136,10 @@ template "/etc/nova/nova.conf" do
     :glance_api_port => image_endpoint.port,
     :iscsi_helper => platform_options["iscsi_helper"],
     :scheduler_default_filters => node["openstack"]["compute"]["scheduler"]["default_filters"].join(","),
-    :osapi_compute_link_prefix => compute_api_endpoint.to_s
+    :osapi_compute_link_prefix => compute_api_endpoint.to_s,
+    :network_endpoint => network_endpoint,
+    :quantum_admin_password => quantum_admin_password,
+    :quantum_metadata_proxy_shared_secret => quantum_metadata_proxy_shared_secret
   )
 end
 
