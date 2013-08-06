@@ -31,7 +31,6 @@ service_user = node["openstack"]["compute"]["service_user"]
 service_role = node["openstack"]["compute"]["service_role"]
 service_tenant_name = node["openstack"]["compute"]["service_tenant_name"]
 nova_api_endpoint = endpoint "compute-api"
-ceilometer_api_endpoint = endpoint "metering-api"
 ec2_admin_endpoint = endpoint "compute-ec2-admin"
 ec2_public_endpoint = endpoint "compute-ec2-api"
 region = node["openstack"]["compute"]["region"]
@@ -88,30 +87,6 @@ openstack_identity_register "Register Compute Endpoint" do
   endpoint_adminurl ::URI.decode nova_api_endpoint.to_s
   endpoint_internalurl ::URI.decode nova_api_endpoint.to_s
   endpoint_publicurl ::URI.decode nova_api_endpoint.to_s
-
-  action :create_endpoint
-end
-
-# Register Ceilometer Service
-openstack_identity_register "Register Metering Service" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_name "ceilometer"
-  service_type "metering"
-  service_description "Ceilometer Service"
-
-  action :create_service
-end
-
-# Register Ceilometer Endpoint
-openstack_identity_register "Register Metering Endpoint" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_type "metering"
-  endpoint_region region
-  endpoint_adminurl ::URI.decode ceilometer_api_endpoint.to_s
-  endpoint_internalurl ::URI.decode ceilometer_api_endpoint.to_s
-  endpoint_publicurl ::URI.decode ceilometer_api_endpoint.to_s
 
   action :create_endpoint
 end
