@@ -34,8 +34,7 @@ class FloatingAddress(object):
     """
 
     def __init__(self, args):
-        self._pool = args.pool
-        self._interface = args.interface
+        self._args = args
 
     def nova_add_cidr(self, cidr):
         """
@@ -59,10 +58,10 @@ class FloatingAddress(object):
 
     def nova_add_floating(self, ip):
         cmd = "nova-manage floating create --ip_range={0}".format(ip)
-        if self._pool:
-            cmd += ' --pool={0}'.format(self._pool)
-        if self._interface:
-            cmd += ' --interface={0}'.format(self._interface)
+        if self._args.pool:
+            cmd += ' --pool={0}'.format(self._args.pool)
+        if self._args.interface:
+            cmd += ' --interface={0}'.format(self._args.interface)
 
         subprocess.check_call(cmd, shell=True)
 
@@ -72,8 +71,17 @@ class FloatingAddress(object):
         cidr = netaddr.IPNetwork(cidr)
 
         # ensure we have a public network and we only ever create one
-        cmd = "if ! quantum net-show public; then quantum net-create %s -- --router:external=True; fi" % self._pool
-        subprocess.check_call(cmd, shell=True)
+        cmd = "if ! quantum net-show public; then quantum net-create %s -- --router:external=True; fi" % self._args.pool
+
+        try:
+            subprocess.check_call(cmd, shell=True)
+        except:
+            # we failed to query the quanutm api, we'll ignore this error
+            # and return now so any surrounding chef runs can continue
+            # since this script may actually be running on the quantum api
+            print "ERROR: Failed to query the quantum api for the public network"
+            return
+
 
         # calculate the start and end values
         ip_start = cidr.ip
@@ -81,13 +89,13 @@ class FloatingAddress(object):
 
         # create a new subnet
         cmd = "quantum subnet-create --allocation-pool start=%s,end=%s %s %s -- --enable_dhcp=False" % \
-              (ip_start, ip_end, self._pool, cidr)
+              (ip_start, ip_end, self._args.pool, cidr)
         subprocess.check_call(cmd, shell=True)
 
 
 def parse_args():
     ap = argparse.ArgumentParser(description=DESCRIPTION)
-    subparsers = ap.add_subparsers(help='sub-command help')
+    subparsers = ap.add_subparsers(help='sub-command help', dest='subparser_name')
 
     # create the parser for the "nova" command
     parser_nova = subparsers.add_parser('nova', help='Use Nova Backend')
@@ -122,12 +130,12 @@ if __name__ == '__main__':
     args = parse_args()
     fa = FloatingAddress(args)
 
-    if args.nova:
+    if args.subparser_name == 'nova':
         if args.cidr:
             fa.nova_add_cidr(args.cidr)
         elif args.ip_range:
             start, end = args.ip_range.split(',')
             fa.nova_add_range(start, end)
 
-    elif args.neutron:
-        fa.neutron_add_cidr(args.cidr)
+    elif args.subparser_name == 'neutron':
+        fa.neutron_add_floating(args.cidr)
