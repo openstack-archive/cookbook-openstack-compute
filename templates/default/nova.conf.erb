@@ -47,8 +47,12 @@ when "quantum" -%>
 # N.B. due to https://bugs.launchpad.net/nova/+bug/1206330
 # we override the endpoint scheme below, ignore the port
 # and essentially force http
-network_api_class=<%= node["openstack"]["compute"]["network"]["quantum"]["network_api_class"]  %>
+<% if @network_endpoint.port == 443 -%>
+quantum_url=http://<%= @network_endpoint.host %>:80
+<% else -%>
 quantum_url=http://<%= @network_endpoint.host %>:<%= @network_endpoint.port %>
+<% end -%>
+network_api_class=<%= node["openstack"]["compute"]["network"]["quantum"]["network_api_class"]  %>
 quantum_auth_strategy=<%= node["openstack"]["compute"]["network"]["quantum"]["auth_strategy"] %>
 quantum_admin_tenant_name=<%= node["openstack"]["compute"]["network"]["quantum"]["admin_tenant_name"] %>
 quantum_admin_username=<%= node["openstack"]["compute"]["network"]["quantum"]["admin_username"] %>
