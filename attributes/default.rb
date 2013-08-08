@@ -39,25 +39,6 @@ default["openstack"]["compute"]["service_tenant_name"] = "service"
 default["openstack"]["compute"]["service_user"] = "nova"
 default["openstack"]["compute"]["service_role"] = "admin"
 
-# ceilometer specific attrs
-default["openstack"]["compute"]["ceilometer"]["conf"] = "/etc/ceilometer/ceilometer.conf"
-default["openstack"]["compute"]["ceilometer"]["db"]["username"] = 'ceilometer'
-default["openstack"]["compute"]["ceilometer"]["periodic_interval"] = 600
-default["openstack"]["compute"]["ceilometer"]["syslog"]["use"] = false
-
-# attrs used in httpd configuration
-default["openstack"]["compute"]["ceilometer"]["api"]["server_hostname"] = "127.0.0.1"
-default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["user"] = "admin"
-default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["password"] = "adminpass"
-default["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] = "#{node['apache']['dir']}/sites-available/meter"
-
-# ceilometer specific attrs used if installing from source
-default["openstack"]["compute"]["platform"]["ceilometer_packages"] = nil
-default["openstack"]["compute"]["ceilometer"]["branch"] = 'stable/grizzly'
-default["openstack"]["compute"]["ceilometer"]["repo"] = "git://github.com/openstack/ceilometer.git"
-default["openstack"]["compute"]["ceilometer"]["dependent_pkgs"] = ['libxslt-dev', 'libxml2-dev']
-default["openstack"]["compute"]["ceilometer"]["install_dir"] = '/opt/ceilometer'
-
 case platform
 when "fedora", "redhat", "centos", "ubuntu"
   default["openstack"]["compute"]["user"] = "nova"
@@ -239,7 +220,6 @@ default["openstack"]["compute"]["api"]["auth"]["version"] = "v2.0"
 
 # Keystone PKI signing directories
 default["openstack"]["compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
-default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/ceilometer-api"
 
 case platform
 when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't fix this
@@ -282,23 +262,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
     default["openstack"]["compute"]["platform"]["lxc_packages"] = ["lxc"]
     default["openstack"]["compute"]["platform"]["nfs_packages"] = ["nfs-utils"]
-    default["openstack"]["compute"]["ceilometer"]["api"]["auth"]["cache_dir"] = "/var/cache/ceilometer"
-    default["openstack"]["compute"]["ceilometer"]["api"]["meter-site"] = "#{node['apache']['dir']}/conf.d/ceilometer-api.conf"
-    default["openstack"]["compute"]["platform"]["ceilometer_packages"] = {
-      "common" => ["openstack-ceilometer"],
-      "agent-central" => ["openstack-ceilometer-agent-central"],
-      "agent-compute" => ["openstack-ceilometer-agent-compute"],
-      "api" => ["openstack-ceilometer-api"],
-      "collector" => ["openstack-ceilometer-collector"]
-    }
-    default["openstack"]["compute"]["platform"]["ceilometer_services"] = {
-      "agent-central" => "openstack-ceilometer-agent-central",
-      "agent-compute" => "openstack-ceilometer-agent-compute",
-      "api" => "openstack-ceilometer-api",
-      "collector" => "openstack-ceilometer-collector",
-    }
   end
-
 when "ubuntu"
   default["openstack"]["compute"]["platform"] = {
     "api_ec2_packages" => ["nova-api-ec2"],

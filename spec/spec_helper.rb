@@ -64,12 +64,6 @@ def expect_runs_nova_common_recipe
   end
 end
 
-def expect_runs_ceilometer_common_recipe
-  it "installs nova-ceilometer" do
-    expect(@chef_run).to include_recipe "openstack-compute::ceilometer-common"
-  end
-end
-
 def expect_installs_python_keystone
   it "installs python-keystone" do
     expect(@chef_run).to upgrade_package "python-keystone"
