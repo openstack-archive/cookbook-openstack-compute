@@ -2,187 +2,123 @@ require_relative "spec_helper"
 
 describe "openstack-compute::identity_registration" do
   before do
-    @identity_register_mock = double "identity_register"
+    compute_stubs
+    @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+    @chef_run.converge "openstack-compute::identity_registration"
   end
 
   it "registers service tenant" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Register Service Tenant") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:tenant_name).
-          with "service"
-        @identity_register_mock.should_receive(:tenant_description).
-          with "Service Tenant"
-        @identity_register_mock.should_receive(:action).
-          with :create_tenant
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register Service Tenant"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :tenant_name => "service",
+      :tenant_description => "Service Tenant",
+      :action => [:create_tenant]
+    )
   end
 
   it "registers service user" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Register Service User") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:tenant_name).
-          with "service"
-        @identity_register_mock.should_receive(:user_name).
-          with "nova"
-        @identity_register_mock.should_receive(:user_pass).
-          with "nova-pass"
-        @identity_register_mock.should_receive(:action).
-          with :create_user
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register Service User"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :tenant_name => "service",
+      :user_name => "nova",
+      :user_pass => "nova-pass",
+      :action => [:create_user]
+    )
   end
 
   it "grants admin role to service user for service tenant" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Grant 'admin' Role to Service User for Service Tenant") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:tenant_name).
-          with "service"
-        @identity_register_mock.should_receive(:user_name).
-          with "nova"
-        @identity_register_mock.should_receive(:role_name).
-          with "admin"
-        @identity_register_mock.should_receive(:action).
-          with :grant_role
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Grant 'admin' Role to Service User for Service Tenant"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :tenant_name => "service",
+      :user_name => "nova",
+      :role_name => "admin",
+      :action => [:grant_role]
+    )
   end
 
   it "registers compute service" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Register Compute Service") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:service_name).
-          with "nova"
-        @identity_register_mock.should_receive(:service_type).
-          with "compute"
-        @identity_register_mock.should_receive(:service_description).
-          with "Nova Compute Service"
-        @identity_register_mock.should_receive(:action).
-          with :create_service
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register Compute Service"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :service_name => "nova",
+      :service_type => "compute",
+      :service_description => "Nova Compute Service",
+      :action => [:create_service]
+    )
   end
 
   it "registers compute endpoint" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Register Compute Endpoint") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:service_type).
-          with "compute"
-        @identity_register_mock.should_receive(:endpoint_region).
-          with "RegionOne"
-        @identity_register_mock.should_receive(:endpoint_adminurl).
-          with "http://127.0.0.1:8774/v2/%(tenant_id)s"
-        @identity_register_mock.should_receive(:endpoint_internalurl).
-          with "http://127.0.0.1:8774/v2/%(tenant_id)s"
-        @identity_register_mock.should_receive(:endpoint_publicurl).
-          with "http://127.0.0.1:8774/v2/%(tenant_id)s"
-        @identity_register_mock.should_receive(:action).
-          with :create_endpoint
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register Compute Endpoint"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :service_type => "compute",
+      :endpoint_region => "RegionOne",
+      :endpoint_adminurl => "http://127.0.0.1:8774/v2/%(tenant_id)s",
+      :endpoint_internalurl => "http://127.0.0.1:8774/v2/%(tenant_id)s",
+      :endpoint_publicurl => "http://127.0.0.1:8774/v2/%(tenant_id)s",
+      :action => [:create_endpoint]
+    )
   end
 
   it "registers ec2 service" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Register EC2 Service") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:service_name).
-          with "ec2"
-        @identity_register_mock.should_receive(:service_type).
-          with "ec2"
-        @identity_register_mock.should_receive(:service_description).
-          with "EC2 Compatibility Layer"
-        @identity_register_mock.should_receive(:action).
-          with :create_service
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register EC2 Service"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :service_name => "ec2",
+      :service_type => "ec2",
+      :service_description => "EC2 Compatibility Layer",
+      :action => [:create_service]
+    )
   end
 
-  it "registers compute endpoint" do
-    compute_stubs
-    ::Chef::Recipe.any_instance.stub(:openstack_identity_register)
-    ::Chef::Recipe.any_instance.should_receive(:openstack_identity_register).
-      with("Register EC2 Endpoint") do |&arg|
-        @identity_register_mock.should_receive(:auth_uri).
-          with "http://127.0.0.1:35357/v2.0"
-        @identity_register_mock.should_receive(:bootstrap_token).
-          with "bootstrap-token"
-        @identity_register_mock.should_receive(:service_type).
-          with "ec2"
-        @identity_register_mock.should_receive(:endpoint_region).
-          with "RegionOne"
-        @identity_register_mock.should_receive(:endpoint_adminurl).
-          with "http://127.0.0.1:8773/services/Admin"
-        @identity_register_mock.should_receive(:endpoint_internalurl).
-          with "http://127.0.0.1:8773/services/Cloud"
-        @identity_register_mock.should_receive(:endpoint_publicurl).
-          with "http://127.0.0.1:8773/services/Cloud"
-        @identity_register_mock.should_receive(:action).
-          with :create_endpoint
+  it "registers ec2 endpoint" do
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register EC2 Endpoint"
+    ).to_hash
 
-        @identity_register_mock.instance_eval &arg
-    end
-
-    chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
-    chef_run.converge "openstack-compute::identity_registration"
+    expect(resource).to include(
+      :auth_uri => "http://127.0.0.1:35357/v2.0",
+      :bootstrap_token => "bootstrap-token",
+      :service_type => "ec2",
+      :endpoint_region => "RegionOne",
+      :endpoint_adminurl => "http://127.0.0.1:8773/services/Admin",
+      :endpoint_internalurl => "http://127.0.0.1:8773/services/Cloud",
+      :endpoint_publicurl => "http://127.0.0.1:8773/services/Cloud",
+      :action => [:create_endpoint]
+    )
   end
 end
