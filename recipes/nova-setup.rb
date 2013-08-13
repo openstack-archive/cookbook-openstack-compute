@@ -103,13 +103,13 @@ when "nova"
 
 when "quantum", "neutron"
 
-  # ensure we have access to the latest version
-  # of the quantum client which floating_cmd will
-  # require
-  include_recipe "python::pip"
-  python_pip "python-quantumclient" do
-    action :upgrade
-    only_if { platform?("ubuntu", "debian") }
+  platform_options = node["openstack"]["compute"]["platform"]
+
+  platform_options["neutron_python_packages"].each do |pkg|
+    package pkg do
+      options platform_options["package_overrides"]
+      action :upgrade
+    end
   end
 
   cookbook_file node["openstack"]["compute"]["floating_cmd"] do
