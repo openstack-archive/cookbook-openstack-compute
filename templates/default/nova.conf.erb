@@ -198,3 +198,7 @@ volume_api_class=<%= node["openstack"]["compute"]["config"]["volume_api_class"] 
 osapi_compute_extension=<%= p %>
 <% end %>
 <% end %>
+
+[conductor]
+
+use_local=<%= node["openstack"]["compute"]["conductor"]["use_local"] %>

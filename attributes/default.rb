@@ -221,6 +221,9 @@ default["openstack"]["compute"]["api"]["auth"]["version"] = "v2.0"
 # Keystone PKI signing directories
 default["openstack"]["compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/api"
 
+# Perform nova-conductor operations locally (boolean value)
+default["openstack"]["compute"]["conductor"]["use_local"] = "False"
+
 case platform
 when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't fix this
   default["openstack"]["compute"]["platform"] = {
