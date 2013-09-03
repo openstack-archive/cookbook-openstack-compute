@@ -232,6 +232,7 @@ License and Author
 | **Author**           |  Matt Ray (<matt@opscode.com>)                     |
 | **Author**           |  Jay Pipes (<jaypipes@att.com>)                    |
 | **Author**           |  John Dewey (<jdewey@att.com>)                     |
+| **Author**           |  Kevin Bringard (<kbringard@att.com>)                     |
 | **Author**           |  Craig Tracey (<craigtracey@gmail.com>)            |
 | **Author**           |  Sean Gallagher (<sean.gallagher@att.com>)         |
 | **Author**           |  Ionut Artarisi (<iartarisi@suse.cz>)              |

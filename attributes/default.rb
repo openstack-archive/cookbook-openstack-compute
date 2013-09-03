@@ -202,6 +202,28 @@ default["openstack"]["compute"]["config"]["volume_api_class"] = "nova.volume.cin
 # quota settings
 default["openstack"]["compute"]["config"]["quota_security_groups"] = 50
 default["openstack"]["compute"]["config"]["quota_security_group_rules"] = 20
+# (StrOpt) default driver to use for quota checks (default: nova.quota.DbQuotaDriver)
+default["openstack"]["compute"]["config"]["quota_driver"] = "nova.quota.DbQuotaDriver"
+# number of instance cores allowed per project (default: 20)
+default["openstack"]["compute"]["config"]["quota_cores"] = 20
+# number of fixed ips allowed per project (this should be at least the number of instances allowed) (default: -1)
+default["openstack"]["compute"]["config"]["quota_fixed_ips"] = -1
+# number of floating ips allowed per project (default: 10)
+default["openstack"]["compute"]["config"]["quota_floating_ips"] = 10
+# number of bytes allowed per injected file (default: 10240)
+default["openstack"]["compute"]["config"]["quota_injected_file_content_bytes"] = 10240
+# number of bytes allowed per injected file path (default: 255)
+default["openstack"]["compute"]["config"]["quota_injected_file_path_bytes"] = 255
+# number of injected files allowed (default: 5)
+default["openstack"]["compute"]["config"]["quota_injected_files"] = 5
+# number of instances allowed per project (defailt: 10)
+default["openstack"]["compute"]["config"]["quota_instances"] = 10
+# number of key pairs per user (default: 100)
+default["openstack"]["compute"]["config"]["quota_key_pairs"] = 100
+# number of metadata items allowed per instance (default: 128)
+default["openstack"]["compute"]["config"]["quota_metadata_items"] = 128
+# megabytes of instance ram allowed per project (default: 51200)
+default["openstack"]["compute"]["config"]["quota_ram"] = 51200
 
 default["openstack"]["compute"]["ratelimit"]["settings"] = {
   "generic-post-limit" => { "verb" => "POST", "uri" => "*", "regex" => ".*", "limit" => "10", "interval" => "MINUTE" },

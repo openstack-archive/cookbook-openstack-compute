@@ -148,10 +148,35 @@ osapi_compute_link_prefix = <%= @osapi_compute_link_prefix %>
 snapshot_image_format=<%= node["openstack"]["compute"]["config"]["snapshot_image_format"] %>
 start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_guests_on_host_boot"] %>
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
+
+##### QUOTAS #####
+# (StrOpt) default driver to use for quota checks (default: nova.quota.DbQuotaDriver)
+quota_driver=<%= node["openstack"]["compute"]["config"]["quota_driver"] %>
 # number of security groups per project (default: 10)
 quota_security_groups=<%= node["openstack"]["compute"]["config"]["quota_security_groups"] %>
 # number of security rules per security group (default: 20)
 quota_security_group_rules=<%= node["openstack"]["compute"]["config"]["quota_security_group_rules"] %>
+# number of instance cores allowed per project (default: 20)
+quota_cores=<%= node["openstack"]["compute"]["config"]["quota_cores"] %>
+# number of fixed ips allowed per project (this should be at least the number of instances allowed) (default: -1)
+quota_fixed_ips=<%= node["openstack"]["compute"]["config"]["quota_fixed_ips"] %>
+# number of floating ips allowed per project (default: 10)
+quota_floating_ips=<%= node["openstack"]["compute"]["config"]["quota_floating_ips"] %>
+# number of bytes allowed per injected file (default: 10240)
+quota_injected_file_content_bytes=<%= node["openstack"]["compute"]["config"]["quota_injected_file_content_bytes"] %>
+# number of bytes allowed per injected file path (default: 255)
+quota_injected_file_path_bytes=<%= node["openstack"]["compute"]["config"]["quota_injected_file_path_bytes"] %>
+# number of injected files allowed (default: 5)
+quota_injected_files=<%= node["openstack"]["compute"]["config"]["quota_injected_files"] %>
+# number of instances allowed per project (defailt: 10)
+quota_instances=<%= node["openstack"]["compute"]["config"]["quota_instances"] %>
+# number of key pairs per user (default: 100)
+quota_key_pairs=<%= node["openstack"]["compute"]["config"]["quota_key_pairs"] %>
+# number of metadata items allowed per instance (default: 128)
+quota_metadata_items=<%= node["openstack"]["compute"]["config"]["quota_metadata_items"] %>
+# megabytes of instance ram allowed per project (default: 51200)
+quota_ram=<%= node["openstack"]["compute"]["config"]["quota_ram"] %>
+
 
 <%- if /FilterScheduler/.match(node["openstack"]["compute"]["scheduler"]["scheduler_driver"]) or
        /MultiScheduler/.match(node["openstack"]["compute"]["scheduler"]["scheduler_driver"]) %>
