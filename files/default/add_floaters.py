@@ -31,6 +31,7 @@ class FloatingAddress(object):
     network, nova-manage doesn't account for this.
 
     TODO(retr0h): This should really be added to nova-manage.
+    TODO(jaypipes): Instead of subprocess calls, just use the quantumclient
     """
 
     def __init__(self, args):
@@ -82,6 +83,12 @@ class FloatingAddress(object):
             print "ERROR: Failed to query the quantum api for the public network"
             return
 
+        cmd = "quantum subnet-list -Fcidr -fcsv --quote=none | grep '%s'" % cidr
+
+        res = subprocess.call(cmd, shell=True)
+        if res == 0:
+            # Subnet has already been created...
+            return
 
         # calculate the start and end values
         ip_start = cidr.ip
