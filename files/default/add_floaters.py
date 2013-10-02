@@ -72,7 +72,7 @@ class FloatingAddress(object):
         cidr = netaddr.IPNetwork(cidr)
 
         # ensure we have a public network and we only ever create one
-        cmd = "if ! quantum net-show public; then quantum net-create %s -- --router:external=True; fi" % self._args.pool
+        cmd = "NETLIST=$(quantum net-list -c name); if [ $? -eq 0 ]; then if ! echo $NETLIST | grep -q %s; then quantum net-create %s -- --router:external=True; fi; fi;" % (self._args.pool, self._args.pool)
 
         try:
             subprocess.check_call(cmd, shell=True)
