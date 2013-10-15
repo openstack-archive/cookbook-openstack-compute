@@ -27,7 +27,6 @@ describe "openstack-compute::network" do
       @node.set["openstack"]["compute"]["network"]["service_type"] = "quantum"
       @chef_run.converge "openstack-compute::network"
       expect(@chef_run).to include_recipe "openstack-network::openvswitch"
-      expect(@chef_run).to include_recipe "openstack-network::dhcp_agent"
     end
 
   end
