@@ -63,7 +63,7 @@ default["openstack"]["compute"]["network"]["service_type"] = "nova"
 
 # if the network type is not nova, we will load the following
 # plugins from openstack-network
-default["openstack"]["compute"]["network"]["plugins"] = ["openvswitch", "dhcp_agent"]
+default["openstack"]["compute"]["network"]["plugins"] = ["openvswitch"]
 
 # Quantum options
 default["openstack"]["compute"]["network"]["quantum"]["network_api_class"] = "nova.network.quantumv2.api.API"
