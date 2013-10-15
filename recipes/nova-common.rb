@@ -110,6 +110,7 @@ Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
+vnc_server_listen = "0.0.0.0"
 vnc_bind_ip = address_for node["openstack"]["compute"]["libvirt"]["bind_interface"]
 xvpvnc_proxy_ip = address_for node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]
 novnc_proxy_ip = address_for node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]
@@ -133,7 +134,8 @@ template "/etc/nova/nova.conf" do
     :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
     :xvpvncproxy_bind_host => xvpvnc_proxy_ip,
     :novncproxy_bind_host => novnc_proxy_ip,
-    :vncserver_listen => vnc_bind_ip,
+	#vnc server should listen to every connection request to make the live migration 
+    :vncserver_listen => vnc_server_listen,
     :vncserver_proxyclient_address => vnc_bind_ip,
     :memcache_servers => memcache_servers,
     :rabbit_password => rabbit_pass,
