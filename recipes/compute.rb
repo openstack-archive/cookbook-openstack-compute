@@ -24,7 +24,7 @@ end
 
 include_recipe "openstack-compute::nova-common"
 include_recipe "openstack-compute::api-metadata"
-unless node.run_list.include? "openstack-network::server"
+unless node.run_context.loaded_recipes.include? 'openstack-network::server'
   include_recipe "openstack-compute::network"
 end
 
