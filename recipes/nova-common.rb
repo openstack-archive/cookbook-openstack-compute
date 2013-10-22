@@ -76,8 +76,8 @@ rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 
-if node.run_list.roles.include?(identity_service_role)
-  # if role is on this node,  just return the node hash
+if node.run_list.expand(node.chef_environment).roles.include?(identity_service_role)
+  # if role is on this node, just return the node hash
   keystone = node
 else
   # otherwise go searching
