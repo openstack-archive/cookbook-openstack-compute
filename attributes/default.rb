@@ -262,7 +262,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "api_os_compute_packages" => ["openstack-nova-api"],
     "api_os_compute_service" => "openstack-nova-api",
     "api_os_compute_process_name" => "nova-api",
-    "neutron_python_packages" => ["python-quantumclient", "python-pyparsing"],
+    "neutron_python_packages" => ["python-quantumclient", "pyparsing"],
     "memcache_python_packages" => ["python-memcached"],
     "compute_api_metadata_packages" => ["openstack-nova-api"],
     "compute_api_metadata_process_name" => "nova-api",
@@ -282,7 +282,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "compute_vncproxy_consoleauth_process_name" => "nova-console",
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
-    "dbus_service" => "dbus",
+    "dbus_service" => "messagebus",
     "compute_cert_packages" => ["openstack-nova-cert"],
     "compute_cert_service" => "openstack-nova-cert",
     "mysql_service" => "mysqld",
@@ -291,10 +291,9 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "nfs_packages" => ["nfs-utils", "nfs-utils-lib"],
     "package_overrides" => ""
   }
-  if platform == "redhat" ||  platform == "centos"
-    default["openstack"]["compute"]["platform"]["dbus_service"] = "messagebus"
-  end
   if platform == "suse"
+    default["openstack"]["compute"]["platform"]["dbus_service"] = "dbus"
+    default["openstack"]["compute"]["platform"]["neutron_python_packages"] = ["python-quantumclient", "python-pyparsing"]
     default["openstack"]["compute"]["platform"]["common_packages"] = ["openstack-nova"]
     default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
     default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
