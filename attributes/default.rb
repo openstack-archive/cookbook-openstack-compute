@@ -173,6 +173,14 @@ default["openstack"]["compute"]["libvirt"]["remove_unused_base_images"] = true
 default["openstack"]["compute"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] = 3600
 default["openstack"]["compute"]["libvirt"]["remove_unused_original_minimum_age_seconds"] = 3600
 default["openstack"]["compute"]["libvirt"]["checksum_base_images"] = false
+# libvirt.max_clients (default: 20)
+default["openstack"]["compute"]["libvirt"]["max_clients"] = 20
+# libvirt.max_workers (default: 20)
+default["openstack"]["compute"]["libvirt"]["max_workers"] = 20
+# libvirt.max_requests (default: 20)
+default["openstack"]["compute"]["libvirt"]["max_requests"] = 20
+# libvirt.max_client_requests (default: 5)
+default["openstack"]["compute"]["libvirt"]["max_client_requests"] = 5
 if node["platform"] == "suse"
   default["openstack"]["compute"]["libvirt"]["group"] = "libvirt"
 else

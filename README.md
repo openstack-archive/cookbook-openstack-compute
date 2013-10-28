@@ -184,6 +184,10 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
 * `openstack["compute"]["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
 * `openstack["compute"]["libvirt"]["ssh"]["public_key"]` - Public key to use if using SSH authentication to your libvirt layer
+* `openstack["compute"]["libvirt"]["max_clients"]` - Maximum number of concurrent client connections to allow over all sockets combined. (default: 20)
+* `openstack["compute"]["libvirt"]["max_workers"]` - Maximum number of workers spawned, typically equal to max_clients. (default: 20)
+* `openstack["compute"]["libvirt"]["max_requests"]` - Total global limit on concurrent RPC calls. Should be at least as large as max_workers. (default: 20)
+* `openstack["compute"]["libvirt"]["max_client_requests"]` - Limit on concurrent requests from a single client connection. (default: 5)
 
 Scheduler Configuration Attributes
 ----------------------------------

@@ -248,7 +248,7 @@ auth_tcp = "<%= @auth_tcp %>"
 
 # The maximum number of concurrent client connections to allow
 # over all sockets combined.
-#max_clients = 20
+max_clients = <%= node['openstack']['compute']['libvirt']['max_clients'] %>
 
 
 # The minimum limit sets the number of workers to start up
@@ -257,7 +257,7 @@ auth_tcp = "<%= @auth_tcp %>"
 # Typically you'd want max_workers to equal maximum number
 # of clients allowed
 #min_workers = 5
-#max_workers = 20
+max_workers = <%= node['openstack']['compute']['libvirt']['max_workers'] %>
 
 
 # The number of priority workers. If all workers from above
@@ -273,13 +273,13 @@ auth_tcp = "<%= @auth_tcp %>"
 #
 # XXX this isn't actually enforced yet, only the per-client
 # limit is used so far
-#max_requests = 20
+max_requests = <%= node['openstack']['compute']['libvirt']['max_requests'] %>
 
 # Limit on concurrent requests from a single client
 # connection. To avoid one client monopolizing the server
 # this should be a small fraction of the global max_requests
 # and max_workers parameter
-#max_client_requests = 5
+max_client_requests = <%= node['openstack']['compute']['libvirt']['max_client_requests'] %>
 
 #################################################################
 #

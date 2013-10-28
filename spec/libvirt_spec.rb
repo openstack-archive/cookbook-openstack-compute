@@ -59,8 +59,15 @@ describe "openstack-compute::libvirt" do
         expect(sprintf("%o", @file.mode)).to eq "644"
       end
 
-      it "template contents" do
-        pending "TODO: implement"
+      it "has proper processing controls" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "max_clients = 20"
+        expect(@chef_run).to create_file_with_content @file.name,
+          "max_workers = 20"
+        expect(@chef_run).to create_file_with_content @file.name,
+          "max_requests = 20"
+        expect(@chef_run).to create_file_with_content @file.name,
+          "max_client_requests = 5"
       end
 
       it "notifies libvirt-bin restart" do
