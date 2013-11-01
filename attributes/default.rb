@@ -282,6 +282,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "compute_vncproxy_consoleauth_process_name" => "nova-console",
     "libvirt_packages" => ["libvirt"],
     "libvirt_service" => "libvirtd",
+    "dbus_service" => "dbus",
     "compute_cert_packages" => ["openstack-nova-cert"],
     "compute_cert_service" => "openstack-nova-cert",
     "mysql_service" => "mysqld",
@@ -290,6 +291,9 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "nfs_packages" => ["nfs-utils", "nfs-utils-lib"],
     "package_overrides" => ""
   }
+  if platform == "redhat" ||  platform == "centos"
+    default["openstack"]["compute"]["platform"]["dbus_service"] = "messagebus"
+  end
   if platform == "suse"
     default["openstack"]["compute"]["platform"]["common_packages"] = ["openstack-nova"]
     default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
@@ -325,6 +329,7 @@ when "ubuntu"
     "compute_vncproxy_consoleauth_process_name" => "nova-consoleauth",
     "libvirt_packages" => ["libvirt-bin"],
     "libvirt_service" => "libvirt-bin",
+    "dbus_service" => "dbus",
     "compute_cert_packages" => ["nova-cert"],
     "compute_cert_service" => "nova-cert",
     "mysql_service" => "mysql",

@@ -143,6 +143,9 @@ link "/usr/bin/qemu-system-x86_64" do
 end
 
 service "dbus" do
+  service_name platform_options["dbus_service"]
+  supports :status => true, :restart => true
+
   action [:enable, :start]
 end
 
