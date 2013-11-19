@@ -121,4 +121,33 @@ describe "openstack-compute::identity_registration" do
       :action => [:create_endpoint]
     )
   end
+
+end
+
+describe "openstack-compute::identity_registration_disable_ec2" do
+  before do
+    compute_stubs
+    @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+    @chef_run.node.set['openstack']['compute']['enabled_apis'] = "osapi_compute,metadata"
+    @chef_run.converge "openstack-compute::identity_registration"
+  end
+
+  it "disable ec2 service registry" do
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register EC2 Service"
+    )
+
+    expect(resource).to be_nil
+  end
+
+  it "disable ec2 endpoint registry" do
+    resource = @chef_run.find_resource(
+      "openstack-identity_register",
+      "Register EC2 Endpoint"
+    )
+
+    expect(resource).to be_nil
+  end
+
 end

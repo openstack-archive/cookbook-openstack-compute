@@ -3,6 +3,7 @@
 # Recipe:: identity_registration
 #
 # Copyright 2013, AT&T
+# Copyright 2013, IBM Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,26 +92,28 @@ openstack_identity_register "Register Compute Endpoint" do
   action :create_endpoint
 end
 
-# Register EC2 Service
-openstack_identity_register "Register EC2 Service" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_name "ec2"
-  service_type "ec2"
-  service_description "EC2 Compatibility Layer"
+if node["openstack"]["compute"]["enabled_apis"].include?("ec2")
+  # Register EC2 Service
+  openstack_identity_register "Register EC2 Service" do
+    auth_uri auth_uri
+    bootstrap_token bootstrap_token
+    service_name "ec2"
+    service_type "ec2"
+    service_description "EC2 Compatibility Layer"
 
-  action :create_service
-end
+    action :create_service
+  end
 
-# Register EC2 Endpoint
-openstack_identity_register "Register EC2 Endpoint" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_type "ec2"
-  endpoint_region region
-  endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
-  endpoint_internalurl ::URI.decode ec2_public_endpoint.to_s
-  endpoint_publicurl ::URI.decode ec2_public_endpoint.to_s
+  # Register EC2 Endpoint
+  openstack_identity_register "Register EC2 Endpoint" do
+    auth_uri auth_uri
+    bootstrap_token bootstrap_token
+    service_type "ec2"
+    endpoint_region region
+    endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
+    endpoint_internalurl ::URI.decode ec2_public_endpoint.to_s
+    endpoint_publicurl ::URI.decode ec2_public_endpoint.to_s
 
-  action :create_endpoint
+    action :create_endpoint
+  end
 end

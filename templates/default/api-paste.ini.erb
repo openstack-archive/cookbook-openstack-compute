@@ -8,11 +8,16 @@ use = egg:Paste#urlmap
 /: meta
 
 [pipeline:meta]
+<% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 pipeline = ec2faultwrap logrequest metaapp
+<% else -%>
+pipeline = faultwrap metaapp
+<% end -%>
 
 [app:metaapp]
 paste.app_factory = nova.api.metadata.handler:MetadataRequestHandler.factory
 
+<% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 #######
 # EC2 #
 #######
@@ -53,6 +58,7 @@ paste.filter_factory = nova.api.ec2:Validator.factory
 
 [app:ec2executor]
 paste.app_factory = nova.api.ec2:Executor.factory
+<% end -%>
 
 #############
 # Openstack #

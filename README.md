@@ -209,6 +209,11 @@ OSAPI Compute Extentions
 
 * `openstack["compute"]["plugins"]` - Array of osapi compute exntesions to add to nova
 
+EC2 Configuration Attributes
+----------------------------
+
+* `openstack["compute"]["enabled_apis"] - Which apis have been enabled in nova compute
+
 Testing
 =====
 

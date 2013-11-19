@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 7.1.0:
+* adds the enabled_apis attribute, defaults to 'ec2,osapi_compute,metadata'
+
 ## 7.0.3:
 * adds the libvirt_inject_password attribute, defaults to false
 

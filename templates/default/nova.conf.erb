@@ -207,6 +207,7 @@ max_cores=<%= node["openstack"]["compute"]["config"]["cpu_allocation_ratio"].to_
 # If true, force creation of config drive regardless of if --config-drive was specified in the API call
 force_config_drive=<%= node["openstack"]["compute"]["config"]["force_config_drive"] %>
 
+<% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 <% if %w(fedora redhat centos).include? node.platform -%>
 # Adding support for non-modded euca2ools to display ip address info
 # https://bugs.launchpad.net/nova/+bug/901594
@@ -215,11 +216,17 @@ ec2_private_dns_show_ip=True
 
 ##### WORKERS ######
 ec2_workers=<%= node["cpu"]["total"] %>
-osapi_compute_workers=<%= node["cpu"]["total"] %>
-metadata_workers=<%= node["cpu"]["total"] %>
 
 ##### KEYSTONE #####
 keystone_ec2_url=<%= @identity_endpoint.scheme %>://<%= @identity_endpoint.host %>:<%= @identity_endpoint.port %>/v2.0/ec2tokens
+<% end -%>
+
+# a list of APIs to enable by default (list value)
+enabled_apis=<%= node["openstack"]["compute"]["enabled_apis"] %>
+
+##### WORKERS ######
+osapi_compute_workers=<%= node["cpu"]["total"] %>
+metadata_workers=<%= node["cpu"]["total"] %>
 
 ##### VOLUMES #####
 # iscsi target user-land tool to use
