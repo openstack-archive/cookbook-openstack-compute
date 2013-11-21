@@ -120,6 +120,8 @@ remove_unused_resized_minimum_age_seconds=<%= node["openstack"]["compute"]["libv
 remove_unused_original_minimum_age_seconds=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_original_minimum_age_seconds"] %>
 # Write a checksum for files in _base to disk (default: false)
 checksum_base_images=<%= node["openstack"]["compute"]["libvirt"]["checksum_base_images"] %>
+# Inject the admin password at boot time, without an agent. (default: false)
+libvirt_inject_password=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_password"] %>
 
 ##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>

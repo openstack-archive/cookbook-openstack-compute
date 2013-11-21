@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 7.0.3:
+* adds the libvirt_inject_password attribute, defaults to false
+
 ## 7.0.2:
 * add the new attribute dbus_service settings for different OS platform.
 

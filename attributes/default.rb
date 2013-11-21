@@ -186,6 +186,7 @@ if node["platform"] == "suse"
 else
   default["openstack"]["compute"]["libvirt"]["group"] = "libvirtd"
 end
+default["openstack"]["compute"]["libvirt"]["libvirt_inject_password"] = false
 default["openstack"]["compute"]["config"]["availability_zone"] = "nova"
 default["openstack"]["compute"]["config"]["storage_availability_zone"] = "nova"
 default["openstack"]["compute"]["config"]["default_schedule_zone"] = "nova"

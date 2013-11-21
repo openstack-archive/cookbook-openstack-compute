@@ -188,6 +188,7 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["max_workers"]` - Maximum number of workers spawned, typically equal to max_clients. (default: 20)
 * `openstack["compute"]["libvirt"]["max_requests"]` - Total global limit on concurrent RPC calls. Should be at least as large as max_workers. (default: 20)
 * `openstack["compute"]["libvirt"]["max_client_requests"]` - Limit on concurrent requests from a single client connection. (default: 5)
+* `openstack["compute"]["libvirt"]["libvirt_inject_password"]` - Inject the admin password at boot time, without an agent. (default: false)
 
 Scheduler Configuration Attributes
 ----------------------------------
