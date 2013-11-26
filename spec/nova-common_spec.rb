@@ -121,6 +121,79 @@ describe "openstack-compute::nova-common" do
           "rabbit_port=5672"
       end
 
+      describe "qpid" do
+        before do
+          @file = @chef_run.template "/etc/nova/nova.conf"
+          # README(shep) need this to evaluate nova.conf.erb template
+          @chef_run.node.set['openstack']['compute']['mq']['service_type'] = "qpid"
+        end
+
+        it "has qpid_hostname" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_hostname=127.0.0.1"
+        end
+
+        it "has qpid_port" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_port=5672"
+        end
+
+        it "has qpid_username" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_username="
+        end
+
+        it "has qpid_password" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_password="
+        end
+
+        it "has qpid_sasl_mechanisms" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_sasl_mechanisms="
+        end
+
+        it "has qpid_reconnect_timeout" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_reconnect_timeout=0"
+        end
+
+        it "has qpid_reconnect_limit" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_reconnect_limit=0"
+        end
+
+        it "has qpid_reconnect_interval_min" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_reconnect_interval_min=0"
+        end
+
+        it "has qpid_reconnect_interval_max" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_reconnect_interval_max=0"
+        end
+
+        it "has qpid_reconnect_interval" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_reconnect_interval=0"
+        end
+
+        it "has qpid_heartbeat" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_heartbeat=60"
+        end
+
+        it "has qpid_protocol" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_protocol=tcp"
+        end
+
+        it "has qpid_tcp_nodelay" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "qpid_tcp_nodelay=true"
+        end
+      end
+
       describe "rabbit ha" do
         before do
           @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|

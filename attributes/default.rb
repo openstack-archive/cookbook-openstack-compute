@@ -65,6 +65,25 @@ default["openstack"]["compute"]["network"]["service_type"] = "nova"
 # plugins from openstack-network
 default["openstack"]["compute"]["network"]["plugins"] = ["openvswitch"]
 
+# MQ options
+default["openstack"]["compute"]["mq"]["service_type"] = node["openstack"]["mq"]["service_type"]
+default["openstack"]["compute"]["mq"]["qpid"]["host"] = "127.0.0.1"
+default["openstack"]["compute"]["mq"]["qpid"]["port"] = "5672"
+default["openstack"]["compute"]["mq"]["qpid"]["qpid_hosts"] = ['127.0.0.1:5672']
+
+default["openstack"]["compute"]["mq"]["qpid"]["username"] = ""
+default["openstack"]["compute"]["mq"]["qpid"]["password"] = ""
+default["openstack"]["compute"]["mq"]["qpid"]["sasl_mechanisms"] = ""
+default["openstack"]["compute"]["mq"]["qpid"]["reconnect_timeout"] = 0
+default["openstack"]["compute"]["mq"]["qpid"]["reconnect_limit"] = 0
+default["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval_min"] = 0
+default["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval_max"] = 0
+default["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval"] = 0
+default["openstack"]["compute"]["mq"]["qpid"]["heartbeat"] = 60
+default["openstack"]["compute"]["mq"]["qpid"]["protocol"] = "tcp"
+default["openstack"]["compute"]["mq"]["qpid"]["tcp_nodelay"] = true
+
+
 # Quantum options
 default["openstack"]["compute"]["network"]["quantum"]["network_api_class"] = "nova.network.quantumv2.api.API"
 default["openstack"]["compute"]["network"]["quantum"]["auth_strategy"] = "keystone"

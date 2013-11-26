@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 7.2.0:
+* adds qpid support. defaults to rabbit
+
 ## 7.1.0:
 * adds the enabled_apis attribute, defaults to 'ec2,osapi_compute,metadata'
 

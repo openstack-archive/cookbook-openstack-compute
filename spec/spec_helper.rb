@@ -1,4 +1,5 @@
 require "chefspec"
+require "chef/application"
 
 ::LOG_LEVEL = :fatal
 ::OPENSUSE_OPTS = {
@@ -56,6 +57,7 @@ def compute_stubs
   ::Chef::Recipe.any_instance.stub(:system).
     with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'").
     and_return true
+  ::Chef::Application.stub(:fatal!)
 end
 
 def expect_runs_nova_common_recipe

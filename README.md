@@ -89,11 +89,6 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["user"]` - User nova services run as
 * `openstack["compute"]["group"]` - Group nova services run as
 * `openstack["compute"]["db"]["username"]` - Username for nova database access
-* `openstack["compute"]["rabbit"]["username"]` - Username for nova rabbit access
-* `openstack["compute"]["rabbit"]["vhost"]` - The rabbit vhost to use
-* `openstack["compute"]["rabbit"]["port"]` - The rabbit port to use
-* `openstack["compute"]["rabbit"]["host"]` - The rabbit host to use (must set when `openstack["compute"]["rabbit"]["ha"]` false).
-* `openstack["compute"]["rabbit"]["ha"]` - Whether or not to use rabbit ha
 * `openstack["compute"]["service_tenant_name"]` - Tenant name used by nova when interacting with keystone
 * `openstack["compute"]["service_user"]` - User name used by nova when interacting with keystone
 * `openstack["compute"]["service_role"]` - User role used by nova when interacting with keystone
@@ -117,6 +112,32 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
+
+
+MQ attributes
+-------------
+* `openstack["compute"]["mq"]["service_type"]` - Select qpid or rabbitmq. default rabbitmq
+TODO: move rabbit parameters under openstack["compute"]["mq"]
+* `openstack["compute"]["rabbit"]["username"]` - Username for nova rabbit access
+* `openstack["compute"]["rabbit"]["vhost"]` - The rabbit vhost to use
+* `openstack["compute"]["rabbit"]["port"]` - The rabbit port to use
+* `openstack["compute"]["rabbit"]["host"]` - The rabbit host to use (must set when `openstack["compute"]["rabbit"]["ha"]` false).
+* `openstack["compute"]["rabbit"]["ha"]` - Whether or not to use rabbit ha
+
+* `openstack["compute"]["mq"]["qpid"]["host"]` - The qpid host to use
+* `openstack["compute"]["mq"]["qpid"]["port"]` - The qpid port to use
+* `openstack["compute"]["mq"]["qpid"]["qpid_hosts"]` - Qpid hosts. TODO. use only when ha is specified.
+* `openstack["compute"]["mq"]["qpid"]["username"]` - Username for qpid connection
+* `openstack["compute"]["mq"]["qpid"]["password"]` - Password for qpid connection
+* `openstack["compute"]["mq"]["qpid"]["sasl_mechanisms"]` - Space separated list of SASL mechanisms to use for auth
+* `openstack["compute"]["mq"]["qpid"]["reconnect_timeout"]` - The number of seconds to wait before deciding that a reconnect attempt has failed.
+* `openstack["compute"]["mq"]["qpid"]["reconnect_limit"]` - The limit for the number of times to reconnect before considering the connection to be failed.
+* `openstack["compute"]["mq"]["qpid"]["reconnect_interval_min"]` - Minimum number of seconds between connection attempts.
+* `openstack["compute"]["mq"]["qpid"]["reconnect_interval_max"]` - Maximum number of seconds between connection attempts.
+* `openstack["compute"]["mq"]["qpid"]["reconnect_interval"]` - Equivalent to setting qpid_reconnect_interval_min and qpid_reconnect_interval_max to the same value.
+* `openstack["compute"]["mq"]["qpid"]["heartbeat"]` - Seconds between heartbeat messages sent to ensure that the connection is still alive.
+* `openstack["compute"]["mq"]["qpid"]["protocol"]` - Protocol to use. Default tcp.
+* `openstack["compute"]["mq"]["qpid"]["tcp_nodelay"]` - Disable the Nagle algorithm. default disabled.
 
 Networking Attributes
 ---------------------

@@ -69,10 +69,12 @@ db_user = node["openstack"]["compute"]["db"]["username"]
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-if node["openstack"]["compute"]["rabbit"]["ha"]
-  rabbit_hosts = rabbit_servers
+if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"
+  if node["openstack"]["compute"]["rabbit"]["ha"]
+    rabbit_hosts = rabbit_servers
+  end
+  rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 end
-rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 
 identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
 

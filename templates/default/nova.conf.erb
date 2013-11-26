@@ -15,6 +15,7 @@ log_config = /etc/openstack/logging.conf
 state_path=/var/lib/nova
 lock_path=/var/lock/nova
 
+<% if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"  %>
 ##### RABBITMQ #####
 rabbit_userid=<%= node["openstack"]["compute"]["rabbit"]["username"] %>
 rabbit_password=<%= @rabbit_password %>
@@ -26,6 +27,29 @@ rabbit_ha_queues=True
 rabbit_host=<%= node["openstack"]["compute"]["rabbit"]["host"] %>
 rabbit_port=<%= node["openstack"]["compute"]["rabbit"]["port"] %>
 <% end -%>
+<% end -%>
+
+<% if node["openstack"]["compute"]["mq"]["service_type"] == "qpid"  %>
+##### QPID #####
+rpc_backend=nova.openstack.common.rpc.impl_qpid
+qpid_hostname=<%= node["openstack"]["compute"]["mq"]["qpid"]["host"] %>
+qpid_port=<%= node["openstack"]["compute"]["mq"]["qpid"]["port"] %>
+
+qpid_password=<%= node["openstack"]["compute"]["mq"]["qpid"]["password"] %>
+qpid_username=<%= node["openstack"]["compute"]["mq"]["qpid"]["username"] %>
+qpid_sasl_mechanisms=<%= node["openstack"]["compute"]["mq"]["qpid"]["sasl_mechanisms"] %>
+qpid_reconnect_timeout=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_timeout"] %>
+qpid_reconnect_limit=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_limit"] %>
+qpid_reconnect_interval_min=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval_min"] %>
+qpid_reconnect_interval_max=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval_max"] %>
+qpid_reconnect_interval=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval"] %>
+qpid_heartbeat=<%= node["openstack"]["compute"]["mq"]["qpid"]["heartbeat"] %>
+# qpid protocol. default 'tcp'. set to 'ssl' to enable SSL
+qpid_protocol=<%= node["openstack"]["compute"]["mq"]["qpid"]["protocol"] %>
+qpid_tcp_nodelay=<%= node["openstack"]["compute"]["mq"]["qpid"]["tcp_nodelay"] %>
+
+<% end %>
+
 
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
