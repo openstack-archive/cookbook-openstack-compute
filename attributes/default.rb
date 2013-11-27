@@ -25,6 +25,11 @@ default["openstack"]["compute"]["identity_service_chef_role"] = "os-identity"
 # db_password routine.
 default["openstack"]["compute"]["db"]["username"] = "nova"
 
+# Common rpc definitions
+default["openstack"]["compute"]["rpc_thread_pool_size"] = 64
+default["openstack"]["compute"]["rpc_conn_pool_size"] = 30
+default["openstack"]["compute"]["rpc_response_timeout"] = 60
+
 # This user's password is stored in an encrypted databag
 # and accessed with openstack-common cookbook library's
 # user_password routine.  You are expected to create

@@ -15,6 +15,11 @@ log_config = /etc/openstack/logging.conf
 state_path=/var/lib/nova
 lock_path=/var/lock/nova
 
+# Options defined in nova.openstack.common.rpc
+rpc_thread_pool_size=<%= node["openstack"]["compute"]["rpc_thread_pool_size"] %>
+rpc_conn_pool_size=<%= node["openstack"]["compute"]["rpc_conn_pool_size"] %>
+rpc_response_timeout=<%= node["openstack"]["compute"]["rpc_response_timeout"] %>
+
 <% if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"  %>
 ##### RABBITMQ #####
 rabbit_userid=<%= node["openstack"]["compute"]["rabbit"]["username"] %>

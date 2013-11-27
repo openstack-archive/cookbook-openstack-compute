@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+# 7.2.1
+* Add new attributes for common rpc configuration
+
 ## 7.2.0:
 * adds qpid support. defaults to rabbit
 

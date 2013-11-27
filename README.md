@@ -112,6 +112,9 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
+* `openstack["compute"]["rpc_thread_pool_size"]` - Size of RPC thread pool (default 64)
+* `openstack["compute"]["rpc_conn_pool_size"]` - Size of RPC connection pool (default 30)
+* `openstack["compute"]["rpc_response_timeout"]` - Seconds to wait for a response from call or multicall (default 60)
 
 
 MQ attributes
@@ -263,11 +266,12 @@ License and Author
 | **Author**           |  Matt Ray (<matt@opscode.com>)                     |
 | **Author**           |  Jay Pipes (<jaypipes@att.com>)                    |
 | **Author**           |  John Dewey (<jdewey@att.com>)                     |
-| **Author**           |  Kevin Bringard (<kbringard@att.com>)                     |
+| **Author**           |  Kevin Bringard (<kbringard@att.com>)              |
 | **Author**           |  Craig Tracey (<craigtracey@gmail.com>)            |
 | **Author**           |  Sean Gallagher (<sean.gallagher@att.com>)         |
 | **Author**           |  Ionut Artarisi (<iartarisi@suse.cz>)              |
 | **Author**           |  JieHua Jin (<jinjhua@cn.ibm.com>)                 |
+| **Author**           |  David Geng (<gengjh@cn.ibm.com>)                  |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |

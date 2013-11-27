@@ -86,6 +86,21 @@ describe "openstack-compute::nova-common" do
         expect(sprintf("%o", @file.mode)).to eq "644"
       end
 
+      it "has rpc_thread_pool_size" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rpc_thread_pool_size=64"
+      end
+
+      it "has rpc_conn_pool_size" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rpc_conn_pool_size=30"
+      end
+
+      it "has rpc_response_timeout" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "rpc_response_timeout=60"
+      end
+
       it "has rabbit_user" do
         expect(@chef_run).to create_file_with_content @file.name,
           "rabbit_userid=guest"
