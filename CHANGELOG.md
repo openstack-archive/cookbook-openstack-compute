@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+# 7.2.2
+### Bug
+* Setting the libvirt_cpu_mode is none when libvirt_type is qemu (LP: 1255840)
+
 # 7.2.1
 * Add new attributes for common rpc configuration
 

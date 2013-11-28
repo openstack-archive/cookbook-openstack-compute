@@ -136,6 +136,18 @@ describe "openstack-compute::nova-common" do
           "rabbit_port=5672"
       end
 
+      describe "virt_type is qemu" do
+        before do
+          @file = @chef_run.template "/etc/nova/nova.conf"
+          @chef_run.node.set['openstack']['compute']['libvirt']['virt_type'] = "qemu"
+        end
+
+        it "the libvirt_cpu_mode is none when virt_type is 'qemu'" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "libvirt_cpu_mode=none"
+        end
+      end
+
       describe "qpid" do
         before do
           @file = @chef_run.template "/etc/nova/nova.conf"
