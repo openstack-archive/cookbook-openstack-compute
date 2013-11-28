@@ -102,19 +102,14 @@ network_manager=<%= node["openstack"]["compute"]["network"]["network_manager"] %
 public_interface=<%= node["openstack"]["compute"]["network"]["public_interface"] %>
 fixed_range=<%= node["openstack"]["compute"]["network"]["fixed_range"] %>
 dmz_cidr=<%= node["openstack"]["compute"]["network"]["dmz_cidr"] %>
-<% if %w(fedora redhat centos).include? node.platform -%>
-# https://bugzilla.redhat.com/show_bug.cgi?id=788485 - not released in epel yet
-force_dhcp_release=false
-<% else -%>
-force_dhcp_release=true
-<% end -%>
+force_dhcp_release=<%= node["openstack"]["compute"]["network"]["force_dhcp_release"] %>
 <% if node["openstack"]["compute"]["dhcp_domain"] -%>
 dhcp_domain=<%= node["openstack"]["compute"]["dhcp_domain"] %>
 <% end %>
 send_arp_for_ha=true
 use_single_default_gateway=<%= node["openstack"]["compute"]["network"]["use_single_default_gateway"] %>
 vlan_interface=<%= node["openstack"]["compute"]["network"]["vlan_interface"] %>
-
+auto_assign_floating_ip=<%= node["openstack"]["compute"]["network"]["auto_assign_floating_ip"] %>
 <% end -%>
 
 ##### GLANCE #####
@@ -180,6 +175,7 @@ osapi_compute_link_prefix = <%= @osapi_compute_link_prefix %>
 snapshot_image_format=<%= node["openstack"]["compute"]["config"]["snapshot_image_format"] %>
 start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_guests_on_host_boot"] %>
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
+allow_resize_to_same_host=<%= node["openstack"]["compute"]["config"]["allow_resize_to_same_host"] %>
 
 ##### QUOTAS #####
 # (StrOpt) default driver to use for quota checks (default: nova.quota.DbQuotaDriver)
@@ -220,6 +216,10 @@ cpu_allocation_ratio=<%= node["openstack"]["compute"]["config"]["cpu_allocation_
 <%- if /RamFilter/.match(@scheduler_default_filters) %>
 # virtual ram to physical ram allocation ratio (default: 1.5)
 ram_allocation_ratio=<%= node["openstack"]["compute"]["config"]["ram_allocation_ratio"] %>
+<%- end %>
+<%- if /DiskFilter/.match(@scheduler_default_filters) %>
+# virtual disk to physical disk allocation ratio (default: 1.0)
+disk_allocation_ratio=<%= node["openstack"]["compute"]["config"]["disk_allocation_ratio"] %>
 <%- end %>
 <%- elsif /SimpleScheduler/.match(node["openstack"]["compute"]["scheduler"]["scheduler_driver"]) %>
 # SimpleScheduler Only Options

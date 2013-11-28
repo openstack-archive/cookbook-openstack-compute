@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 7.3.0
+* Add new attributes: auto_assign_floating_ip, disk_allocation_ratio, allow_resize_to_same_host
+  and force_dhcp_release
+
 ## 7.2.4
 ### Bug
 * Fixing console auth service and process names for RHEL (LP: 1256456)

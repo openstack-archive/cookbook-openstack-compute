@@ -171,6 +171,7 @@ default["openstack"]["compute"]["network"]["dmz_cidr"] = "10.128.0.0/24"
 default["openstack"]["compute"]["network"]["network_manager"] = "nova.network.manager.FlatDHCPManager"
 default["openstack"]["compute"]["network"]["public_interface"] = "eth0"
 default["openstack"]["compute"]["network"]["vlan_interface"] = "eth0"
+default["openstack"]["compute"]["network"]["auto_assign_floating_ip"] = false
 # https://bugs.launchpad.net/nova/+bug/1075859
 default["openstack"]["compute"]["network"]["use_single_default_gateway"] = false
 
@@ -219,7 +220,9 @@ default["openstack"]["compute"]["config"]["allow_same_net_traffic"] = true
 default["openstack"]["compute"]["config"]["osapi_max_limit"] = 1000
 default["openstack"]["compute"]["config"]["cpu_allocation_ratio"] = 16.0
 default["openstack"]["compute"]["config"]["ram_allocation_ratio"] = 1.5
+default["openstack"]["compute"]["config"]["disk_allocation_ratio"] = 1.0
 default["openstack"]["compute"]["config"]["snapshot_image_format"] = "qcow2"
+default["openstack"]["compute"]["config"]["allow_resize_to_same_host"] = false
 # `start` will cause nova-compute to error out if a VM is already running, where
 # `resume` checks to see if it is running first.
 default["openstack"]["compute"]["config"]["start_guests_on_host_boot"] = false
@@ -279,6 +282,8 @@ default["openstack"]["compute"]["api"]["auth"]["cache_dir"] = "/var/cache/nova/a
 # Perform nova-conductor operations locally (boolean value)
 default["openstack"]["compute"]["conductor"]["use_local"] = "False"
 
+default["openstack"]["compute"]["network"]["force_dhcp_release"] = true
+
 case platform
 when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't fix this
   default["openstack"]["compute"]["platform"] = {
@@ -325,6 +330,9 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     default["openstack"]["compute"]["platform"]["lxc_packages"] = ["lxc"]
     default["openstack"]["compute"]["platform"]["nfs_packages"] = ["nfs-utils"]
   end
+  # Since the bug (https://bugzilla.redhat.com/show_bug.cgi?id=788485) not released in epel yet
+  # For "fedora", "redhat", "centos", we need set the default value of force_dhcp_release is 'false'
+  default["openstack"]["compute"]["network"]["force_dhcp_release"] = false
 when "ubuntu"
   default["openstack"]["compute"]["platform"] = {
     "api_ec2_packages" => ["nova-api-ec2"],

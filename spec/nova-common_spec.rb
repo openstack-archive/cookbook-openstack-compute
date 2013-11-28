@@ -136,6 +136,11 @@ describe "openstack-compute::nova-common" do
           "rabbit_port=5672"
       end
 
+      it "has allow_resize_to_same_host" do
+        expect(@chef_run).to create_file_with_content @file.name,
+          "allow_resize_to_same_host=false"
+      end
+
       describe "virt_type is qemu" do
         before do
           @file = @chef_run.template "/etc/nova/nova.conf"
@@ -145,6 +150,39 @@ describe "openstack-compute::nova-common" do
         it "the libvirt_cpu_mode is none when virt_type is 'qemu'" do
           expect(@chef_run).to create_file_with_content @file.name,
             "libvirt_cpu_mode=none"
+        end
+      end
+
+      describe "scheduler filter" do
+        before do
+          @file = @chef_run.template "/etc/nova/nova.conf"
+          @chef_run.node.set['openstack']['compute']['scheduler']['default_filters'] = [
+            "AvailabilityZoneFilter",
+            "DiskFilter",
+            "RamFilter",
+            "ComputeFilter",
+            "CoreFilter",
+            "SameHostFilter",
+            "DifferentHostFilter"
+          ]
+          @chef_run.converge "openstack-compute::nova-common"
+        end
+
+        it "has disk_allocation_ratio" do
+          expect(@chef_run).to create_file_with_content @file.name,
+            "disk_allocation_ratio=1.0"
+        end
+      end
+
+      describe "quantum network" do
+        before do
+          @file = @chef_run.template "/etc/nova/nova.conf"
+          @chef_run.node.set['openstack']['compute']['network']['service_type'] = "quantum"
+        end
+
+        it "has no auto_assign_floating_ip" do
+          expect(@chef_run).to_not create_file_with_content @file.name,
+            "auto_assign_floating_ip=false"
         end
       end
 

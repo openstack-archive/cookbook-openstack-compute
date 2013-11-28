@@ -110,6 +110,8 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
 * `openstack["compute"]["config"]["start_guests_on_host_boot"]` - Whether to restart guests when the host reboots
 * `openstack["compute"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
+* `openstack["compute"]["config"]["disk_allocation_ratio"]` - Virtual disk to physical disk allocation ratio (default 1.0)
+* `openstack["compute"]["config"]["allow_resize_to_same_host"]` - Allow destination machine to match source for resize. Useful when testing in single-host environments (default is false)
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["rpc_thread_pool_size"]` - Size of RPC thread pool (default 64)
@@ -152,6 +154,8 @@ Basic networking configuration is controlled with the following attributes:
 * `openstack["compute"]["network"]["dmz_cidr"]` - A CIDR for the range of IP addresses that will NOT be SNAT'ed by the nova network controller
 * `openstack["compute"]["network"]["public_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses in the `fixed_range`.
 * `openstack["compute"]["network"]["vlan_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses when VMs are assigned in a VLAN subnet.
+* `openstack["compute"]["network"]["auto_assign_floating_ip"]` - Defaults to false. Autoassigning floating ip to VM, this should be only for nova network.
+* `openstack["compute"]["network"]["force_dhcp_release"]` - If True, send a dhcp release on instance termination. (Default is false on "fedora", "redhat", "centos")
 
 You can have the cookbook automatically create networks in Nova for you by adding a Hash to the `openstack["compute"]["networks"]` Array.
 **Note**: The `openstack-compute::nova-setup` recipe contains the code that creates these pre-defined networks.
