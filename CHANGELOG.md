@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 7.2.4
+### Bug
+* Fixing console auth service and process names for RHEL (LP: 1256456)
+
 ## 7.2.3
 * relax the dependencies to the 7.x series
 
