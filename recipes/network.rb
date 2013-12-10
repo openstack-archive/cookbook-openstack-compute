@@ -23,7 +23,7 @@ include_recipe "openstack-compute::nova-common"
 platform_options = node["openstack"]["compute"]["platform"]
 
 # the only type of network we process here is nova, otherwise for
-# quantum, the network will be setup by the inclusion of
+# neutron, the network will be setup by the inclusion of
 # openstack-network recipes
 
 if node["openstack"]["compute"]["network"]["service_type"] == "nova"

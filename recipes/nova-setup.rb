@@ -101,7 +101,7 @@ when "nova"
     end
   end
 
-when "quantum", "neutron"
+when "neutron"
 
   platform_options = node["openstack"]["compute"]["platform"]
 
@@ -123,9 +123,9 @@ when "quantum", "neutron"
   if floating && floating["ipv4_cidr"]
     cmd = ". /root/openrc && #{node["openstack"]["compute"]["floating_cmd"]} neutron --cidr=#{floating["ipv4_cidr"]} --pool=#{floating["public_network_name"]}"
 
-    execute "quantum floating create" do
+    execute "neutron floating create" do
       command cmd
-      not_if ". /root/openrc && quantum floatingip-list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'"
+      not_if ". /root/openrc && neutron floatingip-list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'"
       only_if { File.exists?("/root/openrc") }
 
       action :run

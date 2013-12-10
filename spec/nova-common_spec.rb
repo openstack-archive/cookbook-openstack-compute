@@ -27,10 +27,10 @@ describe "openstack-compute::nova-common" do
       expect(chef_run).not_to include_recipe "openstack-common::logging"
     end
 
-    it "can converge with quantum service type" do
+    it "can converge with neutron service type" do
       chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack"]["compute"]["network"]["service_type"] = "quantum"
+      node.set["openstack"]["compute"]["network"]["service_type"] = "neutron"
       chef_run.converge "openstack-compute::nova-common"
     end
 
@@ -174,10 +174,10 @@ describe "openstack-compute::nova-common" do
         end
       end
 
-      describe "quantum network" do
+      describe "neutron network" do
         before do
           @file = @chef_run.template "/etc/nova/nova.conf"
-          @chef_run.node.set['openstack']['compute']['network']['service_type'] = "quantum"
+          @chef_run.node.set['openstack']['compute']['network']['service_type'] = "neutron"
         end
 
         it "has no auto_assign_floating_ip" do

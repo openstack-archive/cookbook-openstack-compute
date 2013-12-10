@@ -276,6 +276,7 @@ License and Author
 | **Author**           |  Ionut Artarisi (<iartarisi@suse.cz>)              |
 | **Author**           |  JieHua Jin (<jinjhua@cn.ibm.com>)                 |
 | **Author**           |  David Geng (<gengjh@cn.ibm.com>)                  |
+| **Author**           |  Salman Baset (<sabaset@us.ibm.com>)               |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |

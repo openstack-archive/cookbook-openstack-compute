@@ -21,10 +21,10 @@ describe "openstack-compute::network" do
       expect(@chef_run).to set_service_to_start_on_boot "nova-network"
     end
 
-    it "includes openstack-network recipes for quantum when service type is quantum" do
+    it "includes openstack-network recipes for neutron when service type is neutron" do
       @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
       @node = @chef_run.node
-      @node.set["openstack"]["compute"]["network"]["service_type"] = "quantum"
+      @node.set["openstack"]["compute"]["network"]["service_type"] = "neutron"
       @chef_run.converge "openstack-compute::network"
       expect(@chef_run).to include_recipe "openstack-network::openvswitch"
     end

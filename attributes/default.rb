@@ -63,7 +63,7 @@ default["openstack"]["compute"]["region"] = "RegionOne"
 default["openstack"]["compute"]["floating_cmd"] = "/usr/local/bin/add_floaters.py"
 
 # Support multiple network types.  Default network type is "nova"
-# with the other option supported being "quantum"
+# with the other option supported being "neutron"
 default["openstack"]["compute"]["network"]["service_type"] = "nova"
 
 # if the network type is not nova, we will load the following
@@ -89,18 +89,18 @@ default["openstack"]["compute"]["mq"]["qpid"]["protocol"] = "tcp"
 default["openstack"]["compute"]["mq"]["qpid"]["tcp_nodelay"] = true
 
 
-# Quantum options
-default["openstack"]["compute"]["network"]["quantum"]["network_api_class"] = "nova.network.quantumv2.api.API"
-default["openstack"]["compute"]["network"]["quantum"]["auth_strategy"] = "keystone"
-default["openstack"]["compute"]["network"]["quantum"]["admin_tenant_name"] = "service"
-default["openstack"]["compute"]["network"]["quantum"]["admin_username"] = "quantum"
-default["openstack"]["compute"]["network"]["quantum"]["libvirt_vif_driver"] = "nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"
-default["openstack"]["compute"]["network"]["quantum"]["linuxnet_interface_driver"] = "nova.network.linux_net.LinuxOVSInterfaceDriver"
-default["openstack"]["compute"]["network"]["quantum"]["security_group_api"] = "quantum"
-default["openstack"]["compute"]["network"]["quantum"]["service_quantum_metadata_proxy"] = true
-default["openstack"]["compute"]["network"]["quantum"]["metadata_secret_name"] = "quantum_metadata_shared_secret"
-default["openstack"]["compute"]["network"]["quantum"]["public_network_name"] = "public"
-default["openstack"]["compute"]["network"]["quantum"]["dns_server"] = "8.8.8.8"
+# Neutron options
+default["openstack"]["compute"]["network"]["neutron"]["network_api_class"] = "nova.network.neutronv2.api.API"
+default["openstack"]["compute"]["network"]["neutron"]["auth_strategy"] = "keystone"
+default["openstack"]["compute"]["network"]["neutron"]["admin_tenant_name"] = "service"
+default["openstack"]["compute"]["network"]["neutron"]["admin_username"] = "neutron"
+default["openstack"]["compute"]["network"]["neutron"]["libvirt_vif_driver"] = "nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver"
+default["openstack"]["compute"]["network"]["neutron"]["linuxnet_interface_driver"] = "nova.network.linux_net.LinuxOVSInterfaceDriver"
+default["openstack"]["compute"]["network"]["neutron"]["security_group_api"] = "neutron"
+default["openstack"]["compute"]["network"]["neutron"]["service_neutron_metadata_proxy"] = true
+default["openstack"]["compute"]["network"]["neutron"]["metadata_secret_name"] = "neutron_metadata_shared_secret"
+default["openstack"]["compute"]["network"]["neutron"]["public_network_name"] = "public"
+default["openstack"]["compute"]["network"]["neutron"]["dns_server"] = "8.8.8.8"
 
 # TODO(shep): This should probably be ["openstack"]["compute"]["network"]["fixed"]
 default["openstack"]["compute"]["networks"] = [
@@ -292,7 +292,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
     "api_os_compute_packages" => ["openstack-nova-api"],
     "api_os_compute_service" => "openstack-nova-api",
     "api_os_compute_process_name" => "nova-api",
-    "neutron_python_packages" => ["python-quantumclient", "pyparsing"],
+    "neutron_python_packages" => ["python-neutronclient", "pyparsing"],
     "memcache_python_packages" => ["python-memcached"],
     "compute_api_metadata_packages" => ["openstack-nova-api"],
     "compute_api_metadata_process_name" => "nova-api",
@@ -323,7 +323,7 @@ when "fedora", "redhat", "centos", "suse" # :pragma-foodcritic: ~FC024 - won't f
   }
   if platform == "suse"
     default["openstack"]["compute"]["platform"]["dbus_service"] = "dbus"
-    default["openstack"]["compute"]["platform"]["neutron_python_packages"] = ["python-quantumclient", "python-pyparsing"]
+    default["openstack"]["compute"]["platform"]["neutron_python_packages"] = ["python-neutronclient", "python-pyparsing"]
     default["openstack"]["compute"]["platform"]["common_packages"] = ["openstack-nova"]
     default["openstack"]["compute"]["platform"]["kvm_packages"] = ["kvm"]
     default["openstack"]["compute"]["platform"]["xen_packages"] = ["kernel-xen", "xen", "xen-tools"]
@@ -341,7 +341,7 @@ when "ubuntu"
     "api_os_compute_process_name" => "nova-api-os-compute",
     "api_os_compute_service" => "nova-api-os-compute",
     "memcache_python_packages" => ["python-memcache"],
-    "neutron_python_packages" => ["python-quantumclient", "python-pyparsing"],
+    "neutron_python_packages" => ["python-neutronclient", "python-pyparsing"],
     "compute_api_metadata_packages" => ["nova-api-metadata"],
     "compute_api_metadata_service" => "nova-api-metadata",
     "compute_api_metadata_process_name" => "nova-api-metadata",

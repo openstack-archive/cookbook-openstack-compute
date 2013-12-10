@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 8.0.0
+* Branch for Havana. Add neutron support by search/replace quantum with neutron
+
 ## 7.3.0
 * Add new attributes: auto_assign_floating_ip, disk_allocation_ratio, allow_resize_to_same_host
   and force_dhcp_release

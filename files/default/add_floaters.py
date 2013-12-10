@@ -21,7 +21,7 @@ import subprocess
 
 import netaddr
 
-DESCRIPTION = "A `nova-manage floating create` and `quantum net create` wrapper."
+DESCRIPTION = "A `nova-manage floating create` and `neutron net create` wrapper."
 
 
 class FloatingAddress(object):
@@ -31,7 +31,7 @@ class FloatingAddress(object):
     network, nova-manage doesn't account for this.
 
     TODO(retr0h): This should really be added to nova-manage.
-    TODO(jaypipes): Instead of subprocess calls, just use the quantumclient
+    TODO(jaypipes): Instead of subprocess calls, just use the neutronclient
     """
 
     def __init__(self, args):
@@ -72,18 +72,18 @@ class FloatingAddress(object):
         cidr = netaddr.IPNetwork(cidr)
 
         # ensure we have a public network and we only ever create one
-        cmd = "NETLIST=$(quantum net-list -c name); if [ $? -eq 0 ]; then if ! echo $NETLIST | grep -q %s; then quantum net-create %s -- --router:external=True; fi; fi;" % (self._args.pool, self._args.pool)
+        cmd = "NETLIST=$(neutron net-list -c name); if [ $? -eq 0 ]; then if ! echo $NETLIST | grep -q %s; then neutron net-create %s -- --router:external=True; fi; fi;" % (self._args.pool, self._args.pool)
 
         try:
             subprocess.check_call(cmd, shell=True)
         except:
             # we failed to query the quanutm api, we'll ignore this error
             # and return now so any surrounding chef runs can continue
-            # since this script may actually be running on the quantum api
-            print "ERROR: Failed to query the quantum api for the public network"
+            # since this script may actually be running on the neutron api
+            print "ERROR: Failed to query the neutron api for the public network"
             return
 
-        cmd = "quantum subnet-list -Fcidr -fcsv --quote=none | grep '%s'" % cidr
+        cmd = "neutron subnet-list -Fcidr -fcsv --quote=none | grep '%s'" % cidr
 
         res = subprocess.call(cmd, shell=True)
         if res == 0:
@@ -95,7 +95,7 @@ class FloatingAddress(object):
         ip_end = netaddr.IPAddress(cidr.last-1)
 
         # create a new subnet
-        cmd = "quantum subnet-create --allocation-pool start=%s,end=%s %s %s -- --enable_dhcp=False" % \
+        cmd = "neutron subnet-create --allocation-pool start=%s,end=%s %s %s -- --enable_dhcp=False" % \
               (ip_start, ip_end, self._args.pool, cidr)
         subprocess.check_call(cmd, shell=True)
 

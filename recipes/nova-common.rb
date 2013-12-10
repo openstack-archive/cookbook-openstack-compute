@@ -116,12 +116,12 @@ vnc_bind_ip = address_for node["openstack"]["compute"]["libvirt"]["bind_interfac
 xvpvnc_proxy_ip = address_for node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]
 novnc_proxy_ip = address_for node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]
 
-if node["openstack"]["compute"]["network"]["service_type"] == "quantum"
-  quantum_admin_password = service_password "openstack-network"
-  quantum_metadata_proxy_shared_secret = secret "secrets", "quantum_metadata_secret"
+if node["openstack"]["compute"]["network"]["service_type"] == "neutron"
+  neutron_admin_password = service_password "openstack-network"
+  neutron_metadata_proxy_shared_secret = secret "secrets", "neutron_metadata_secret"
 else
-  quantum_admin_password = nil
-  quantum_metadata_proxy_shared_secret = nil
+  neutron_admin_password = nil
+  neutron_metadata_proxy_shared_secret = nil
 end
 
 template "/etc/nova/nova.conf" do
@@ -149,8 +149,8 @@ template "/etc/nova/nova.conf" do
     :scheduler_default_filters => node["openstack"]["compute"]["scheduler"]["default_filters"].join(","),
     :osapi_compute_link_prefix => compute_api_endpoint.to_s,
     :network_endpoint => network_endpoint,
-    :quantum_admin_password => quantum_admin_password,
-    :quantum_metadata_proxy_shared_secret => quantum_metadata_proxy_shared_secret
+    :neutron_admin_password => neutron_admin_password,
+    :neutron_metadata_proxy_shared_secret => neutron_metadata_proxy_shared_secret
   )
 end
 
