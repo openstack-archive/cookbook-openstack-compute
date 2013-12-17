@@ -4,7 +4,7 @@ describe "openstack-compute::nova-cert" do
   before { compute_stubs }
   describe "redhat" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::nova-cert"
     end
 
@@ -13,7 +13,7 @@ describe "openstack-compute::nova-cert" do
     end
 
     it "starts nova cert on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "openstack-nova-cert"
+      expect(@chef_run).to enable_service "openstack-nova-cert"
     end
   end
 end

@@ -4,7 +4,7 @@ describe "openstack-compute::nova-common" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+      @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
         n.set["openstack"]["mq"] = {
           "host" => "127.0.0.1"
         }
@@ -22,13 +22,13 @@ describe "openstack-compute::nova-common" do
     end
 
     it "doesn't run logging recipe" do
-      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       chef_run.converge "openstack-compute::nova-common"
       expect(chef_run).not_to include_recipe "openstack-common::logging"
     end
 
     it "can converge with neutron service type" do
-      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set["openstack"]["compute"]["network"]["service_type"] = "neutron"
       chef_run.converge "openstack-compute::nova-common"
@@ -42,226 +42,122 @@ describe "openstack-compute::nova-common" do
       expect(@chef_run).to install_package "python-memcache"
     end
 
-    describe "/etc/nova" do
-      before do
-        @dir = @chef_run.directory "/etc/nova"
-      end
-
-      it "has proper owner" do
-        expect(@dir).to be_owned_by "nova", "nova"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @dir.mode)).to eq "700"
-      end
+    it "creates the /etc/nova directory" do
+      expect(@chef_run).to create_directory("/etc/nova").with(
+        owner: "nova",
+        group: "nova",
+        mode: 0700
+      )
     end
 
-    describe "/etc/nova/rootwrap.d" do
-      before do
-        @dir = @chef_run.directory "/etc/nova/rootwrap.d"
-      end
-
-      it "has proper owner" do
-        expect(@dir).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @dir.mode)).to eq "700"
-      end
+    it "creates the /etc/nova/rootwrap.d directory" do
+      expect(@chef_run).to create_directory("/etc/nova/rootwrap.d").with(
+        owner: "root",
+        group: "root",
+        mode: 0700
+      )
     end
 
     describe "nova.conf" do
       before do
-        @file = @chef_run.template "/etc/nova/nova.conf"
-        # README(shep) need this to evaluate nova.conf.erb template
+        @filename = "/etc/nova/nova.conf"
+        # need this to evaluate nova.conf.erb template
         @chef_run.node.set['cpu'] = Hash.new()
         @chef_run.node.set.cpu.total = "2"
       end
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "nova", "nova"
+      it "creates the file" do
+        expect(@chef_run).to create_template("/etc/nova/nova.conf").with(
+          owner: "nova",
+          group: "nova",
+          mode: 0644
+        )
       end
 
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
-      end
-
-      it "has rpc_thread_pool_size" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rpc_thread_pool_size=64"
-      end
-
-      it "has rpc_conn_pool_size" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rpc_conn_pool_size=30"
-      end
-
-      it "has rpc_response_timeout" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rpc_response_timeout=60"
-      end
-
-      it "has rabbit_user" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rabbit_userid=guest"
-      end
-
-      it "has rabbit_password" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rabbit_password=rabbit-pass"
-      end
-
-      it "has rabbit_virtual_host" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rabbit_virtual_host=/"
-      end
-
-      it "has rabbit_host" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rabbit_host=127.0.0.1"
-      end
-
-      it "does not have rabbit_hosts" do
-        expect(@chef_run).not_to create_file_with_content @file.name,
-          "rabbit_hosts="
-      end
-
-      it "does not have rabbit_ha_queues" do
-        expect(@chef_run).not_to create_file_with_content @file.name,
-          "rabbit_ha_queues="
-      end
-
-      it "has rabbit_port" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "rabbit_port=5672"
-      end
-
-      it "has allow_resize_to_same_host" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "allow_resize_to_same_host=false"
-      end
-
-      describe "virt_type is qemu" do
-        before do
-          @file = @chef_run.template "/etc/nova/nova.conf"
-          @chef_run.node.set['openstack']['compute']['libvirt']['virt_type'] = "qemu"
-        end
-
-        it "the libvirt_cpu_mode is none when virt_type is 'qemu'" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "libvirt_cpu_mode=none"
+      array = [/^rpc_thread_pool_size=64$/,
+        /^rpc_conn_pool_size=30$/,
+        /^rpc_response_timeout=60$/,
+        /^rabbit_userid=guest$/,
+        /^rabbit_password=rabbit-pass$/,
+        /^rabbit_virtual_host=\/$/,
+        /^rabbit_host=127.0.0.1$/,
+        /^rabbit_port=5672$/,
+        /^allow_resize_to_same_host=false$/,
+        /^vncserver_listen=127.0.1.1$/,
+        /^vncserver_proxyclient_address=127.0.1.1$/,
+        /^xvpvncproxy_host=127.0.1.1$/,
+        /^novncproxy_host=127.0.1.1$/,
+        /^force_dhcp_release=true$/,
+        /^libvirt_use_virtio_for_bridges=true$/
+      ]
+      array.each do |content|
+        it "has a \"#{content.source[1...-1]}\" line" do
+          expect(@chef_run).to render_file(@filename).with_content(content)
         end
       end
 
-      describe "scheduler filter" do
-        before do
-          @file = @chef_run.template "/etc/nova/nova.conf"
-          @chef_run.node.set['openstack']['compute']['scheduler']['default_filters'] = [
-            "AvailabilityZoneFilter",
-            "DiskFilter",
-            "RamFilter",
-            "ComputeFilter",
-            "CoreFilter",
-            "SameHostFilter",
-            "DifferentHostFilter"
-          ]
-          @chef_run.converge "openstack-compute::nova-common"
-        end
-
-        it "has disk_allocation_ratio" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "disk_allocation_ratio=1.0"
+      [/^rabbit_hosts=/, /^rabbit_ha_queues=/, /^ec2_private_dns_show_ip$/].each do |content|
+        it "does not have a \"#{content.source[1..-1]}\" line" do
+          expect(@chef_run).not_to render_file(@filename).with_content(content)
         end
       end
 
-      describe "neutron network" do
-        before do
-          @file = @chef_run.template "/etc/nova/nova.conf"
-          @chef_run.node.set['openstack']['compute']['network']['service_type'] = "neutron"
-        end
-
-        it "has no auto_assign_floating_ip" do
-          expect(@chef_run).to_not create_file_with_content @file.name,
-            "auto_assign_floating_ip=false"
-        end
+      it "the libvirt_cpu_mode is none when virt_type is 'qemu'" do
+        @chef_run.node.set['openstack']['compute']['libvirt']['virt_type'] = "qemu"
+        expect(@chef_run).to render_file(@filename).with_content(
+          "libvirt_cpu_mode=none")
       end
 
-      describe "qpid" do
-        before do
-          @file = @chef_run.template "/etc/nova/nova.conf"
-          # README(shep) need this to evaluate nova.conf.erb template
+      it "has disk_allocation_ratio when the right filter is set" do
+        @chef_run.node.set['openstack']['compute']['scheduler']['default_filters'] = [
+          "AvailabilityZoneFilter",
+          "DiskFilter",
+          "RamFilter",
+          "ComputeFilter",
+          "CoreFilter",
+          "SameHostFilter",
+          "DifferentHostFilter"
+        ]
+        @chef_run.converge("openstack-compute::nova-common")
+        expect(@chef_run).to render_file(@filename).with_content(
+          "disk_allocation_ratio=1.0")
+      end
+
+      it "has no auto_assign_floating_ip" do
+        @chef_run.node.set['openstack']['compute']['network']['service_type'] = "neutron"
+        expect(@chef_run).not_to render_file(@filename).with_content(
+          "auto_assign_floating_ip=false")
+      end
+
+      context "qpid" do
+        before {
           @chef_run.node.set['openstack']['compute']['mq']['service_type'] = "qpid"
-        end
+        }
 
-        it "has qpid_hostname" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_hostname=127.0.0.1"
-        end
-
-        it "has qpid_port" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_port=5672"
-        end
-
-        it "has qpid_username" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_username="
-        end
-
-        it "has qpid_password" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_password="
-        end
-
-        it "has qpid_sasl_mechanisms" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_sasl_mechanisms="
-        end
-
-        it "has qpid_reconnect_timeout" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_reconnect_timeout=0"
-        end
-
-        it "has qpid_reconnect_limit" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_reconnect_limit=0"
-        end
-
-        it "has qpid_reconnect_interval_min" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_reconnect_interval_min=0"
-        end
-
-        it "has qpid_reconnect_interval_max" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_reconnect_interval_max=0"
-        end
-
-        it "has qpid_reconnect_interval" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_reconnect_interval=0"
-        end
-
-        it "has qpid_heartbeat" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_heartbeat=60"
-        end
-
-        it "has qpid_protocol" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_protocol=tcp"
-        end
-
-        it "has qpid_tcp_nodelay" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "qpid_tcp_nodelay=true"
+        array = [/^qpid_hostname=127.0.0.1$/,
+          /^qpid_port=5672$/,
+          /^qpid_username=$/,
+          /^qpid_password=$/,
+          /^qpid_sasl_mechanisms=$/,
+          /^qpid_reconnect_timeout=0$/,
+          /^qpid_reconnect_limit=0$/,
+          /^qpid_reconnect_interval_min=0$/,
+          /^qpid_reconnect_interval_max=0$/,
+          /^qpid_reconnect_interval=0$/,
+          /^qpid_heartbeat=60$/,
+          /^qpid_protocol=tcp$/,
+          /^qpid_tcp_nodelay=true$/
+        ]
+        array.each do |content|
+          it "has a \"#{content.source[1...-1]}\" line" do
+            expect(@chef_run).to render_file(@filename).with_content(content)
+          end
         end
       end
 
       describe "rabbit ha" do
         before do
-          @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+          @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
             n.set["openstack"]["compute"]["rabbit"]["ha"] = true
             n.set["cpu"] = {
               "total" => "2"
@@ -270,67 +166,24 @@ describe "openstack-compute::nova-common" do
           @chef_run.converge "openstack-compute::nova-common"
         end
 
-        it "has rabbit_hosts" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "rabbit_hosts=1.1.1.1:5672,2.2.2.2:5672"
+        [/^rabbit_hosts=1.1.1.1:5672,2.2.2.2:5672$/, /^rabbit_ha_queues=True$/].each do |content|
+          it "has a \"#{content.source[1...-1]}\" line" do
+            expect(@chef_run).to render_file(@filename).with_content(content)
+          end
         end
 
-        it "has rabbit_ha_queues" do
-          expect(@chef_run).to create_file_with_content @file.name,
-            "rabbit_ha_queues=True"
+        [/^rabbit_host=127.0.0.1$/, /^rabbit_port=5672$/].each do |content|
+          it "does not have a \"#{content.source[1..-1]}\" line" do
+            expect(@chef_run).not_to render_file(@filename).with_content(content)
+          end
         end
-
-        it "does not have rabbit_host" do
-          expect(@chef_run).not_to create_file_with_content @file.name,
-            "rabbit_host=127.0.0.1"
-        end
-
-        it "does not have rabbit_port" do
-          expect(@chef_run).not_to create_file_with_content @file.name,
-            "rabbit_port=5672"
-        end
-      end
-
-      it "has vncserver_listen" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "vncserver_listen=127.0.1.1"
-      end
-
-      it "has vncserver_proxyclient_address" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "vncserver_proxyclient_address=127.0.1.1"
-      end
-
-      it "has xvpvncproxy_host" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "xvpvncproxy_host=127.0.1.1"
-      end
-
-      it "has novncproxy_host" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "novncproxy_host=127.0.1.1"
-      end
-
-      it "has correct force_dhcp_release value" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "force_dhcp_release=true"
-      end
-
-      it "has virtio enabled" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "libvirt_use_virtio_for_bridges=true"
-      end
-
-      it "does not have ec2_private_dns_show_ip option" do
-        expect(@chef_run).to_not create_file_with_content @file.name,
-          "ec2_private_dns_show_ip"
       end
     end
 
 
 #    describe "identity role local node" do
 #      before do
-#        @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+#        @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
 #          n.set["openstack"]["identity"]["admin_tenant_name"] = "admin-tenant"
 #          n.set["openstack"]["identity"]["admin_user"] = "admin-user"
 #        end
@@ -350,7 +203,7 @@ describe "openstack-compute::nova-common" do
 
 #    describe "identity role search" do
 #      before do
-#        @chef_run = ::ChefSpec::ChefRunner.new(::UBUNTU_OPTS) do |n|
+#        @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
 #          n.set["openstack"]["compute"]["identity_service_chef_role"] = "os-identity"
 #        end
 #        @chef_run.converge "openstack-compute::nova-common"
@@ -367,34 +220,14 @@ describe "openstack-compute::nova-common" do
 #    end
 
     describe "rootwrap.conf" do
-      before do
-        @file = @chef_run.template "/etc/nova/rootwrap.conf"
-      end
+      before { @filename = "/etc/nova/rootwrap.conf" }
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
-      end
-
-      it "template contents" do
-        pending "TODO: implement"
-      end
-    end
-
-    describe "api-metadata.filters" do
-      before do
-        @file = @chef_run.template "/etc/nova/rootwrap.d/api-metadata.filters"
-      end
-
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
+      it "creates the /etc/nova/rootwrap.conf file" do
+        expect(@chef_run).to create_template(@filename).with(
+          user: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
       it "template contents" do
@@ -402,35 +235,15 @@ describe "openstack-compute::nova-common" do
       end
     end
 
-    describe "compute.filters" do
-      before do
-        @file = @chef_run.template "/etc/nova/rootwrap.d/compute.filters"
-      end
+    describe "/etc/nova/rootwrap.d/api-metadata.filters" do
+      before { @filename = "/etc/nova/rootwrap.d/api-metadata.filters" }
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
-      end
-
-      it "template contents" do
-        pending "TODO: implement"
-      end
-    end
-
-    describe "network.filters" do
-      before do
-        @file = @chef_run.template "/etc/nova/rootwrap.d/network.filters"
-      end
-
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
+      it "creates the /etc/nova/rootwrap.d/api-metadata.filters file" do
+        expect(@chef_run).to create_template(@filename).with(
+          user: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
       it "template contents" do
@@ -438,32 +251,53 @@ describe "openstack-compute::nova-common" do
       end
     end
 
-    describe "openrc" do
-      before do
-        @file = @chef_run.template "/root/openrc"
+    describe "/etc/nova/rootwrap.d/compute.filters" do
+      before { @filename = "/etc/nova/rootwrap.d/compute.filters" }
+
+      it "creates the /etc/nova/rootwrap.d/compute.filters file" do
+        expect(@chef_run).to create_template(@filename).with(
+          user: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
+      it "template contents" do
+        pending "TODO: implement"
+      end
+    end
+
+    describe "/etc/nova/rootwrap.d/network.filters" do
+      before { @filename = "/etc/nova/rootwrap.d/network.filters" }
+
+      it "creates the /etc/nova/rootwrap.d/network.filters file" do
+        expect(@chef_run).to create_template(@filename).with(
+          user: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "600"
+      it "template contents" do
+        pending "TODO: implement"
+      end
+    end
+
+    describe "/root/openrc" do
+      before { @filename = "/root/openrc" }
+
+      it "creates the /root/openrc file" do
+        expect(@chef_run).to create_template(@filename).with(
+          user: "root",
+          group: "root",
+          mode: 0600
+        )
       end
 
-      it "contains ksadmin_user" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "export OS_USERNAME=admin-user"
-      end
-
-      it "contains ksadmin_tenant_name" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "export OS_TENANT_NAME=admin-tenant"
-      end
-
-      it "contains ksadmin_pass" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "export OS_PASSWORD=admin-pass"
+      [/^export OS_USERNAME=admin-user/, /^export OS_TENANT_NAME=admin-tenant$/, /^export OS_PASSWORD=admin-pass$/].each do |content|
+        it "has a \"#{content.source[1...-1]}\" line" do
+          expect(@chef_run).to render_file(@filename).with_content(content)
+        end
       end
 
       it "rest of template contents" do
@@ -472,8 +306,7 @@ describe "openstack-compute::nova-common" do
     end
 
     it "enables nova login" do
-      cmd = "usermod -s /bin/sh nova"
-      expect(@chef_run).to execute_command cmd
+      expect(@chef_run).to run_execute("usermod -s /bin/sh nova")
     end
   end
 end

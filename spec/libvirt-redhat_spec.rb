@@ -4,7 +4,7 @@ describe "openstack-compute::libvirt" do
   before { compute_stubs }
   describe "redhat" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::libvirt"
     end
 
@@ -28,24 +28,22 @@ describe "openstack-compute::libvirt" do
     end
 
     it "starts libvirt on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "libvirtd"
+      expect(@chef_run).to enable_service "libvirtd"
     end
 
     it "does not create /etc/default/libvirt-bin" do
       pending "TODO: how to test this"
     end
 
-    describe "libvirtd" do
-      before do
-        @file = @chef_run.template "/etc/sysconfig/libvirtd"
-      end
+    describe "/etc/sysconfig/libvirtd" do
+      before { @filename = "/etc/sysconfig/libvirtd" }
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
+      it "creates the /etc/sysconfig/libvirtd file" do
+        expect(@chef_run).to create_template(@filename).with(
+          owner: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
       it "template contents" do
@@ -53,7 +51,7 @@ describe "openstack-compute::libvirt" do
       end
 
       it "notifies libvirt-bin restart" do
-        expect(@file).to notify "service[libvirt-bin]", :restart
+        expect(@chef_run.template(@filename)).to notify("service[libvirt-bin]").to(:restart)
       end
     end
   end

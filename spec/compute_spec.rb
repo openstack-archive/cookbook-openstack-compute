@@ -4,7 +4,7 @@ describe "openstack-compute::compute" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       @chef_run.converge "openstack-compute::compute"
     end
 
@@ -20,7 +20,7 @@ describe "openstack-compute::compute" do
 
     # stubbing the run_context properly is non-trivial, fix with ChefSpec 3.0
     # it "doesn't run network recipe with openstack-network::server" do
-    #   chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+    #   chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
     #   node = chef_run.node
     #   node.run_list.stub("include?").and_return true
     #   chef_run.converge "openstack-compute::compute"
@@ -36,7 +36,7 @@ describe "openstack-compute::compute" do
     end
 
     it "installs kvm when virt_type is 'kvm'" do
-      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "kvm"
       chef_run.converge "openstack-compute::compute"
@@ -46,7 +46,7 @@ describe "openstack-compute::compute" do
     end
 
     it "installs qemu when virt_type is 'qemu'" do
-      chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "qemu"
       chef_run.converge "openstack-compute::compute"
@@ -70,7 +70,7 @@ describe "openstack-compute::compute" do
     end
 
     it "starts nova compute on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "nova-compute"
+      expect(@chef_run).to enable_service "nova-compute"
     end
 
     it "starts nova compute" do

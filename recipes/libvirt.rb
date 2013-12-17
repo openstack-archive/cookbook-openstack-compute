@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+require 'mixlib/shellout'
+
 platform_options = node["openstack"]["compute"]["platform"]
 
 platform_options["libvirt_packages"].each do |pkg|
@@ -51,17 +53,17 @@ def set_grub_default_kernel(flavor='default')
   # change default option for /boot/grub/menu.lst
   unless current_default.eql?(default_boot)
     ::Chef::Log.info("Changed grub default to #{default_boot}")
-    %x[sed -i -e "s;^default.*;default #{default_boot};" /boot/grub/menu.lst]
+    Mixlib::ShellOut.new("sed -i -e \"s;^default.*;default #{default_boot};\" /boot/grub/menu.lst").run_command
   end
 end
 
 def set_grub2_default_kernel(flavor='default')
   boot_entry = "'openSUSE GNU/Linux, with Xen hypervisor'"
-  if system("grub2-set-default #{boot_entry}")
-    ::Chef::Log.info("Changed grub2 default to #{boot_entry}")
-  else
+  if Mixlib::ShellOut.new("grub2-set-default #{boot_entry}").error
     ::Chef::Application.fatal!(
       "Unable to change grub2 default to #{boot_entry}")
+  else
+    ::Chef::Log.info("Changed grub2 default to #{boot_entry}")
   end
 end
 
@@ -78,7 +80,7 @@ def set_boot_kernel_and_trigger_reboot(flavor='default')
 
   # trigger reboot through reboot_handler, if kernel-$flavor is not yet
   # running
-  unless %x[uname -r].include?(flavor)
+  unless Mixlib::ShellOut.new("uname -r").run_command.stdout.include?(flavor)
     node.run_state["reboot"] = true
   end
 end

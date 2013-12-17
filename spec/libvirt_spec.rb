@@ -4,7 +4,7 @@ describe "openstack-compute::libvirt" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       @chef_run.converge "openstack-compute::libvirt"
     end
 
@@ -25,7 +25,7 @@ describe "openstack-compute::libvirt" do
     end
 
     it "starts dbus on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "dbus"
+      expect(@chef_run).to enable_service "dbus"
     end
 
     it "starts libvirt" do
@@ -33,59 +33,48 @@ describe "openstack-compute::libvirt" do
     end
 
     it "starts libvirt on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "libvirt-bin"
+      expect(@chef_run).to enable_service "libvirt-bin"
     end
 
     it "disables default libvirt network" do
-      cmd = "virsh net-autostart default --disable"
-      expect(@chef_run).to execute_command cmd
+      expect(@chef_run).to run_execute("virsh net-autostart default --disable")
     end
 
     it "deletes default libvirt network" do
-      cmd = "virsh net-destroy default"
-      expect(@chef_run).to execute_command cmd
+      expect(@chef_run).to run_execute("virsh net-destroy default")
     end
 
-    describe "libvirtd.conf" do
-      before do
-        @file = @chef_run.template "/etc/libvirt/libvirtd.conf"
-      end
+    describe "/etc/libvirt/libvirtd.conf" do
+      before { @filename = "/etc/libvirt/libvirtd.conf" }
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
+      it "creates the /etc/libvirt/libvirtd.conf file" do
+        expect(@chef_run).to create_template(@filename).with(
+          owner: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
       it "has proper processing controls" do
-        expect(@chef_run).to create_file_with_content @file.name,
-          "max_clients = 20"
-        expect(@chef_run).to create_file_with_content @file.name,
-          "max_workers = 20"
-        expect(@chef_run).to create_file_with_content @file.name,
-          "max_requests = 20"
-        expect(@chef_run).to create_file_with_content @file.name,
-          "max_client_requests = 5"
+        [/^max_clients = 20$/, /^max_workers = 20$/, /^max_requests = 20$/, /^max_client_requests = 5$/].each do |content|
+          expect(@chef_run).to render_file(@filename).with_content(content)
+        end
       end
 
       it "notifies libvirt-bin restart" do
-        expect(@file).to notify "service[libvirt-bin]", :restart
+        expect(@chef_run.template(@filename)).to notify("service[libvirt-bin]").to(:restart)
       end
     end
 
-    describe "libvirt-bin" do
-      before do
-        @file = @chef_run.template "/etc/default/libvirt-bin"
-      end
+    describe "/etc/default/libvirt-bin" do
+      before { @filename = "/etc/default/libvirt-bin" }
 
-      it "has proper owner" do
-        expect(@file).to be_owned_by "root", "root"
-      end
-
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
+      it "creates the /etc/default/libvirt-bin file" do
+        expect(@chef_run).to create_template(@filename).with(
+          owner: "root",
+          group: "root",
+          mode: 0644
+        )
       end
 
       it "template contents" do
@@ -93,7 +82,7 @@ describe "openstack-compute::libvirt" do
       end
 
       it "notifies libvirt-bin restart" do
-        expect(@file).to notify "service[libvirt-bin]", :restart
+        expect(@chef_run.template(@filename)).to notify("service[libvirt-bin]").to(:restart)
       end
     end
 

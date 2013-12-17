@@ -4,7 +4,7 @@ describe "openstack-compute::vncproxy" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       @chef_run.converge "openstack-compute::vncproxy"
     end
 
@@ -21,7 +21,7 @@ describe "openstack-compute::vncproxy" do
     end
 
     it "starts nova vncproxy on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "nova-novncproxy"
+      expect(@chef_run).to enable_service "nova-novncproxy"
     end
 
     it "starts nova consoleauth" do
@@ -29,7 +29,7 @@ describe "openstack-compute::vncproxy" do
     end
 
     it "starts nova consoleauth on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "nova-consoleauth"
+      expect(@chef_run).to enable_service "nova-consoleauth"
     end
   end
 end

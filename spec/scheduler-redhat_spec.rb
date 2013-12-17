@@ -4,7 +4,7 @@ describe "openstack-compute::scheduler" do
   before { compute_stubs }
   describe "redhat" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::scheduler"
     end
 
@@ -18,7 +18,7 @@ describe "openstack-compute::scheduler" do
 
     it "starts nova scheduler on boot" do
       expected = "openstack-nova-scheduler"
-      expect(@chef_run).to set_service_to_start_on_boot expected
+      expect(@chef_run).to enable_service expected
     end
   end
 end

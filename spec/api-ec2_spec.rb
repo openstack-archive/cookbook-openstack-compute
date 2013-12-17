@@ -4,7 +4,7 @@ describe "openstack-compute::api-ec2" do
   before { compute_stubs }
   describe "ubuntu" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::UBUNTU_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       @chef_run.converge "openstack-compute::api-ec2"
     end
 
@@ -19,7 +19,7 @@ describe "openstack-compute::api-ec2" do
     end
 
     it "starts ec2 api on boot" do
-      expect(@chef_run).to set_service_to_start_on_boot "nova-api-ec2"
+      expect(@chef_run).to enable_service "nova-api-ec2"
     end
 
     expect_creates_api_paste "service[nova-api-ec2]"

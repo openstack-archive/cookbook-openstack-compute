@@ -58,6 +58,12 @@ def compute_stubs
     with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'").
     and_return true
   ::Chef::Application.stub(:fatal!)
+  stub_command("nova-manage network list | grep 192.168.100.0/24").and_return(false)
+  stub_command("nova-manage network list | grep 192.168.200.0/24").and_return(false)
+  stub_command("nova-manage floating list |grep -E '.*([0-9]{1,3}[.]){3}[0-9]{1,3}*'").and_return(false)
+  stub_command("virsh net-list | grep -q default").and_return(true)
+  stub_command("ovs-vsctl show | grep 'Bridge br-int'").and_return(true)
+  stub_command("ovs-vsctl show | grep 'Bridge br-tun'").and_return(true)
 end
 
 def expect_runs_nova_common_recipe
@@ -73,41 +79,32 @@ def expect_installs_python_keystone
 end
 
 def expect_creates_nova_lock_dir
-  describe "/var/lock/nova" do
-    before do
-      @dir = @chef_run.directory "/var/lock/nova"
-    end
-
-    it "has proper owner" do
-      expect(@dir).to be_owned_by "nova", "nova"
-    end
-
-    it "has proper modes" do
-      expect(sprintf("%o", @dir.mode)).to eq "700"
-    end
+  it "creates the /var/lock/nova directory" do
+    expect(@chef_run).to create_directory("/var/lock/nova").with(
+      user: "nova",
+      group: "nova",
+      mode: 0700
+    )
   end
 end
 
 def expect_creates_api_paste service, action=:restart
-  describe "api-paste.ini" do
-    before do
-      @file = @chef_run.template "/etc/nova/api-paste.ini"
-    end
-
-    it "has proper owner" do
-      expect(@file).to be_owned_by "nova", "nova"
-    end
-
-    it "has proper modes" do
-      expect(sprintf("%o", @file.mode)).to eq "644"
+  describe "/etc/nova/api-paste.ini" do
+    before { @filename = "/etc/nova/api-paste.ini" }
+    it "creates api-paste.ini" do
+      expect(@chef_run).to create_template(@filename).with(
+        user: "nova",
+        group: "nova",
+        mode: 0644,
+      )
     end
 
     it "template contents" do
       pending "TODO: implement"
     end
 
-    it "notifies nova-api-ec2 restart" do
-      expect(@file).to notify service, action
+    it "notifies #{service} #{action}" do
+      expect(@chef_run.template("/etc/nova/api-paste.ini")).to notify(service).to(action)
     end
   end
 end

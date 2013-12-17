@@ -4,12 +4,12 @@ describe "openstack-compute::compute" do
   before { compute_stubs }
   describe "redhat" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       @chef_run.converge "openstack-compute::compute"
     end
 
     it "does not install kvm when virt_type is 'kvm'" do
-      chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       node = chef_run.node
       node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "kvm"
       chef_run.converge "openstack-compute::compute"
@@ -17,7 +17,7 @@ describe "openstack-compute::compute" do
     end
 
     it "does not install qemu when virt_type is 'qemu'" do
-      chef_run = ::ChefSpec::ChefRunner.new ::REDHAT_OPTS
+      chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       node = chef_run.node
       node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "qemu"
       chef_run.converge "openstack-compute::compute"
@@ -35,7 +35,7 @@ describe "openstack-compute::compute" do
 
     it "starts nova compute on boot" do
       expected = "openstack-nova-compute"
-      expect(@chef_run).to set_service_to_start_on_boot expected
+      expect(@chef_run).to enable_service expected
     end
 
     it "starts nova compute" do

@@ -4,7 +4,7 @@ describe "openstack-compute::compute" do
   before { compute_stubs }
   describe "opensuse" do
     before do
-      @chef_run = ::ChefSpec::ChefRunner.new ::OPENSUSE_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::OPENSUSE_OPTS
       @chef_run.converge "openstack-compute::compute"
     end
 
