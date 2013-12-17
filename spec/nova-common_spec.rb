@@ -294,7 +294,7 @@ describe "openstack-compute::nova-common" do
         )
       end
 
-      [/^export OS_USERNAME=admin-user/, /^export OS_TENANT_NAME=admin-tenant$/, /^export OS_PASSWORD=admin-pass$/].each do |content|
+      [/^export OS_USERNAME=admin/, /^export OS_TENANT_NAME=admin$/, /^export OS_PASSWORD=admin$/].each do |content|
         it "has a \"#{content.source[1...-1]}\" line" do
           expect(@chef_run).to render_file(@filename).with_content(content)
         end

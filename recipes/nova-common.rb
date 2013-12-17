@@ -76,18 +76,19 @@ if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"
   rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
 end
 
-identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
-
-if node.run_list.expand(node.chef_environment).roles.include?(identity_service_role)
-  # if role is on this node, just return the node hash
-  keystone = node
+# check attributes before search
+if node["openstack"]["identity"]["admin_tenant_name"] && node["openstack"]["identity"]["admin_user"]
+  ksadmin_tenant_name = node["openstack"]["identity"]["admin_tenant_name"]
+  ksadmin_user = node["openstack"]["identity"]["admin_user"]
 else
-  # otherwise go searching
+  identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
   keystone = search_for(identity_service_role).first
+
+  ksadmin_tenant_name = keystone["openstack"]["identity"]["admin_tenant_name"]
+  ksadmin_user = keystone["openstack"]["identity"]["admin_user"]
+  Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
 end
 
-ksadmin_tenant_name = keystone["openstack"]["identity"]["admin_tenant_name"]
-ksadmin_user = keystone["openstack"]["identity"]["admin_user"]
 ksadmin_pass = user_password ksadmin_user
 
 memcache_servers = memcached_servers.join ","
@@ -101,7 +102,6 @@ ec2_public_endpoint = endpoint "compute-ec2-api" || {}
 network_endpoint = endpoint "network-api" || {}
 image_endpoint = endpoint "image-api"
 
-Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
 Chef::Log.debug("openstack-compute::nova-common:ksadmin_user|#{ksadmin_user}")
 Chef::Log.debug("openstack-compute::nova-common:ksadmin_tenant_name|#{ksadmin_tenant_name}")
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
