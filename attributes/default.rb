@@ -366,6 +366,7 @@ end
 
 # plugins
 default["openstack"]["compute"]["plugins"] = nil
+default["openstack"]["compute"]["misc"] = nil
 
 # To disable the EC2 API endpoint, simply remove "ec2," from the list
 # of enabled API services.
