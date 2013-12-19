@@ -21,3 +21,10 @@ export NOVA_REGION_NAME=<%= node["openstack"]["compute"]["region"] %>
 export EC2_ACCESS_KEY=<%= node["credentials"]["EC2"]["admin"]["access"] %>
 export EC2_SECRET_KEY=<%= node["credentials"]["EC2"]["admin"]["secret"] %>
 export EC2_URL=<%= @ec2_url %>
+
+<% if node["openstack"]["compute"]["misc_openrc"] %>
+# Misc options
+<% node["openstack"]["compute"]["misc_openrc"].each do |m| %>
+<%= m %>
+<% end %>
+<% end %>
