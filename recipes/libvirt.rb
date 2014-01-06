@@ -59,11 +59,12 @@ end
 
 def set_grub2_default_kernel(flavor='default')
   boot_entry = "'openSUSE GNU/Linux, with Xen hypervisor'"
-  if Mixlib::ShellOut.new("grub2-set-default #{boot_entry}").error
-    ::Chef::Application.fatal!(
-      "Unable to change grub2 default to #{boot_entry}")
-  else
+  begin
+    Mixlib::ShellOut.new("grub2-set-default #{boot_entry}").run_command.error!
     ::Chef::Log.info("Changed grub2 default to #{boot_entry}")
+  rescue Mixlib::ShellOut::ShellCommandFailed => e
+    ::Chef::Application.fatal!(
+      "Unable to change grub2 default to #{boot_entry}\n#{e.message}")
   end
 end
 
