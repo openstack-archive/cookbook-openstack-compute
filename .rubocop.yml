@@ -1,0 +1,7 @@
+# UTF-8 headers not generally in these files
+Encoding:
+  Enabled: false
+
+# ignore long lines
+LineLength:
+  Enabled: false

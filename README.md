@@ -247,15 +247,7 @@ EC2 Configuration Attributes
 Testing
 =====
 
-This cookbook uses [bundler](http://gembundler.com/), [berkshelf](http://berkshelf.com/), and [strainer](https://github.com/customink/strainer) to isolate dependencies and run tests.
-
-Tests are defined in Strainerfile.
-
-To run tests:
-
-    $ bundle install # install gem dependencies
-    $ bundle exec berks install # install cookbook dependencies
-    $ bundle exec strainer test # run tests
+Please refer to the [TESTING.md](TESTING.md) for instructions for testing the cookbook.
 
 License and Author
 ==================
