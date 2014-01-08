@@ -41,6 +41,13 @@ platform_options["common_packages"].each do |pkg|
   end
 end
 
+db_type = node['openstack']['db']['compute']['db_type']
+platform_options["#{db_type}_python_packages"].each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 # required to run more than one consoleauth process
 platform_options["memcache_python_packages"].each do |pkg|
   package pkg do
