@@ -50,14 +50,6 @@ describe "openstack-compute::nova-common" do
       )
     end
 
-    it "creates the /etc/nova/rootwrap.d directory" do
-      expect(@chef_run).to create_directory("/etc/nova/rootwrap.d").with(
-        owner: "root",
-        group: "root",
-        mode: 0700
-      )
-    end
-
     describe "nova.conf" do
       before do
         @filename = "/etc/nova/nova.conf"
@@ -223,54 +215,6 @@ describe "openstack-compute::nova-common" do
       before { @filename = "/etc/nova/rootwrap.conf" }
 
       it "creates the /etc/nova/rootwrap.conf file" do
-        expect(@chef_run).to create_template(@filename).with(
-          user: "root",
-          group: "root",
-          mode: 0644
-        )
-      end
-
-      it "template contents" do
-        pending "TODO: implement"
-      end
-    end
-
-    describe "/etc/nova/rootwrap.d/api-metadata.filters" do
-      before { @filename = "/etc/nova/rootwrap.d/api-metadata.filters" }
-
-      it "creates the /etc/nova/rootwrap.d/api-metadata.filters file" do
-        expect(@chef_run).to create_template(@filename).with(
-          user: "root",
-          group: "root",
-          mode: 0644
-        )
-      end
-
-      it "template contents" do
-        pending "TODO: implement"
-      end
-    end
-
-    describe "/etc/nova/rootwrap.d/compute.filters" do
-      before { @filename = "/etc/nova/rootwrap.d/compute.filters" }
-
-      it "creates the /etc/nova/rootwrap.d/compute.filters file" do
-        expect(@chef_run).to create_template(@filename).with(
-          user: "root",
-          group: "root",
-          mode: 0644
-        )
-      end
-
-      it "template contents" do
-        pending "TODO: implement"
-      end
-    end
-
-    describe "/etc/nova/rootwrap.d/network.filters" do
-      before { @filename = "/etc/nova/rootwrap.d/network.filters" }
-
-      it "creates the /etc/nova/rootwrap.d/network.filters file" do
         expect(@chef_run).to create_template(@filename).with(
           user: "root",
           group: "root",
