@@ -63,15 +63,6 @@ directory "/etc/nova" do
   action :create
 end
 
-directory "/etc/nova/rootwrap.d" do
-  # Must be root!
-  owner "root"
-  group "root"
-  mode  00700
-
-  action :create
-end
-
 db_user = node["openstack"]["compute"]["db"]["username"]
 db_pass = db_password "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
@@ -163,30 +154,6 @@ end
 
 template "/etc/nova/rootwrap.conf" do
   source "rootwrap.conf.erb"
-  # Must be root!
-  owner  "root"
-  group  "root"
-  mode   00644
-end
-
-template "/etc/nova/rootwrap.d/api-metadata.filters" do
-  source "rootwrap.d/api-metadata.filters.erb"
-  # Must be root!
-  owner  "root"
-  group  "root"
-  mode   00644
-end
-
-template "/etc/nova/rootwrap.d/compute.filters" do
-  source "rootwrap.d/compute.filters.erb"
-  # Must be root!
-  owner  "root"
-  group  "root"
-  mode   00644
-end
-
-template "/etc/nova/rootwrap.d/network.filters" do
-  source "rootwrap.d/network.filters.erb"
   # Must be root!
   owner  "root"
   group  "root"
