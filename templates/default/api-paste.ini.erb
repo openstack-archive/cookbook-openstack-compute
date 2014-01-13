@@ -117,3 +117,13 @@ admin_tenant_name = <%= node["openstack"]["compute"]["service_tenant_name"] %>
 admin_user = <%= node["openstack"]["compute"]["service_user"] %>
 admin_password = <%= @service_pass %>
 signing_dir = <%= node["openstack"]["compute"]["api"]["auth"]["cache_dir"] %>
+
+<% if node["openstack"]["compute"]["misc_paste"] %>
+########
+# Misc #
+########
+
+<% node["openstack"]["compute"]["misc_paste"].each do |m| %>
+<%= m %>
+<% end %>
+<% end %>

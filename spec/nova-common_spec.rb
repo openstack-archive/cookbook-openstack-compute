@@ -121,6 +121,12 @@ describe "openstack-compute::nova-common" do
           "auto_assign_floating_ip=false")
       end
 
+      it "has misc option" do
+        @chef_run.node.set['openstack']['compute']['misc_nova'] = ["MISC_OPTION","FOO"]
+        expect(@chef_run).to render_file(@filename).with_content(
+          "MISC_OPTION")
+      end
+
       context "qpid" do
         before {
           @chef_run.node.set['openstack']['compute']['mq']['service_type'] = "qpid"
@@ -242,6 +248,12 @@ describe "openstack-compute::nova-common" do
         it "has a \"#{content.source[1...-1]}\" line" do
           expect(@chef_run).to render_file(@filename).with_content(content)
         end
+      end
+
+      it "has misc option" do
+        @chef_run.node.set['openstack']['compute']['misc_openrc'] = ["MISC_OPTION", "FOO"]
+        expect(@chef_run).to render_file(@filename).with_content(
+          "MISC_OPTION")
       end
 
       it "rest of template contents" do

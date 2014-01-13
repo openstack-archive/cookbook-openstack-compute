@@ -263,6 +263,12 @@ osapi_compute_extension=<%= p %>
 <% end %>
 <% end %>
 
+<% if node["openstack"]["compute"]["misc_nova"] %>
+<% node["openstack"]["compute"]["misc_nova"].each do |m| %>
+<%= m %>
+<% end %>
+<% end %>
+
 [conductor]
 
 use_local=<%= node["openstack"]["compute"]["conductor"]["use_local"] %>
