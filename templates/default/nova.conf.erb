@@ -19,6 +19,7 @@ lock_path=/var/lock/nova
 rpc_thread_pool_size=<%= node["openstack"]["compute"]["rpc_thread_pool_size"] %>
 rpc_conn_pool_size=<%= node["openstack"]["compute"]["rpc_conn_pool_size"] %>
 rpc_response_timeout=<%= node["openstack"]["compute"]["rpc_response_timeout"] %>
+rpc_backend=<%= node["openstack"]["compute"]["rpc_backend"] %>
 
 <% if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"  %>
 ##### RABBITMQ #####
@@ -36,7 +37,6 @@ rabbit_port=<%= node["openstack"]["compute"]["rabbit"]["port"] %>
 
 <% if node["openstack"]["compute"]["mq"]["service_type"] == "qpid"  %>
 ##### QPID #####
-rpc_backend=nova.openstack.common.rpc.impl_qpid
 qpid_hostname=<%= node["openstack"]["compute"]["mq"]["qpid"]["host"] %>
 qpid_port=<%= node["openstack"]["compute"]["mq"]["qpid"]["port"] %>
 

@@ -80,6 +80,7 @@ describe "openstack-compute::nova-common" do
         /^xvpvncproxy_host=127.0.1.1$/,
         /^novncproxy_host=127.0.1.1$/,
         /^force_dhcp_release=true$/,
+        /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
         /^libvirt_use_virtio_for_bridges=true$/
       ]
       array.each do |content|
