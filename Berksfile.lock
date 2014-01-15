@@ -21,7 +21,7 @@
     "openstack-network": {
       "locked_version": "8.0.0",
       "git": "git://github.com/stackforge/cookbook-openstack-network.git",
-      "ref": "0f7feef177d49732099c768543f47e32a47168eb"
+      "ref": "66bfd986510f4d25c0574f27b8e5314a70809b31"
     },
     "sysctl": {
       "locked_version": "0.2.0",
@@ -32,7 +32,7 @@
       "locked_version": "0.6.2"
     },
     "yum": {
-      "locked_version": "2.4.4"
+      "locked_version": "2.3.4"
     },
     "python": {
       "locked_version": "1.4.4"
@@ -41,22 +41,22 @@
       "locked_version": "1.4.2"
     },
     "apt": {
-      "locked_version": "2.3.0"
+      "locked_version": "2.2.0"
     },
     "database": {
-      "locked_version": "1.4.0"
+      "locked_version": "1.5.2"
     },
     "mysql": {
-      "locked_version": "3.0.0"
+      "locked_version": "3.0.12"
     },
     "openssl": {
       "locked_version": "1.1.0"
     },
     "postgresql": {
-      "locked_version": "3.3.4"
+      "locked_version": "3.1.0"
     },
     "aws": {
-      "locked_version": "1.0.0"
+      "locked_version": "0.101.6"
     },
     "xfs": {
       "locked_version": "1.1.0"

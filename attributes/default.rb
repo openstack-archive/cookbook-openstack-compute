@@ -22,7 +22,7 @@ default["openstack"]["compute"]["identity_service_chef_role"] = "os-identity"
 
 # This user's password is stored in an encrypted databag
 # and accessed with openstack-common cookbook library's
-# db_password routine.
+# get_password routine.
 default["openstack"]["compute"]["db"]["username"] = "nova"
 
 # Common rpc definitions
@@ -32,7 +32,7 @@ default["openstack"]["compute"]["rpc_response_timeout"] = 60
 
 # This user's password is stored in an encrypted databag
 # and accessed with openstack-common cookbook library's
-# user_password routine.  You are expected to create
+# get_password routine.  You are expected to create
 # the user, pass, vhost in a wrapper rabbitmq cookbook.
 default["openstack"]["compute"]["rabbit"]["username"] = "guest"
 default["openstack"]["compute"]["rabbit"]["vhost"] = "/"

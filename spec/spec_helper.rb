@@ -42,17 +42,19 @@ def compute_stubs
   ::Chef::Recipe.any_instance.stub(:secret).
     with("secrets", "neutron_metadata_secret").
     and_return "metadata-secret"
-  ::Chef::Recipe.any_instance.stub(:db_password).and_return String.new
-  ::Chef::Recipe.any_instance.stub(:user_password).and_return String.new
-  ::Chef::Recipe.any_instance.stub(:user_password).
-    with("guest").
+  ::Chef::Recipe.any_instance.stub(:get_password).
+    and_return String.new
+  ::Chef::Recipe.any_instance.stub(:get_password).
+    with("user", "guest").
     and_return "rabbit-pass"
-  ::Chef::Recipe.any_instance.stub(:user_password).
-    with("admin").
+  ::Chef::Recipe.any_instance.stub(:get_password).
+    with("user", "admin").
     and_return "admin"
-  ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-compute").
+  ::Chef::Recipe.any_instance.stub(:get_password).
+    with("service", "openstack-compute").
     and_return "nova-pass"
-  ::Chef::Recipe.any_instance.stub(:service_password).with("openstack-network").
+  ::Chef::Recipe.any_instance.stub(:get_password).
+    with("service", "openstack-network").
     and_return "neutron-pass"
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
   ::Chef::Recipe.any_instance.stub(:system).
