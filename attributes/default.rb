@@ -29,6 +29,12 @@ default["openstack"]["compute"]["db"]["username"] = "nova"
 default["openstack"]["compute"]["rpc_thread_pool_size"] = 64
 default["openstack"]["compute"]["rpc_conn_pool_size"] = 30
 default["openstack"]["compute"]["rpc_response_timeout"] = 60
+case node["openstack"]["mq"]["service_type"]
+when "rabbitmq"
+  default["openstack"]["compute"]["rpc_backend"] = "nova.openstack.common.rpc.impl_kombu"
+when "qpid"
+  default["openstack"]["compute"]["rpc_backend"] = "nova.openstack.common.rpc.impl_qpid"
+end
 
 # This user's password is stored in an encrypted databag
 # and accessed with openstack-common cookbook library's
