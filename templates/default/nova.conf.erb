@@ -21,37 +21,38 @@ rpc_conn_pool_size=<%= node["openstack"]["compute"]["rpc_conn_pool_size"] %>
 rpc_response_timeout=<%= node["openstack"]["compute"]["rpc_response_timeout"] %>
 rpc_backend=<%= node["openstack"]["compute"]["rpc_backend"] %>
 
-<% if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"  %>
+<% if node["openstack"]["mq"]["compute"]["service_type"] == "rabbitmq"  %>
 ##### RABBITMQ #####
-rabbit_userid=<%= node["openstack"]["compute"]["rabbit"]["username"] %>
+rabbit_userid=<%= node["openstack"]["mq"]["compute"]["rabbit"]["userid"] %>
 rabbit_password=<%= @rabbit_password %>
-rabbit_virtual_host=<%= node["openstack"]["compute"]["rabbit"]["vhost"] %>
-<% if node["openstack"]["compute"]["rabbit"]["ha"] -%>
+rabbit_virtual_host=<%= node["openstack"]["mq"]["compute"]["rabbit"]["vhost"] %>
+<% if node["openstack"]["mq"]["compute"]["rabbit"]["ha"] -%>
 rabbit_hosts=<%= @rabbit_hosts %>
 rabbit_ha_queues=True
 <% else -%>
-rabbit_host=<%= node["openstack"]["compute"]["rabbit"]["host"] %>
-rabbit_port=<%= node["openstack"]["compute"]["rabbit"]["port"] %>
+rabbit_host=<%= node["openstack"]["mq"]["compute"]["rabbit"]["host"] %>
+rabbit_port=<%= node["openstack"]["mq"]["compute"]["rabbit"]["port"] %>
+rabbit_use_ssl=<%= node["openstack"]["mq"]["compute"]["rabbit"]["use_ssl"] %>
 <% end -%>
 <% end -%>
 
-<% if node["openstack"]["compute"]["mq"]["service_type"] == "qpid"  %>
+<% if node["openstack"]["mq"]["compute"]["service_type"] == "qpid"  %>
 ##### QPID #####
-qpid_hostname=<%= node["openstack"]["compute"]["mq"]["qpid"]["host"] %>
-qpid_port=<%= node["openstack"]["compute"]["mq"]["qpid"]["port"] %>
+qpid_hostname=<%= node["openstack"]["mq"]["compute"]["qpid"]["host"] %>
+qpid_port=<%= node["openstack"]["mq"]["compute"]["qpid"]["port"] %>
 
-qpid_password=<%= node["openstack"]["compute"]["mq"]["qpid"]["password"] %>
-qpid_username=<%= node["openstack"]["compute"]["mq"]["qpid"]["username"] %>
-qpid_sasl_mechanisms=<%= node["openstack"]["compute"]["mq"]["qpid"]["sasl_mechanisms"] %>
-qpid_reconnect_timeout=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_timeout"] %>
-qpid_reconnect_limit=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_limit"] %>
-qpid_reconnect_interval_min=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval_min"] %>
-qpid_reconnect_interval_max=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval_max"] %>
-qpid_reconnect_interval=<%= node["openstack"]["compute"]["mq"]["qpid"]["reconnect_interval"] %>
-qpid_heartbeat=<%= node["openstack"]["compute"]["mq"]["qpid"]["heartbeat"] %>
+qpid_password=<%= node["openstack"]["mq"]["compute"]["qpid"]["password"] %>
+qpid_username=<%= node["openstack"]["mq"]["compute"]["qpid"]["username"] %>
+qpid_sasl_mechanisms=<%= node["openstack"]["mq"]["compute"]["qpid"]["sasl_mechanisms"] %>
+qpid_reconnect_timeout=<%= node["openstack"]["mq"]["compute"]["qpid"]["reconnect_timeout"] %>
+qpid_reconnect_limit=<%= node["openstack"]["mq"]["compute"]["qpid"]["reconnect_limit"] %>
+qpid_reconnect_interval_min=<%= node["openstack"]["mq"]["compute"]["qpid"]["reconnect_interval_min"] %>
+qpid_reconnect_interval_max=<%= node["openstack"]["mq"]["compute"]["qpid"]["reconnect_interval_max"] %>
+qpid_reconnect_interval=<%= node["openstack"]["mq"]["compute"]["qpid"]["reconnect_interval"] %>
+qpid_heartbeat=<%= node["openstack"]["mq"]["compute"]["qpid"]["heartbeat"] %>
 # qpid protocol. default 'tcp'. set to 'ssl' to enable SSL
-qpid_protocol=<%= node["openstack"]["compute"]["mq"]["qpid"]["protocol"] %>
-qpid_tcp_nodelay=<%= node["openstack"]["compute"]["mq"]["qpid"]["tcp_nodelay"] %>
+qpid_protocol=<%= node["openstack"]["mq"]["compute"]["qpid"]["protocol"] %>
+qpid_tcp_nodelay=<%= node["openstack"]["mq"]["compute"]["qpid"]["tcp_nodelay"] %>
 
 <% end %>
 

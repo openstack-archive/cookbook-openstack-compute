@@ -22,11 +22,6 @@ default['openstack']['compute']['debug'] = 'False'
 # The name of the Chef role that sets up the Keystone Service API
 default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 
-# This user's password is stored in an encrypted databag
-# and accessed with openstack-common cookbook library's
-# get_password routine.
-default['openstack']['compute']['db']['username'] = 'nova'
-
 # Common rpc definitions
 default['openstack']['compute']['rpc_thread_pool_size'] = 64
 default['openstack']['compute']['rpc_conn_pool_size'] = 30
@@ -37,16 +32,6 @@ when 'rabbitmq'
 when 'qpid'
   default['openstack']['compute']['rpc_backend'] = 'nova.openstack.common.rpc.impl_qpid'
 end
-
-# This user's password is stored in an encrypted databag
-# and accessed with openstack-common cookbook library's
-# get_password routine.  You are expected to create
-# the user, pass, vhost in a wrapper rabbitmq cookbook.
-default['openstack']['compute']['rabbit']['username'] = 'guest'
-default['openstack']['compute']['rabbit']['vhost'] = '/'
-default['openstack']['compute']['rabbit']['port'] = 5672
-default['openstack']['compute']['rabbit']['host'] = '127.0.0.1'
-default['openstack']['compute']['rabbit']['ha'] = false
 
 default['openstack']['compute']['service_tenant_name'] = 'service'
 default['openstack']['compute']['service_user'] = 'nova'
@@ -77,24 +62,6 @@ default['openstack']['compute']['network']['service_type'] = 'nova'
 # if the network type is not nova, we will load the following
 # plugins from openstack-network
 default['openstack']['compute']['network']['plugins'] = ['openvswitch']
-
-# MQ options
-default['openstack']['compute']['mq']['service_type'] = node['openstack']['mq']['service_type']
-default['openstack']['compute']['mq']['qpid']['host'] = '127.0.0.1'
-default['openstack']['compute']['mq']['qpid']['port'] = '5672'
-default['openstack']['compute']['mq']['qpid']['qpid_hosts'] = ['127.0.0.1:5672']
-
-default['openstack']['compute']['mq']['qpid']['username'] = ''
-default['openstack']['compute']['mq']['qpid']['password'] = ''
-default['openstack']['compute']['mq']['qpid']['sasl_mechanisms'] = ''
-default['openstack']['compute']['mq']['qpid']['reconnect_timeout'] = 0
-default['openstack']['compute']['mq']['qpid']['reconnect_limit'] = 0
-default['openstack']['compute']['mq']['qpid']['reconnect_interval_min'] = 0
-default['openstack']['compute']['mq']['qpid']['reconnect_interval_max'] = 0
-default['openstack']['compute']['mq']['qpid']['reconnect_interval'] = 0
-default['openstack']['compute']['mq']['qpid']['heartbeat'] = 60
-default['openstack']['compute']['mq']['qpid']['protocol'] = 'tcp'
-default['openstack']['compute']['mq']['qpid']['tcp_nodelay'] = true
 
 # Neutron options
 default['openstack']['compute']['network']['neutron']['network_api_class'] = 'nova.network.neutronv2.api.API'
