@@ -152,9 +152,8 @@ Networking Attributes
 Basic networking configuration is controlled with the following attributes:
 
 * `openstack["compute"]["network"]["network_manager"]` - Defaults to "nova.network.manager.FlatDHCPManager". Set to "nova.network.manager.VlanManager" to configure VLAN Networking.
-* `openstack["compute"]["network"]["fixed_range"]` - The CIDR for the network that VMs will be assigned to. In the case of VLAN Networking, this should be the network in which all VLAN networks that tenants are assigned will fit.
 * `openstack["compute"]["network"]["dmz_cidr"]` - A CIDR for the range of IP addresses that will NOT be SNAT'ed by the nova network controller
-* `openstack["compute"]["network"]["public_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses in the `fixed_range`.
+* `openstack["compute"]["network"]["public_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses`.
 * `openstack["compute"]["network"]["vlan_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses when VMs are assigned in a VLAN subnet.
 * `openstack["compute"]["network"]["auto_assign_floating_ip"]` - Defaults to false. Autoassigning floating ip to VM, this should be only for nova network.
 * `openstack["compute"]["network"]["force_dhcp_release"]` - If True, send a dhcp release on instance termination. (Default is false on "fedora", "redhat", "centos")

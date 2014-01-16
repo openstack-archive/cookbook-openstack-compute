@@ -138,9 +138,6 @@ default["openstack"]["compute"]["networks"] = [
 #
 # default["openstack"]["compute"]["network"]["network_manager"] = "nova.network.manager.VlanManager"
 # default["openstack"]["compute"]["network"]["vlan_interface"] = "eth1"  # Or "eth2", "bond1", etc...
-# # The fixed_range setting is the **entire** subnet/network that all your VLAN
-# # networks will fit inside.
-# default["openstack"]["compute"]["network"]["fixed_range"] = "10.0.0.0/8"  # Or smaller for smaller deploys...
 #
 # In addition to the above, you typically either want to do one of the following:
 #
@@ -170,7 +167,6 @@ default["openstack"]["compute"]["networks"] = [
 #   ]
 
 default["openstack"]["compute"]["network"]["multi_host"] = false
-default["openstack"]["compute"]["network"]["fixed_range"] = default["openstack"]["compute"]["networks"][0]["ipv4_cidr"]
 # DMZ CIDR is a range of IP addresses that should not
 # have their addresses SNAT'ed by the nova network controller
 default["openstack"]["compute"]["network"]["dmz_cidr"] = "10.128.0.0/24"
