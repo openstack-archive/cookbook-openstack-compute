@@ -64,14 +64,14 @@ directory "/etc/nova" do
 end
 
 db_user = node["openstack"]["compute"]["db"]["username"]
-db_pass = db_password "nova"
+db_pass = get_password "db", "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
 if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"
   if node["openstack"]["compute"]["rabbit"]["ha"]
     rabbit_hosts = rabbit_servers
   end
-  rabbit_pass = user_password node["openstack"]["compute"]["rabbit"]["username"]
+  rabbit_pass = get_password "user", node["openstack"]["compute"]["rabbit"]["username"]
 end
 
 # check attributes before search
@@ -87,7 +87,7 @@ else
   Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
 end
 
-ksadmin_pass = user_password ksadmin_user
+ksadmin_pass = get_password "user", ksadmin_user
 
 memcache_servers = memcached_servers.join ","
 
@@ -115,7 +115,7 @@ xvpvnc_proxy_ip = address_for node["openstack"]["compute"]["xvpvnc_proxy"]["bind
 novnc_proxy_ip = address_for node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]
 
 if node["openstack"]["compute"]["network"]["service_type"] == "neutron"
-  neutron_admin_password = service_password "openstack-network"
+  neutron_admin_password = get_password "service", "openstack-network"
   neutron_metadata_proxy_shared_secret = secret "secrets", "neutron_metadata_secret"
 else
   neutron_admin_password = nil

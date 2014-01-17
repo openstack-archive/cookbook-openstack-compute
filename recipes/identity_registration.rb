@@ -27,7 +27,7 @@ end
 identity_admin_endpoint = endpoint "identity-admin"
 bootstrap_token = secret "secrets", "openstack_identity_bootstrap_token"
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
-service_pass = service_password "openstack-compute"
+service_pass = get_password "service", "openstack-compute"
 service_user = node["openstack"]["compute"]["service_user"]
 service_role = node["openstack"]["compute"]["service_role"]
 service_tenant_name = node["openstack"]["compute"]["service_tenant_name"]
