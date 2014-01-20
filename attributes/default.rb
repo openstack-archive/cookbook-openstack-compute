@@ -310,7 +310,7 @@ when 'fedora', 'redhat', 'centos', 'suse' # :pragma-foodcritic: ~FC024 - won't f
     'compute_scheduler_service' => 'openstack-nova-scheduler',
     'compute_conductor_packages' => ['openstack-nova-conductor'],
     'compute_conductor_service' => 'openstack-nova-conductor',
-    'compute_vncproxy_packages' => ['openstack-nova-novncproxy'], # me thinks this is right?
+    'compute_vncproxy_packages' => ['openstack-nova-novncproxy'],
     'compute_vncproxy_service' => 'openstack-nova-novncproxy',
     'compute_vncproxy_consoleauth_packages' => ['openstack-nova-console'],
     'compute_vncproxy_consoleauth_service' => 'openstack-nova-consoleauth',

@@ -8,6 +8,20 @@ describe "openstack-compute::vncproxy" do
       @chef_run.converge "openstack-compute::vncproxy"
     end
 
+    expect_runs_nova_common_recipe
+
+    it "installs nova vncproxy packages" do
+      expect(@chef_run).to upgrade_package "openstack-nova-novncproxy"
+    end
+
+    it "installs nova consoleauth packages" do
+      expect(@chef_run).to upgrade_package "openstack-nova-console"
+    end
+
+    it "starts nova vncproxy" do
+      expect(@chef_run).to start_service "openstack-nova-novncproxy"
+    end
+
     it "starts nova vncproxy on boot" do
       expected = "openstack-nova-novncproxy"
       expect(@chef_run).to enable_service expected

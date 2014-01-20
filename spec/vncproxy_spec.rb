@@ -10,14 +10,18 @@ describe "openstack-compute::vncproxy" do
 
     expect_runs_nova_common_recipe
 
-    it "installs vncproxy packages" do
+    it "installs nova vncproxy packages" do
       expect(@chef_run).to upgrade_package "novnc"
       expect(@chef_run).to upgrade_package "websockify"
       expect(@chef_run).to upgrade_package "nova-novncproxy"
     end
 
-    it "installs consoleauth packages" do
+    it "installs nova consoleauth packages" do
       expect(@chef_run).to upgrade_package "nova-consoleauth"
+    end
+
+    it "starts nova vncproxy" do
+      expect(@chef_run).to start_service "nova-novncproxy"
     end
 
     it "starts nova vncproxy on boot" do
