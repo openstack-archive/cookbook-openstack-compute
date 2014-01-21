@@ -179,13 +179,13 @@ default['openstack']['compute']['network']['auto_assign_floating_ip'] = false
 default['openstack']['compute']['network']['use_single_default_gateway'] = false
 
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
-default['openstack']['compute']['scheduler']['default_filters'] = %w(
-  'AvailabilityZoneFilter',
-  'RamFilter',
-  'ComputeFilter',
-  'CoreFilter',
-  'SameHostFilter',
-  'DifferentHostFilter')
+default['openstack']['compute']['scheduler']['default_filters'] = %W(
+  AvailabilityZoneFilter
+  RamFilter
+  ComputeFilter
+  CoreFilter
+  SameHostFilter
+  DifferentHostFilter)
 
 default['openstack']['compute']['xvpvnc_proxy']['service_port'] = '6081'
 default['openstack']['compute']['xvpvnc_proxy']['bind_interface'] = 'lo'
