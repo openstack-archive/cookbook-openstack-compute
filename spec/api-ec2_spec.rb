@@ -1,11 +1,13 @@
-require_relative "spec_helper"
+# encoding: UTF-8
 
-describe "openstack-compute::api-ec2" do
+require_relative 'spec_helper'
+
+describe 'openstack-compute::api-ec2' do
   before { compute_stubs }
-  describe "ubuntu" do
+  describe 'ubuntu' do
     before do
       @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
-      @chef_run.converge "openstack-compute::api-ec2"
+      @chef_run.converge 'openstack-compute::api-ec2'
     end
 
     expect_runs_nova_common_recipe
@@ -14,14 +16,14 @@ describe "openstack-compute::api-ec2" do
 
     expect_installs_python_keystone
 
-    it "installs ec2 api packages" do
-      expect(@chef_run).to upgrade_package "nova-api-ec2"
+    it 'installs ec2 api packages' do
+      expect(@chef_run).to upgrade_package 'nova-api-ec2'
     end
 
-    it "starts ec2 api on boot" do
-      expect(@chef_run).to enable_service "nova-api-ec2"
+    it 'starts ec2 api on boot' do
+      expect(@chef_run).to enable_service 'nova-api-ec2'
     end
 
-    expect_creates_api_paste "service[nova-api-ec2]"
+    expect_creates_api_paste 'service[nova-api-ec2]'
   end
 end

@@ -1,84 +1,86 @@
-require_relative "spec_helper"
+# encoding: UTF-8
 
-describe "openstack-compute::compute" do
+require_relative 'spec_helper'
+
+describe 'openstack-compute::compute' do
   before { compute_stubs }
-  describe "ubuntu" do
+  describe 'ubuntu' do
     before do
       @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
-      @chef_run.converge "openstack-compute::compute"
+      @chef_run.converge 'openstack-compute::compute'
     end
 
     expect_runs_nova_common_recipe
 
-    it "runs api-metadata recipe" do
-      expect(@chef_run).to include_recipe "openstack-compute::api-metadata"
+    it 'runs api-metadata recipe' do
+      expect(@chef_run).to include_recipe 'openstack-compute::api-metadata'
     end
 
-    it "runs network recipe" do
-      expect(@chef_run).to include_recipe "openstack-compute::network"
+    it 'runs network recipe' do
+      expect(@chef_run).to include_recipe 'openstack-compute::network'
     end
 
     # stubbing the run_context properly is non-trivial, fix with ChefSpec 3.0
-    # it "doesn't run network recipe with openstack-network::server" do
+    # it 'doesn't run network recipe with openstack-network::server' do
     #   chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
     #   node = chef_run.node
-    #   node.run_list.stub("include?").and_return true
-    #   chef_run.converge "openstack-compute::compute"
-    #   expect(chef_run).not_to include_recipe "openstack-compute::network"
+    #   node.run_list.stub('include?').and_return true
+    #   chef_run.converge 'openstack-compute::compute'
+    #   expect(chef_run).not_to include_recipe 'openstack-compute::network'
     # end
 
-    it "installs nova compute packages" do
-      expect(@chef_run).to upgrade_package "nova-compute"
+    it 'installs nova compute packages' do
+      expect(@chef_run).to upgrade_package 'nova-compute'
     end
 
-    it "installs nfs client packages" do
-      expect(@chef_run).to upgrade_package "nfs-common"
+    it 'installs nfs client packages' do
+      expect(@chef_run).to upgrade_package 'nfs-common'
     end
 
     it "installs kvm when virt_type is 'kvm'" do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "kvm"
-      chef_run.converge "openstack-compute::compute"
+      node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
+      chef_run.converge 'openstack-compute::compute'
 
-      expect(chef_run).to upgrade_package "nova-compute-kvm"
-      expect(chef_run).not_to upgrade_package "nova-compute-qemu"
+      expect(chef_run).to upgrade_package 'nova-compute-kvm'
+      expect(chef_run).not_to upgrade_package 'nova-compute-qemu'
     end
 
     it "installs qemu when virt_type is 'qemu'" do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
-      node.set["openstack"]["compute"]["libvirt"]["virt_type"] = "qemu"
-      chef_run.converge "openstack-compute::compute"
+      node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
+      chef_run.converge 'openstack-compute::compute'
 
-      expect(chef_run).to upgrade_package "nova-compute-qemu"
-      expect(chef_run).not_to upgrade_package "nova-compute-kvm"
+      expect(chef_run).to upgrade_package 'nova-compute-qemu'
+      expect(chef_run).not_to upgrade_package 'nova-compute-kvm'
     end
 
-    describe "nova-compute.conf" do
+    describe 'nova-compute.conf' do
       before do
-        @file = @chef_run.cookbook_file "/etc/nova/nova-compute.conf"
+        @file = @chef_run.cookbook_file '/etc/nova/nova-compute.conf'
       end
 
-      it "has proper modes" do
-        expect(sprintf("%o", @file.mode)).to eq "644"
+      it 'has proper modes' do
+        expect(sprintf('%o', @file.mode)).to eq '644'
       end
 
-      it "template contents" do
-        pending "TODO: implement"
+      it 'template contents' do
+        pending 'TODO: implement'
       end
     end
 
-    it "starts nova compute on boot" do
-      expect(@chef_run).to enable_service "nova-compute"
+    it 'starts nova compute on boot' do
+      expect(@chef_run).to enable_service 'nova-compute'
     end
 
-    it "starts nova compute" do
-      expect(@chef_run).to start_service "nova-compute"
+    it 'starts nova compute' do
+      expect(@chef_run).to start_service 'nova-compute'
     end
 
-    it "runs libvirt recipe" do
-      expect(@chef_run).to include_recipe "openstack-compute::libvirt"
+    it 'runs libvirt recipe' do
+      expect(@chef_run).to include_recipe 'openstack-compute::libvirt'
     end
   end
 end

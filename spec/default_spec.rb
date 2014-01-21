@@ -1,4 +1,6 @@
-require_relative "spec_helper"
+# encoding: UTF-8
 
-describe "openstack-compute::default" do
+require_relative 'spec_helper'
+
+describe 'openstack-compute::default' do
 end
