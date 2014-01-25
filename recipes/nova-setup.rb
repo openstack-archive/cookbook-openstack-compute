@@ -24,6 +24,9 @@ end
 include_recipe "openstack-compute::nova-common"
 
 execute "nova-manage db sync" do
+  user node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+
   command "nova-manage db sync"
 
   action :run
@@ -35,6 +38,9 @@ when "nova"
   next_vlan = 100
   node["openstack"]["compute"]["networks"].each do |net|
     execute "nova-manage network create --label=#{net['label']}" do
+      user node['openstack']['compute']['user']
+      group node['openstack']['compute']['group']
+
       # The only two required keys in each network Hash
       # are "label" and "ipv4_cidr".
       cmd = "nova-manage network create --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']}"
@@ -93,6 +99,8 @@ when "nova"
     end
 
     execute "nova-manage floating create" do
+      user node['openstack']['compute']['user']
+      group node['openstack']['compute']['group']
       command cmd
 
       not_if "nova-manage floating list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'"
