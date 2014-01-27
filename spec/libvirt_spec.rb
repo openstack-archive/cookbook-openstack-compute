@@ -46,6 +46,19 @@ describe 'openstack-compute::libvirt' do
       expect(@chef_run).to run_execute('virsh net-destroy default')
     end
 
+    describe 'rbd/ceph volume storage' do
+      before do
+        @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
+          n.set['openstack']['compute']['libvirt']['volume_backend'] = 'rbd'
+        end
+        @chef_run.converge 'openstack-compute::libvirt'
+      end
+
+      it 'includes the libvirt_rbd recipe if it is the selected volume backend' do
+        expect(@chef_run).to include_recipe('openstack-compute::libvirt_rbd')
+      end
+    end
+
     describe '/etc/libvirt/libvirtd.conf' do
       before { @filename = '/etc/libvirt/libvirtd.conf' }
 

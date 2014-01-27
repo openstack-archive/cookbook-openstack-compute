@@ -54,6 +54,11 @@ libvirt
 ----
 - Installs libvirt, used by nova compute for management of the virtual machine environment
 
+libvirt_rbd
+----
+- Prepares the compute node for interaction with a Ceph cluster for block storage (RBD)
+- Depends on `openstack-common::ceph_client` for packages and cluster connectivity (i.e. a proper `/etc/ceph/ceph.conf`)
+
 network
 ----
 - Includes recipe `nova-common`
@@ -213,6 +218,7 @@ Libvirt Configuration Attributes
 ---------------------------------
 
 * `openstack["compute"]["libvirt"]["virt_type"]` - What hypervisor software layer to use with libvirt (e.g., kvm, qemu)
+* `openstack["compute"]["libvirt"]["volume_backend"]` - What block storage backend to use with libvirt (e.g. rbd)
 * `openstack["compute"]["libvirt"]["bind_interface"]` - Determine the interface's IP address (used for VNC).  IP address on the hypervisor that libvirt listens for VNC requests on, and IP address on the hypervisor that libvirt exposes for VNC requests on.
 * `openstack["compute"]["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
 * `openstack["compute"]["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
@@ -227,6 +233,8 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["sparse_logical_volumes"]` - When images_type is lvm: use sparse logical volumes
 * `openstack["compute"]["libvirt"]["images_rbd_pool"]` - When images_type is rbd: use this RBD pool
 * `openstack["compute"]["libvirt"]["images_rbd_ceph_conf"]` - When images_type is rbd: use this ceph.conf
+* `openstack["compute"]["libvirt"]["rbd"]["rbd_user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)
+* `openstack["compute"]["libvirt"]["rbd"]["rbd_secret_name"]` - The name of the databag item containing the UUID shared between Cinder and nova-compute.  `libvirt_rbd` will define a libvirt secret with this UUID, containing the `rbd_user`'s password.  The password itself will be retrieved using `get_password` on the service `rbd_block_storage`.  Creating the cephx user in a Ceph cluster has to be done outside of the scope of this cookbook.
 
 Scheduler Configuration Attributes
 ----------------------------------
