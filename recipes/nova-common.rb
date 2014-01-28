@@ -41,7 +41,7 @@ platform_options["common_packages"].each do |pkg|
   end
 end
 
-db_type = node['openstack']['db']['compute']['db_type']
+db_type = node['openstack']['db']['compute']['service_type']
 platform_options["#{db_type}_python_packages"].each do |pkg|
   package pkg do
     action :install
@@ -63,15 +63,15 @@ directory "/etc/nova" do
   action :create
 end
 
-db_user = node["openstack"]["compute"]["db"]["username"]
+db_user = node["openstack"]["db"]["compute"]["username"]
 db_pass = get_password "db", "nova"
 sql_connection = db_uri("compute", db_user, db_pass)
 
-if node["openstack"]["compute"]["mq"]["service_type"] == "rabbitmq"
-  if node["openstack"]["compute"]["rabbit"]["ha"]
+if node["openstack"]["mq"]["compute"]["service_type"] == "rabbitmq"
+  if node["openstack"]["mq"]["compute"]["rabbit"]["ha"]
     rabbit_hosts = rabbit_servers
   end
-  rabbit_pass = get_password "user", node["openstack"]["compute"]["rabbit"]["username"]
+  rabbit_pass = get_password "user", node["openstack"]["mq"]["compute"]["rabbit"]["userid"]
 end
 
 # check attributes before search

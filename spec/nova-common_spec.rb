@@ -74,6 +74,7 @@ describe "openstack-compute::nova-common" do
         /^rabbit_virtual_host=\/$/,
         /^rabbit_host=127.0.0.1$/,
         /^rabbit_port=5672$/,
+        /^rabbit_use_ssl=false$/,
         /^allow_resize_to_same_host=false$/,
         /^vncserver_listen=127.0.1.1$/,
         /^vncserver_proxyclient_address=127.0.1.1$/,
@@ -130,7 +131,8 @@ describe "openstack-compute::nova-common" do
 
       context "qpid" do
         before {
-          @chef_run.node.set['openstack']['compute']['mq']['service_type'] = "qpid"
+          @chef_run.node.set['openstack']['mq']['compute']['service_type'] = "qpid"
+          @chef_run.converge "openstack-compute::nova-common"
         }
 
         array = [/^qpid_hostname=127.0.0.1$/,
@@ -157,7 +159,7 @@ describe "openstack-compute::nova-common" do
       describe "rabbit ha" do
         before do
           @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
-            n.set["openstack"]["compute"]["rabbit"]["ha"] = true
+            n.set["openstack"]["mq"]["compute"]["rabbit"]["ha"] = true
             n.set["cpu"] = {
               "total" => "2"
             }
