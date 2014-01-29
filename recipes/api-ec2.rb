@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: openstack-compute
 # Recipe:: api-ec2
@@ -21,46 +22,46 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "openstack-compute::nova-common"
+include_recipe 'openstack-compute::nova-common'
 
-platform_options = node["openstack"]["compute"]["platform"]
+platform_options = node['openstack']['compute']['platform']
 
-directory "/var/lock/nova" do
-  owner node["openstack"]["compute"]["user"]
-  group node["openstack"]["compute"]["group"]
+directory '/var/lock/nova' do
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
   mode  00700
 
   action :create
 end
 
-package "python-keystone" do
+package 'python-keystone' do
   action :upgrade
 end
 
-platform_options["api_ec2_packages"].each do |pkg|
+platform_options['api_ec2_packages'].each do |pkg|
   package pkg do
-    options platform_options["package_overrides"]
+    options platform_options['package_overrides']
 
     action :upgrade
   end
 end
 
-service "nova-api-ec2" do
-  service_name platform_options["api_ec2_service"]
-  supports :status => true, :restart => true
-  subscribes :restart, resources("template[/etc/nova/nova.conf]")
+service 'nova-api-ec2' do
+  service_name platform_options['api_ec2_service']
+  supports status: true, restart: true
+  subscribes :restart, resources('template[/etc/nova/nova.conf]')
 
   action :enable
 end
 
-identity_endpoint = endpoint "identity-api"
-identity_admin_endpoint = endpoint "identity-admin"
-service_pass = get_password "service", "openstack-compute"
+identity_endpoint = endpoint 'identity-api'
+identity_admin_endpoint = endpoint 'identity-admin'
+service_pass = get_password 'service', 'openstack-compute'
 
-#TODO(jaypipes): Move this logic and stuff into the openstack-common
+# TODO(jaypipes): Move this logic and stuff into the openstack-common
 # library cookbook.
 auth_uri = identity_endpoint.to_s
-if node["openstack"]["compute"]["api"]["auth"]["version"] != "v2.0"
+if node['openstack']['compute']['api']['auth']['version'] != 'v2.0'
   # The auth_uri should contain /v2.0 in most cases, but if the
   # auth_version is v3.0, we leave it off. This is only necessary
   # for environments that need to support V3 non-default-domain
@@ -69,15 +70,15 @@ if node["openstack"]["compute"]["api"]["auth"]["version"] != "v2.0"
   auth_uri = auth_uri.gsub('/v2.0', '')
 end
 
-template "/etc/nova/api-paste.ini" do
-  source "api-paste.ini.erb"
-  owner  node["openstack"]["compute"]["user"]
-  group  node["openstack"]["compute"]["group"]
+template '/etc/nova/api-paste.ini' do
+  source 'api-paste.ini.erb'
+  owner  node['openstack']['compute']['user']
+  group  node['openstack']['compute']['group']
   mode   00644
   variables(
-    :auth_uri => auth_uri,
-    :identity_admin_endpoint => identity_admin_endpoint,
-    :service_pass => service_pass
+    auth_uri: auth_uri,
+    identity_admin_endpoint: identity_admin_endpoint,
+    service_pass: service_pass
   )
-  notifies :restart, "service[nova-api-ec2]"
+  notifies :restart, 'service[nova-api-ec2]'
 end

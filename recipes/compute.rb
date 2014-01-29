@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: openstack-compute
 # Recipe:: compute
@@ -22,28 +23,28 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-include_recipe "openstack-compute::nova-common"
-include_recipe "openstack-compute::api-metadata"
+include_recipe 'openstack-compute::nova-common'
+include_recipe 'openstack-compute::api-metadata'
 if node['openstack']['compute']['network']['service_type'] == 'nova'
-  include_recipe "openstack-compute::network"
+  include_recipe 'openstack-compute::network'
 end
 
-platform_options = node["openstack"]["compute"]["platform"]
+platform_options = node['openstack']['compute']['platform']
 # Note(maoy): Make sure compute_compute_packages is not a node object.
 # so that this is compatible with chef 11 when being changed later.
-compute_compute_packages = Array.new(platform_options["compute_compute_packages"])
+compute_compute_packages = Array.new(platform_options['compute_compute_packages'])
 
 if platform?(%w(ubuntu))
-  if node["openstack"]["compute"]["libvirt"]["virt_type"] == "kvm"
-    compute_compute_packages << "nova-compute-kvm"
-  elsif node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu"
-    compute_compute_packages << "nova-compute-qemu"
+  if node['openstack']['compute']['libvirt']['virt_type'] == 'kvm'
+    compute_compute_packages << 'nova-compute-kvm'
+  elsif node['openstack']['compute']['libvirt']['virt_type'] == 'qemu'
+    compute_compute_packages << 'nova-compute-qemu'
   end
 end
 
 compute_compute_packages.each do |pkg|
   package pkg do
-    options platform_options["package_overrides"]
+    options platform_options['package_overrides']
 
     action :upgrade
   end
@@ -52,27 +53,27 @@ end
 # Installing nfs client packages because in grizzly, cinder nfs is supported
 # Never had to install iscsi packages because nova-compute package depends it
 # So volume-attach 'just worked' before - alop
-platform_options["nfs_packages"].each do |pkg|
+platform_options['nfs_packages'].each do |pkg|
   package pkg do
-    options platform_options["package_overrides"]
+    options platform_options['package_overrides']
 
     action :upgrade
   end
 end
 
-cookbook_file "/etc/nova/nova-compute.conf" do
-  source "nova-compute.conf"
+cookbook_file '/etc/nova/nova-compute.conf' do
+  source 'nova-compute.conf'
   mode   00644
 
   action :create
 end
 
-service "nova-compute" do
-  service_name platform_options["compute_compute_service"]
-  supports :status => true, :restart => true
-  subscribes :restart, resources("template[/etc/nova/nova.conf]")
+service 'nova-compute' do
+  service_name platform_options['compute_compute_service']
+  supports status: true, restart: true
+  subscribes :restart, resources('template[/etc/nova/nova.conf]')
 
   action [:enable, :start]
 end
 
-include_recipe "openstack-compute::libvirt"
+include_recipe 'openstack-compute::libvirt'

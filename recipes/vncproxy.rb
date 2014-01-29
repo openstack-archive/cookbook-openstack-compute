@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: openstack-compute
 # Recipe:: vncproxy
@@ -18,39 +19,39 @@
 # limitations under the License.
 #
 
-include_recipe "openstack-compute::nova-common"
+include_recipe 'openstack-compute::nova-common'
 
-platform_options = node["openstack"]["compute"]["platform"]
+platform_options = node['openstack']['compute']['platform']
 
-platform_options["compute_vncproxy_packages"].each do |pkg|
+platform_options['compute_vncproxy_packages'].each do |pkg|
   package pkg do
-    options platform_options["package_overrides"]
+    options platform_options['package_overrides']
 
     action :upgrade
   end
 end
 
 # required for vnc console authentication
-platform_options["compute_vncproxy_consoleauth_packages"].each do |pkg|
+platform_options['compute_vncproxy_consoleauth_packages'].each do |pkg|
   package pkg do
     action :upgrade
   end
 end
 
-proxy_service = platform_options["compute_vncproxy_service"]
+proxy_service = platform_options['compute_vncproxy_service']
 
 service proxy_service do
   service_name proxy_service
-  supports :status => true, :restart => true
-  subscribes :restart, resources("template[/etc/nova/nova.conf]")
+  supports status: true, restart: true
+  subscribes :restart, resources('template[/etc/nova/nova.conf]')
 
   action [:enable, :start]
 end
 
-service "nova-consoleauth" do
-  service_name platform_options["compute_vncproxy_consoleauth_service"]
-  supports :status => true, :restart => true
-  subscribes :restart, resources("template[/etc/nova/nova.conf]")
+service 'nova-consoleauth' do
+  service_name platform_options['compute_vncproxy_consoleauth_service']
+  supports status: true, restart: true
+  subscribes :restart, resources('template[/etc/nova/nova.conf]')
 
   action [:enable, :start]
 end

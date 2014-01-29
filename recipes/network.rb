@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: openstack-compute
 # Recipe:: network
@@ -18,34 +19,34 @@
 # limitations under the License.
 #
 
-include_recipe "openstack-compute::nova-common"
+include_recipe 'openstack-compute::nova-common'
 
-platform_options = node["openstack"]["compute"]["platform"]
+platform_options = node['openstack']['compute']['platform']
 
 # the only type of network we process here is nova, otherwise for
 # neutron, the network will be setup by the inclusion of
 # openstack-network recipes
 
-if node["openstack"]["compute"]["network"]["service_type"] == "nova"
+if node['openstack']['compute']['network']['service_type'] == 'nova'
 
-  platform_options["compute_network_packages"].each do |pkg|
+  platform_options['compute_network_packages'].each do |pkg|
     package pkg do
-      options platform_options["package_overrides"]
+      options platform_options['package_overrides']
 
       action :upgrade
     end
   end
 
-  service "nova-network" do
-    service_name platform_options["compute_network_service"]
-    supports :status => true, :restart => true
-    subscribes :restart, resources("template[/etc/nova/nova.conf]")
+  service 'nova-network' do
+    service_name platform_options['compute_network_service']
+    supports status: true, restart: true
+    subscribes :restart, resources('template[/etc/nova/nova.conf]')
     action :enable
   end
 
 else
 
-  node["openstack"]["compute"]["network"]["plugins"].each do |plugin|
+  node['openstack']['compute']['network']['plugins'].each do |plugin|
     include_recipe "openstack-network::#{plugin}"
   end
 

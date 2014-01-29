@@ -4,10 +4,10 @@ AllCops:
     - Gemfile
     - attributes/**
     - spec/**
+    - recipes/**
   Excludes:
     - libraries/**
     - providers/**
-    - recipes/**
     - resources/**
 
 Encoding:

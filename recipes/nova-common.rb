@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: openstack-compute
 # Recipe:: nova-common
@@ -18,25 +19,21 @@
 # limitations under the License.
 #
 
-require "uri"
+require 'uri'
 
-class ::Chef::Recipe
+class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
 
-if platform?(%w(fedora redhat centos)) # :pragma-foodcritic: ~FC024 - won't fix this
-  include_recipe "yum::epel"
-end
-if node["openstack"]["compute"]["syslog"]["use"]
-  include_recipe "openstack-common::logging"
-end
+include_recipe 'yum::epel' if platform?(%w(fedora redhat centos))
 
-platform_options = node["openstack"]["compute"]["platform"]
+include_recipe 'openstack-common::logging' if node['openstack']['compute']['syslog']['use']
 
-platform_options["common_packages"].each do |pkg|
+platform_options = node['openstack']['compute']['platform']
+
+platform_options['common_packages'].each do |pkg|
   package pkg do
-    options platform_options["package_overrides"]
-
+    options platform_options['package_overrides']
     action :upgrade
   end
 end
@@ -49,56 +46,53 @@ platform_options["#{db_type}_python_packages"].each do |pkg|
 end
 
 # required to run more than one consoleauth process
-platform_options["memcache_python_packages"].each do |pkg|
+platform_options['memcache_python_packages'].each do |pkg|
   package pkg do
     action :install
   end
 end
 
-directory "/etc/nova" do
-  owner node["openstack"]["compute"]["user"]
-  group node["openstack"]["compute"]["group"]
+directory '/etc/nova' do
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
   mode  00700
-
   action :create
 end
 
-db_user = node["openstack"]["db"]["compute"]["username"]
-db_pass = get_password "db", "nova"
-sql_connection = db_uri("compute", db_user, db_pass)
+db_user = node['openstack']['db']['compute']['username']
+db_pass = get_password 'db', 'nova'
+sql_connection = db_uri('compute', db_user, db_pass)
 
-if node["openstack"]["mq"]["compute"]["service_type"] == "rabbitmq"
-  if node["openstack"]["mq"]["compute"]["rabbit"]["ha"]
-    rabbit_hosts = rabbit_servers
-  end
-  rabbit_pass = get_password "user", node["openstack"]["mq"]["compute"]["rabbit"]["userid"]
+if node['openstack']['mq']['compute']['service_type'] == 'rabbitmq'
+  node['openstack']['mq']['compute']['rabbit']['ha'] && (rabbit_hosts = rabbit_servers)
+  rabbit_pass = get_password 'user', node['openstack']['mq']['compute']['rabbit']['userid']
 end
 
 # check attributes before search
-if node["openstack"]["identity"]["admin_tenant_name"] && node["openstack"]["identity"]["admin_user"]
-  ksadmin_tenant_name = node["openstack"]["identity"]["admin_tenant_name"]
-  ksadmin_user = node["openstack"]["identity"]["admin_user"]
+if node['openstack']['identity']['admin_tenant_name'] && node['openstack']['identity']['admin_user']
+  ksadmin_tenant_name = node['openstack']['identity']['admin_tenant_name']
+  ksadmin_user = node['openstack']['identity']['admin_user']
 else
-  identity_service_role = node["openstack"]["compute"]["identity_service_chef_role"]
+  identity_service_role = node['openstack']['compute']['identity_service_chef_role']
   keystone = search_for(identity_service_role).first
 
-  ksadmin_tenant_name = keystone["openstack"]["identity"]["admin_tenant_name"]
-  ksadmin_user = keystone["openstack"]["identity"]["admin_user"]
+  ksadmin_tenant_name = keystone['openstack']['identity']['admin_tenant_name']
+  ksadmin_user = keystone['openstack']['identity']['admin_user']
   Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
 end
 
-ksadmin_pass = get_password "user", ksadmin_user
+ksadmin_pass = get_password 'user', ksadmin_user
 
-memcache_servers = memcached_servers.join ","
+memcache_servers = memcached_servers.join ','
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_endpoint = endpoint "identity-api"
-xvpvnc_endpoint = endpoint "compute-xvpvnc" || {}
-novnc_endpoint = endpoint "compute-novnc" || {}
-compute_api_endpoint = endpoint "compute-api" || {}
-ec2_public_endpoint = endpoint "compute-ec2-api" || {}
-network_endpoint = endpoint "network-api" || {}
-image_endpoint = endpoint "image-api"
+identity_endpoint = endpoint 'identity-api'
+xvpvnc_endpoint = endpoint 'compute-xvpvnc' || {}
+novnc_endpoint = endpoint 'compute-novnc' || {}
+compute_api_endpoint = endpoint 'compute-api' || {}
+ec2_public_endpoint = endpoint 'compute-ec2-api' || {}
+network_endpoint = endpoint 'network-api' || {}
+image_endpoint = endpoint 'image-api'
 
 Chef::Log.debug("openstack-compute::nova-common:ksadmin_user|#{ksadmin_user}")
 Chef::Log.debug("openstack-compute::nova-common:ksadmin_tenant_name|#{ksadmin_tenant_name}")
@@ -110,75 +104,75 @@ Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
 
-vnc_bind_ip = address_for node["openstack"]["compute"]["libvirt"]["bind_interface"]
-xvpvnc_proxy_ip = address_for node["openstack"]["compute"]["xvpvnc_proxy"]["bind_interface"]
-novnc_proxy_ip = address_for node["openstack"]["compute"]["novnc_proxy"]["bind_interface"]
+vnc_bind_ip = address_for node['openstack']['compute']['libvirt']['bind_interface']
+xvpvnc_proxy_ip = address_for node['openstack']['compute']['xvpvnc_proxy']['bind_interface']
+novnc_proxy_ip = address_for node['openstack']['compute']['novnc_proxy']['bind_interface']
 
-if node["openstack"]["compute"]["network"]["service_type"] == "neutron"
-  neutron_admin_password = get_password "service", "openstack-network"
-  neutron_metadata_proxy_shared_secret = secret "secrets", "neutron_metadata_secret"
+if node['openstack']['compute']['network']['service_type'] == 'neutron'
+  neutron_admin_password = get_password 'service', 'openstack-network'
+  neutron_metadata_proxy_shared_secret = secret 'secrets', 'neutron_metadata_secret'
 else
   neutron_admin_password = nil
   neutron_metadata_proxy_shared_secret = nil
 end
 
-template "/etc/nova/nova.conf" do
-  source "nova.conf.erb"
-  owner node["openstack"]["compute"]["user"]
-  group node["openstack"]["compute"]["group"]
+template '/etc/nova/nova.conf' do
+  source 'nova.conf.erb'
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
   mode 00644
   variables(
-    :sql_connection => sql_connection,
-    :novncproxy_base_url => novnc_endpoint.to_s,
-    :xvpvncproxy_base_url => xvpvnc_endpoint.to_s,
-    :xvpvncproxy_bind_host => xvpvnc_proxy_ip,
-    :novncproxy_bind_host => novnc_proxy_ip,
-    :vncserver_listen => vnc_bind_ip,
-    :vncserver_proxyclient_address => vnc_bind_ip,
-    :memcache_servers => memcache_servers,
-    :rabbit_password => rabbit_pass,
-    :rabbit_hosts => rabbit_hosts,
-    :identity_endpoint => identity_endpoint,
+    sql_connection: sql_connection,
+    novncproxy_base_url: novnc_endpoint.to_s,
+    xvpvncproxy_base_url: xvpvnc_endpoint.to_s,
+    xvpvncproxy_bind_host: xvpvnc_proxy_ip,
+    novncproxy_bind_host: novnc_proxy_ip,
+    vncserver_listen: vnc_bind_ip,
+    vncserver_proxyclient_address: vnc_bind_ip,
+    memcache_servers: memcache_servers,
+    rabbit_password: rabbit_pass,
+    rabbit_hosts: rabbit_hosts,
+    identity_endpoint: identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
-    :glance_api_ipaddress => image_endpoint.host,
-    :glance_api_port => image_endpoint.port,
-    :iscsi_helper => platform_options["iscsi_helper"],
-    :scheduler_default_filters => node["openstack"]["compute"]["scheduler"]["default_filters"].join(","),
-    :osapi_compute_link_prefix => compute_api_endpoint.to_s,
-    :network_endpoint => network_endpoint,
-    :neutron_admin_password => neutron_admin_password,
-    :neutron_metadata_proxy_shared_secret => neutron_metadata_proxy_shared_secret
+    glance_api_ipaddress: image_endpoint.host,
+    glance_api_port: image_endpoint.port,
+    iscsi_helper: platform_options['iscsi_helper'],
+    scheduler_default_filters: node['openstack']['compute']['scheduler']['default_filters'].join(','),
+    osapi_compute_link_prefix: compute_api_endpoint.to_s,
+    network_endpoint: network_endpoint,
+    neutron_admin_password: neutron_admin_password,
+    neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret
   )
 end
 
-template "/etc/nova/rootwrap.conf" do
-  source "rootwrap.conf.erb"
+template '/etc/nova/rootwrap.conf' do
+  source 'rootwrap.conf.erb'
   # Must be root!
-  owner  "root"
-  group  "root"
+  owner  'root'
+  group  'root'
   mode   00644
 end
 
 # TODO: need to re-evaluate this for accuracy
 # TODO(jaypipes): This should be moved into openstack-common
 # and evaluated only on nodes with admin privs.
-template "/root/openrc" do
-  source "openrc.erb"
+template '/root/openrc' do
+  source 'openrc.erb'
   # Must be root!
-  owner  "root"
-  group  "root"
+  owner  'root'
+  group  'root'
   mode   00600
   variables(
-    :user => ksadmin_user,
-    :tenant => ksadmin_tenant_name,
-    :password => ksadmin_pass,
-    :identity_endpoint => identity_endpoint,
-    :auth_strategy => "keystone",
-    :ec2_url => ec2_public_endpoint.to_s
+    user: ksadmin_user,
+    tenant: ksadmin_tenant_name,
+    password: ksadmin_pass,
+    identity_endpoint: identity_endpoint,
+    auth_strategy: 'keystone',
+    ec2_url: ec2_public_endpoint.to_s
   )
 end
 
-execute "enable nova login" do
-  command "usermod -s /bin/sh #{node["openstack"]["compute"]["user"]}"
+execute 'enable nova login' do
+  command "usermod -s /bin/sh #{node['openstack']['compute']['user']}"
 end

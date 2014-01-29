@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: nova
 # Recipe:: conductor
@@ -18,20 +19,20 @@
 # limitations under the License.
 #
 
-include_recipe "openstack-compute::nova-common"
+include_recipe 'openstack-compute::nova-common'
 
-platform_options = node["openstack"]["compute"]["platform"]
+platform_options = node['openstack']['compute']['platform']
 
-platform_options["compute_conductor_packages"].each do |pkg|
+platform_options['compute_conductor_packages'].each do |pkg|
   package pkg do
-    options platform_options["package_overrides"]
+    options platform_options['package_overrides']
     action :upgrade
   end
 end
 
-service "nova-conductor" do
-  service_name platform_options["compute_conductor_service"]
-  supports :status => true, :restart => true
-  subscribes :restart, resources("template[/etc/nova/nova.conf]")
+service 'nova-conductor' do
+  service_name platform_options['compute_conductor_service']
+  supports status: true, restart: true
+  subscribes :restart, resources('template[/etc/nova/nova.conf]')
   action [:enable, :start]
 end
