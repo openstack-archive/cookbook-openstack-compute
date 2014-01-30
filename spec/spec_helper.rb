@@ -40,28 +40,29 @@ def compute_stubs # rubocop:disable MethodLength
     )
   ::Chef::Recipe.any_instance.stub(:secret)
     .with('secrets', 'openstack_identity_bootstrap_token')
-    .and_return 'bootstrap-token'
+    .and_return('bootstrap-token')
   ::Chef::Recipe.any_instance.stub(:secret)
     .with('secrets', 'neutron_metadata_secret')
-    .and_return 'metadata-secret'
+    .and_return('metadata-secret')
   ::Chef::Recipe.any_instance.stub(:get_password)
-    .and_return ''
+    .with('db', anything)
+    .and_return('')
   ::Chef::Recipe.any_instance.stub(:get_password)
     .with('user', 'guest')
-    .and_return 'rabbit-pass'
+    .and_return('rabbit-pass')
   ::Chef::Recipe.any_instance.stub(:get_password)
     .with('user', 'admin')
-    .and_return 'admin'
+    .and_return('admin')
   ::Chef::Recipe.any_instance.stub(:get_password)
     .with('service', 'openstack-compute')
-    .and_return 'nova-pass'
+    .and_return('nova-pass')
   ::Chef::Recipe.any_instance.stub(:get_password)
     .with('service', 'openstack-network')
-    .and_return 'neutron-pass'
+    .and_return('neutron-pass')
   ::Chef::Recipe.any_instance.stub(:memcached_servers).and_return []
   ::Chef::Recipe.any_instance.stub(:system)
     .with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'")
-    .and_return true
+    .and_return(true)
   ::Chef::Application.stub(:fatal!)
   stub_command('nova-manage network list | grep 192.168.100.0/24').and_return(false)
   stub_command('nova-manage network list | grep 192.168.200.0/24').and_return(false)
