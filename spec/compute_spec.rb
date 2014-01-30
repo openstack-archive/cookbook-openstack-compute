@@ -47,7 +47,17 @@ describe 'openstack-compute::compute' do
       expect(chef_run).not_to upgrade_package 'nova-compute-qemu'
     end
 
-    it "installs qemu when virt_type is 'qemu'" do
+    it 'honors the package options platform overrides for kvm' do
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      node = chef_run.node
+      node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
+      node.set['openstack']['compute']['platform']['package_overrides'] = '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes'
+      chef_run.converge 'openstack-compute::compute'
+
+      expect(chef_run).to upgrade_package('nova-compute-kvm').with(options: '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes')
+    end
+
+    it 'installs qemu when virt_type is qemu' do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
@@ -55,6 +65,28 @@ describe 'openstack-compute::compute' do
 
       expect(chef_run).to upgrade_package 'nova-compute-qemu'
       expect(chef_run).not_to upgrade_package 'nova-compute-kvm'
+    end
+
+    it 'honors the package options platform overrides for qemu' do
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      node = chef_run.node
+      node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
+      node.set['openstack']['compute']['platform']['package_overrides'] = '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes'
+      chef_run.converge 'openstack-compute::compute'
+
+      expect(chef_run).to upgrade_package('nova-compute-qemu').with(options: '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes')
+    end
+
+    %w{qemu kvm}.each do |virt_type|
+      it "honors the package name platform overrides for #{virt_type}" do
+        chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+        node = chef_run.node
+        node.set['openstack']['compute']['libvirt']['virt_type'] = virt_type
+        node.set['openstack']['compute']['platform']["#{virt_type}_compute_packages"] = ["my-nova-#{virt_type}"]
+        chef_run.converge 'openstack-compute::compute'
+
+        expect(chef_run).to upgrade_package("my-nova-#{virt_type}")
+      end
     end
 
     describe 'nova-compute.conf' do
