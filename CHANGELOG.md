@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+
+## 8.1.0
+* Update to reflect changes in v3 of yum cookbook. Yum v3 now required.
+
 ## 8.0.0
 * Branch for Havana. Add neutron support by search/replace quantum with neutron
 
