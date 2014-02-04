@@ -21,7 +21,7 @@
 
 require 'uri'
 
-class ::Chef::Recipe
+class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
 

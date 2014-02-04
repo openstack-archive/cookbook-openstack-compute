@@ -101,7 +101,7 @@ def expect_creates_api_paste(service, action = :restart) # rubocop:disable Metho
       expect(@chef_run).to create_template(@filename).with(
         user: 'nova',
         group: 'nova',
-        mode: 0644,
+        mode: 0644
       )
     end
 
