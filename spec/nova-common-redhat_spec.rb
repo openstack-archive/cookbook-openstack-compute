@@ -11,7 +11,7 @@ describe 'openstack-compute::nova-common' do
     end
 
     it 'runs epel recipe' do
-      expect(@chef_run).to include_recipe 'yum::epel'
+      expect(@chef_run).to include_recipe 'yum-epel'
     end
 
     it 'installs nova common packages' do

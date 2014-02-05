@@ -25,7 +25,7 @@ class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
 
-include_recipe 'yum::epel' if platform?(%w(fedora redhat centos))
+include_recipe 'yum-epel' if platform?(%w(fedora redhat centos))
 
 include_recipe 'openstack-common::logging' if node['openstack']['compute']['syslog']['use']
 

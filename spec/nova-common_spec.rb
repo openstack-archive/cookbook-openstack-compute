@@ -16,7 +16,7 @@ describe 'openstack-compute::nova-common' do
     end
 
     it "doesn't run epel recipe" do
-      expect(@chef_run).to_not include_recipe 'yum::epel'
+      expect(@chef_run).to_not include_recipe 'yum-epel'
     end
 
     it 'runs logging recipe if node attributes say to' do
