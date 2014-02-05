@@ -41,6 +41,10 @@ api-os-compute
 - Includes recipe `nova-common`
 - Installs OS API and configures the service and endpoints in keystone
 
+client
+----
+- Install the nova client packages
+
 compute
 ----
 - Includes recipes `nova-common`, `api-metadata`, `network`
@@ -288,6 +292,7 @@ License and Author
 | **Author**           |  David Geng (<gengjh@cn.ibm.com>)                  |
 | **Author**           |  Salman Baset (<sabaset@us.ibm.com>)               |
 | **Author**           |  Chen Zhiwei (<zhiwchen@cn.ibm.com>)               |
+| **Author**           |  Mark Vanderwiel (<vanderwl@us.ibm.com>)           |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |

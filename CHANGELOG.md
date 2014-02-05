@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 8.2.0
+* Add client recipe
 
 ## 8.1.0
 * Update to reflect changes in v3 of yum cookbook. Yum v3 now required.

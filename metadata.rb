@@ -4,11 +4,12 @@ maintainer_email 'matt@opscode.com'
 license          'Apache 2.0'
 description      'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '8.1.0'
+version          '8.2.0'
 
 recipe 'openstack-compute::api-ec2', 'Installs AWS EC2 compatible API'
 recipe 'openstack-compute::api-metadata', 'Installs the nova metadata package'
 recipe 'openstack-compute::api-os-compute', 'Installs OS API'
+recipe 'openstack-compute::client', 'Install nova client packages'
 recipe 'openstack-compute::compute', 'nova-compute service'
 recipe 'openstack-compute::conductor', 'Installs nova conductor service'
 recipe 'openstack-compute::libvirt', 'Installs libvirt, used by nova compute for management of the virtual machine environment'
