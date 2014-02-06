@@ -30,19 +30,18 @@ if node['openstack']['compute']['network']['service_type'] == 'nova'
 end
 
 platform_options = node['openstack']['compute']['platform']
-# Note(maoy): Make sure compute_compute_packages is not a node object.
-# so that this is compatible with chef 11 when being changed later.
-compute_compute_packages = Array.new(platform_options['compute_compute_packages'])
 
-if platform?(%w(ubuntu))
-  if node['openstack']['compute']['libvirt']['virt_type'] == 'kvm'
-    compute_compute_packages << 'nova-compute-kvm'
-  elsif node['openstack']['compute']['libvirt']['virt_type'] == 'qemu'
-    compute_compute_packages << 'nova-compute-qemu'
+platform_options['compute_compute_packages'].each do |pkg|
+  package pkg do
+    options platform_options['package_overrides']
+
+    action :upgrade
   end
 end
 
-compute_compute_packages.each do |pkg|
+virt_type = node['openstack']['compute']['libvirt']['virt_type']
+
+platform_options["#{virt_type}_compute_packages"].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
 
