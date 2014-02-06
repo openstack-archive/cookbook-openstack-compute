@@ -5,9 +5,9 @@ require 'chefspec/berkshelf'
 require 'chef/application'
 
 ::LOG_LEVEL = :fatal
-::OPENSUSE_OPTS = {
-  platform: 'opensuse',
-  version: '12.3',
+::SUSE_OPTS = {
+  platform: 'suse',
+  version: '11.03',
   log_level: ::LOG_LEVEL
 }
 ::REDHAT_OPTS = {
