@@ -140,6 +140,14 @@ libvirt_cpu_mode=none
 <% else -%>
 libvirt_use_virtio_for_bridges=true
 <% end -%>
+libvirt_images_type=<%= node['openstack']['compute']['libvirt']['images_type'] %>
+<% if node['openstack']['compute']['libvirt']['images_type'] == 'lvm' -%>
+libvirt_images_volume_group=<%= node['openstack']['compute']['libvirt']['volume_group'] %>
+libvirt_sparse_logical_volumes=<%= node['openstack']['compute']['libvirt']['sparse_logical_volumes'] %>
+<% elsif node['openstack']['compute']['libvirt']['images_type'] == 'rbd' -%>
+libvirt_images_rbd_pool=<%= node['openstack']['compute']['libvirt']['images_rbd_pool'] %>
+libvirt_images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] %>
+<% end -%>
 
 ##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>

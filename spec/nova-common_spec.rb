@@ -68,25 +68,26 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
-      array = [/^rpc_thread_pool_size=64$/,
-               /^rpc_conn_pool_size=30$/,
-               /^rpc_response_timeout=60$/,
-               /^rabbit_userid=guest$/,
-               /^rabbit_password=rabbit-pass$/,
-               /^rabbit_virtual_host=\/$/,
-               /^rabbit_host=127.0.0.1$/,
-               /^rabbit_port=5672$/,
-               /^rabbit_use_ssl=false$/,
-               /^allow_resize_to_same_host=false$/,
-               /^vncserver_listen=127.0.1.1$/,
-               /^vncserver_proxyclient_address=127.0.1.1$/,
-               /^xvpvncproxy_host=127.0.1.1$/,
-               /^novncproxy_host=127.0.1.1$/,
-               /^force_dhcp_release=true$/,
-               /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
-               /^libvirt_use_virtio_for_bridges=true$/
-      ]
-      array.each do |content|
+      [
+        /^rpc_thread_pool_size=64$/,
+        /^rpc_conn_pool_size=30$/,
+        /^rpc_response_timeout=60$/,
+        /^rabbit_userid=guest$/,
+        /^rabbit_password=rabbit-pass$/,
+        /^rabbit_virtual_host=\/$/,
+        /^rabbit_host=127.0.0.1$/,
+        /^rabbit_port=5672$/,
+        /^rabbit_use_ssl=false$/,
+        /^allow_resize_to_same_host=false$/,
+        /^vncserver_listen=127.0.1.1$/,
+        /^vncserver_proxyclient_address=127.0.1.1$/,
+        /^xvpvncproxy_host=127.0.1.1$/,
+        /^novncproxy_host=127.0.1.1$/,
+        /^force_dhcp_release=true$/,
+        /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
+        /^libvirt_use_virtio_for_bridges=true$/,
+        /^libvirt_images_type=default$/
+      ].each do |content|
         it "has a #{content.source[1...-1]} line" do
           expect(@chef_run).to render_file(@filename).with_content(content)
         end
@@ -131,27 +132,96 @@ describe 'openstack-compute::nova-common' do
           'MISC_OPTION')
       end
 
+      context 'rbd' do
+        before do
+          @chef_run.node.set['openstack']['compute']['libvirt']['images_type'] = 'rbd'
+          @chef_run.converge 'openstack-compute::nova-common'
+        end
+        [
+          /^libvirt_images_type=rbd$/,
+          /^libvirt_images_rbd_pool=rbd$/,
+          %r{^libvirt_images_rbd_ceph_conf=/etc/ceph/ceph.conf$}
+        ].each do |content|
+          it "has a #{content.source[1...-1]} line" do
+            expect(@chef_run).to render_file(@filename).with_content(content)
+          end
+        end
+
+        describe 'override rbd settings' do
+          before do
+            @chef_run.node.set['openstack']['compute']['libvirt']['images_type'] = 'rbd'
+            @chef_run.node.set['openstack']['compute']['libvirt']['images_rbd_pool'] = 'myrbd'
+            @chef_run.node.set['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/myceph/ceph.conf'
+            @chef_run.converge 'openstack-compute::nova-common'
+          end
+          [
+            /^libvirt_images_type=rbd$/,
+            /^libvirt_images_rbd_pool=myrbd$/,
+            %r{^libvirt_images_rbd_ceph_conf=/etc/myceph/ceph.conf$}
+          ].each do |content|
+            it "has a #{content.source[1...-1]} line" do
+              expect(@chef_run).to render_file(@filename).with_content(content)
+            end
+          end
+        end
+
+        context 'lvm' do
+          before do
+            @chef_run.node.set['openstack']['compute']['libvirt']['images_type'] = 'lvm'
+            @chef_run.node.set['openstack']['compute']['libvirt']['volume_group'] = 'instances'
+            @chef_run.converge 'openstack-compute::nova-common'
+          end
+          [
+            /^libvirt_images_type=lvm$/,
+            /^libvirt_images_volume_group=instances$/,
+            /^libvirt_sparse_logical_volumes=false$/
+          ].each do |content|
+            it "has a #{content.source[1...-1]} line" do
+              expect(@chef_run).to render_file(@filename).with_content(content)
+            end
+          end
+
+          describe 'override settings' do
+            before do
+              @chef_run.node.set['openstack']['compute']['libvirt']['images_type'] = 'lvm'
+              @chef_run.node.set['openstack']['compute']['libvirt']['volume_group'] = 'instances'
+              @chef_run.node.set['openstack']['compute']['libvirt']['sparse_logical_volumes'] = true
+              @chef_run.converge 'openstack-compute::nova-common'
+            end
+            [
+              /^libvirt_images_type=lvm$/,
+              /^libvirt_images_volume_group=instances$/,
+              /^libvirt_sparse_logical_volumes=true$/
+            ].each do |content|
+              it "has a #{content.source[1...-1]} line" do
+                expect(@chef_run).to render_file(@filename).with_content(content)
+              end
+            end
+          end
+        end
+      end
+
       context 'qpid' do
         before do
           @chef_run.node.set['openstack']['mq']['compute']['service_type'] = 'qpid'
           @chef_run.converge 'openstack-compute::nova-common'
         end
 
-        array = [/^qpid_hostname=127.0.0.1$/,
-                 /^qpid_port=5672$/,
-                 /^qpid_username=$/,
-                 /^qpid_password=$/,
-                 /^qpid_sasl_mechanisms=$/,
-                 /^qpid_reconnect_timeout=0$/,
-                 /^qpid_reconnect_limit=0$/,
-                 /^qpid_reconnect_interval_min=0$/,
-                 /^qpid_reconnect_interval_max=0$/,
-                 /^qpid_reconnect_interval=0$/,
-                 /^qpid_heartbeat=60$/,
-                 /^qpid_protocol=tcp$/,
-                 /^qpid_tcp_nodelay=true$/
-        ]
-        array.each do |content|
+        [
+          /^qpid_hostname=127.0.0.1$/,
+          /^qpid_port=5672$/,
+          /^qpid_username=$/,
+          /^qpid_password=$/,
+          /^qpid_sasl_mechanisms=$/,
+          /^qpid_reconnect_timeout=0$/,
+          /^qpid_reconnect_limit=0$/,
+          /^qpid_reconnect_interval_min=0$/,
+          /^qpid_reconnect_interval_max=0$/,
+          /^qpid_reconnect_interval=0$/,
+          /^qpid_heartbeat=60$/,
+          /^qpid_protocol=tcp$/,
+          /^qpid_tcp_nodelay=true$/
+        ].each do |content|
           it "has a #{content.source[1...-1]} line" do
             expect(@chef_run).to render_file(@filename).with_content(content)
           end
@@ -210,7 +280,11 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
-      [/^export OS_USERNAME=admin/, /^export OS_TENANT_NAME=admin$/, /^export OS_PASSWORD=admin$/].each do |content|
+      [
+        /^export OS_USERNAME=admin/,
+        /^export OS_TENANT_NAME=admin$/,
+        /^export OS_PASSWORD=admin$/
+      ].each do |content|
         it "has a #{content.source[1...-1]} line" do
           expect(@chef_run).to render_file(@filename).with_content(content)
         end
