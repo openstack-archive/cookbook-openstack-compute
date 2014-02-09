@@ -25,9 +25,7 @@ end
 
 include_recipe 'openstack-compute::nova-common'
 include_recipe 'openstack-compute::api-metadata'
-if node['openstack']['compute']['network']['service_type'] == 'nova'
-  include_recipe 'openstack-compute::network'
-end
+include_recipe 'openstack-compute::network'
 
 platform_options = node['openstack']['compute']['platform']
 
