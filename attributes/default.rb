@@ -181,6 +181,18 @@ else
   default['openstack']['compute']['libvirt']['group'] = 'libvirtd'
 end
 default['openstack']['compute']['libvirt']['libvirt_inject_password'] = false
+# VM Images format. Acceptable values are: raw, qcow2, lvm,
+# rbd, default. If default is specified, then use_cow_images
+# flag is used instead of this one. (string value)
+# (The cookbook doesn't set that value, so if you want cow, set qcow2 here.)
+default['openstack']['compute']['libvirt']['images_type'] = 'default'
+# lvm
+default['openstack']['compute']['libvirt']['volume_group'] = nil
+default['openstack']['compute']['libvirt']['sparse_logical_volumes'] = false
+# rbd
+default['openstack']['compute']['libvirt']['images_rbd_pool'] = 'rbd'
+default['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/ceph/ceph.conf'
+
 default['openstack']['compute']['config']['availability_zone'] = 'nova'
 default['openstack']['compute']['config']['storage_availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
