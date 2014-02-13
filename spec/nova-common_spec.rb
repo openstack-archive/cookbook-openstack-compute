@@ -177,6 +177,41 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      context 'metering' do
+        describe 'metering disabled' do
+          it 'leaves default audit options' do
+            ['instance_usage_audit=False',
+             'instance_usage_audit_period=month'].each do |line|
+              expect(chef_run).to render_file(file.name).with_content(line)
+            end
+          end
+
+          it 'does not configure metering notification' do
+            ['notification_driver',
+             'notify_on_state_change'].each do |line|
+              expect(chef_run).not_to render_file(file.name).with_content(line)
+            end
+          end
+        end
+
+        describe 'notification enabled' do
+          before do
+            node.override['openstack']['compute']['metering'] = true
+          end
+
+          it 'sets audit and notification options correctly' do
+            ['notification_driver=nova.openstack.common.notifier.rpc_notifier',
+             'notification_driver=ceilometer.compute.nova_notifier',
+             'instance_usage_audit=True',
+             'instance_usage_audit_period=hour',
+             'notify_on_state_change=vm_and_task_state'
+            ].each do |line|
+              expect(chef_run).to render_file(file.name).with_content(line)
+            end
+          end
+        end
+      end
+
       context 'libvirt configuration' do
         it 'has default libvirt_* options set' do
           [/^libvirt_use_virtio_for_bridges=true$/,
