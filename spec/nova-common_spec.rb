@@ -10,6 +10,8 @@ describe 'openstack-compute::nova-common' do
         n.set['openstack']['mq'] = {
           'host' => '127.0.0.1'
         }
+        # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+        n.set['cpu']['total'] = 1
         n.set['openstack']['compute']['syslog']['use'] = true
       end
       @chef_run.converge 'openstack-compute::nova-common'
@@ -24,7 +26,10 @@ describe 'openstack-compute::nova-common' do
     end
 
     it "doesn't run logging recipe" do
-      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS do |n|
+        # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+        n.set['cpu']['total'] = 1
+      end
       chef_run.converge 'openstack-compute::nova-common'
       expect(chef_run).not_to include_recipe 'openstack-common::logging'
     end
@@ -33,6 +38,8 @@ describe 'openstack-compute::nova-common' do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set['openstack']['compute']['network']['service_type'] = 'neutron'
+      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+      node.set['cpu']['total'] = 1
       chef_run.converge 'openstack-compute::nova-common'
     end
 

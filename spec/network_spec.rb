@@ -9,6 +9,8 @@ describe 'openstack-compute::network' do
       @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       @node = @chef_run.node
       @node.set['openstack']['compute']['network']['service_type'] = 'nova'
+      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+      @node.set['cpu']['total'] = 1
       @chef_run.converge 'openstack-compute::network'
     end
 

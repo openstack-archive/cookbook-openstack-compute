@@ -6,7 +6,10 @@ describe 'openstack-compute::compute' do
   before { compute_stubs }
   describe 'ubuntu' do
     before do
-      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS do |n|
+        # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+        n.set['cpu']['total'] = 1
+      end
       @chef_run.converge 'openstack-compute::compute'
     end
 
@@ -40,6 +43,8 @@ describe 'openstack-compute::compute' do
     it "installs kvm when virt_type is 'kvm'" do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
+      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+      node.set['cpu']['total'] = 1
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
       chef_run.converge 'openstack-compute::compute'
 
@@ -50,6 +55,8 @@ describe 'openstack-compute::compute' do
     it 'honors the package options platform overrides for kvm' do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
+      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+      node.set['cpu']['total'] = 1
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
       node.set['openstack']['compute']['platform']['package_overrides'] = '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes'
       chef_run.converge 'openstack-compute::compute'
@@ -60,6 +67,8 @@ describe 'openstack-compute::compute' do
     it 'installs qemu when virt_type is qemu' do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
+      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+      node.set['cpu']['total'] = 1
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
       chef_run.converge 'openstack-compute::compute'
 
@@ -70,6 +79,8 @@ describe 'openstack-compute::compute' do
     it 'honors the package options platform overrides for qemu' do
       chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
       node = chef_run.node
+      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+      node.set['cpu']['total'] = 1
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
       node.set['openstack']['compute']['platform']['package_overrides'] = '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes'
       chef_run.converge 'openstack-compute::compute'
@@ -81,6 +92,8 @@ describe 'openstack-compute::compute' do
       it "honors the package name platform overrides for #{virt_type}" do
         chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
         node = chef_run.node
+        # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
+        node.set['cpu']['total'] = 1
         node.set['openstack']['compute']['libvirt']['virt_type'] = virt_type
         node.set['openstack']['compute']['platform']["#{virt_type}_compute_packages"] = ["my-nova-#{virt_type}"]
         chef_run.converge 'openstack-compute::compute'
