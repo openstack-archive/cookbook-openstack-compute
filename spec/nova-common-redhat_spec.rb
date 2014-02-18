@@ -6,10 +6,7 @@ describe 'openstack-compute::nova-common' do
   before { compute_stubs }
   describe 'redhat' do
     before do
-      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS do |n|
-        # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
-        n.set['cpu']['total'] = 1
-      end
+      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       @chef_run.converge 'openstack-compute::nova-common'
     end
 
@@ -28,8 +25,6 @@ describe 'openstack-compute::nova-common' do
     it 'installs db2 python packages if explicitly told' do
       chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       node = chef_run.node
-      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
-      node.set['cpu']['total'] = 1
       node.set['openstack']['db']['compute']['service_type'] = 'db2'
       chef_run.converge 'openstack-compute::nova-common'
       ['db2-odbc', 'python-ibm-db', 'python-ibm-db-sa'].each do |pkg|

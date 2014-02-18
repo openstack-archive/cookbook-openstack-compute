@@ -5,10 +5,7 @@ require_relative 'spec_helper'
 describe 'openstack-compute::identity_registration' do
   before do
     compute_stubs
-    @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS do |n|
-      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
-      n.set['cpu']['total'] = 1
-    end
+    @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
     @chef_run.converge 'openstack-compute::identity_registration'
   end
 
@@ -133,8 +130,6 @@ describe 'openstack-compute::identity_registration_disable_ec2' do
   before do
     compute_stubs
     @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
-    # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
-    @chef_run.node.set['cpu']['total'] = 1
     @chef_run.node.set['openstack']['compute']['enabled_apis'] = 'osapi_compute,metadata'
     @chef_run.converge 'openstack-compute::identity_registration'
   end

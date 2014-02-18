@@ -8,8 +8,6 @@ describe 'openstack-compute::client' do
     let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
     let(:chef_run) do
-      # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
-      node.set_unless['cpu']['total'] = 1
       runner.converge(described_recipe)
     end
 

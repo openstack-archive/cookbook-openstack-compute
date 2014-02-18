@@ -6,10 +6,7 @@ describe 'openstack-compute::conductor' do
   before { compute_stubs }
   describe 'redhat' do
     before do
-      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS do |n|
-        # TODO: Remove work around once https://github.com/customink/fauxhai/pull/77 merges
-        n.set['cpu']['total'] = 1
-      end
+      @chef_run = ::ChefSpec::Runner.new ::REDHAT_OPTS
       @chef_run.converge 'openstack-compute::conductor'
     end
 
