@@ -90,6 +90,21 @@ describe 'openstack-compute::identity_registration' do
     )
   end
 
+  it 'overrides compute endpoint region' do
+    @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS do |n|
+      n.set['openstack']['compute']['region'] = 'computeRegion'
+    end
+    @chef_run.converge 'openstack-compute::identity_registration'
+    resource = @chef_run.find_resource(
+      'openstack-identity_register',
+      'Register Compute Endpoint'
+    ).to_hash
+
+    expect(resource).to include(
+      endpoint_region: 'computeRegion',
+      action: [:create_endpoint]
+    )
+  end
   it 'registers ec2 service' do
     resource = @chef_run.find_resource(
       'openstack-identity_register',
@@ -120,6 +135,22 @@ describe 'openstack-compute::identity_registration' do
       endpoint_adminurl: 'http://127.0.0.1:8773/services/Admin',
       endpoint_internalurl: 'http://127.0.0.1:8773/services/Cloud',
       endpoint_publicurl: 'http://127.0.0.1:8773/services/Cloud',
+      action: [:create_endpoint]
+    )
+  end
+
+  it 'overrides ec2 endpoint region' do
+    @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS do |n|
+      n.set['openstack']['compute']['region'] = 'ec2Region'
+    end
+    @chef_run.converge 'openstack-compute::identity_registration'
+    resource = @chef_run.find_resource(
+      'openstack-identity_register',
+      'Register EC2 Endpoint'
+    ).to_hash
+
+    expect(resource).to include(
+      endpoint_region: 'ec2Region',
       action: [:create_endpoint]
     )
   end
