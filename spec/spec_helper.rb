@@ -114,3 +114,9 @@ def expect_creates_api_paste(service, action = :restart) # rubocop:disable Metho
     end
   end
 end
+
+# README(galstrom21): This will remove any coverage warnings from
+#   dependent cookbooks
+ChefSpec::Coverage.filters << '*/openstack-compute'
+
+at_exit { ChefSpec::Coverage.report! }
