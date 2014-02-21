@@ -1,2 +1,7 @@
 .bundle/
+.kitchen
+.vagrant
+.coverage/
+*.swp
 Berksfile.lock
+Vagrantfile
