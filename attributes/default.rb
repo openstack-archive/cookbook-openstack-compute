@@ -51,7 +51,7 @@ default['openstack']['compute']['syslog']['use'] = false
 default['openstack']['compute']['syslog']['facility'] = 'LOG_LOCAL1'
 default['openstack']['compute']['syslog']['config_facility'] = 'local1'
 
-default['openstack']['compute']['region'] = 'RegionOne'
+default['openstack']['compute']['region'] = node['openstack']['region']
 
 default['openstack']['compute']['floating_cmd'] = '/usr/local/bin/add_floaters.py'
 
