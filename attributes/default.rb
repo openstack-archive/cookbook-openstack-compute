@@ -192,7 +192,10 @@ default['openstack']['compute']['libvirt']['sparse_logical_volumes'] = false
 # rbd
 default['openstack']['compute']['libvirt']['images_rbd_pool'] = 'rbd'
 default['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/ceph/ceph.conf'
-
+# use a different backend for volumes, allowed options: rbd
+default['openstack']['compute']['libvirt']['volume_backend'] = nil
+default['openstack']['compute']['libvirt']['rbd']['rbd_secret_name'] = 'rbd_secret_uuid'
+default['openstack']['compute']['libvirt']['rbd']['rbd_user'] = 'cinder'
 default['openstack']['compute']['config']['availability_zone'] = 'nova'
 default['openstack']['compute']['config']['storage_availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
@@ -296,6 +299,7 @@ when 'fedora', 'redhat', 'centos', 'suse' # :pragma-foodcritic: ~FC024 - won't f
     'compute_vncproxy_consoleauth_service' => 'openstack-nova-consoleauth',
     'libvirt_packages' => ['libvirt'],
     'libvirt_service' => 'libvirtd',
+    'libvirt_ceph_packages' => ['ceph-common'],
     'dbus_service' => 'messagebus',
     'compute_cert_packages' => ['openstack-nova-cert'],
     'compute_cert_service' => 'openstack-nova-cert',
@@ -348,6 +352,7 @@ when 'ubuntu'
     'compute_vncproxy_consoleauth_service' => 'nova-consoleauth',
     'libvirt_packages' => ['libvirt-bin'],
     'libvirt_service' => 'libvirt-bin',
+    'libvirt_ceph_packages' => ['ceph-common'],
     'dbus_service' => 'dbus',
     'compute_cert_packages' => ['nova-cert'],
     'compute_cert_service' => 'nova-cert',

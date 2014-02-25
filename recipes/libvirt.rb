@@ -209,3 +209,6 @@ template '/etc/sysconfig/libvirtd' do
 
   only_if { platform? %w{fedora redhat centos} }
 end
+
+volume_backend = node['openstack']['compute']['libvirt']['volume_backend']
+include_recipe "openstack-compute::libvirt_#{volume_backend}" unless volume_backend.nil?
