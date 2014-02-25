@@ -14,6 +14,9 @@ Encoding:
     - metadata.rb
     - Gemfile
 
+NumericLiterals:
+  Enabled: false
+
 LineLength:
   Enabled: false
 

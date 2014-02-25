@@ -231,7 +231,7 @@ default['openstack']['compute']['config']['quota_fixed_ips'] = -1
 # number of floating ips allowed per project (default: 10)
 default['openstack']['compute']['config']['quota_floating_ips'] = 10
 # number of bytes allowed per injected file (default: 10240)
-default['openstack']['compute']['config']['quota_injected_file_content_bytes'] = 10_240
+default['openstack']['compute']['config']['quota_injected_file_content_bytes'] = 10240
 # number of bytes allowed per injected file path (default: 255)
 default['openstack']['compute']['config']['quota_injected_file_path_bytes'] = 255
 # number of injected files allowed (default: 5)
@@ -243,7 +243,7 @@ default['openstack']['compute']['config']['quota_key_pairs'] = 100
 # number of metadata items allowed per instance (default: 128)
 default['openstack']['compute']['config']['quota_metadata_items'] = 128
 # megabytes of instance ram allowed per project (default: 51200)
-default['openstack']['compute']['config']['quota_ram'] = 51_200
+default['openstack']['compute']['config']['quota_ram'] = 51200
 
 default['openstack']['compute']['ratelimit']['settings'] = {
   'generic-post-limit' => { 'verb' => 'POST', 'uri' => '*', 'regex' => '.*', 'limit' => '10', 'interval' => 'MINUTE' },
