@@ -374,3 +374,33 @@ default['openstack']['compute']['misc_openrc'] = nil
 # To disable the EC2 API endpoint, simply remove 'ec2,' from the list
 # of enabled API services.
 default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute,metadata'
+
+# VMware driver
+# URL for connection to VMware ESX/VC host. (string value)
+default['openstack']['compute']['vmware']['host_ip'] = ''
+# Username for connection to VMware ESX/VC host. (string value)
+default['openstack']['compute']['vmware']['host_username'] = ''
+# Password for connection to VMware ESX/VC host. (string value)
+default['openstack']['compute']['vmware']['host_password'] = ''
+# Name of a VMware Cluster ComputeResource. Used only if compute_driver is vmwareapi.VMwareVCDriver. (multi valued)
+default['openstack']['compute']['vmware']['cluster_name'] = []
+# Regex to match the name of a datastore. (string value)
+default['openstack']['compute']['vmware']['datastore_regex'] = nil
+# The interval used for polling of remote tasks. (floating point value, default 0.5)
+default['openstack']['compute']['vmware']['task_poll_interval'] = 0.5
+# The number of times we retry on failures, e.g., socket error, etc. (integer value, default 10)
+default['openstack']['compute']['vmware']['api_retry_count'] = 10
+# VNC starting port (integer value, default 5900)
+default['openstack']['compute']['vmware']['vnc_port'] = 5900
+# Total number of VNC ports (integer value, default 10000)
+default['openstack']['compute']['vmware']['vnc_port_total'] = 10000
+# Whether to use linked clone (boolean value, default true)
+default['openstack']['compute']['vmware']['use_linked_clone'] = true
+# Physical ethernet adapter name for vlan networking (string value, default vmnic0)
+default['openstack']['compute']['vmware']['vlan_interface'] = 'vmnic0'
+# Optional VIM Service WSDL Location, you must specify this location of the WSDL files when you try to connect vSphere vCenter versions 5.0 and earlier.
+default['openstack']['compute']['vmware']['wsdl_location'] = nil
+# The maximum number of ObjectContent data objects that should be returned in a single result. (integer value, default 100)
+default['openstack']['compute']['vmware']['maximum_objects'] = 100
+# Name of Integration Bridge (string value, default br-int)
+default['openstack']['compute']['vmware']['integration_bridge'] = 'br-int'

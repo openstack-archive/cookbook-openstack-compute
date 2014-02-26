@@ -268,6 +268,24 @@ EC2 Configuration Attributes
 
 * `openstack["compute"]["enabled_apis"] - Which apis have been enabled in nova compute
 
+VMware Configuration Attributes
+-------------------------------
+
+* `openstack['compute']['vmware']['host_ip']` - URL for connection to VMware ESX/VC host. (string value)
+* `openstack['compute']['vmware']['host_username']` - Username for connection to VMware ESX/VC host. (string value)
+* `openstack['compute']['vmware']['host_password']` - Password for connection to VMware ESX/VC host. (string value)
+* `openstack['compute']['vmware']['cluster_name']` - Name of a VMware Cluster ComputeResource. Used only if compute_driver is vmwareapi.VMwareVCDriver. (multi valued)
+* `openstack['compute']['vmware']['datastore_regex']` - Regex to match the name of a datastore. (string value)
+* `openstack['compute']['vmware']['task_poll_interval']` - The interval used for polling of remote tasks. (floating point value, default 0.5)
+* `openstack['compute']['vmware']['api_retry_count']` - The number of times we retry on failures, e.g., socket error, etc. (integer value, default 10)
+* `openstack['compute']['vmware']['vnc_port']` - VNC starting port (integer value, default 5900)
+* `openstack['compute']['vmware']['vnc_port_total']` - Total number of VNC ports (integer value, default 10000)
+* `openstack['compute']['vmware']['use_linked_clone']` - Whether to use linked clone (boolean value, default true)
+* `openstack['compute']['vmware']['vlan_interface']` - Physical ethernet adapter name for vlan networking (string value, default vmnic0)
+* `openstack['compute']['vmware']['wsdl_location']` - Optional VIM Service WSDL Location, you must specify this location of the WSDL files when you try to connect vSphere vCenter versions 5.0 and earlier.
+* `openstack['compute']['vmware']['maximum_objects']` - The maximum number of ObjectContent data objects that should be returned in a single result. (integer value, default 100)
+* `openstack['compute']['vmware']['integration_bridge']` - Name of Integration Bridge (string value, default br-int)
+
 Testing
 =====
 

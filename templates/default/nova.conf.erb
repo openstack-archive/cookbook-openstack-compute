@@ -282,3 +282,93 @@ osapi_compute_extension=<%= p %>
 [conductor]
 
 use_local=<%= node["openstack"]["compute"]["conductor"]["use_local"] %>
+
+<% if %w(vmwareapi.VMwareESXDriver vmwareapi.VMwareVCDriver).include?(node['openstack']['compute']['driver']) %>
+[vmware]
+
+#
+# Options defined in nova.virt.vmwareapi.driver
+#
+
+# URL for connection to VMware ESX/VC host. (string value)
+host_ip = <%= node['openstack']['compute']['vmware']['host_ip'] %>
+
+# Username for connection to VMware ESX/VC host. (string
+# value)
+host_username = <%= node['openstack']['compute']['vmware']['host_username'] %>
+
+# Password for connection to VMware ESX/VC host. (string
+# value)
+host_password = <%= node['openstack']['compute']['vmware']['host_password'] %>
+
+<% if node['openstack']['compute']['vmware']['cluster_name'] %>
+# Name of a VMware Cluster ComputeResource. Used only if
+# compute_driver is vmwareapi.VMwareVCDriver. (multi valued)
+  <% node['openstack']['compute']['vmware']['cluster_name'].each do |cluster| %>
+cluster_name = <%= cluster %>
+  <% end %>
+<% end %>
+
+<% if node['openstack']['compute']['vmware']['datastore_regex'] %>
+# Regex to match the name of a datastore. (string value)
+datastore_regex = <%= node['openstack']['compute']['vmware']['datastore_regex'] %>
+<% end %>
+
+# The interval used for polling of remote tasks. (floating
+# point value)
+task_poll_interval = <%= node['openstack']['compute']['vmware']['task_poll_interval'] %>
+
+# The number of times we retry on failures, e.g., socket
+# error, etc. (integer value)
+api_retry_count = <%= node['openstack']['compute']['vmware']['api_retry_count'] %>
+
+# VNC starting port (integer value)
+vnc_port = <%= node['openstack']['compute']['vmware']['vnc_port'] %>
+
+# Total number of VNC ports (integer value)
+vnc_port_total = <%= node['openstack']['compute']['vmware']['vnc_port_total'] %>
+
+# Whether to use linked clone (boolean value)
+use_linked_clone = <%= node['openstack']['compute']['vmware']['use_linked_clone'] %>
+
+
+#
+# Options defined in nova.virt.vmwareapi.vif
+#
+
+# Physical ethernet adapter name for vlan networking (string
+# value)
+vlan_interface = <%= node['openstack']['compute']['vmware']['vlan_interface'] %>
+
+
+<% if node['openstack']['compute']['vmware']['wsdl_location'] %>
+#
+# Options defined in nova.virt.vmwareapi.vim
+#
+# Optional VIM Service WSDL Location e.g
+# http://<server>/vimService.wsdl. Optional over-ride to
+# default location for bug work-arounds (string value)
+wsdl_location = <%= node['openstack']['compute']['vmware']['wsdl_location'] %>
+<% end %>
+
+#
+# Options defined in nova.virt.vmwareapi.vim_util
+#
+
+# The maximum number of ObjectContent data objects that should
+# be returned in a single result. A positive value will cause
+# the operation to suspend the retrieval when the count of
+# objects reaches the specified maximum. The server may still
+# limit the count to something less than the configured value.
+# Any remaining objects may be retrieved with additional
+# requests. (integer value)
+maximum_objects = <%= node['openstack']['compute']['vmware']['maximum_objects'] %>
+
+
+#
+# Options defined in nova.virt.vmwareapi.vmops
+#
+
+# Name of Integration Bridge (string value)
+integration_bridge = <%= node['openstack']['compute']['vmware']['integration_bridge'] %>
+<% end %>

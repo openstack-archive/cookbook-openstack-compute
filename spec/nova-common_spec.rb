@@ -238,6 +238,62 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      context 'vmware' do
+        before do
+          @chef_run.node.set['openstack']['compute']['driver'] = 'vmwareapi.VMwareVCDriver'
+          @chef_run.converge 'openstack-compute::nova-common'
+        end
+
+        [
+          /^host_ip = $/,
+          /^host_username = $/,
+          /^host_password = $/,
+          /^task_poll_interval = 0.5$/,
+          /^api_retry_count = 10$/,
+          /^vnc_port = 5900$/,
+          /^vnc_port_total = 10000$/,
+          /^use_linked_clone = true$/,
+          /^vlan_interface = vmnic0$/,
+          /^maximum_objects = 100$/,
+          /^integration_bridge = br-int$/
+        ].each do |content|
+          it "has a #{content.source[1...-1]} line" do
+            expect(@chef_run).to render_file(@filename).with_content(content)
+          end
+        end
+
+        it 'has no datastore_regex line' do
+          expect(@chef_run).not_to render_file(@filename).with_content('datastore_regex = ')
+        end
+
+        it 'has no wsdl_location line' do
+          expect(@chef_run).not_to render_file(@filename).with_content('wsdl_location = ')
+        end
+      end
+
+      context 'vmware cluster name' do
+        before do
+          @chef_run.node.set['openstack']['compute']['driver'] = 'vmwareapi.VMwareVCDriver'
+          @chef_run.node.set['openstack']['compute']['vmware']['cluster_name'] = ['cluster1', 'cluster2']
+          @chef_run.node.set['openstack']['compute']['vmware']['datastore_regex'] = '*.'
+          @chef_run.node.set['openstack']['compute']['vmware']['wsdl_location'] = 'http://127.0.0.1/'
+          @chef_run.converge 'openstack-compute::nova-common'
+        end
+
+        it 'has multiple cluster name lines' do
+          expect(@chef_run).to render_file(@filename).with_content('cluster_name = cluster1')
+          expect(@chef_run).to render_file(@filename).with_content('cluster_name = cluster2')
+        end
+
+        it 'has datastore_regex line' do
+          expect(@chef_run).to render_file(@filename).with_content('datastore_regex = *.')
+        end
+
+        it 'has wsdl_location line' do
+          expect(@chef_run).to render_file(@filename).with_content('wsdl_location = http://127.0.0.1/')
+        end
+      end
+
       describe 'rabbit ha' do
         before do
           @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|

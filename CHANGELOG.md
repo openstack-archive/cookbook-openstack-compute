@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 8.3.0
+* VMware compute driver support
+
 ## 8.2.1:
 * Add the libvirt_inject_key attribute, defaults to true
 
