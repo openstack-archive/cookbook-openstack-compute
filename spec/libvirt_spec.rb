@@ -3,15 +3,15 @@
 require_relative 'spec_helper'
 
 describe 'openstack-compute::libvirt' do
-  before { compute_stubs }
   describe 'ubuntu' do
-    before do
-      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
-      @chef_run.converge 'openstack-compute::libvirt'
-    end
+    let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
+    let(:node) { runner.node }
+    let(:chef_run) { runner.converge(described_recipe) }
+
+    include_context 'compute_stubs'
 
     it 'installs libvirt packages' do
-      expect(@chef_run).to install_package 'libvirt-bin'
+      expect(chef_run).to install_package 'libvirt-bin'
     end
 
     it 'does not create libvirtd group and add to nova' do
@@ -23,47 +23,44 @@ describe 'openstack-compute::libvirt' do
     end
 
     it 'starts dbus' do
-      expect(@chef_run).to start_service 'dbus'
+      expect(chef_run).to start_service 'dbus'
     end
 
     it 'starts dbus on boot' do
-      expect(@chef_run).to enable_service 'dbus'
+      expect(chef_run).to enable_service 'dbus'
     end
 
     it 'starts libvirt' do
-      expect(@chef_run).to start_service 'libvirt-bin'
+      expect(chef_run).to start_service 'libvirt-bin'
     end
 
     it 'starts libvirt on boot' do
-      expect(@chef_run).to enable_service 'libvirt-bin'
+      expect(chef_run).to enable_service 'libvirt-bin'
     end
 
     it 'disables default libvirt network' do
-      expect(@chef_run).to run_execute('virsh net-autostart default --disable')
+      expect(chef_run).to run_execute('virsh net-autostart default --disable')
     end
 
     it 'deletes default libvirt network' do
-      expect(@chef_run).to run_execute('virsh net-destroy default')
+      expect(chef_run).to run_execute('virsh net-destroy default')
     end
 
     describe 'rbd/ceph volume storage' do
       before do
-        @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
-          n.set['openstack']['compute']['libvirt']['volume_backend'] = 'rbd'
-        end
-        @chef_run.converge 'openstack-compute::libvirt'
+        node.set['openstack']['compute']['libvirt']['volume_backend'] = 'rbd'
       end
 
       it 'includes the libvirt_rbd recipe if it is the selected volume backend' do
-        expect(@chef_run).to include_recipe('openstack-compute::libvirt_rbd')
+        expect(chef_run).to include_recipe('openstack-compute::libvirt_rbd')
       end
     end
 
     describe '/etc/libvirt/libvirtd.conf' do
-      before { @filename = '/etc/libvirt/libvirtd.conf' }
+      let(:file) { chef_run.template('/etc/libvirt/libvirtd.conf') }
 
       it 'creates the /etc/libvirt/libvirtd.conf file' do
-        expect(@chef_run).to create_template(@filename).with(
+        expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
           mode: 0644
@@ -72,20 +69,20 @@ describe 'openstack-compute::libvirt' do
 
       it 'has proper processing controls' do
         [/^max_clients = 20$/, /^max_workers = 20$/, /^max_requests = 20$/, /^max_client_requests = 5$/].each do |content|
-          expect(@chef_run).to render_file(@filename).with_content(content)
+          expect(chef_run).to render_file(file.name).with_content(content)
         end
       end
 
       it 'notifies libvirt-bin restart' do
-        expect(@chef_run.template(@filename)).to notify('service[libvirt-bin]').to(:restart)
+        expect(file).to notify('service[libvirt-bin]').to(:restart)
       end
     end
 
     describe '/etc/default/libvirt-bin' do
-      before { @filename = '/etc/default/libvirt-bin' }
+      let(:file) { chef_run.template('/etc/default/libvirt-bin') }
 
       it 'creates the /etc/default/libvirt-bin file' do
-        expect(@chef_run).to create_template(@filename).with(
+        expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
           mode: 0644
@@ -97,7 +94,7 @@ describe 'openstack-compute::libvirt' do
       end
 
       it 'notifies libvirt-bin restart' do
-        expect(@chef_run.template(@filename)).to notify('service[libvirt-bin]').to(:restart)
+        expect(file).to notify('service[libvirt-bin]').to(:restart)
       end
     end
 

@@ -3,25 +3,22 @@
 require_relative 'spec_helper'
 
 describe 'openstack-compute::api-metadata' do
-  before { compute_stubs }
   describe 'ubuntu' do
-    before do
-      @chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
-      @chef_run.converge 'openstack-compute::api-metadata'
-    end
+    let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
+    let(:node) { runner.node }
+    let(:chef_run) { runner.converge(described_recipe) }
 
-    expect_runs_nova_common_recipe
-
-    expect_creates_nova_lock_dir
-
-    expect_installs_python_keystone
+    include_context 'compute_stubs'
+    include_examples 'expect_runs_nova_common_recipe'
+    include_examples 'expect_creates_nova_lock_dir'
+    include_examples 'expect_installs_python_keystone'
 
     it 'installs metadata api packages' do
-      expect(@chef_run).to upgrade_package 'nova-api-metadata'
+      expect(chef_run).to upgrade_package 'nova-api-metadata'
     end
 
     it 'starts metadata api on boot' do
-      expect(@chef_run).to enable_service 'nova-api-metadata'
+      expect(chef_run).to enable_service 'nova-api-metadata'
     end
 
     expect_creates_api_paste 'service[nova-api-metadata]'

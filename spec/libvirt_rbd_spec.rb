@@ -3,31 +3,31 @@
 require_relative 'spec_helper'
 
 describe 'openstack-compute::libvirt_rbd' do
-  before { compute_stubs }
   describe 'ubuntu' do
-    before do
-      @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
-        n.set['openstack']['compute']['libvirt']['volume_backend'] = 'rbd'
-      end
-      @chef_run.converge 'openstack-compute::libvirt_rbd'
+    let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
+    let(:node) { runner.node }
+    let(:chef_run) do
+      node.set['openstack']['compute']['libvirt']['volume_backend'] = 'rbd'
+
+      runner.converge(described_recipe)
     end
+
+    include_context 'compute_stubs'
 
     it 'includes the openstack-common::ceph_client recipe' do
       pending 'TODO: openstack-common needs that recipe first'
-      expect(@chef_run).to include_recipe('openstack-common::ceph_client')
+      expect(chef_run).to include_recipe('openstack-common::ceph_client')
     end
 
     it 'installs rbd packages' do
-      expect(@chef_run).to install_package 'ceph-common'
+      expect(chef_run).to install_package 'ceph-common'
     end
 
     describe 'if there was no secret with this uuid defined' do
-      before do
-        @filename = '/tmp/ad3313264ea51d8c6a3d1c5b140b9883.xml'
-      end
+      let(:file) { chef_run.template('/tmp/ad3313264ea51d8c6a3d1c5b140b9883.xml') }
 
       it 'creates the temporary secret xml file' do
-        expect(@chef_run).to create_template(@filename).with(
+        expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
           mode: '700'
@@ -41,15 +41,15 @@ describe 'openstack-compute::libvirt_rbd' do
       end
 
       it 'defines the secret' do
-        expect(@chef_run).to run_execute('virsh secret-define --file /tmp/ad3313264ea51d8c6a3d1c5b140b9883.xml')
+        expect(chef_run).to run_execute("virsh secret-define --file #{file.name}")
       end
 
       it 'sets the secret value to the password' do
-        expect(@chef_run).to run_execute("virsh secret-set-value --secret 00000000-0000-0000-0000-000000000000 'cinder-rbd-pass'")
+        expect(chef_run).to run_execute("virsh secret-set-value --secret 00000000-0000-0000-0000-000000000000 'cinder-rbd-pass'")
       end
 
       it 'deletes the temporary secret xml file' do
-        expect(@chef_run).to delete_file(@filename)
+        expect(chef_run).to delete_file(file.name)
       end
 
     end
