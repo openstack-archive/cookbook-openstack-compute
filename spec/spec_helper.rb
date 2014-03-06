@@ -53,7 +53,7 @@ def compute_stubs # rubocop:disable MethodLength
     .and_return('')
   ::Chef::Recipe.any_instance.stub(:get_password)
     .with('user', 'guest')
-    .and_return('rabbit-pass')
+    .and_return('mq-pass')
   ::Chef::Recipe.any_instance.stub(:get_password)
     .with('user', 'admin')
     .and_return('admin')

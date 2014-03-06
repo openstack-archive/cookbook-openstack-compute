@@ -63,9 +63,13 @@ db_user = node['openstack']['db']['compute']['username']
 db_pass = get_password 'db', 'nova'
 sql_connection = db_uri('compute', db_user, db_pass)
 
-if node['openstack']['mq']['compute']['service_type'] == 'rabbitmq'
+mq_service_type = node['openstack']['mq']['compute']['service_type']
+
+if mq_service_type == 'rabbitmq'
   node['openstack']['mq']['compute']['rabbit']['ha'] && (rabbit_hosts = rabbit_servers)
-  rabbit_pass = get_password 'user', node['openstack']['mq']['compute']['rabbit']['userid']
+  mq_password = get_password 'user', node['openstack']['mq']['compute']['rabbit']['userid']
+elsif mq_service_type == 'qpid'
+  mq_password = get_password 'user', node['openstack']['mq']['compute']['qpid']['username']
 end
 
 # check attributes before search
@@ -130,7 +134,8 @@ template '/etc/nova/nova.conf' do
     vncserver_listen: vnc_bind_ip,
     vncserver_proxyclient_address: vnc_bind_ip,
     memcache_servers: memcache_servers,
-    rabbit_password: rabbit_pass,
+    mq_service_type: mq_service_type,
+    mq_password: mq_password,
     rabbit_hosts: rabbit_hosts,
     identity_endpoint: identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers

@@ -73,7 +73,7 @@ describe 'openstack-compute::nova-common' do
         /^rpc_conn_pool_size=30$/,
         /^rpc_response_timeout=60$/,
         /^rabbit_userid=guest$/,
-        /^rabbit_password=rabbit-pass$/,
+        /^rabbit_password=mq-pass$/,
         /^rabbit_virtual_host=\/$/,
         /^rabbit_host=127.0.0.1$/,
         /^rabbit_port=5672$/,
@@ -203,15 +203,18 @@ describe 'openstack-compute::nova-common' do
 
       context 'qpid' do
         before do
-          @chef_run.node.set['openstack']['mq']['compute']['service_type'] = 'qpid'
+          @chef_run = ::ChefSpec::Runner.new(::UBUNTU_OPTS) do |n|
+            n.set['openstack']['mq']['compute']['service_type'] = 'qpid'
+            n.set['openstack']['mq']['compute']['qpid']['username'] = 'guest'
+          end
           @chef_run.converge 'openstack-compute::nova-common'
         end
 
         [
           /^qpid_hostname=127.0.0.1$/,
           /^qpid_port=5672$/,
-          /^qpid_username=$/,
-          /^qpid_password=$/,
+          /^qpid_username=guest$/,
+          /^qpid_password=mq-pass$/,
           /^qpid_sasl_mechanisms=$/,
           /^qpid_reconnect_timeout=0$/,
           /^qpid_reconnect_limit=0$/,
