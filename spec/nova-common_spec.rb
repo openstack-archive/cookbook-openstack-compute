@@ -86,7 +86,8 @@ describe 'openstack-compute::nova-common' do
         /^force_dhcp_release=true$/,
         /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
         /^libvirt_use_virtio_for_bridges=true$/,
-        /^libvirt_images_type=default$/
+        /^libvirt_images_type=default$/,
+        /^libvirt_inject_key=true$/
       ].each do |content|
         it "has a #{content.source[1...-1]} line" do
           expect(@chef_run).to render_file(@filename).with_content(content)
@@ -130,6 +131,12 @@ describe 'openstack-compute::nova-common' do
         @chef_run.node.set['openstack']['compute']['misc_nova'] = ['MISC_OPTION', 'FOO']
         expect(@chef_run).to render_file(@filename).with_content(
           'MISC_OPTION')
+      end
+
+      it 'has a configurable libvirt_inject_key setting' do
+        @chef_run.node.set['openstack']['compute']['libvirt']['libvirt_inject_key'] = false
+        expect(@chef_run).to render_file(@filename).with_content(
+          /^libvirt_inject_key=false$/)
       end
 
       context 'rbd' do
