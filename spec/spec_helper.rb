@@ -76,8 +76,8 @@ def compute_stubs # rubocop:disable MethodLength
   stub_command('nova-manage network list | grep 192.168.200.0/24').and_return(false)
   stub_command("nova-manage floating list |grep -E '.*([0-9]{1,3}[.]){3}[0-9]{1,3}*'").and_return(false)
   stub_command('virsh net-list | grep -q default').and_return(true)
-  stub_command("ovs-vsctl show | grep 'Bridge br-int'").and_return(true)
-  stub_command("ovs-vsctl show | grep 'Bridge br-tun'").and_return(true)
+  stub_command('ovs-vsctl br-exists br-int').and_return(true)
+  stub_command('ovs-vsctl br-exists br-tun').and_return(true)
   stub_command('virsh secret-list | grep 00000000-0000-0000-0000-000000000000').and_return(false)
   stub_command("virsh secret-get-value 00000000-0000-0000-0000-000000000000 | grep 'cinder-rbd-pass'").and_return(false)
 end
