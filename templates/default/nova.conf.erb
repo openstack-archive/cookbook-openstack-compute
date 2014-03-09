@@ -21,10 +21,10 @@ rpc_conn_pool_size=<%= node["openstack"]["compute"]["rpc_conn_pool_size"] %>
 rpc_response_timeout=<%= node["openstack"]["compute"]["rpc_response_timeout"] %>
 rpc_backend=<%= node["openstack"]["compute"]["rpc_backend"] %>
 
-<% if node["openstack"]["mq"]["compute"]["service_type"] == "rabbitmq"  %>
+<% if @mq_service_type == "rabbitmq"  %>
 ##### RABBITMQ #####
 rabbit_userid=<%= node["openstack"]["mq"]["compute"]["rabbit"]["userid"] %>
-rabbit_password=<%= @rabbit_password %>
+rabbit_password=<%= @mq_password %>
 rabbit_virtual_host=<%= node["openstack"]["mq"]["compute"]["rabbit"]["vhost"] %>
 <% if node["openstack"]["mq"]["compute"]["rabbit"]["ha"] -%>
 rabbit_hosts=<%= @rabbit_hosts %>
@@ -36,12 +36,12 @@ rabbit_use_ssl=<%= node["openstack"]["mq"]["compute"]["rabbit"]["use_ssl"] %>
 <% end -%>
 <% end -%>
 
-<% if node["openstack"]["mq"]["compute"]["service_type"] == "qpid"  %>
+<% if @mq_service_type == "qpid"  %>
 ##### QPID #####
 qpid_hostname=<%= node["openstack"]["mq"]["compute"]["qpid"]["host"] %>
 qpid_port=<%= node["openstack"]["mq"]["compute"]["qpid"]["port"] %>
 
-qpid_password=<%= node["openstack"]["mq"]["compute"]["qpid"]["password"] %>
+qpid_password=<%= @mq_password %>
 qpid_username=<%= node["openstack"]["mq"]["compute"]["qpid"]["username"] %>
 qpid_sasl_mechanisms=<%= node["openstack"]["mq"]["compute"]["qpid"]["sasl_mechanisms"] %>
 qpid_reconnect_timeout=<%= node["openstack"]["mq"]["compute"]["qpid"]["reconnect_timeout"] %>
