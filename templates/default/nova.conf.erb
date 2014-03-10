@@ -262,8 +262,11 @@ disk_allocation_ratio=<%= node["openstack"]["compute"]["config"]["disk_allocatio
 max_cores=<%= node["openstack"]["compute"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"]["total"].to_i %>
 <%- end %>
 
-# If true, force creation of config drive regardless of if --config-drive was specified in the API call
+<% if node["openstack"]["compute"]["config"]["force_config_drive"] %>
 force_config_drive=<%= node["openstack"]["compute"]["config"]["force_config_drive"] %>
+<% end %>
+mkisofs_cmd=<%= node["openstack"]["compute"]["config"]["mkisofs_cmd"] %>
+injected_network_template=<%= node["openstack"]["compute"]["config"]["injected_network_template"] %>
 
 <% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 <% if %w(fedora redhat centos).include? node.platform -%>

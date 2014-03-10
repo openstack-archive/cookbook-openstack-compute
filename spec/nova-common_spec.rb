@@ -180,9 +180,17 @@ describe 'openstack-compute::nova-common' do
 
       it 'has default nova.config options set' do
         [/^allow_resize_to_same_host=false$/,
-         /^force_dhcp_release=true$/].each do |line|
+         /^force_dhcp_release=true$/,
+         /^mkisofs_cmd=genisoimage$/,
+         %r{^injected_network_template=\$pybasedir/nova/virt/interfaces.template$}].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
+      end
+
+      it 'has a force_config_drive setting' do
+        chef_run.node.set['openstack']['compute']['config']['force_config_drive'] = 'always'
+        expect(chef_run).to render_file(file.name).with_content(
+          /^force_config_drive=always$/)
       end
 
       context 'metering' do
