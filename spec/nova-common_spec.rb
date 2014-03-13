@@ -210,6 +210,12 @@ describe 'openstack-compute::nova-common' do
           /^force_config_drive=always$/)
       end
 
+      it 'has a disk_cachemodes setting' do
+        chef_run.node.set['openstack']['compute']['config']['disk_cachemodes'] = 'disk:writethrough'
+        expect(chef_run).to render_file(file.name).with_content(
+          /^disk_cachemodes=disk:writethrough$/)
+      end
+
       context 'metering' do
         describe 'metering disabled' do
           it 'leaves default audit options' do
