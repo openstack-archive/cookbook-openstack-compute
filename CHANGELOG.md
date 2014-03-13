@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 8.3.1
+* Fixes including api-metadata recipe only when asked for (LP: 1286300)
+
 ## 8.3.0
 * VMware compute driver support
 

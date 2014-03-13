@@ -11,8 +11,17 @@ describe 'openstack-compute::compute' do
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
 
-    it 'runs api-metadata recipe' do
+    it 'includes api-metadata recipe' do
       expect(chef_run).to include_recipe 'openstack-compute::api-metadata'
+    end
+
+    it 'does not include api-metadata recipe' do
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      node = chef_run.node
+      node.set['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute'
+      chef_run.converge 'openstack-compute::compute'
+
+      expect(chef_run).not_to include_recipe 'openstack-compute::api-metadata'
     end
 
     it 'runs network recipe' do
