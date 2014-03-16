@@ -117,7 +117,54 @@ def expect_creates_api_paste(service, action = :restart) # rubocop:disable Metho
       )
     end
 
-    it 'template contents' do
+    describe 'keystone auth token' do
+      it 'has auth_uri' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^#{Regexp.quote('auth_uri = http://127.0.0.1:5000/v2.0')}$/)
+      end
+
+      it 'has auth_host' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^#{Regexp.quote('auth_host = 127.0.0.1')}$/)
+      end
+
+      it 'has auth_port' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^auth_port = 35357$/)
+      end
+
+      it 'has auth_protocol' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^auth_protocol = http$/)
+      end
+
+      it 'has auth_version' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^auth_version = v2.0$/)
+      end
+
+      it 'has admin_tenant_name' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^admin_tenant_name = service$/)
+      end
+
+      it 'has admin_user' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^admin_user = nova$/)
+      end
+
+      it 'has admin_password' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^admin_password = nova-pass$/)
+      end
+
+      it 'has signing_dir' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^#{Regexp.quote('signing_dir = /var/cache/nova/api')}$/)
+      end
+    end
+
+    it 'template other contents' do
       pending 'TODO: implement'
     end
 

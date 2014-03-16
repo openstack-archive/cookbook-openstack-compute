@@ -128,6 +128,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["rpc_response_timeout"]` - Seconds to wait for a response from call or multicall (default 60)
 TODO: Add DB2 support on other platforms
 * `openstack["compute"]["platform"]["db2_python_packages"]` - Array of DB2 python packages, only available on redhat platform
+* `openstack['compute']['api']['auth']['version']` - Select v2.0 or v3.0. Default v2.0. The auth API version used to interact with identity service.
 
 
 MQ attributes
@@ -346,6 +347,7 @@ License and Author
 | **Author**           |  Salman Baset (<sabaset@us.ibm.com>)               |
 | **Author**           |  Chen Zhiwei (<zhiwchen@cn.ibm.com>)               |
 | **Author**           |  Mark Vanderwiel (<vanderwl@us.ibm.com>)           |
+| **Author**           |  Eric Zhou (<zyouzhou@cn.ibm.com>)                 |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |

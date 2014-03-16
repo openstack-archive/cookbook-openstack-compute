@@ -281,9 +281,7 @@ end
 # Keystone settings
 default['openstack']['compute']['api']['auth_strategy'] = 'keystone'
 
-# Setting this to v2.0. See discussion on
-# https://bugs.launchpad.net/openstack-chef/+bug/1207504
-default['openstack']['compute']['api']['auth']['version'] = 'v2.0'
+default['openstack']['compute']['api']['auth']['version'] = node['openstack']['api']['auth']['version']
 
 # Keystone PKI signing directories
 default['openstack']['compute']['api']['auth']['cache_dir'] = '/var/cache/nova/api'
