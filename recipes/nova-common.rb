@@ -55,7 +55,7 @@ end
 directory '/etc/nova' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode  00700
+  mode  00750
   action :create
 end
 

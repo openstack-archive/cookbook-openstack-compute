@@ -32,7 +32,7 @@ describe 'openstack-compute::nova-common' do
       expect(chef_run).to create_directory('/etc/nova').with(
         owner: 'nova',
         group: 'nova',
-        mode: 0700
+        mode: 0750
       )
     end
 
