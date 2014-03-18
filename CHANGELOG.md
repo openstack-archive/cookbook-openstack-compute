@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 8.4.2
+* Fixing allow nova compute and ec2 ip and port to be configured
+
 ## 8.4.1
 ### Bug
 * Fix the DB2 ODBC driver issue

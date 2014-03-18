@@ -84,6 +84,20 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default compute ip and port options set' do
+        [/^osapi_compute_listen=127.0.0.1$/,
+         /^osapi_compute_listen_port=8774$/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
+      it 'has default ec2 ip and port options set' do
+        [/^ec2_listen=127.0.0.1$/,
+         /^ec2_listen_port=8773$/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
       context 'rabbit mq backend' do
         before do
           node.set['openstack']['mq']['compute']['service_type'] = 'rabbitmq'

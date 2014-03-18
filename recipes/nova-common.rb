@@ -147,7 +147,9 @@ template '/etc/nova/nova.conf' do
     osapi_compute_link_prefix: compute_api_endpoint.to_s,
     network_endpoint: network_endpoint,
     neutron_admin_password: neutron_admin_password,
-    neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret
+    neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret,
+    compute_api_ipaddress: compute_api_endpoint.host,
+    ec2_public_api_ipaddress: ec2_public_endpoint.host
   )
 end
 

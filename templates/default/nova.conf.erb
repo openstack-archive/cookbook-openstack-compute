@@ -176,6 +176,13 @@ instance_usage_audit_period=<%= node['openstack']['compute']['config']['instance
 notify_on_state_change=<%= node['openstack']['compute']['config']['notify_on_state_change'] %>
 <% end %>
 
+<% if node["openstack"]["compute"]["enabled_apis"].include?("osapi_compute") -%>
+# The IP address on which the OpenStack API will listen. (string value)
+osapi_compute_listen=<%= @compute_api_ipaddress %>
+# The port on which the OpenStack API will listen. (integer value)
+osapi_compute_listen_port=<%= node['openstack']['endpoints']['compute-api']['port'] %>
+<% end -%>
+
 ##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>
 xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
@@ -269,6 +276,11 @@ mkisofs_cmd=<%= node["openstack"]["compute"]["config"]["mkisofs_cmd"] %>
 injected_network_template=<%= node["openstack"]["compute"]["config"]["injected_network_template"] %>
 
 <% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
+# The IP address on which the EC2 API will listen. (string value)
+ec2_listen=<%= @ec2_public_api_ipaddress %>
+# The port on which the EC2 API will listen. (integer value)
+ec2_listen_port=<%= node['openstack']['endpoints']['compute-ec2-api']['port'] %>
+
 <% if %w(fedora redhat centos).include? node.platform -%>
 # Adding support for non-modded euca2ools to display ip address info
 # https://bugs.launchpad.net/nova/+bug/901594
