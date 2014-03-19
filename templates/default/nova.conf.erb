@@ -8,12 +8,13 @@ verbose=<%= node["openstack"]["compute"]["verbose"] %>
 auth_strategy=<%= node["openstack"]["compute"]["api"]["auth_strategy"] %>
 dhcpbridge_flagfile=/etc/nova/nova.conf
 dhcpbridge=/usr/bin/nova-dhcpbridge
-logdir=/var/log/nova
+log_dir=node["openstack"]["compute"]["log_dir"]
 <% if node["openstack"]["compute"]["syslog"]["use"] %>
 log_config = /etc/openstack/logging.conf
 <% end %>
-state_path=/var/lib/nova
-lock_path=/var/lock/nova
+state_path=<%= node["openstack"]["compute"]["state_path"] %>
+instances_path=<%= node["openstack"]["compute"]["instances_path"] %>
+lock_path=<%= node["openstack"]["compute"]["lock_path"] %>
 
 # Options defined in nova.openstack.common.rpc
 rpc_thread_pool_size=<%= node["openstack"]["compute"]["rpc_thread_pool_size"] %>

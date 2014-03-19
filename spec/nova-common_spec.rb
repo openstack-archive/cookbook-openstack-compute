@@ -67,6 +67,14 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
+      it 'has default *_path options set' do
+        [%r{^state_path=/var/lib/nova$},
+         /^instances_path=\$state_path\/instances$/,
+         /^lock_path=\$state_path\/lock$/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
       it 'has default rpc_* options set' do
         [/^rpc_thread_pool_size=64$/, /^rpc_conn_pool_size=30$/,
          /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
