@@ -15,7 +15,6 @@ describe 'openstack-compute::libvirt_rbd' do
     include_context 'compute_stubs'
 
     it 'includes the openstack-common::ceph_client recipe' do
-      pending 'TODO: openstack-common needs that recipe first'
       expect(chef_run).to include_recipe('openstack-common::ceph_client')
     end
 

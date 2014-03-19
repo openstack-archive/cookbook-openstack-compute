@@ -22,7 +22,7 @@ class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
 
-# include_recipe 'openstack-common::ceph_client'
+include_recipe 'openstack-common::ceph_client'
 
 platform_options = node['openstack']['compute']['platform']
 
