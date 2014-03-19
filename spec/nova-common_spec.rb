@@ -68,7 +68,8 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has default *_path options set' do
-        [%r{^state_path=/var/lib/nova$},
+        [%r{^log_dir=/var/log/nova$},
+         %r{^state_path=/var/lib/nova$},
          /^instances_path=\$state_path\/instances$/,
          /^lock_path=\$state_path\/lock$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
