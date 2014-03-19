@@ -266,7 +266,28 @@ Miscellaneous Options
 EC2 Configuration Attributes
 ----------------------------
 
-* `openstack["compute"]["enabled_apis"] - Which apis have been enabled in nova compute
+* `openstack["compute"]["enabled_apis"]` - Which apis have been enabled in nova compute
+
+Notification Attributes
+-----------------------
+
+* `openstack["compute"]["metering"]`- Boolean that indicates whether to enable the metering attributes with sensible defaults. Default is false.
+* `openstack["compute"]["config"]["notification_drivers"]`- An array of drivers to handle sending notifications.
+* `openstack["compute"]["config"]["instance_usage_audit"]`- Boolean that indicates whether to generate intance usage audits.
+* `openstack["compute"]["config"]["instance_usage_audit_period"]`- Time period to generate instance usages for.  Time period must be "hour", "day", "month" or "year".
+* `openstack["compute"]["config"]["notify_on_state_change"]`- If set, send compute.instance.update notifications on instance state changes.  Valid values are None, "vm_state" or "vm_and_task_state".
+
+When enabling nova metering with ceilometer, the notification configuration
+properties need to be set to values that are different from the default values
+used when metering is off. In order to facilitate setting all those
+notification properties, the cookbook includes the `openstack["compute"]["metering"]`
+attribute which when set to `true` will automatically set all notification
+properties to the suggested defaults.
+
+One of the notification_drivers that is set when metering is on comes from
+ceilometer. In order for the notification driver to be available, make sure
+the `os-telemetry-agent-compute` role (or the openstack-telemetry::agent-compute recipe)
+are set on this node.
 
 VMware Configuration Attributes
 -------------------------------

@@ -10,6 +10,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 
 ## 8.2.1:
 * Add the libvirt_inject_key attribute, defaults to true
+* Add metering attributes
 
 ## 8.2.0
 * Add client recipe

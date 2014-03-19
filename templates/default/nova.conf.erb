@@ -151,6 +151,30 @@ libvirt_images_rbd_pool=<%= node['openstack']['compute']['libvirt']['images_rbd_
 libvirt_images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] %>
 <% end -%>
 
+##### NOTIFICATIONS #####
+<% if node['openstack']['compute']['config']['notification_drivers'] %>
+# Driver or drivers to handle sending notifications (multi valued)
+<% node['openstack']['compute']['config']['notification_drivers'].each do |d| %>
+notification_driver=<%= d %>
+<% end %>
+<% end %>
+
+# Generate periodic compute.instance.exists notifications
+instance_usage_audit=<%= node['openstack']['compute']['config']['instance_usage_audit'] %>
+
+# Time period to generate instance usages for.  Time period
+# must be hour, day, month or year (string value)
+instance_usage_audit_period=<%= node['openstack']['compute']['config']['instance_usage_audit_period'] %>
+
+<% unless node['openstack']['compute']['config']['notify_on_state_change'].empty? -%>
+# If set, send compute.instance.update notifications on
+# instance state changes.  Valid values are None for no
+# notifications, "vm_state" for notifications on VM state
+# changes, or "vm_and_task_state" for notifications on VM and
+# task state changes. (string value)
+notify_on_state_change=<%= node['openstack']['compute']['config']['notify_on_state_change'] %>
+<% end %>
+
 ##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>
 xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>

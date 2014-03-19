@@ -254,6 +254,22 @@ default['openstack']['compute']['ratelimit']['settings'] = {
   'generic-delete-limit' => { 'verb' => 'DELETE', 'uri' => '*', 'regex' => '.*', 'limit' => '100', 'interval' => 'MINUTE' }
 }
 
+# Metering settings
+default['openstack']['compute']['metering'] = false
+
+# Notification settings
+if node['openstack']['compute']['metering']
+  default['openstack']['compute']['config']['notification_drivers'] = ['nova.openstack.common.notifier.rpc_notifier', 'ceilometer.compute.nova_notifier']
+  default['openstack']['compute']['config']['instance_usage_audit'] = 'True'
+  default['openstack']['compute']['config']['instance_usage_audit_period'] = 'hour'
+  default['openstack']['compute']['config']['notify_on_state_change'] = 'vm_and_task_state'
+else
+  default['openstack']['compute']['config']['notification_drivers'] = []
+  default['openstack']['compute']['config']['instance_usage_audit'] = 'False'
+  default['openstack']['compute']['config']['instance_usage_audit_period'] = 'month'
+  default['openstack']['compute']['config']['notify_on_state_change'] = ''
+end
+
 # Keystone settings
 default['openstack']['compute']['api']['auth_strategy'] = 'keystone'
 
