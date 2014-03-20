@@ -222,8 +222,11 @@ default['openstack']['compute']['config']['start_guests_on_host_boot'] = false
 # requires https://review.openstack.org/#/c/8423/
 default['openstack']['compute']['config']['resume_guests_state_on_host_boot'] = true
 
-# If true, create a config drive regardless of if the user specified --config-drive true in their nova boot call
-default['openstack']['compute']['config']['force_config_drive'] = 'false'
+# force_config_drive can be nil or 'always',
+# if it's 'always', nova will create a config drive regardless of if the user specified --config-drive true in their nova boot call
+default['openstack']['compute']['config']['force_config_drive'] = nil
+default['openstack']['compute']['config']['mkisofs_cmd'] = 'genisoimage'
+default['openstack']['compute']['config']['injected_network_template'] = '$pybasedir/nova/virt/interfaces.template'
 
 # Volume API class (driver)
 default['openstack']['compute']['config']['volume_api_class'] = 'nova.volume.cinder.API'
