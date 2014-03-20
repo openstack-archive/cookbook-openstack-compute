@@ -359,8 +359,11 @@ describe 'openstack-compute::nova-common' do
         describe 'default rdb settings' do
           it 'sets the libvirt_* options correctly' do
             [
-              /^libvirt_images_type=rbd$/, /^libvirt_images_rbd_pool=rbd$/,
-              %r{^libvirt_images_rbd_ceph_conf=/etc/ceph/ceph.conf$}
+              /^libvirt_images_type=rbd$/,
+              /^libvirt_images_rbd_pool=rbd$/,
+              %r{^libvirt_images_rbd_ceph_conf=/etc/ceph/ceph.conf$},
+              /^rbd_user=cinder$/,
+              /^rbd_secret_uuid=00000000-0000-0000-0000-000000000000$/
             ].each do |line|
               expect(chef_run).to render_file(file.name).with_content(line)
             end

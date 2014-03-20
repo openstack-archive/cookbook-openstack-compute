@@ -120,6 +120,12 @@ else
   neutron_metadata_proxy_shared_secret = nil
 end
 
+if node['openstack']['compute']['libvirt']['images_type'] == 'rbd'
+  rbd_secret_uuid = secret 'secrets', node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
+else
+  rbd_secret_uuid = nil
+end
+
 template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   owner node['openstack']['compute']['user']
@@ -149,7 +155,8 @@ template '/etc/nova/nova.conf' do
     neutron_admin_password: neutron_admin_password,
     neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret,
     compute_api_ipaddress: compute_api_endpoint.host,
-    ec2_public_api_ipaddress: ec2_public_endpoint.host
+    ec2_public_api_ipaddress: ec2_public_endpoint.host,
+    rbd_secret_uuid: rbd_secret_uuid
   )
 end
 
