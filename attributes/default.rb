@@ -162,11 +162,6 @@ default['openstack']['compute']['scheduler']['default_filters'] = %W(
   SameHostFilter
   DifferentHostFilter)
 
-default['openstack']['compute']['xvpvnc_proxy']['service_port'] = '6081'
-default['openstack']['compute']['xvpvnc_proxy']['bind_interface'] = 'lo'
-default['openstack']['compute']['novnc_proxy']['service_port'] = '6080'
-default['openstack']['compute']['novnc_proxy']['bind_interface'] = 'lo'
-
 default['openstack']['compute']['driver'] = 'libvirt.LibvirtDriver'
 default['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
 default['openstack']['compute']['libvirt']['bind_interface'] = 'lo'

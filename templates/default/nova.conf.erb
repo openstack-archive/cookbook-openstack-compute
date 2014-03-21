@@ -196,11 +196,11 @@ xvpvncproxy_base_url=<%= @xvpvncproxy_base_url %>
 
 # This is only required on the server running xvpvncproxy
 xvpvncproxy_host=<%= @xvpvncproxy_bind_host %>
-xvpvncproxy_port=<%= node["openstack"]["compute"]["xvpvnc_proxy"]["service_port"] %>
+xvpvncproxy_port=<%= @xvpvncproxy_bind_port %>
 
 # This is only required on the server running novncproxy
 novncproxy_host=<%= @novncproxy_bind_host %>
-novncproxy_port=<%= node["openstack"]["compute"]["novnc_proxy"]["service_port"] %>
+novncproxy_port=<%= @novncproxy_bind_port %>
 
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
