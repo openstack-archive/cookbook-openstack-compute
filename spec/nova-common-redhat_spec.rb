@@ -24,7 +24,7 @@ describe 'openstack-compute::nova-common' do
 
     it 'installs db2 python packages if explicitly told' do
       node.set['openstack']['db']['compute']['service_type'] = 'db2'
-      ['db2-odbc', 'python-ibm-db', 'python-ibm-db-sa'].each do |pkg|
+      ['python-ibm-db', 'python-ibm-db-sa'].each do |pkg|
         expect(chef_run).to install_package pkg
       end
     end

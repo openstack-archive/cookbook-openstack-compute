@@ -298,7 +298,7 @@ case platform
 when 'fedora', 'redhat', 'centos', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
     'mysql_python_packages' => ['MySQL-python'],
-    'db2_python_packages' => ['db2-odbc', 'python-ibm-db', 'python-ibm-db-sa'],
+    'db2_python_packages' => ['python-ibm-db', 'python-ibm-db-sa'],
     'postgresql_python_packages' => ['python-psycopg2'],
     'api_ec2_packages' => ['openstack-nova-api'],
     'api_ec2_service' => 'openstack-nova-api',

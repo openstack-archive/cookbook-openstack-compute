@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 8.4.1
+### Bug
+* Fix the DB2 ODBC driver issue
+
 ## 8.4.0
 ### Blue print
 * Use the library method auth_uri_transform
