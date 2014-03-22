@@ -90,7 +90,12 @@ describe 'openstack-compute::libvirt' do
       end
 
       it 'template contents' do
-        pending 'TODO: implement'
+        [
+          /^start_libvirtd="yes"$/,
+          /^libvirtd_opts="-d -l"$/
+        ].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
       end
 
       it 'notifies libvirt-bin restart' do

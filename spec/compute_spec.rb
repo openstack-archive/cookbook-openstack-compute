@@ -79,10 +79,6 @@ describe 'openstack-compute::compute' do
       it 'has proper modes' do
         expect(sprintf('%o', file.mode)).to eq '644'
       end
-
-      it 'template contents' do
-        pending 'TODO: implement'
-      end
     end
 
     it 'starts nova compute on boot' do

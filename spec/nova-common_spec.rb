@@ -436,8 +436,24 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
-      it 'template contents' do
-        pending 'TODO: implement'
+      context 'template contents' do
+        it 'shows the custom banner' do
+          node.set['openstack']['compute']['custom_template_banner'] = 'banner'
+
+          expect(chef_run).to render_file(file.name).with_content(/^banner$/)
+        end
+
+        it 'sets the default attributes' do
+          [
+            %r(^filters_path=/etc/nova/rootwrap.d,/usr/share/nova/rootwrap$),
+            %r(^exec_dirs=/sbin,/usr/sbin,/bin,/usr/bin$),
+            /^use_syslog=False$/,
+            /^syslog_log_facility=syslog$/,
+            /^syslog_log_level=ERROR$/
+          ].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(line)
+          end
+        end
       end
     end
 
@@ -468,8 +484,50 @@ describe 'openstack-compute::nova-common' do
           'MISC_OPTION')
       end
 
-      it 'rest of template contents' do
-        pending 'TODO: implement'
+      context 'rest of template contents' do
+        it 'contains additional auth environment variables' do
+          endpoint = double(to_s: 'endpoint', host: 'endpoint', port: 'port')
+          Chef::Recipe.any_instance.should_receive(:endpoint)
+            .at_least(1).times.and_return(endpoint)
+          node.set['openstack']['compute']['region'] = 'os_region_name'
+          [
+            /^export OS_AUTH_URL=endpoint$/,
+            /^export OS_AUTH_STRATEGY=keystone$/,
+            /^export OS_REGION_NAME=os_region_name$/
+          ].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(line)
+          end
+        end
+        it 'contains legacy nova envs' do
+          node.set['openstack']['compute']['region'] = 'os_region_name'
+          [
+            /^export NOVA_USERNAME=\${OS_USERNAME}$/,
+            /^export NOVA_PROJECT_ID=\${OS_TENANT_NAME}$/,
+            /^export NOVA_PASSWORD=\${OS_PASSWORD}$/,
+            /^export NOVA_API_KEY=\${OS_PASSWORD}$/,
+            /^export NOVA_URL=\${OS_AUTH_URL}$/,
+            /^export NOVA_VERSION=$/,
+            /^export NOVA_REGION_NAME=os_region_name$/
+          ].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(line)
+          end
+        end
+
+        it 'contains euca2ools env variables' do
+          node.set['credentials']['EC2']['admin']['access'] = 'ec2_admin_access'
+          node.set['credentials']['EC2']['admin']['secret'] = 'ec2_admin_secret'
+          endpoint = double(to_s: 'endpoint', host: 'endpoint', port: 'port')
+          Chef::Recipe.any_instance.should_receive(:endpoint)
+            .at_least(1).times.and_return(endpoint)
+
+          [
+            /^export EC2_ACCESS_KEY=ec2_admin_access$/,
+            /^export EC2_SECRET_KEY=ec2_admin_secret$/,
+            /^export EC2_URL=endpoint$/
+          ].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(line)
+          end
+        end
       end
     end
 
