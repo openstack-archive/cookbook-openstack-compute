@@ -156,7 +156,9 @@ template '/etc/nova/nova.conf' do
     neutron_admin_password: neutron_admin_password,
     neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret,
     compute_api_ipaddress: compute_api_endpoint.host,
+    compute_api_port: compute_api_endpoint.port,
     ec2_public_api_ipaddress: ec2_public_endpoint.host,
+    ec2_public_api_port: ec2_public_endpoint.port,
     rbd_secret_uuid: rbd_secret_uuid
   )
 end
