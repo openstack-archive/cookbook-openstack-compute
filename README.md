@@ -205,16 +205,6 @@ By default, the `openstack["compute"]["networks"]` array has two networks:
 * `openstack["compute"]["networks"]["private"]["bridge"]` - Bridge to be created for accessing the VM network (e.g., br200)
 * `openstack["compute"]["networks"]["private"]["bridge_dev"]` - Physical device on which the bridge device should be attached (e.g., eth3)
 
-VNC Configuration Attributes
-----------------------------
-
-Requires [network_addr](https://gist.github.com/jtimberman/1040543) Ohai plugin.
-
-* `openstack["compute"]["xvpvnc_proxy"]["service_port"]` - Port on which XvpVNC runs
-* `openstack["compute"]["xvpvnc_proxy"]["bind_interface"]` - Determine the interface's IP address to bind to
-* `openstack["compute"]["novnc_proxy"]["service_port"]` - Port on which NoVNC runs
-* `openstack["compute"]["novnc_proxy"]["bind_interface"]` - Determine the interface's IP address to bind to
-
 Libvirt Configuration Attributes
 ---------------------------------
 
@@ -348,6 +338,7 @@ License and Author
 | **Author**           |  Chen Zhiwei (<zhiwchen@cn.ibm.com>)               |
 | **Author**           |  Mark Vanderwiel (<vanderwl@us.ibm.com>)           |
 | **Author**           |  Eric Zhou (<zyouzhou@cn.ibm.com>)                 |
+| **Author**           |  Mathew Odden (<mrodden@us.ibm.com>)               |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |

@@ -186,9 +186,11 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'has default xvpvncproxy_* options set' do
-        [/^xvpvncproxy_host=127.0.1.1$/,
-         /^novncproxy_host=127.0.1.1$/].each do |line|
+      it 'has default *vncproxy_* options set' do
+        [/^xvpvncproxy_host=127.0.0.1$/,
+         /^xvpvncproxy_port=6081$/,
+         /^novncproxy_host=127.0.0.1$/,
+         /^novncproxy_port=6080$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
