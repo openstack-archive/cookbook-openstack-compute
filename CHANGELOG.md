@@ -1,6 +1,8 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.0.0
+* Upgrade to Icehouse
 
 ## 8.4.2
 * Fixing allow nova compute and ec2 ip and port to be configured
