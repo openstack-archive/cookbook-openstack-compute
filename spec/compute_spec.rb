@@ -92,5 +92,18 @@ describe 'openstack-compute::compute' do
     it 'runs libvirt recipe' do
       expect(chef_run).to include_recipe 'openstack-compute::libvirt'
     end
+
+    it 'creates instances_path directory' do
+      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      node = chef_run.node
+      node.set['openstack']['compute']['instances_path'] = 'instances'
+      chef_run.converge 'openstack-compute::compute'
+
+      expect(chef_run).to create_directory('instances').with(
+        owner: 'nova',
+        group: 'nova',
+        mode: 0755
+      )
+    end
   end
 end

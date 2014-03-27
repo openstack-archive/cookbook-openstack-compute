@@ -251,6 +251,8 @@ default['openstack']['compute']['config']['quota_key_pairs'] = 100
 default['openstack']['compute']['config']['quota_metadata_items'] = 128
 # megabytes of instance ram allowed per project (default: 51200)
 default['openstack']['compute']['config']['quota_ram'] = 51200
+# disk cache modes
+default['openstack']['compute']['config']['disk_cache_modes'] = nil
 
 default['openstack']['compute']['ratelimit']['settings'] = {
   'generic-post-limit' => { 'verb' => 'POST', 'uri' => '*', 'regex' => '.*', 'limit' => '10', 'interval' => 'MINUTE' },

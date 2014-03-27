@@ -75,4 +75,11 @@ service 'nova-compute' do
   action [:enable, :start]
 end
 
+directory node['openstack']['compute']['instances_path'] do
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+  mode 00755
+  recursive true
+end
+
 include_recipe 'openstack-compute::libvirt'
