@@ -93,6 +93,7 @@ memcache_servers = memcached_servers.join ','
 identity_endpoint = endpoint 'identity-api'
 xvpvnc_endpoint = endpoint 'compute-xvpvnc' || {}
 novnc_endpoint = endpoint 'compute-novnc' || {}
+vnc_endpoint = endpoint 'compute-vnc' || {}
 compute_api_endpoint = endpoint 'compute-api' || {}
 ec2_public_endpoint = endpoint 'compute-ec2-api' || {}
 network_endpoint = endpoint 'network-api' || {}
@@ -107,9 +108,6 @@ Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.dec
 Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
-
-# compute host address libvirt/QEMU VNC consoles should listen on
-vnc_bind_ip = address_for node['openstack']['compute']['libvirt']['bind_interface']
 
 if node['openstack']['compute']['network']['service_type'] == 'neutron'
   neutron_admin_password = get_password 'service', 'openstack-network'
@@ -138,8 +136,8 @@ template '/etc/nova/nova.conf' do
     xvpvncproxy_bind_port: xvpvnc_endpoint.port,
     novncproxy_bind_host: novnc_endpoint.host,
     novncproxy_bind_port: novnc_endpoint.port,
-    vncserver_listen: vnc_bind_ip,
-    vncserver_proxyclient_address: vnc_bind_ip,
+    vncserver_listen: vnc_endpoint.host,
+    vncserver_proxyclient_address: vnc_endpoint.host,
     memcache_servers: memcache_servers,
     mq_service_type: mq_service_type,
     mq_password: mq_password,
