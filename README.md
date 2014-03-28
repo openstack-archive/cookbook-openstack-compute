@@ -211,7 +211,6 @@ Libvirt Configuration Attributes
 
 * `openstack["compute"]["libvirt"]["virt_type"]` - What hypervisor software layer to use with libvirt (e.g., kvm, qemu)
 * `openstack["compute"]["libvirt"]["volume_backend"]` - What block storage backend to use with libvirt (e.g. rbd)
-* `openstack["compute"]["libvirt"]["bind_interface"]` - Determine the interface's IP address (used for VNC).  IP address on the hypervisor that libvirt listens for VNC requests on, and IP address on the hypervisor that libvirt exposes for VNC requests on.
 * `openstack["compute"]["libvirt"]["auth_tcp"]` - Type of authentication your libvirt layer requires
 * `openstack["compute"]["libvirt"]["ssh"]["private_key"]` - Private key to use if using SSH authentication to your libvirt layer
 * `openstack["compute"]["libvirt"]["ssh"]["public_key"]` - Public key to use if using SSH authentication to your libvirt layer

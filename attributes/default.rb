@@ -164,7 +164,6 @@ default['openstack']['compute']['scheduler']['default_filters'] = %W(
 
 default['openstack']['compute']['driver'] = 'libvirt.LibvirtDriver'
 default['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
-default['openstack']['compute']['libvirt']['bind_interface'] = 'lo'
 default['openstack']['compute']['libvirt']['auth_tcp'] = 'none'
 default['openstack']['compute']['libvirt']['remove_unused_base_images'] = true
 default['openstack']['compute']['libvirt']['remove_unused_resized_minimum_age_seconds'] = 3600
