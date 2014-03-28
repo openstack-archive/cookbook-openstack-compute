@@ -20,7 +20,6 @@ The following cookbooks are dependencies:
 * openstack-identity
 * openstack-image
 * selinux (Fedora)
-* sysctl
 * yum
 
 Usage
