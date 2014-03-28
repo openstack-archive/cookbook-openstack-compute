@@ -1,26 +1,27 @@
 Description
 ===========
 
-This cookbook installs the OpenStack Compute service **Nova** as part of the OpenStack reference deployment Chef for OpenStack. The http://github.com/mattray/chef-openstack-repo contains documentation for using this cookbook in the context of a full OpenStack deployment. Nova is currently installed from packages.
+This cookbook installs the OpenStack Compute service **Nova** as part of the OpenStack reference deployment Chef for OpenStack. The http://github.com/mattray/chef-openstack-repo contains documentation for using this cookbook in the context of a full OpenStack deployment. Nova is currently installed from packages. This version is for deploying the 'Havana' release, the 'master' branch is currently working on the 'Icehouse' release.
 
 http://nova.openstack.org
 
 Requirements
 ============
 
-Chef 0.10.0 or higher required (for Chef environment use).
+Chef 11 or higher is required.
 
 Cookbooks
 ---------
 
 The following cookbooks are dependencies:
 
-* apache2
 * openstack-common
 * openstack-identity
 * openstack-image
+* openstack-network
 * selinux (Fedora)
-* yum
+* yum-epel
+* python
 
 Usage
 =====
@@ -325,7 +326,7 @@ License and Author
 | **Author**           |  William Kelly (<william.kelly@rackspace.com>)     |
 | **Author**           |  Darren Birkett (<darren.birkett@rackspace.co.uk>) |
 | **Author**           |  Evan Callicoat (<evan.callicoat@rackspace.com>)   |
-| **Author**           |  Matt Ray (<matt@opscode.com>)                     |
+| **Author**           |  Matt Ray (<matt@getchef.com>)                     |
 | **Author**           |  Jay Pipes (<jaypipes@att.com>)                    |
 | **Author**           |  John Dewey (<jdewey@att.com>)                     |
 | **Author**           |  Kevin Bringard (<kbringard@att.com>)              |
@@ -341,7 +342,7 @@ License and Author
 | **Author**           |  Mathew Odden (<mrodden@us.ibm.com>)               |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
-| **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |
+| **Copyright**        |  Copyright (c) 2012-2014, Chef Software, Inc.      |
 | **Copyright**        |  Copyright (c) 2012-2013, AT&T Services, Inc.      |
 | **Copyright**        |  Copyright (c) 2013, Craig Tracey                  |
 | **Copyright**        |  Copyright (c) 2013, SUSE Linux GmbH               |
