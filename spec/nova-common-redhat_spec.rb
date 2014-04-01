@@ -10,10 +10,6 @@ describe 'openstack-compute::nova-common' do
 
     include_context 'compute_stubs'
 
-    it 'runs epel recipe' do
-      expect(chef_run).to include_recipe 'yum-epel'
-    end
-
     it 'installs nova common packages' do
       expect(chef_run).to upgrade_package 'openstack-nova-common'
     end
