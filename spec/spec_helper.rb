@@ -43,14 +43,14 @@ shared_context 'compute_stubs' do
           }
         }]
       )
-    Chef::Recipe.any_instance.stub(:secret)
-      .with('secrets', 'openstack_identity_bootstrap_token')
+    Chef::Recipe.any_instance.stub(:get_secret)
+      .with('openstack_identity_bootstrap_token')
       .and_return('bootstrap-token')
-    Chef::Recipe.any_instance.stub(:secret)
-      .with('secrets', 'neutron_metadata_secret')
+    Chef::Recipe.any_instance.stub(:get_secret)
+      .with('neutron_metadata_secret')
       .and_return('metadata-secret')
-    Chef::Recipe.any_instance.stub(:secret) # this is the rbd_uuid default name
-      .with('secrets', 'rbd_secret_uuid')
+    Chef::Recipe.any_instance.stub(:get_secret) # this is the rbd_uuid default name
+      .with('rbd_secret_uuid')
       .and_return '00000000-0000-0000-0000-000000000000'
     Chef::Recipe.any_instance.stub(:get_password)
       .with('db', anything)

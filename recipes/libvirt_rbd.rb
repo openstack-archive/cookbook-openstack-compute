@@ -35,7 +35,7 @@ end
 # TODO(srenatus) there might be multiple secrets, cinder will tell nova-compute
 # which one should be used for each single volume mount request
 Chef::Log.info("rbd_secret_name: #{node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']}")
-secret_uuid = secret 'secrets', node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
+secret_uuid = get_secret node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
 ceph_key = get_password 'service', 'rbd_block_storage'
 
 require 'securerandom'

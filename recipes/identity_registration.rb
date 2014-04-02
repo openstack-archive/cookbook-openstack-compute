@@ -26,7 +26,7 @@ class ::Chef::Recipe # rubocop:disable Documentation
 end
 
 identity_admin_endpoint = endpoint 'identity-admin'
-bootstrap_token = secret 'secrets', 'openstack_identity_bootstrap_token'
+bootstrap_token = get_secret 'openstack_identity_bootstrap_token'
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
 service_pass = get_password 'service', 'openstack-compute'
 service_user = node['openstack']['compute']['service_user']
