@@ -16,6 +16,15 @@ state_path=<%= node["openstack"]["compute"]["state_path"] %>
 instances_path=<%= node["openstack"]["compute"]["instances_path"] %>
 lock_path=<%= node["openstack"]["compute"]["lock_path"] %>
 
+# Command prefix to use for running commands as root (default: sudo)
+rootwrap_config=/etc/nova/rootwrap.conf
+
+# Should unused base images be removed? (default: false)
+remove_unused_base_images=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_base_images"] %>
+
+# Unused unresized base images younger than this will not be removed (default: 86400)
+remove_unused_original_minimum_age_seconds=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_original_minimum_age_seconds"] %>
+
 # Options defined in nova.openstack.common.rpc
 rpc_thread_pool_size=<%= node["openstack"]["compute"]["rpc_thread_pool_size"] %>
 rpc_conn_pool_size=<%= node["openstack"]["compute"]["rpc_conn_pool_size"] %>
@@ -89,7 +98,6 @@ neutron_admin_tenant_name=<%= node["openstack"]["compute"]["network"]["neutron"]
 neutron_admin_username=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_username"] %>
 neutron_admin_password=<%= @neutron_admin_password %>
 neutron_admin_auth_url=<%= @identity_endpoint.to_s %>
-libvirt_vif_driver=<%= node["openstack"]["compute"]["network"]["neutron"]["libvirt_vif_driver"] %>
 linuxnet_interface_driver=<%= node["openstack"]["compute"]["network"]["neutron"]["linuxnet_interface_driver"] %>
 firewall_driver = nova.virt.firewall.NoopFirewallDriver
 security_group_api=<%= node["openstack"]["compute"]["network"]["neutron"]["security_group_api"] %>
@@ -122,42 +130,6 @@ compute_driver=<%= node["openstack"]["compute"]["driver"] %>
 compute_manager=nova.compute.manager.ComputeManager
 sql_connection=<%= @sql_connection %>
 connection_type=libvirt
-libvirt_type=<%= node["openstack"]["compute"]["libvirt"]["virt_type"] %>
-# Command prefix to use for running commands as root (default: sudo)
-rootwrap_config=/etc/nova/rootwrap.conf
-# Should unused base images be removed? (default: false)
-remove_unused_base_images=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_base_images"] %>
-# Unused resized base images younger than this will not be removed (default: 3600)
-remove_unused_resized_minimum_age_seconds=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] %>
-# Unused unresized base images younger than this will not be removed (default: 86400)
-remove_unused_original_minimum_age_seconds=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_original_minimum_age_seconds"] %>
-# Write a checksum for files in _base to disk (default: false)
-checksum_base_images=<%= node["openstack"]["compute"]["libvirt"]["checksum_base_images"] %>
-# Inject the ssh public key at boot time, without an agent. (default: true)
-libvirt_inject_key=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_key"] %>
-# Inject the admin password at boot time, without an agent. (default: false)
-libvirt_inject_password=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_password"] %>
-<% if node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu" -%>
-libvirt_use_virtio_for_bridges=false
-libvirt_cpu_mode=none
-<% else -%>
-libvirt_use_virtio_for_bridges=true
-<% end -%>
-libvirt_images_type=<%= node['openstack']['compute']['libvirt']['images_type'] %>
-<% if node['openstack']['compute']['libvirt']['images_type'] == 'lvm' -%>
-libvirt_images_volume_group=<%= node['openstack']['compute']['libvirt']['volume_group'] %>
-libvirt_sparse_logical_volumes=<%= node['openstack']['compute']['libvirt']['sparse_logical_volumes'] %>
-<% elsif node['openstack']['compute']['libvirt']['images_type'] == 'rbd' -%>
-libvirt_images_rbd_pool=<%= node['openstack']['compute']['libvirt']['images_rbd_pool'] %>
-libvirt_images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] %>
-# The RADOS client name for accessing rbd volumes (string value)
-# NOTE that if these two options are set here, it will override the rbd_user that cinder provides
-# for nova in netdisk_properties:
-# https://github.com/openstack/nova/blob/c15dff2e9978fe851c73e92ab7f9b46e27de81ba/nova/virt/libvirt/volume.py#L217-L229
-rbd_user=<%= node['openstack']['compute']['libvirt']['rbd']['rbd_user'] %>
-# The libvirt UUID of the secret for the rbd images (string value)
-rbd_secret_uuid=<%= @rbd_secret_uuid %>
-<% end -%>
 
 ##### NOTIFICATIONS #####
 <% if node['openstack']['compute']['config']['notification_drivers'] %>
@@ -221,7 +193,6 @@ osapi_max_limit=<%= node["openstack"]["compute"]["config"]["osapi_max_limit"] %>
 # URIs returned in the various links collections to contain the proper
 # HTTPS endpoint.
 osapi_compute_link_prefix = <%= @osapi_compute_link_prefix %>
-snapshot_image_format=<%= node["openstack"]["compute"]["config"]["snapshot_image_format"] %>
 start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_guests_on_host_boot"] %>
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
 allow_resize_to_same_host=<%= node["openstack"]["compute"]["config"]["allow_resize_to_same_host"] %>
@@ -312,11 +283,6 @@ metadata_workers=<%= node["cpu"]["total"] %>
 # iscsi target user-land tool to use
 iscsi_helper=<%= @iscsi_helper %>
 volume_api_class=<%= node["openstack"]["compute"]["config"]["volume_api_class"] %>
-
-##### Cache Mode #####
-<% if node["openstack"]["compute"]["config"]["disk_cachemodes"] %>
-disk_cachemodes=<%= node["openstack"]["compute"]["config"]["disk_cachemodes"] %>
-<% end %>
 
 ##### THIRD PARTY ADDITIONS #####
 <% if node["openstack"]["compute"]["plugins"] %>
@@ -424,3 +390,171 @@ maximum_objects = <%= node['openstack']['compute']['vmware']['maximum_objects'] 
 # Name of Integration Bridge (string value)
 integration_bridge = <%= node['openstack']['compute']['vmware']['integration_bridge'] %>
 <% end %>
+
+[libvirt]
+
+#
+# Options defined in nova.virt.libvirt.driver
+#
+
+# Rescue ami image (string value)
+#rescue_image_id=<None>
+
+# Rescue aki image (string value)
+#rescue_kernel_id=<None>
+
+# Rescue ari image (string value)
+#rescue_ramdisk_id=<None>
+
+# Libvirt domain type (valid options are: kvm, lxc, qemu, uml,
+# xen) (string value)
+# Deprecated group/name - [DEFAULT]/libvirt_type
+virt_type=<%= node["openstack"]["compute"]["libvirt"]["virt_type"] %>
+
+# Override the default libvirt URI (which is dependent on
+# virt_type) (string value)
+# Deprecated group/name - [DEFAULT]/libvirt_uri
+#connection_uri=
+
+# Inject the admin password at boot time, without an agent.
+# (boolean value)
+# Deprecated group/name - [DEFAULT]/libvirt_inject_password
+inject_password=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_password"] %>
+
+# Inject the ssh public key at boot time (boolean value)
+# Deprecated group/name - [DEFAULT]/libvirt_inject_key
+inject_key=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_key"] %>
+
+# The partition to inject to : -2 => disable, -1 => inspect
+# (libguestfs only), 0 => not partitioned, >0 => partition
+# number (integer value)
+# Deprecated group/name - [DEFAULT]/libvirt_inject_partition
+#inject_partition=-2
+
+# Sync virtual and real mouse cursors in Windows VMs (boolean
+# value)
+#use_usb_tablet=true
+
+# Migration target URI (any included "%s" is replaced with the
+# migration target hostname) (string value)
+#live_migration_uri=qemu+tcp://%s/system
+
+# Migration flags to be set for live migration (string value)
+#live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER
+
+# Migration flags to be set for block migration (string value)
+#block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC
+
+# Maximum bandwidth to be used during migration, in Mbps
+# (integer value)
+#live_migration_bandwidth=0
+
+# Snapshot image format (valid options are : raw, qcow2, vmdk,
+# vdi). Defaults to same as source image (string value)
+snapshot_image_format=<%= node["openstack"]["compute"]["config"]["snapshot_image_format"] %>
+
+# The libvirt VIF driver to configure the VIFs. (string value)
+# Deprecated group/name - [DEFAULT]/libvirt_vif_driver
+vif_driver=<%= node["openstack"]["compute"]["network"]["neutron"]["libvirt_vif_driver"] %>
+
+# Libvirt handlers for remote volumes. (list value)
+# Deprecated group/name - [DEFAULT]/libvirt_volume_drivers
+#volume_drivers=iscsi=nova.virt.libvirt.volume.LibvirtISCSIVolumeDriver,iser=nova.virt.libvirt.volume.LibvirtISERVolumeDriver,local=nova.virt.libvirt.volume.LibvirtVolumeDriver,fake=nova.virt.libvirt.volume.LibvirtFakeVolumeDriver,rbd=nova.virt.libvirt.volume.LibvirtNetVolumeDriver,sheepdog=nova.virt.libvirt.volume.LibvirtNetVolumeDriver,nfs=nova.virt.libvirt.volume.LibvirtNFSVolumeDriver,aoe=nova.virt.libvirt.volume.LibvirtAOEVolumeDriver,glusterfs=nova.virt.libvirt.volume.LibvirtGlusterfsVolumeDriver,fibre_channel=nova.virt.libvirt.volume.LibvirtFibreChannelVolumeDriver,scality=nova.virt.libvirt.volume.LibvirtScalityVolumeDriver
+
+# Override the default disk prefix for the devices attached to
+# a server, which is dependent on virt_type. (valid options
+# are: sd, xvd, uvd, vd) (string value)
+# Deprecated group/name - [DEFAULT]/libvirt_disk_prefix
+#disk_prefix=<None>
+
+# Number of seconds to wait for instance to shut down after
+# soft reboot request is made. We fall back to hard reboot if
+# instance does not shutdown within this window. (integer
+# value)
+# Deprecated group/name - [DEFAULT]/libvirt_wait_soft_reboot_seconds
+#wait_soft_reboot_seconds=120
+
+# Set to "host-model" to clone the host CPU feature flags; to
+# "host-passthrough" to use the host CPU model exactly; to
+# "custom" to use a named CPU model; to "none" to not set any
+# CPU model. If virt_type="kvm|qemu", it will default to
+# "host-model", otherwise it will default to "none" (string
+# value)
+# Deprecated group/name - [DEFAULT]/libvirt_cpu_mode
+<% if node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu" -%>
+cpu_mode=none
+<% end -%>
+
+# Set to a named libvirt CPU model (see names listed in
+# /usr/share/libvirt/cpu_map.xml). Only has effect if
+# cpu_mode="custom" and virt_type="kvm|qemu" (string value)
+# Deprecated group/name - [DEFAULT]/libvirt_cpu_model
+#cpu_model=<none>
+
+# Location where libvirt driver will store snapshots before
+# uploading them to image service (string value)
+# Deprecated group/name - [DEFAULT]/libvirt_snapshots_directory
+#snapshots_directory=$instances_path/snapshots
+
+# Location where the Xen hvmloader is kept (string value)
+#xen_hvmloader_path=/usr/lib/xen/boot/hvmloader
+
+# Specific cachemodes to use for different disk types e.g:
+# file=directsync,block=none (list value)
+<% if node["openstack"]["compute"]["config"]["disk_cachemodes"] %>
+disk_cachemodes=<%= node["openstack"]["compute"]["config"]["disk_cachemodes"] %>
+<% end %>
+
+# A path to a device that will be used as source of entropy on
+# the host. Permitted options are: /dev/random or /dev/hwrng
+# (string value)
+#rng_dev_path=<None>
+
+#
+# Options defined in nova.virt.libvirt.imagecache
+#
+
+# Unused resized base images younger than this will not be removed (default: 3600)
+remove_unused_resized_minimum_age_seconds=<%= node["openstack"]["compute"]["libvirt"]["remove_unused_resized_minimum_age_seconds"] %>
+
+# Write a checksum for files in _base to disk (default: false)
+checksum_base_images=<%= node["openstack"]["compute"]["libvirt"]["checksum_base_images"] %>
+
+#
+# Options defined in nova.virt.libvirt.vif
+#
+
+<% if node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu" -%>
+use_virtio_for_bridges=false
+<% else -%>
+use_virtio_for_bridges=true
+<% end -%>
+
+#
+# Options defined in nova.virt.libvirt.imagebackend
+#
+
+# VM Images format. Acceptable values are: raw, qcow2, lvm, rbd, default. If default is specified,
+# then use_cow_images flag is used instead of this one.
+images_type=<%= node['openstack']['compute']['libvirt']['images_type'] %>
+
+<% if node['openstack']['compute']['libvirt']['images_type'] == 'lvm' -%>
+images_volume_group=<%= node['openstack']['compute']['libvirt']['volume_group'] %>
+sparse_logical_volumes=<%= node['openstack']['compute']['libvirt']['sparse_logical_volumes'] %>
+
+<% elsif node['openstack']['compute']['libvirt']['images_type'] == 'rbd' -%>
+images_rbd_pool=<%= node['openstack']['compute']['libvirt']['images_rbd_pool'] %>
+images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] %>
+
+#
+# Options defined in nova.virt.libvirt.volume
+#
+
+# The RADOS client name for accessing rbd volumes (string value)
+# NOTE that if these two options are set here, it will override the rbd_user that cinder provides
+# for nova in netdisk_properties:
+# https://github.com/openstack/nova/blob/c15dff2e9978fe851c73e92ab7f9b46e27de81ba/nova/virt/libvirt/volume.py#L217-L229
+rbd_user=<%= node['openstack']['compute']['libvirt']['rbd']['rbd_user'] %>
+# The libvirt UUID of the secret for the rbd images (string value)
+rbd_secret_uuid=<%= @rbd_secret_uuid %>
+<% end -%>

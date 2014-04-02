@@ -251,25 +251,33 @@ describe 'openstack-compute::nova-common' do
 
       context 'libvirt configuration' do
         it 'has default libvirt_* options set' do
-          [/^libvirt_use_virtio_for_bridges=true$/,
-           /^libvirt_images_type=default$/,
-           /^libvirt_inject_key=true$/].each do |line|
+          [/^use_virtio_for_bridges=true$/,
+           /^images_type=default$/,
+           /^inject_key=true$/,
+           /^inject_password=false$/].each do |line|
              expect(chef_run).to render_file(file.name).with_content(line)
            end
         end
 
-        it "the libvirt_cpu_mode is none when virt_type is 'qemu'" do
+        it "the libvirt cpu_mode is none when virt_type is 'qemu'" do
           node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
 
           expect(chef_run).to render_file(file.name).with_content(
-            'libvirt_cpu_mode=none')
+            'cpu_mode=none')
         end
 
-        it 'has a configurable libvirt_inject_key setting' do
+        it 'has a configurable inject_key setting' do
           node.set['openstack']['compute']['libvirt']['libvirt_inject_key'] = false
 
           expect(chef_run).to render_file(file.name).with_content(
-            /^libvirt_inject_key=false$/)
+            /^inject_key=false$/)
+        end
+
+        it 'has a configurable inject_password setting' do
+          node.set['openstack']['compute']['libvirt']['libvirt_inject_password'] = true
+
+          expect(chef_run).to render_file(file.name).with_content(
+            /^inject_password=true$/)
         end
       end
 
@@ -363,11 +371,11 @@ describe 'openstack-compute::nova-common' do
         end
 
         describe 'default rdb settings' do
-          it 'sets the libvirt_* options correctly' do
+          it 'sets the libvirt * options correctly' do
             [
-              /^libvirt_images_type=rbd$/,
-              /^libvirt_images_rbd_pool=rbd$/,
-              %r{^libvirt_images_rbd_ceph_conf=/etc/ceph/ceph.conf$},
+              /^images_type=rbd$/,
+              /^images_rbd_pool=rbd$/,
+              %r{^images_rbd_ceph_conf=/etc/ceph/ceph.conf$},
               /^rbd_user=cinder$/,
               /^rbd_secret_uuid=00000000-0000-0000-0000-000000000000$/
             ].each do |line|
@@ -383,11 +391,11 @@ describe 'openstack-compute::nova-common' do
             node.set['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/myceph/ceph.conf'
           end
 
-          it 'sets the overridden libvirt_* options correctly' do
+          it 'sets the overridden libvirt options correctly' do
             [
-              /^libvirt_images_type=rbd$/,
-              /^libvirt_images_rbd_pool=myrbd$/,
-              %r{^libvirt_images_rbd_ceph_conf=/etc/myceph/ceph.conf$}
+              /^images_type=rbd$/,
+              /^images_rbd_pool=myrbd$/,
+              %r{^images_rbd_ceph_conf=/etc/myceph/ceph.conf$}
             ].each do |line|
               expect(chef_run).to render_file(file.name).with_content(line)
             end
@@ -402,9 +410,9 @@ describe 'openstack-compute::nova-common' do
         end
 
         [
-          /^libvirt_images_type=lvm$/,
-          /^libvirt_images_volume_group=instances$/,
-          /^libvirt_sparse_logical_volumes=false$/
+          /^images_type=lvm$/,
+          /^images_volume_group=instances$/,
+          /^sparse_logical_volumes=false$/
         ].each do |content|
           it "has a #{content.source[1...-1]} line" do
             expect(chef_run).to render_file(file.name).with_content(content)
@@ -419,9 +427,9 @@ describe 'openstack-compute::nova-common' do
           end
 
           [
-            /^libvirt_images_type=lvm$/,
-            /^libvirt_images_volume_group=instances$/,
-            /^libvirt_sparse_logical_volumes=true$/
+            /^images_type=lvm$/,
+            /^images_volume_group=instances$/,
+            /^sparse_logical_volumes=true$/
           ].each do |content|
             it "has a #{content.source[1...-1]} line" do
               expect(chef_run).to render_file(file.name).with_content(content)
