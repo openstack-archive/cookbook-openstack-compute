@@ -288,7 +288,7 @@ ec2_listen=<%= @ec2_public_api_ipaddress %>
 # The port on which the EC2 API will listen. (integer value)
 ec2_listen_port=<%= @ec2_public_api_port %>
 
-<% if %w(fedora redhat centos).include? node.platform -%>
+<% if %w(fedora rhel).include? node.platform_family -%>
 # Adding support for non-modded euca2ools to display ip address info
 # https://bugs.launchpad.net/nova/+bug/901594
 ec2_private_dns_show_ip=True

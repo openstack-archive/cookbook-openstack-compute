@@ -43,8 +43,8 @@ default['openstack']['compute']['service_tenant_name'] = 'service'
 default['openstack']['compute']['service_user'] = 'nova'
 default['openstack']['compute']['service_role'] = 'admin'
 
-case platform
-when 'fedora', 'redhat', 'centos', 'ubuntu'
+case platform_family
+when 'fedora', 'rhel', 'debian'
   default['openstack']['compute']['user'] = 'nova'
   default['openstack']['compute']['group'] = 'nova'
 when 'suse'
@@ -290,8 +290,8 @@ default['openstack']['compute']['conductor']['use_local'] = 'False'
 
 default['openstack']['compute']['network']['force_dhcp_release'] = true
 
-case platform
-when 'fedora', 'redhat', 'centos', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
+case platform_family
+when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
     'mysql_python_packages' => ['MySQL-python'],
     'db2_python_packages' => ['python-ibm-db', 'python-ibm-db-sa'],
@@ -331,7 +331,7 @@ when 'fedora', 'redhat', 'centos', 'suse' # :pragma-foodcritic: ~FC024 - won't f
     'nfs_packages' => ['nfs-utils', 'nfs-utils-lib'],
     'package_overrides' => ''
   }
-  if platform == 'suse'
+  if platform_family == 'suse'
     default['openstack']['compute']['platform']['mysql_python_packages'] = ['python-mysql']
     default['openstack']['compute']['platform']['dbus_service'] = 'dbus'
     default['openstack']['compute']['platform']['neutron_python_packages'] = ['python-neutronclient', 'python-pyparsing']
@@ -344,7 +344,7 @@ when 'fedora', 'redhat', 'centos', 'suse' # :pragma-foodcritic: ~FC024 - won't f
   # Since the bug (https://bugzilla.redhat.com/show_bug.cgi?id=788485) not released in epel yet
   # For 'fedora', 'redhat', 'centos', we need set the default value of force_dhcp_release is 'false'
   default['openstack']['compute']['network']['force_dhcp_release'] = false
-when 'ubuntu'
+when 'debian'
   default['openstack']['compute']['platform'] = {
     'mysql_python_packages' => ['python-mysqldb'],
     'postgresql_python_packages' => ['python-psycopg2'],

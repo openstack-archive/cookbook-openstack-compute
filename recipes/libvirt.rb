@@ -89,7 +89,7 @@ def update_boot_kernel_and_trigger_reboot(flavor = 'default') # rubocop:disable 
 end
 
 # on suse nova-compute don't depends on any virtualization mechanism
-case node['platform']
+case node['platform_family']
 when 'suse'
   case node['openstack']['compute']['libvirt']['virt_type']
   when 'kvm'
@@ -136,7 +136,7 @@ group node['openstack']['compute']['libvirt']['group'] do
   members [node['openstack']['compute']['group']]
 
   action :create
-  only_if { platform? %w{suse fedora redhat centos} }
+  only_if { platform_family? %w{suse fedora rhel} }
 end
 
 # http://fedoraproject.org/wiki/Getting_started_with_OpenStack_EPEL#Installing_within_a_VM
@@ -144,7 +144,7 @@ end
 link '/usr/bin/qemu-system-x86_64' do
   to '/usr/libexec/qemu-kvm'
 
-  only_if { platform? %w{fedora redhat centos} }
+  only_if { platform_family? %w{fedora rhel} }
 end
 
 service 'dbus' do
@@ -185,7 +185,7 @@ template '/etc/libvirt/libvirtd.conf' do
   )
 
   notifies :restart, 'service[libvirt-bin]', :immediately
-  not_if { platform? 'suse' }
+  not_if { platform_family? 'suse' }
 end
 
 template '/etc/default/libvirt-bin' do
@@ -196,7 +196,7 @@ template '/etc/default/libvirt-bin' do
 
   notifies :restart, 'service[libvirt-bin]', :immediately
 
-  only_if { platform? %w{ubuntu debian} }
+  only_if { platform_family? %w{debian} }
 end
 
 template '/etc/sysconfig/libvirtd' do
@@ -207,7 +207,7 @@ template '/etc/sysconfig/libvirtd' do
 
   notifies :restart, 'service[libvirt-bin]', :immediately
 
-  only_if { platform? %w{fedora redhat centos} }
+  only_if { platform_family? %w{fedora rhel} }
 end
 
 volume_backend = node['openstack']['compute']['libvirt']['volume_backend']
