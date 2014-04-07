@@ -9,6 +9,7 @@ describe 'openstack-compute::api-ec2' do
     let(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
+    include_examples 'expect_installs_python_keystoneclient'
 
     it 'installs ec2 api packages' do
       expect(chef_run).to upgrade_package 'openstack-nova-api'

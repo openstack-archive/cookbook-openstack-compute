@@ -38,7 +38,8 @@ directory ::File.dirname(node['openstack']['compute']['api']['auth']['cache_dir'
   mode 00700
 end
 
-package 'python-keystone' do
+# NOTE(mrodden): required for keystone auth middleware
+package 'python-keystoneclient' do
   action :upgrade
 end
 

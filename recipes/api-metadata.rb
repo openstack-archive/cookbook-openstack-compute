@@ -37,7 +37,8 @@ directory '/var/lock/nova' do
   action :create
 end
 
-package 'python-keystone' do
+# NOTE(mrodden): required for keystone auth middleware
+package 'python-keystoneclient' do
   action :upgrade
 end
 
