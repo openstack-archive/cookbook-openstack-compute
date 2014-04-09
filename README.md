@@ -224,6 +224,7 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["images_type"]` - How to store local images (ephemeral disks): raw, qcow2, lvm, rbd, or default
 * `openstack["compute"]["libvirt"]["volume_group"]` - When images_type is lvm: volume group to use
 * `openstack["compute"]["libvirt"]["sparse_logical_volumes"]` - When images_type is lvm: use sparse logical volumes
+* `openstack["compute"]["libvirt"]["lvm_snapshot_size"]` - When images_type is lvm: size of logical volumes for snapshotting instances
 * `openstack["compute"]["libvirt"]["images_rbd_pool"]` - When images_type is rbd: use this RBD pool
 * `openstack["compute"]["libvirt"]["images_rbd_ceph_conf"]` - When images_type is rbd: use this ceph.conf
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)

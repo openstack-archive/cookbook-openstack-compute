@@ -147,6 +147,7 @@ libvirt_images_type=<%= node['openstack']['compute']['libvirt']['images_type'] %
 <% if node['openstack']['compute']['libvirt']['images_type'] == 'lvm' -%>
 libvirt_images_volume_group=<%= node['openstack']['compute']['libvirt']['volume_group'] %>
 libvirt_sparse_logical_volumes=<%= node['openstack']['compute']['libvirt']['sparse_logical_volumes'] %>
+libvirt_lvm_snapshot_size=<%= node['openstack']['compute']['libvirt']['lvm_snapshot_size'] %>
 <% elsif node['openstack']['compute']['libvirt']['images_type'] == 'rbd' -%>
 libvirt_images_rbd_pool=<%= node['openstack']['compute']['libvirt']['images_rbd_pool'] %>
 libvirt_images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] %>

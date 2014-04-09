@@ -406,6 +406,7 @@ describe 'openstack-compute::nova-common' do
         [
           /^libvirt_images_type=lvm$/,
           /^libvirt_images_volume_group=instances$/,
+          /^libvirt_lvm_snapshot_size=1000$/,
           /^libvirt_sparse_logical_volumes=false$/
         ].each do |content|
           it "has a #{content.source[1...-1]} line" do
