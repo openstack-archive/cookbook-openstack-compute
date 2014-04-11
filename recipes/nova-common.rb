@@ -92,8 +92,12 @@ memcache_servers = memcached_servers.join ','
 # find the node attribute endpoint settings for the server holding a given role
 identity_endpoint = endpoint 'identity-api'
 xvpvnc_endpoint = endpoint 'compute-xvpvnc' || {}
+xvpvnc_bind = endpoint 'compute-xvpvnc-bind' || {}
 novnc_endpoint = endpoint 'compute-novnc' || {}
+novnc_bind = endpoint 'compute-novnc-bind' || {}
+compute_api_bind = endpoint 'compute-api-bind' || {}
 compute_api_endpoint = endpoint 'compute-api' || {}
+ec2_api_bind = endpoint 'compute-ec2-api-bind' || {}
 ec2_public_endpoint = endpoint 'compute-ec2-api' || {}
 network_endpoint = endpoint 'network-api' || {}
 image_endpoint = endpoint 'image-api'
@@ -134,10 +138,10 @@ template '/etc/nova/nova.conf' do
     sql_connection: sql_connection,
     novncproxy_base_url: novnc_endpoint.to_s,
     xvpvncproxy_base_url: xvpvnc_endpoint.to_s,
-    xvpvncproxy_bind_host: xvpvnc_endpoint.host,
-    xvpvncproxy_bind_port: xvpvnc_endpoint.port,
-    novncproxy_bind_host: novnc_endpoint.host,
-    novncproxy_bind_port: novnc_endpoint.port,
+    xvpvncproxy_bind_host: xvpvnc_bind.host,
+    xvpvncproxy_bind_port: xvpvnc_bind.port,
+    novncproxy_bind_host: novnc_bind.host,
+    novncproxy_bind_port: novnc_bind.port,
     vncserver_listen: vnc_bind_ip,
     vncserver_proxyclient_address: vnc_bind_ip,
     memcache_servers: memcache_servers,
@@ -155,10 +159,10 @@ template '/etc/nova/nova.conf' do
     network_endpoint: network_endpoint,
     neutron_admin_password: neutron_admin_password,
     neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret,
-    compute_api_ipaddress: compute_api_endpoint.host,
-    compute_api_port: compute_api_endpoint.port,
-    ec2_public_api_ipaddress: ec2_public_endpoint.host,
-    ec2_public_api_port: ec2_public_endpoint.port,
+    compute_api_bind_ip: compute_api_bind.host,
+    compute_api_bind_port: compute_api_bind.port,
+    ec2_api_bind_ip: ec2_api_bind.host,
+    ec2_api_bind_port: ec2_api_bind.port,
     rbd_secret_uuid: rbd_secret_uuid
   )
 end

@@ -299,6 +299,31 @@ VMware Configuration Attributes
 * `openstack['compute']['vmware']['maximum_objects']` - The maximum number of ObjectContent data objects that should be returned in a single result. (integer value, default 100)
 * `openstack['compute']['vmware']['integration_bridge']` - Name of Integration Bridge (string value, default br-int)
 
+The following attributes are defined in attributes/default.rb of the common cookbook, but are documented here due to their relevance:
+
+* `openstack['endpoints']['compute-compute api-bind']['host']` - The IP address to bind the compute api service to
+* `openstack['endpoints']['compute-compute api-bind']['port']` - The port to bind the compute api service to
+* `openstack['endpoints']['compute-compute api-bind']['bind_interface']` - The interface name to bind the compute api service to
+
+* `openstack['endpoints']['compute-ec2-api-bind']['host']` - The IP address to bind the ec2 api service to
+* `openstack['endpoints']['compute-ec2-api-bind']['port']` - The port to bind the ec2 api service to
+* `openstack['endpoints']['compute-ec2-api-bind']['bind_interface']` - The interface name to bind the ec2 api service to
+
+* `openstack['endpoints']['compute-ec2-admin-bind']['host']` - The IP address to bind the ec2 admin api service to
+* `openstack['endpoints']['compute-ec2-admin-bind']['port']` - The port to bind the ec2 admin api service to
+* `openstack['endpoints']['compute-ec2-admin-bind']['bind_interface']` - The interface name to bind the ec2 admin api service to
+
+* `openstack['endpoints']['compute-xvpvnc-bind']['host']` - The IP address to bind the xvpvnc service to
+* `openstack['endpoints']['compute-xvpvnc-bind']['port']` - The port to bind the xvpvnc service to
+* `openstack['endpoints']['compute-xvpvnc-bind']['bind_interface']` - The interface name to bind the xvpvnc service to
+
+* `openstack['endpoints']['compute-novnc-bind']['host']` - The IP address to bind the novnc service to
+* `openstack['endpoints']['compute-novnc-bind']['port']` - The port to bind the novnc service to
+* `openstack['endpoints']['compute-novnc-bind']['bind_interface']` - The interface name to bind the novnc service to
+
+If the value of the 'bind_interface' attribute is non-nil, then the service will be bound to the first IP address on that interface.  If the value of the 'bind_interface' attribute is nil, then the service will be bound to the IP address specified in the host attribute.
+
+
 Testing
 =====
 
