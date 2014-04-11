@@ -185,9 +185,9 @@ notify_on_state_change=<%= node['openstack']['compute']['config']['notify_on_sta
 
 <% if node["openstack"]["compute"]["enabled_apis"].include?("osapi_compute") -%>
 # The IP address on which the OpenStack API will listen. (string value)
-osapi_compute_listen=<%= @compute_api_ipaddress %>
+osapi_compute_listen=<%= @compute_api_bind_ip %>
 # The port on which the OpenStack API will listen. (integer value)
-osapi_compute_listen_port=<%= @compute_api_port %>
+osapi_compute_listen_port=<%= @compute_api_bind_port %>
 <% end -%>
 
 ##### VNCPROXY #####
@@ -284,9 +284,9 @@ injected_network_template=<%= node["openstack"]["compute"]["config"]["injected_n
 
 <% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 # The IP address on which the EC2 API will listen. (string value)
-ec2_listen=<%= @ec2_public_api_ipaddress %>
+ec2_listen=<%= @ec2_api_bind_ip %>
 # The port on which the EC2 API will listen. (integer value)
-ec2_listen_port=<%= @ec2_public_api_port %>
+ec2_listen_port=<%= @ec2_api_bind_port %>
 
 <% if %w(fedora rhel).include? node.platform_family -%>
 # Adding support for non-modded euca2ools to display ip address info
