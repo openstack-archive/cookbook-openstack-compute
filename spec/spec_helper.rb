@@ -93,9 +93,9 @@ shared_examples 'expect_runs_nova_common_recipe' do
   end
 end
 
-shared_examples 'expect_installs_python_keystone' do
-  it 'installs python-keystone' do
-    expect(chef_run).to upgrade_package 'python-keystone'
+shared_examples 'expect_installs_python_keystoneclient' do
+  it 'installs python-keystoneclient' do
+    expect(chef_run).to upgrade_package 'python-keystoneclient'
   end
 end
 

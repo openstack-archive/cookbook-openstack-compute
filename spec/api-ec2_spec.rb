@@ -11,7 +11,7 @@ describe 'openstack-compute::api-ec2' do
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
     include_examples 'expect_creates_nova_lock_dir'
-    include_examples 'expect_installs_python_keystone'
+    include_examples 'expect_installs_python_keystoneclient'
 
     it 'installs ec2 api packages' do
       expect(chef_run).to upgrade_package 'nova-api-ec2'
