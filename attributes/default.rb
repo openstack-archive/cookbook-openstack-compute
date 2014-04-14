@@ -20,10 +20,12 @@ default['openstack']['compute']['verbose'] = 'False'
 default['openstack']['compute']['debug'] = 'False'
 
 default['openstack']['compute']['state_path'] = '/var/lib/nova'
-default['openstack']['compute']['instances_path'] = '$state_path/instances'
+default['openstack']['compute']['instances_path'] =
+  "#{node['openstack']['compute']['state_path']}/instances"
 # The lock_path normally uses /var/lock/nova, but it's not allowed in openSUSE,
 # so setting lock_path to $state_path/lock like in Neutron.
-default['openstack']['compute']['lock_path'] = '$state_path/lock'
+default['openstack']['compute']['lock_path'] =
+  "#{node['openstack']['compute']['state_path']}/lock"
 
 # The name of the Chef role that sets up the Keystone Service API
 default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
