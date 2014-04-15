@@ -1,6 +1,9 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.1.0
+* Remove openrc, it's been moved to Common
+
 ## 9.0.1
 ### Bug
 * Add network_allocate_retries option to nova.conf template

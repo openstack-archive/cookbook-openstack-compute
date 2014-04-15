@@ -95,6 +95,8 @@ when 'nova'
 
 when 'neutron'
 
+  include_recipe 'openstack-common::openrc'
+
   platform_options = node['openstack']['compute']['platform']
 
   platform_options['neutron_python_packages'].each do |pkg|

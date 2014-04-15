@@ -70,21 +70,6 @@ elsif mq_service_type == 'qpid'
   mq_password = get_password 'user', node['openstack']['mq']['compute']['qpid']['username']
 end
 
-# check attributes before search
-if node['openstack']['identity']['admin_tenant_name'] && node['openstack']['identity']['admin_user']
-  ksadmin_tenant_name = node['openstack']['identity']['admin_tenant_name']
-  ksadmin_user = node['openstack']['identity']['admin_user']
-else
-  identity_service_role = node['openstack']['compute']['identity_service_chef_role']
-  keystone = search_for(identity_service_role).first
-
-  ksadmin_tenant_name = keystone['openstack']['identity']['admin_tenant_name']
-  ksadmin_user = keystone['openstack']['identity']['admin_user']
-  Chef::Log.debug("openstack-compute::nova-common:keystone|#{keystone}")
-end
-
-ksadmin_pass = get_password 'user', ksadmin_user
-
 memcache_servers = memcached_servers.join ','
 
 # find the node attribute endpoint settings for the server holding a given role
@@ -101,8 +86,6 @@ ec2_public_endpoint = endpoint 'compute-ec2-api' || {}
 network_endpoint = endpoint 'network-api' || {}
 image_endpoint = endpoint 'image-api'
 
-Chef::Log.debug("openstack-compute::nova-common:ksadmin_user|#{ksadmin_user}")
-Chef::Log.debug("openstack-compute::nova-common:ksadmin_tenant_name|#{ksadmin_tenant_name}")
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")
@@ -169,25 +152,6 @@ template '/etc/nova/rootwrap.conf' do
   owner  'root'
   group  'root'
   mode   00644
-end
-
-# TODO: need to re-evaluate this for accuracy
-# TODO(jaypipes): This should be moved into openstack-common
-# and evaluated only on nodes with admin privs.
-template '/root/openrc' do
-  source 'openrc.erb'
-  # Must be root!
-  owner  'root'
-  group  'root'
-  mode   00600
-  variables(
-    user: ksadmin_user,
-    tenant: ksadmin_tenant_name,
-    password: ksadmin_pass,
-    identity_endpoint: identity_endpoint,
-    auth_strategy: 'keystone',
-    ec2_url: ec2_public_endpoint.to_s
-  )
 end
 
 execute 'enable nova login' do

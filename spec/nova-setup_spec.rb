@@ -62,6 +62,10 @@ describe 'openstack-compute::nova-setup' do
         expect(chef_run).to upgrade_package('python-pyparsing')
       end
 
+      it 'include common openrc recipe' do
+        expect(chef_run).to include_recipe('openstack-common::openrc')
+      end
+
       it 'adds cidr range of floating ipv4 addresses to neutron' do
         resource = chef_run.find_resource('execute', 'neutron floating create').to_hash
         expect(resource).to include(action: [:run], command: '. /root/openrc && /usr/local/bin/add_floaters.py neutron --cidr=10.10.10.0/24 --pool=public')

@@ -393,7 +393,6 @@ end
 default['openstack']['compute']['plugins'] = nil
 default['openstack']['compute']['misc_nova'] = nil
 default['openstack']['compute']['misc_paste'] = nil
-default['openstack']['compute']['misc_openrc'] = nil
 
 # To disable the EC2 API endpoint, simply remove 'ec2,' from the list
 # of enabled API services.

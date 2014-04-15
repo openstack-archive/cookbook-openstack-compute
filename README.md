@@ -72,7 +72,6 @@ nova-common
 ----
 - May include recipe `selinux` (Fedora)
 - Builds the basic nova.conf config file with details of the rabbitmq, mysql, glance and keystone servers
-- Builds a openrc file for root with appropriate environment variables to interact with the nova client CLI
 
 nova-setup
 ----
