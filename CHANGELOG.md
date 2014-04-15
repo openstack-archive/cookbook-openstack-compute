@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+
+## 8.4.3
+* Allow different service bind vs endpoint IPs per service (for load balancing)
+
 ## 8.4.2
 * Fixing allow nova compute and ec2 ip and port to be configured
 
