@@ -22,6 +22,7 @@ default['openstack']['compute']['debug'] = 'False'
 default['openstack']['compute']['state_path'] = '/var/lib/nova'
 default['openstack']['compute']['instances_path'] =
   "#{node['openstack']['compute']['state_path']}/instances"
+default['openstack']['compute']['network_allocate_retries'] = 0
 # The lock_path normally uses /var/lock/nova, but it's not allowed in openSUSE,
 # so setting lock_path to $state_path/lock like in Neutron.
 default['openstack']['compute']['lock_path'] =

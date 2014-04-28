@@ -72,6 +72,11 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default network_allocate_retries set' do
+        line = /^network_allocate_retries=0$/
+        expect(chef_run).to render_file(file.name).with_content(line)
+      end
+
       it 'has default rpc_* options set' do
         [/^rpc_thread_pool_size=64$/, /^rpc_conn_pool_size=30$/,
          /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,

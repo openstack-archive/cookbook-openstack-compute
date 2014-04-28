@@ -14,6 +14,7 @@ log_config = /etc/openstack/logging.conf
 <% end %>
 state_path=<%= node["openstack"]["compute"]["state_path"] %>
 instances_path=<%= node["openstack"]["compute"]["instances_path"] %>
+network_allocate_retries=<%= node['openstack']['compute']['network_allocate_retries'] %>
 lock_path=<%= node["openstack"]["compute"]["lock_path"] %>
 
 # Command prefix to use for running commands as root (default: sudo)
