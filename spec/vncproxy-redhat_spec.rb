@@ -9,7 +9,6 @@ describe 'openstack-compute::vncproxy' do
     let(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
-    include_examples 'expect_runs_nova_common_recipe'
 
     it 'installs nova vncproxy packages' do
       expect(chef_run).to upgrade_package('openstack-nova-novncproxy')

@@ -11,8 +11,8 @@ describe 'openstack-compute::network' do
     include_context 'compute_stubs'
 
     it 'installs nova network packages' do
-      expect(chef_run).to upgrade_package 'iptables'
-      expect(chef_run).to upgrade_package 'openstack-nova-network'
+      expect(chef_run).to upgrade_package('iptables')
+      expect(chef_run).to upgrade_package('openstack-nova-network')
     end
 
     it 'starts nova network on boot' do

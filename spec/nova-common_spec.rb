@@ -42,7 +42,7 @@ describe 'openstack-compute::nova-common' do
       end
     end
 
-    context 'with logging enabled' do
+    context 'with logging disabled' do
       before do
         node.set['openstack']['compute']['syslog']['use'] = false
       end
@@ -409,13 +409,13 @@ describe 'openstack-compute::nova-common' do
           node.set['openstack']['compute']['libvirt']['volume_group'] = 'instances'
         end
 
-        [
-          /^images_type=lvm$/,
-          /^images_volume_group=instances$/,
-          /^sparse_logical_volumes=false$/
-        ].each do |content|
-          it "has a #{content.source[1...-1]} line" do
-            expect(chef_run).to render_file(file.name).with_content(content)
+        it 'sets the lvm options correctly' do
+          [
+            /^images_type=lvm$/,
+            /^images_volume_group=instances$/,
+            /^sparse_logical_volumes=false$/
+          ].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(line)
           end
         end
 
@@ -426,13 +426,13 @@ describe 'openstack-compute::nova-common' do
             node.set['openstack']['compute']['libvirt']['sparse_logical_volumes'] = true
           end
 
-          [
-            /^images_type=lvm$/,
-            /^images_volume_group=instances$/,
-            /^sparse_logical_volumes=true$/
-          ].each do |content|
-            it "has a #{content.source[1...-1]} line" do
-              expect(chef_run).to render_file(file.name).with_content(content)
+          it 'sets the overridden lvm options correctly' do
+            [
+              /^images_type=lvm$/,
+              /^images_volume_group=instances$/,
+              /^sparse_logical_volumes=true$/
+            ].each do |line|
+              expect(chef_run).to render_file(file.name).with_content(line)
             end
           end
         end
@@ -512,6 +512,7 @@ describe 'openstack-compute::nova-common' do
             expect(chef_run).to render_file(file.name).with_content(line)
           end
         end
+
         it 'contains legacy nova envs' do
           node.set['openstack']['compute']['region'] = 'os_region_name'
           [
