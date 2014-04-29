@@ -11,11 +11,11 @@ describe 'openstack-compute::scheduler' do
     include_context 'compute_stubs'
 
     it 'installs nova scheduler packages' do
-      expect(chef_run).to upgrade_package 'openstack-nova-scheduler'
+      expect(chef_run).to upgrade_package('openstack-nova-scheduler')
     end
 
     it 'starts nova scheduler' do
-      expect(chef_run).to start_service 'openstack-nova-scheduler'
+      expect(chef_run).to start_service('openstack-nova-scheduler')
     end
 
     it 'starts nova scheduler on boot' do
