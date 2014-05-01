@@ -39,14 +39,16 @@ end
 db_type = node['openstack']['db']['compute']['service_type']
 platform_options["#{db_type}_python_packages"].each do |pkg|
   package pkg do
-    action :install
+    options platform_options['package_overrides']
+    action :upgrade
   end
 end
 
 # required to run more than one consoleauth process
 platform_options['memcache_python_packages'].each do |pkg|
   package pkg do
-    action :install
+    options platform_options['package_overrides']
+    action :upgrade
   end
 end
 

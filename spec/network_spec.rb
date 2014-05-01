@@ -16,7 +16,7 @@ describe 'openstack-compute::network' do
         node.set['openstack']['compute']['network']['service_type'] = 'nova'
       end
 
-      it 'installs nova network packages' do
+      it 'upgrades nova network packages' do
         expect(chef_run).to upgrade_package('iptables')
         expect(chef_run).to upgrade_package('nova-network')
       end

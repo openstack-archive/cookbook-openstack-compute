@@ -88,13 +88,13 @@ shared_context 'compute_stubs' do
 end
 
 shared_examples 'expect_runs_nova_common_recipe' do
-  it 'installs nova-common' do
+  it 'includes nova-common' do
     expect(chef_run).to include_recipe 'openstack-compute::nova-common'
   end
 end
 
-shared_examples 'expect_installs_python_keystoneclient' do
-  it 'installs python-keystoneclient' do
+shared_examples 'expect_upgrades_python_keystoneclient' do
+  it 'upgrades python-keystoneclient' do
     expect(chef_run).to upgrade_package 'python-keystoneclient'
   end
 end

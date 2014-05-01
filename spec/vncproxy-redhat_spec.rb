@@ -10,11 +10,11 @@ describe 'openstack-compute::vncproxy' do
 
     include_context 'compute_stubs'
 
-    it 'installs nova vncproxy packages' do
+    it 'upgrades nova vncproxy package' do
       expect(chef_run).to upgrade_package('openstack-nova-novncproxy')
     end
 
-    it 'installs nova consoleauth packages' do
+    it 'upgrades nova consoleauth package' do
       expect(chef_run).to upgrade_package('openstack-nova-console')
     end
 

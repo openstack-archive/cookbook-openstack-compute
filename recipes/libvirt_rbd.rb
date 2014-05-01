@@ -28,7 +28,8 @@ platform_options = node['openstack']['compute']['platform']
 
 platform_options['libvirt_ceph_packages'].each do |pkg|
   package pkg do
-    action :install
+    options platform_options['package_overrides']
+    action :upgrade
   end
 end
 

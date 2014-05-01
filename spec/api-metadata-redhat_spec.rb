@@ -10,7 +10,7 @@ describe 'openstack-compute::api-metadata' do
 
     include_context 'compute_stubs'
 
-    it 'installs metadata api packages' do
+    it 'upgrades metadata api packages' do
       expect(chef_run).to upgrade_package 'openstack-nova-api'
     end
 

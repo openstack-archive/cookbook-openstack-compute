@@ -11,9 +11,9 @@ describe 'openstack-compute::api-metadata' do
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
     include_examples 'expect_creates_nova_lock_dir'
-    include_examples 'expect_installs_python_keystoneclient'
+    include_examples 'expect_upgrades_python_keystoneclient'
 
-    it 'installs metadata api packages' do
+    it 'upgrades metadata api packages' do
       expect(chef_run).to upgrade_package 'nova-api-metadata'
     end
 

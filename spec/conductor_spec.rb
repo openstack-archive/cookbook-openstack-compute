@@ -11,7 +11,7 @@ describe 'openstack-compute::conductor' do
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
 
-    it 'installs conductor packages' do
+    it 'upgrades conductor package' do
       expect(chef_run).to upgrade_package 'nova-conductor'
     end
 

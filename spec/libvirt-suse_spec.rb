@@ -17,8 +17,8 @@ describe 'openstack-compute::libvirt' do
 
     include_context 'compute_stubs'
 
-    it 'installs libvirt packages' do
-      expect(chef_run).to install_package 'libvirt'
+    it 'upgrade libvirt package' do
+      expect(chef_run).to upgrade_package 'libvirt'
     end
 
     it 'starts libvirt' do
@@ -33,19 +33,19 @@ describe 'openstack-compute::libvirt' do
       expect(chef_run).not_to create_template('/etc/sysconfig/libvirtd')
     end
 
-    it 'installs kvm packages' do
-      expect(chef_run).to install_package 'kvm'
+    it 'upgrade kvm package' do
+      expect(chef_run).to upgrade_package 'kvm'
     end
 
-    it 'installs qemu packages' do
+    it 'upgrade kvm package' do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
-      expect(chef_run).to install_package 'kvm'
+      expect(chef_run).to upgrade_package 'kvm'
     end
 
-    it 'installs xen packages' do
+    it 'upgrade xen packages' do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'xen'
       ['kernel-xen', 'xen', 'xen-tools'].each do |pkg|
-        expect(chef_run).to install_package pkg
+        expect(chef_run).to upgrade_package pkg
       end
     end
 
@@ -54,8 +54,8 @@ describe 'openstack-compute::libvirt' do
         node.set['openstack']['compute']['libvirt']['virt_type'] = 'lxc'
       end
 
-      it 'installs packages' do
-        expect(chef_run).to install_package 'lxc'
+      it 'upgrade lxc package' do
+        expect(chef_run).to upgrade_package 'lxc'
       end
 
       it 'starts boot.cgroupslxc' do

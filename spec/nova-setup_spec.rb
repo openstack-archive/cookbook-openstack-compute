@@ -57,7 +57,7 @@ describe 'openstack-compute::nova-setup' do
         node.set['openstack']['compute']['network']['floating']['public_network_name'] = 'public'
       end
 
-      it 'installs the neutron python packages' do
+      it 'upgrades the neutron python packages' do
         expect(chef_run).to upgrade_package('python-neutronclient')
         expect(chef_run).to upgrade_package('python-pyparsing')
       end

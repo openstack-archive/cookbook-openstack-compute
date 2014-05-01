@@ -25,7 +25,8 @@ platform_options = node['openstack']['compute']['platform']
 
 platform_options['libvirt_packages'].each do |pkg|
   package pkg do
-    action :install
+    options platform_options['package_overrides']
+    action :upgrade
   end
 end
 
@@ -95,7 +96,8 @@ when 'suse'
   when 'kvm'
     node['openstack']['compute']['platform']['kvm_packages'].each do |pkg|
       package pkg do
-        action :install
+        options platform_options['package_overrides']
+        action :upgrade
       end
     end
     execute 'loading kvm modules' do
@@ -107,7 +109,8 @@ when 'suse'
   when 'xen'
     node['openstack']['compute']['platform']['xen_packages'].each do |pkg|
       package pkg do
-        action :install
+        options platform_options['package_overrides']
+        action :upgrade
       end
     end
     update_boot_kernel_and_trigger_reboot('xen')
@@ -115,14 +118,16 @@ when 'suse'
   when 'qemu'
     node['openstack']['compute']['platform']['kvm_packages'].each do |pkg|
       package pkg do
-        action :install
+        options platform_options['package_overrides']
+        action :upgrade
       end
     end
 
   when 'lxc'
     node['openstack']['compute']['platform']['lxc_packages'].each do |pkg|
       package pkg do
-        action :install
+        options platform_options['package_overrides']
+        action :upgrade
       end
     end
     service 'boot.cgroup' do

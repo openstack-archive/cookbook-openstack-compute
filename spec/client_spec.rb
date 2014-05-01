@@ -11,7 +11,7 @@ describe 'openstack-compute::client' do
       runner.converge(described_recipe)
     end
 
-    it 'installs packages' do
+    it 'upgrades python-novaclient package' do
       expect(chef_run).to upgrade_package('python-novaclient')
     end
   end

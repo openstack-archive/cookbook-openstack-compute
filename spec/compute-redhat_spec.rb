@@ -10,23 +10,23 @@ describe 'openstack-compute::compute' do
 
     include_context 'compute_stubs'
 
-    it "does not install kvm when virt_type is 'kvm'" do
+    it "does not upgrade kvm when virt_type is 'kvm'" do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
 
       expect(chef_run).to_not upgrade_package('nova-compute-kvm')
     end
 
-    it "does not install qemu when virt_type is 'qemu'" do
+    it "does not upgrade qemu when virt_type is 'qemu'" do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
 
       expect(chef_run).to_not upgrade_package('nova-compute-qemu')
     end
 
-    it 'installs nova compute packages' do
+    it 'upgrades nova compute package' do
       expect(chef_run).to upgrade_package('openstack-nova-compute')
     end
 
-    it 'installs nfs client packages' do
+    it 'upgrades nfs client package' do
       expect(chef_run).to upgrade_package('nfs-utils')
       expect(chef_run).to upgrade_package('nfs-utils-lib')
     end

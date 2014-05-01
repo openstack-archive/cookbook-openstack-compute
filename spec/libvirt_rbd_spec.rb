@@ -18,8 +18,8 @@ describe 'openstack-compute::libvirt_rbd' do
       expect(chef_run).to include_recipe('openstack-common::ceph_client')
     end
 
-    it 'installs rbd packages' do
-      expect(chef_run).to install_package 'ceph-common'
+    it 'upgrades rbd packages' do
+      expect(chef_run).to upgrade_package 'ceph-common'
     end
 
     describe 'if there was no secret with this uuid defined' do

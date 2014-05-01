@@ -10,8 +10,8 @@ describe 'openstack-compute::libvirt' do
 
     include_context 'compute_stubs'
 
-    it 'installs libvirt packages' do
-      expect(chef_run).to install_package 'libvirt'
+    it 'upgrades libvirt packages' do
+      expect(chef_run).to upgrade_package 'libvirt'
     end
 
     it 'creates libvirtd group and adds nova as a member' do

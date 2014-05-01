@@ -10,7 +10,7 @@ describe 'openstack-compute::api-ec2' do
 
     include_context 'compute_stubs'
 
-    it 'installs ec2 api packages' do
+    it 'upgrades ec2 api packages' do
       expect(chef_run).to upgrade_package 'openstack-nova-api'
     end
 

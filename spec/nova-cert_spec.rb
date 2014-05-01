@@ -11,7 +11,7 @@ describe 'openstack-compute::nova-cert' do
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
 
-    it 'installs nova cert packages' do
+    it 'upgrades nova cert package' do
       expect(chef_run).to upgrade_package('nova-cert')
     end
 

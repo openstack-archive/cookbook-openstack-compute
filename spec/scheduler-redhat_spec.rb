@@ -10,7 +10,7 @@ describe 'openstack-compute::scheduler' do
 
     include_context 'compute_stubs'
 
-    it 'installs nova scheduler packages' do
+    it 'upgrades nova scheduler package' do
       expect(chef_run).to upgrade_package('openstack-nova-scheduler')
     end
 

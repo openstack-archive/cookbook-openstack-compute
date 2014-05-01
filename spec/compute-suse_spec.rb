@@ -10,7 +10,7 @@ describe 'openstack-compute::compute' do
 
     include_context 'compute_stubs'
 
-    it 'installs nfs client packages' do
+    it 'upgrades nfs client packages' do
       expect(chef_run).to upgrade_package 'nfs-utils'
       expect(chef_run).not_to upgrade_package 'nfs-utils-lib'
     end

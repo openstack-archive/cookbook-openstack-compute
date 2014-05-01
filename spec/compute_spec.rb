@@ -28,15 +28,15 @@ describe 'openstack-compute::compute' do
       expect(chef_run).to include_recipe 'openstack-compute::network'
     end
 
-    it 'installs nova compute packages' do
+    it 'upgrades nova compute package' do
       expect(chef_run).to upgrade_package 'nova-compute'
     end
 
-    it 'installs nfs client packages' do
+    it 'upgrades nfs client package' do
       expect(chef_run).to upgrade_package 'nfs-common'
     end
 
-    it "installs kvm when virt_type is 'kvm'" do
+    it "upgrades kvm when virt_type is 'kvm'" do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
 
       expect(chef_run).to upgrade_package 'nova-compute-kvm'
@@ -50,7 +50,7 @@ describe 'openstack-compute::compute' do
       expect(chef_run).to upgrade_package('nova-compute-kvm').with(options: '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes')
     end
 
-    it 'installs qemu when virt_type is qemu' do
+    it 'upgrades qemu when virt_type is qemu' do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
 
       expect(chef_run).to upgrade_package 'nova-compute-qemu'
