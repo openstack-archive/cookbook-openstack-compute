@@ -16,6 +16,10 @@ describe 'openstack-compute::nova-common' do
 
     include_context 'compute_stubs'
 
+    it 'installs mysql python packages' do
+      expect(chef_run).to install_package 'python-mysqldb'
+    end
+
     it 'installs nova common packages' do
       expect(chef_run).to upgrade_package 'nova-common'
     end
