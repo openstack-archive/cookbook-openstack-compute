@@ -110,6 +110,8 @@ else
   rbd_secret_uuid = nil
 end
 
+vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
+
 template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   owner node['openstack']['compute']['user']
@@ -144,7 +146,8 @@ template '/etc/nova/nova.conf' do
     compute_api_bind_port: compute_api_bind.port,
     ec2_api_bind_ip: ec2_api_bind.host,
     ec2_api_bind_port: ec2_api_bind.port,
-    rbd_secret_uuid: rbd_secret_uuid
+    rbd_secret_uuid: rbd_secret_uuid,
+    vmware_host_pass: vmware_host_pass
   )
 end
 

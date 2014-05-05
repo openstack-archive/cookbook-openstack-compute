@@ -282,9 +282,9 @@ are set on this node.
 VMware Configuration Attributes
 -------------------------------
 
+* `openstack['compute']['vmware']['secret_name']` - VMware databag secret name
 * `openstack['compute']['vmware']['host_ip']` - URL for connection to VMware ESX/VC host. (string value)
 * `openstack['compute']['vmware']['host_username']` - Username for connection to VMware ESX/VC host. (string value)
-* `openstack['compute']['vmware']['host_password']` - Password for connection to VMware ESX/VC host. (string value)
 * `openstack['compute']['vmware']['cluster_name']` - Name of a VMware Cluster ComputeResource. Used only if compute_driver is vmwareapi.VMwareVCDriver. (multi valued)
 * `openstack['compute']['vmware']['datastore_regex']` - Regex to match the name of a datastore. (string value)
 * `openstack['compute']['vmware']['task_poll_interval']` - The interval used for polling of remote tasks. (floating point value, default 0.5)
