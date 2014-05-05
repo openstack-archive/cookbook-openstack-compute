@@ -185,7 +185,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has default vncserver_* options set' do
-        node.set['openstack']['endpoints']['compute-vnc']['bind_interface'] = 'lo'
+        node.set['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
 
         [/^vncserver_listen=127.0.1.1$/,
          /^vncserver_proxyclient_address=127.0.1.1$/].each do |line|
