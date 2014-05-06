@@ -1,4 +1,5 @@
 .bundle/
+.cookbooks/
 .kitchen
 .vagrant
 .coverage/
