@@ -217,6 +217,12 @@ describe 'openstack-compute::nova-common' do
           /^force_config_drive=always$/)
       end
 
+      it 'has a os_region_name setting' do
+        chef_run.node.set['openstack']['node'] = 'RegionOne'
+        expect(chef_run).to render_file(file.name).with_content(
+          /^os_region_name=RegionOne$/)
+      end
+
       it 'has a disk_cachemodes setting' do
         chef_run.node.set['openstack']['compute']['config']['disk_cachemodes'] = 'disk:writethrough'
         expect(chef_run).to render_file(file.name).with_content(

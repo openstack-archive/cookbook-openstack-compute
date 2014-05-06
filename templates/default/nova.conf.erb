@@ -284,6 +284,8 @@ metadata_workers=<%= node["cpu"]["total"] %>
 # iscsi target user-land tool to use
 iscsi_helper=<%= @iscsi_helper %>
 volume_api_class=<%= node["openstack"]["compute"]["config"]["volume_api_class"] %>
+# Region name of this node (string value)
+os_region_name=<%= node['openstack']['region'] %>
 
 ##### THIRD PARTY ADDITIONS #####
 <% if node["openstack"]["compute"]["plugins"] %>
