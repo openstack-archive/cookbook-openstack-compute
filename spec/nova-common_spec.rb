@@ -127,6 +127,30 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'confirms default min value for workers' do
+        [/^ec2_workers=/,
+         /^osapi_compute_workers=/,
+         /^metadata_workers=/,
+         /^workers=/].each do |line|
+          expect(chef_run).to_not render_file(file.name).with_content(line)
+        end
+      end
+
+      describe 'allow overrides for workers' do
+        it 'has worker overrides' do
+          node.set['openstack']['compute']['ec2_workers'] = 123
+          node.set['openstack']['compute']['osapi_compute_workers'] = 456
+          node.set['openstack']['compute']['metadata_workers'] = 789
+          node.set['openstack']['compute']['conductor']['workers'] = 321
+          [/^ec2_workers=123$/,
+           /^osapi_compute_workers=456$/,
+           /^metadata_workers=789$/,
+           /^workers=321$/].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(line)
+          end
+        end
+      end
+
       context 'rabbit mq backend' do
         before do
           node.set['openstack']['mq']['compute']['service_type'] = 'rabbitmq'

@@ -275,7 +275,9 @@ ec2_private_dns_show_ip=True
 <% end -%>
 
 ##### WORKERS ######
-ec2_workers=<%= node["cpu"]["total"] %>
+<% if node["openstack"]["compute"]["ec2_workers"] %>
+ec2_workers=<%= node["openstack"]["compute"]["ec2_workers"] %>
+<% end %>
 
 ##### KEYSTONE #####
 keystone_ec2_url=<%= @identity_endpoint.scheme %>://<%= @identity_endpoint.host %>:<%= @identity_endpoint.port %>/v2.0/ec2tokens
@@ -285,8 +287,12 @@ keystone_ec2_url=<%= @identity_endpoint.scheme %>://<%= @identity_endpoint.host 
 enabled_apis=<%= node["openstack"]["compute"]["enabled_apis"] %>
 
 ##### WORKERS ######
-osapi_compute_workers=<%= node["cpu"]["total"] %>
-metadata_workers=<%= node["cpu"]["total"] %>
+<% if node["openstack"]["compute"]["osapi_compute_workers"] %>
+osapi_compute_workers=<%= node["openstack"]["compute"]["osapi_compute_workers"] %>
+<% end %>
+<% if node["openstack"]["compute"]["metadata_workers"] %>
+metadata_workers=<%= node["openstack"]["compute"]["metadata_workers"] %>
+<% end %>
 
 ##### VOLUMES #####
 # iscsi target user-land tool to use
@@ -311,6 +317,9 @@ osapi_compute_extension=<%= p %>
 [conductor]
 
 use_local=<%= node["openstack"]["compute"]["conductor"]["use_local"] %>
+<% if node["openstack"]["compute"]["conductor"]["workers"] %>
+workers=<%= node["openstack"]["compute"]["conductor"]["workers"] %>
+<% end %>
 
 <% if %w(vmwareapi.VMwareESXDriver vmwareapi.VMwareVCDriver).include?(node['openstack']['compute']['driver']) %>
 [vmware]

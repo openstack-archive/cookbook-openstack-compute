@@ -101,6 +101,9 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["service_user"]` - User name used by nova when interacting with keystone
 * `openstack["compute"]["service_role"]` - User role used by nova when interacting with keystone
 * `openstack["compute"]["floating_cmd"]` - Path to the `nova-manage floating create` wrapper script.
+* `openstack["compute"]["ec2_workers"]` - Number of ec2 workers
+* `openstack["compute"]["osapi_compute_workers"]` - Number of api workers
+* `openstack["compute"]["metadata_workers"]` - Number of metadata workders
 * `openstack["compute"]["config"]["volume_api_class"]` - API Class used for Volume support
 * `openstack['compute']['driver'] = Driver to use for controlling virtualization
 * `openstack['compute']['default_ephemeral_format'] = The default format an ephemeral_volume will be formatted with on creation
@@ -135,6 +138,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 TODO: Add DB2 support on other platforms
 * `openstack["compute"]["platform"]["db2_python_packages"]` - Array of DB2 python packages, only available on redhat platform
 * `openstack['compute']['api']['auth']['version']` - Select v2.0 or v3.0. Default v2.0. The auth API version used to interact with identity service.
+* `openstack['compute']['conductor']['workers']` = Number of conductor workers
 
 
 MQ attributes

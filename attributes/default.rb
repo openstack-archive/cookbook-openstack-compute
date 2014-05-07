@@ -30,6 +30,12 @@ default['openstack']['compute']['instance_name_template'] = 'instance-%08x'
 default['openstack']['compute']['lock_path'] =
   "#{node['openstack']['compute']['state_path']}/lock"
 
+# Workers
+# nova will default to number of cpus
+default['openstack']['compute']['ec2_workers'] = nil
+default['openstack']['compute']['osapi_compute_workers'] = nil
+default['openstack']['compute']['metadata_workers'] = nil
+
 # The name of the Chef role that sets up the Keystone Service API
 default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 
@@ -296,8 +302,11 @@ default['openstack']['compute']['api']['auth']['version'] = node['openstack']['a
 # Keystone PKI signing directories
 default['openstack']['compute']['api']['auth']['cache_dir'] = '/var/cache/nova/api'
 
+# Conductor settings
 # Perform nova-conductor operations locally (boolean value)
 default['openstack']['compute']['conductor']['use_local'] = 'False'
+# nova-conductor will default to number of cpus
+default['openstack']['compute']['conductor']['workers'] = nil
 
 default['openstack']['compute']['network']['force_dhcp_release'] = true
 
