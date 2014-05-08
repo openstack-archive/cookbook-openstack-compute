@@ -102,6 +102,12 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["service_role"]` - User role used by nova when interacting with keystone
 * `openstack["compute"]["floating_cmd"]` - Path to the `nova-manage floating create` wrapper script.
 * `openstack["compute"]["config"]["volume_api_class"]` - API Class used for Volume support
+* `openstack['compute']['driver'] = Driver to use for controlling virtualization
+* `openstack['compute']['default_ephemeral_format'] = The default format an ephemeral_volume will be formatted with on creation
+* `openstack['compute']['preallocate_images'] = VM image preallocation mode
+* `openstack['compute']['use_cow_images'] = Whether to use cow images
+* `openstack['compute']['vif_plugging_is_fatal'] = Fail instance boot if vif plugging fails
+* `openstack['compute']['vif_plugging_timeout'] = Number of seconds to wait for neutron vif plugging events to arrive before continuing or failing
 * `openstack["compute"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
 * `openstack["compute"]["compute"]["api"]["port"]` - Port on which OS API runs
 * `openstack["compute"]["compute"]["api"]["version"]` - Version of the OS API used

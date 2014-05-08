@@ -81,6 +81,25 @@ describe 'openstack-compute::nova-common' do
           /^instance_name_template=instance-%08x$/)
       end
 
+      it 'has compute driver attributes defaults set' do
+        [/^compute_driver=libvirt.LibvirtDriver$/,
+         /^preallocate_images=none$/,
+         /^use_cow_images=true$/,
+         /^vif_plugging_is_fatal=true$/,
+         /^vif_plugging_timeout=300$/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
+      it 'does not have compute driver attribute default_ephemeral_format set by default' do
+        expect(chef_run).not_to render_file(file.name).with_content(/^default_ephemeral_format=$/)
+      end
+
+      it 'allows override for compute driver attribute default_ephemeral_format' do
+        node.set['openstack']['compute']['default_ephemeral_format'] = 'someformat'
+        expect(chef_run).to render_file(file.name).with_content(/^default_ephemeral_format=someformat$/)
+      end
+
       it 'has default network_allocate_retries set' do
         line = /^network_allocate_retries=0$/
         expect(chef_run).to render_file(file.name).with_content(line)

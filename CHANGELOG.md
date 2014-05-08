@@ -1,6 +1,9 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.2.1
+* Fix to allow compute driver attributes
+
 ## 9.2.0
 * Get VMware vCenter password from databag
 

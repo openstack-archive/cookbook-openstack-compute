@@ -129,6 +129,13 @@ glance_api_servers=<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
 
 ##### COMPUTE #####
 compute_driver=<%= node["openstack"]["compute"]["driver"] %>
+<% if node["openstack"]["compute"]["default_ephemeral_format"] %>
+default_ephemeral_format=<%= node["openstack"]["compute"]["default_ephemeral_format"] %>
+<% end %>
+preallocate_images=<%= node["openstack"]["compute"]["preallocate_images"] %>
+use_cow_images=<%= node["openstack"]["compute"]["use_cow_images"] %>
+vif_plugging_is_fatal=<%= node["openstack"]["compute"]["vif_plugging_is_fatal"] %>
+vif_plugging_timeout=<%= node["openstack"]["compute"]["vif_plugging_timeout"] %>
 compute_manager=nova.compute.manager.ComputeManager
 sql_connection=<%= @sql_connection %>
 connection_type=libvirt
