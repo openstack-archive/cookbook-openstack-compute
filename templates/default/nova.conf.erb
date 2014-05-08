@@ -32,6 +32,8 @@ rpc_thread_pool_size=<%= node["openstack"]["compute"]["rpc_thread_pool_size"] %>
 rpc_conn_pool_size=<%= node["openstack"]["compute"]["rpc_conn_pool_size"] %>
 rpc_response_timeout=<%= node["openstack"]["compute"]["rpc_response_timeout"] %>
 rpc_backend=<%= node["openstack"]["compute"]["rpc_backend"] %>
+amqp_durable_queues=<%= node['openstack']['mq']['compute']['durable_queues'] %>
+amqp_auto_delete=<%= node['openstack']['mq']['compute']['auto_delete'] %>
 
 <% if @mq_service_type == "rabbitmq"  %>
 ##### RABBITMQ #####
@@ -52,7 +54,6 @@ rabbit_use_ssl=<%= node["openstack"]["mq"]["compute"]["rabbit"]["use_ssl"] %>
 ##### QPID #####
 qpid_hostname=<%= node["openstack"]["mq"]["compute"]["qpid"]["host"] %>
 qpid_port=<%= node["openstack"]["mq"]["compute"]["qpid"]["port"] %>
-
 qpid_password=<%= @mq_password %>
 qpid_username=<%= node["openstack"]["mq"]["compute"]["qpid"]["username"] %>
 qpid_sasl_mechanisms=<%= node["openstack"]["mq"]["compute"]["qpid"]["sasl_mechanisms"] %>
@@ -65,7 +66,7 @@ qpid_heartbeat=<%= node["openstack"]["mq"]["compute"]["qpid"]["heartbeat"] %>
 # qpid protocol. default 'tcp'. set to 'ssl' to enable SSL
 qpid_protocol=<%= node["openstack"]["mq"]["compute"]["qpid"]["protocol"] %>
 qpid_tcp_nodelay=<%= node["openstack"]["mq"]["compute"]["qpid"]["tcp_nodelay"] %>
-
+qpid_topology_version=<%= node['openstack']['mq']['compute']['qpid']['topology_version'] %>
 <% end %>
 
 

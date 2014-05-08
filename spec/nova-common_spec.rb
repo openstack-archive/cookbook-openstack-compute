@@ -105,10 +105,13 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to render_file(file.name).with_content(line)
       end
 
-      it 'has default rpc_* options set' do
-        [/^rpc_thread_pool_size=64$/, /^rpc_conn_pool_size=30$/,
-         /^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
-         /^rpc_response_timeout=60$/].each do |line|
+      it 'has default RPC/AMQP options set' do
+        [/^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
+         /^rpc_thread_pool_size=64$/,
+         /^rpc_conn_pool_size=30$/,
+         /^rpc_response_timeout=60$/,
+         /^amqp_durable_queues=false$/,
+         /^amqp_auto_delete=false$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
@@ -225,7 +228,8 @@ describe 'openstack-compute::nova-common' do
             /^qpid_reconnect_interval=0$/,
             /^qpid_heartbeat=60$/,
             /^qpid_protocol=tcp$/,
-            /^qpid_tcp_nodelay=true$/
+            /^qpid_tcp_nodelay=true$/,
+            /^qpid_topology_version=1$/
           ].each do |line|
             expect(chef_run).to render_file(file.name).with_content(line)
           end
