@@ -24,9 +24,12 @@ end
 
 include_recipe 'openstack-compute::nova-common'
 
+nova_user = node['openstack']['compute']['user']
+nova_group = node['openstack']['compute']['group']
+
 execute 'nova-manage db sync' do
-  user node['openstack']['compute']['user']
-  group node['openstack']['compute']['group']
+  user nova_user
+  group nova_group
   command 'nova-manage db sync'
   action :run
 end
@@ -37,8 +40,8 @@ when 'nova'
   next_vlan = 100
   node['openstack']['compute']['networks'].each do |net|
     execute "nova-manage network create --label=#{net['label']}" do
-      user node['openstack']['compute']['user']
-      group node['openstack']['compute']['group']
+      user nova_user
+      group nova_group
 
       # The only two required keys in each network Hash
       # are 'label' and 'ipv4_cidr'.
@@ -60,7 +63,7 @@ when 'nova'
         next_vlan = next_vlan + 1
       end
       command cmd
-      not_if "nova-manage network list | grep #{net['ipv4_cidr']}"
+      not_if "nova-manage network list | grep #{net['ipv4_cidr']}", user: nova_user, group: nova_group
 
       action :run
     end
@@ -83,11 +86,11 @@ when 'nova'
     end
 
     execute 'nova-manage floating create' do
-      user node['openstack']['compute']['user']
-      group node['openstack']['compute']['group']
+      user nova_user
+      group nova_group
       command cmd
 
-      not_if "nova-manage floating list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'"
+      not_if "nova-manage floating list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'", user: nova_user, group: nova_group
 
       action :run
     end
