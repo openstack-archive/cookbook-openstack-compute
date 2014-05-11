@@ -76,6 +76,11 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has an instance_name_template setting' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^instance_name_template=instance-%08x$/)
+      end
+
       it 'has default network_allocate_retries set' do
         line = /^network_allocate_retries=0$/
         expect(chef_run).to render_file(file.name).with_content(line)
