@@ -52,6 +52,9 @@ shared_context 'compute_stubs' do
     Chef::Recipe.any_instance.stub(:get_secret) # this is the rbd_uuid default name
       .with('rbd_secret_uuid')
       .and_return '00000000-0000-0000-0000-000000000000'
+    Chef::Recipe.any_instance.stub(:get_secret)
+      .with('openstack_vmware_secret_name')
+      .and_return 'vmware_secret_name'
     Chef::Recipe.any_instance.stub(:get_password)
       .with('db', anything)
       .and_return('')

@@ -321,7 +321,7 @@ host_username = <%= node['openstack']['compute']['vmware']['host_username'] %>
 
 # Password for connection to VMware ESX/VC host. (string
 # value)
-host_password = <%= node['openstack']['compute']['vmware']['host_password'] %>
+host_password = <%= @vmware_host_pass %>
 
 <% if node['openstack']['compute']['vmware']['cluster_name'] %>
 # Name of a VMware Cluster ComputeResource. Used only if

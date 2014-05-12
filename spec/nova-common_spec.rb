@@ -312,7 +312,7 @@ describe 'openstack-compute::nova-common' do
           [
             /^host_ip = $/,
             /^host_username = $/,
-            /^host_password = $/,
+            /^host_password = vmware_secret_name$/,
             /^task_poll_interval = 0.5$/,
             /^api_retry_count = 10$/,
             /^vnc_port = 5900$/,

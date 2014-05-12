@@ -401,12 +401,11 @@ default['openstack']['compute']['misc_paste'] = nil
 default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute,metadata'
 
 # VMware driver
+default['openstack']['compute']['vmware']['secret_name'] = 'openstack_vmware_secret_name'
 # URL for connection to VMware ESX/VC host. (string value)
 default['openstack']['compute']['vmware']['host_ip'] = ''
 # Username for connection to VMware ESX/VC host. (string value)
 default['openstack']['compute']['vmware']['host_username'] = ''
-# Password for connection to VMware ESX/VC host. (string value)
-default['openstack']['compute']['vmware']['host_password'] = ''
 # Name of a VMware Cluster ComputeResource. Used only if compute_driver is vmwareapi.VMwareVCDriver. (multi valued)
 default['openstack']['compute']['vmware']['cluster_name'] = []
 # Regex to match the name of a datastore. (string value)
