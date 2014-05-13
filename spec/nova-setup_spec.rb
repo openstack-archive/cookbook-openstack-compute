@@ -12,7 +12,7 @@ describe 'openstack-compute::nova-setup' do
     include_examples 'expect_runs_nova_common_recipe'
 
     it 'runs db migrations' do
-      expect(chef_run).to run_execute('nova-manage db sync')
+      expect(chef_run).to run_execute('nova-manage db sync').with(user: 'nova', group: 'nova')
     end
 
     it 'adds nova network ipv4 addresses' do
@@ -25,7 +25,7 @@ describe 'openstack-compute::nova-setup' do
              '--dns1=8.8.8.8',
              '--dns2=8.8.4.4',
              '--bridge_interface=eth2'].join(' ')
-      expect(chef_run).to run_execute(cmd)
+      expect(chef_run).to run_execute(cmd).with(user: 'nova', group: 'nova')
     end
 
     it 'add_floaters.py has proper modes' do
