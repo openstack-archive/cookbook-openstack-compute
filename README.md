@@ -249,9 +249,10 @@ OSAPI Compute Extentions
 Miscellaneous Options
 ---------------------
 
-* `openstack["compute"]["misc_nova"]` - Array of bare options for nova.conf (e.g. 'option=value')
-* `openstack["compute"]["misc_paste"]` - Array of bare options for api-paste.ini (e.g. 'option=value')
-* `openstack["compute"]["misc_openrc"]` - Array of bare options for openrc (e.g. 'option=value')
+Arrays whose elements will be copied exactly into the respective config files (contents e.g. ['option1=value1', 'option2=value2']).
+
+* `openstack["compute"]["misc_nova"]` - Array of bare options for `nova.conf`.
+* `openstack["compute"]["misc_paste"]` - Array of bare options for `api-paste.ini`
 
 EC2 Configuration Attributes
 ----------------------------
