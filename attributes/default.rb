@@ -393,7 +393,10 @@ end
 
 # plugins
 default['openstack']['compute']['plugins'] = nil
+
+# Array of options for `nova.conf` (e.g. ['option1=value1', 'option2=value2'])
 default['openstack']['compute']['misc_nova'] = nil
+# Array of options for `api-paste.ini` (e.g. ['option1=value1', ...])
 default['openstack']['compute']['misc_paste'] = nil
 
 # To disable the EC2 API endpoint, simply remove 'ec2,' from the list
