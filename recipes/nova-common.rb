@@ -105,7 +105,9 @@ if node['openstack']['compute']['libvirt']['images_type'] == 'rbd'
   rbd_secret_uuid = get_secret node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
 end
 
-vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
+if node['openstack']['compute']['driver'].split('.').first == 'vmwareapi'
+  vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
+end
 
 template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
