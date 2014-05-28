@@ -99,15 +99,10 @@ Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.
 if node['openstack']['compute']['network']['service_type'] == 'neutron'
   neutron_admin_password = get_password 'service', 'openstack-network'
   neutron_metadata_proxy_shared_secret = get_secret 'neutron_metadata_secret'
-else
-  neutron_admin_password = nil
-  neutron_metadata_proxy_shared_secret = nil
 end
 
 if node['openstack']['compute']['libvirt']['images_type'] == 'rbd'
   rbd_secret_uuid = get_secret node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
-else
-  rbd_secret_uuid = nil
 end
 
 vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
