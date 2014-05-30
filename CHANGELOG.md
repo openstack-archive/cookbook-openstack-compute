@@ -1,6 +1,9 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.2.3
+* Allow unix_sock_rw_perms to have attribute overrides
+
 ## 9.2.2
 * Fix to allow workers to have attribute overrides
 

@@ -199,6 +199,7 @@ if node['platform'] == 'suse'
 else
   default['openstack']['compute']['libvirt']['group'] = 'libvirtd'
 end
+default['openstack']['compute']['libvirt']['unix_sock_rw_perms'] = '0770'
 default['openstack']['compute']['libvirt']['libvirt_inject_key'] = true
 default['openstack']['compute']['libvirt']['libvirt_inject_password'] = false
 # VM Images format. Acceptable values are: raw, qcow2, lvm,

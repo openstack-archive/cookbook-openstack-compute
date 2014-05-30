@@ -234,6 +234,7 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["sparse_logical_volumes"]` - When images_type is lvm: use sparse logical volumes
 * `openstack["compute"]["libvirt"]["images_rbd_pool"]` - When images_type is rbd: use this RBD pool
 * `openstack["compute"]["libvirt"]["images_rbd_ceph_conf"]` - When images_type is rbd: use this ceph.conf
+* `openstack["compute"]["libvirt"]["unix_sock_rw_perms"]` - Set the UNIX socket permissions for the R/W socket. This is used for full management of VMs.
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_secret_name"]` - The name of the databag item containing the UUID shared between Cinder and nova-compute.  `libvirt_rbd` will define a libvirt secret with this UUID, containing the `rbd_user`'s password.  The password itself will be retrieved using `get_password` on the service `rbd_block_storage`.  Creating the cephx user in a Ceph cluster has to be done outside of the scope of this cookbook.
 

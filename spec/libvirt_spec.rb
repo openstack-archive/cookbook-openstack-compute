@@ -73,6 +73,10 @@ describe 'openstack-compute::libvirt' do
         end
       end
 
+      it 'has unix_sock_rw_perms' do
+        expect(chef_run).to render_file(file.name).with_content(/^unix_sock_rw_perms = "0770"$/)
+      end
+
       it 'notifies libvirt-bin restart' do
         expect(file).to notify('service[libvirt-bin]').to(:restart)
       end
