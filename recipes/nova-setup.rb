@@ -70,6 +70,8 @@ when 'nova'
   end
 
   cookbook_file node['openstack']['compute']['floating_cmd'] do
+    user 'root'
+    group 'root'
     source 'add_floaters.py'
     mode   00755
 
@@ -110,6 +112,8 @@ when 'neutron'
   end
 
   cookbook_file node['openstack']['compute']['floating_cmd'] do
+    user 'root'
+    group 'root'
     source 'add_floaters.py'
     mode   00755
 

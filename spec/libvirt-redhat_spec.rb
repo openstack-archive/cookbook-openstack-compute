@@ -15,14 +15,11 @@ describe 'openstack-compute::libvirt' do
     end
 
     it 'creates libvirtd group and adds nova as a member' do
-      expect(chef_run).to create_group 'libvirtd'
-      libvirt_group = chef_run.group('libvirtd')
-      libvirt_group.members.should == ['nova']
+      expect(chef_run).to create_group('libvirtd').with(members: ['nova'])
     end
 
     it 'symlinks qemu-kvm' do
-      link = chef_run.link '/usr/bin/qemu-system-x86_64'
-      expect(link).to link_to '/usr/libexec/qemu-kvm'
+      expect(chef_run).to create_link('/usr/bin/qemu-system-x86_64').with(to: '/usr/libexec/qemu-kvm')
     end
 
     it 'starts libvirt' do
@@ -34,7 +31,7 @@ describe 'openstack-compute::libvirt' do
     end
 
     it 'does not create /etc/default/libvirt-bin' do
-      pending 'TODO: how to test this'
+      expect(chef_run).not_to create_template('/etc/default/libvirt-bin')
     end
 
     describe '/etc/sysconfig/libvirtd' do
