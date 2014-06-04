@@ -221,7 +221,6 @@ default['openstack']['compute']['libvirt']['volume_backend'] = nil
 default['openstack']['compute']['libvirt']['rbd']['rbd_secret_name'] = 'rbd_secret_uuid'
 default['openstack']['compute']['libvirt']['rbd']['rbd_user'] = 'cinder'
 default['openstack']['compute']['config']['availability_zone'] = 'nova'
-default['openstack']['compute']['config']['storage_availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
 default['openstack']['compute']['config']['force_raw_images'] = false
 default['openstack']['compute']['config']['allow_same_net_traffic'] = true

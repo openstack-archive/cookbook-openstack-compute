@@ -127,6 +127,13 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default availability zone options set' do
+        [/^default_availability_zone=nova$/,
+         /^default_schedule_zone=nova/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
       it 'has default compute ip and port options set' do
         [/^osapi_compute_listen=127.0.0.1$/,
          /^osapi_compute_listen_port=8774$/].each do |line|
