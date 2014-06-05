@@ -117,6 +117,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["compute"]["adminURL"]` - URL used to access the OS API for admin functions
 * `openstack["compute"]["compute"]["internalURL"]` - URL used to access the OS API for user functions from an internal network
 * `openstack["compute"]["compute"]["publicURL"]` - URL used to access the OS API for user functions from an external network
+* `openstack["compute"]["compute"]["dnsmasq_config_file"]` - Override the default dnsmasq settings with this file
 * `openstack["compute"]["config"]["availability_zone"]` - Nova availability zone.  Usually set at the node level to place a compute node in another az
 * `openstack["compute"]["config"]["default_schedule_zone"]` - The availability zone to schedule instances in when no az is specified in the request
 * `openstack["compute"]["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)

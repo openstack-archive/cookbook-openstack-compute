@@ -302,6 +302,9 @@ volume_api_class=<%= node["openstack"]["compute"]["config"]["volume_api_class"] 
 # Region name of this node (string value)
 os_region_name=<%= node['openstack']['region'] %>
 
+# Override the default dnsmasq settings with this file (String value)
+dnsmasq_config_file=<%= node['openstack']['compute']['dnsmasq_config_file'] %>
+
 ##### THIRD PARTY ADDITIONS #####
 <% if node["openstack"]["compute"]["plugins"] %>
 <% node["openstack"]["compute"]["plugins"].each do |p| %>

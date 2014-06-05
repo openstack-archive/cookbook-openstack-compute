@@ -67,6 +67,10 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
+      it 'has dnsmasq_config_file' do
+        expect(chef_run).to render_file(file.name).with_content(/^dnsmasq_config_file=$/)
+      end
+
       it 'has default *_path options set' do
         [%r{^log_dir=/var/log/nova$},
          %r{^state_path=/var/lib/nova$},

@@ -39,6 +39,9 @@ default['openstack']['compute']['metadata_workers'] = nil
 # The name of the Chef role that sets up the Keystone Service API
 default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 
+# The dnsmasq config file path
+default['openstack']['compute']['dnsmasq_config_file'] = ''
+
 # Common rpc definitions
 default['openstack']['compute']['rpc_thread_pool_size'] = 64
 default['openstack']['compute']['rpc_conn_pool_size'] = 30
