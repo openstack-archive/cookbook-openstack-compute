@@ -1,6 +1,10 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+
+##9.2.6
+* Allow resize_confirm_window to have attribute overrides
+
 ## 9.2.5
 * Create state and lock directories
 

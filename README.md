@@ -131,6 +131,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["resume_guests_state_on_host_boot"]` - Whether to start guests that were running before the host rebooted
 * `openstack["compute"]["config"]["disk_allocation_ratio"]` - Virtual disk to physical disk allocation ratio (default 1.0)
 * `openstack["compute"]["config"]["allow_resize_to_same_host"]` - Allow destination machine to match source for resize. Useful when testing in single-host environments (default is false)
+* `openstack["compute"]["config"]["resize_confirm_window"]` -  Automatically confirm resizes after N seconds, Set to 0 to disable (default is 0)
 * `openstack["compute"]["config"]["disk_cachemodes"]` - Cachemodes to use for different disk types e.g: "file=directsync,block=none".  Valid cache values are "default", "none", "writethrough", "writeback", "directsync" and "unsafe".
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens

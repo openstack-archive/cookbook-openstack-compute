@@ -206,6 +206,7 @@ osapi_compute_link_prefix = <%= @osapi_compute_link_prefix %>
 start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_guests_on_host_boot"] %>
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
 allow_resize_to_same_host=<%= node["openstack"]["compute"]["config"]["allow_resize_to_same_host"] %>
+resize_confirm_window=<%= node["openstack"]["compute"]["config"]["resize_confirm_window"] %>
 
 ##### QUOTAS #####
 # (StrOpt) default driver to use for quota checks (default: nova.quota.DbQuotaDriver)

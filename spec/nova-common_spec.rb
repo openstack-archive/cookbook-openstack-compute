@@ -111,6 +111,11 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to render_file(file.name).with_content(line)
       end
 
+      it 'has default resize_confirm_window set' do
+        line = /^resize_confirm_window=0$/
+        expect(chef_run).to render_file(file.name).with_content(line)
+      end
+
       it 'has default RPC/AMQP options set' do
         [/^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
          /^rpc_thread_pool_size=64$/,
