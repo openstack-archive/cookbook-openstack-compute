@@ -232,6 +232,7 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["max_client_requests"]` - Limit on concurrent requests from a single client connection. (default: 5)
 * `openstack["compute"]["libvirt"]["libvirt_inject_key"]` - Inject the ssh public key at boot time, without an agent. (default: true)
 * `openstack["compute"]["libvirt"]["libvirt_inject_password"]` - Inject the admin password at boot time, without an agent. (default: false)
+* `openstack["compute"]["libvirt"]["libvirt_inject_partition"]` - The partition to inject to : -2 => disable, -1 => inspect (libguestfs only), 0 => not partitioned, >0 => partition number. (default: -2)
 * `openstack["compute"]["libvirt"]["images_type"]` - How to store local images (ephemeral disks): raw, qcow2, lvm, rbd, or default
 * `openstack["compute"]["libvirt"]["volume_group"]` - When images_type is lvm: volume group to use
 * `openstack["compute"]["libvirt"]["sparse_logical_volumes"]` - When images_type is lvm: use sparse logical volumes

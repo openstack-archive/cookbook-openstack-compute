@@ -453,7 +453,7 @@ inject_key=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_key"] %>
 # (libguestfs only), 0 => not partitioned, >0 => partition
 # number (integer value)
 # Deprecated group/name - [DEFAULT]/libvirt_inject_partition
-#inject_partition=-2
+inject_partition=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_partition"] %>
 
 # Sync virtual and real mouse cursors in Windows VMs (boolean
 # value)

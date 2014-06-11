@@ -339,7 +339,8 @@ describe 'openstack-compute::nova-common' do
           [/^use_virtio_for_bridges=true$/,
            /^images_type=default$/,
            /^inject_key=true$/,
-           /^inject_password=false$/].each do |line|
+           /^inject_password=false$/,
+           /^inject_partition=-2$/].each do |line|
              expect(chef_run).to render_file(file.name).with_content(line)
            end
         end
