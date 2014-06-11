@@ -357,9 +357,11 @@ describe 'openstack-compute::nova-common' do
           # README(galstrom21): There is a order of operations issue here
           #   if you use node.set, these tests will fail.
           node.override['openstack']['compute']['driver'] = 'vmwareapi.VMwareVCDriver'
+          # NB(srenatus) this is only one option, the other one is
+          #   'vmwareapi.VMwareESXDriver' (see templates/default/nova.conf.erb)
         end
 
-        it 'has default vmware config options set' do
+        it 'has vmware config options set' do
           [
             /^host_ip = $/,
             /^host_username = $/,
