@@ -1,6 +1,9 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.2.10
+* Allow flat_injected and use_ipv6 to have attribute overrides
+
 ## 9.2.9
 * Allow live migration to have attribute overrides
 
@@ -10,7 +13,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 ## 9.2.7
 * Remove the storage_availability_zone settings
 
-##9.2.6
+## 9.2.6
 * Allow resize_confirm_window to have attribute overrides
 
 ## 9.2.5

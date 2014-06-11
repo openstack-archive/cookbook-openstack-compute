@@ -134,6 +134,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["resize_confirm_window"]` -  Automatically confirm resizes after N seconds, Set to 0 to disable (default is 0)
 * `openstack["compute"]["config"]["disk_cachemodes"]` - Cachemodes to use for different disk types e.g: "file=directsync,block=none".  Valid cache values are "default", "none", "writethrough", "writeback", "directsync" and "unsafe".
 * `openstack["compute"]["config"]["live_migration_retry_count"]` - Number of 1 second retries needed in live_migration
+* `openstack["compute"]["config"]["flat_injected"]` - Whether to attempt to inject network setup into guest. Used by config_drive support.
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["rpc_thread_pool_size"]` - Size of RPC thread pool (default 64)
@@ -181,6 +182,7 @@ Basic networking configuration is controlled with the following attributes:
 * `openstack["compute"]["network"]["vlan_interface"]` - Defaults to eth0. Refers to the network interface used for VM addresses when VMs are assigned in a VLAN subnet.
 * `openstack["compute"]["network"]["auto_assign_floating_ip"]` - Defaults to false. Autoassigning floating ip to VM, this should be only for nova network.
 * `openstack["compute"]["network"]["force_dhcp_release"]` - If True, send a dhcp release on instance termination. (Default is false on "fedora", "redhat", "centos")
+* `openstack["compute"]["network"]["use_ipv6"]` - If True, use ipv6 support.
 
 You can have the cookbook automatically create networks in Nova for you by adding a Hash to the `openstack["compute"]["networks"]` Array.
 **Note**: The `openstack-compute::nova-setup` recipe contains the code that creates these pre-defined networks.

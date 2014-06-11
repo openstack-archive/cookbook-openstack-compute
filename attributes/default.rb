@@ -166,6 +166,7 @@ default['openstack']['compute']['network']['vlan_interface'] = 'eth0'
 default['openstack']['compute']['network']['auto_assign_floating_ip'] = false
 # https://bugs.launchpad.net/nova/+bug/1075859
 default['openstack']['compute']['network']['use_single_default_gateway'] = false
+default['openstack']['compute']['network']['use_ipv6'] = false
 
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
 default['openstack']['compute']['scheduler']['default_filters'] = %W(
@@ -249,6 +250,7 @@ default['openstack']['compute']['config']['resume_guests_state_on_host_boot'] = 
 default['openstack']['compute']['config']['force_config_drive'] = nil
 default['openstack']['compute']['config']['mkisofs_cmd'] = 'genisoimage'
 default['openstack']['compute']['config']['injected_network_template'] = '$pybasedir/nova/virt/interfaces.template'
+default['openstack']['compute']['config']['flat_injected'] = false
 
 # Volume API class (driver)
 default['openstack']['compute']['config']['volume_api_class'] = 'nova.volume.cinder.API'

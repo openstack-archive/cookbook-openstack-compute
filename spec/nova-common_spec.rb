@@ -277,7 +277,9 @@ describe 'openstack-compute::nova-common' do
         [/^allow_resize_to_same_host=false$/,
          /^force_dhcp_release=true$/,
          /^mkisofs_cmd=genisoimage$/,
-         %r{^injected_network_template=\$pybasedir/nova/virt/interfaces.template$}].each do |line|
+         %r{^injected_network_template=\$pybasedir/nova/virt/interfaces.template$},
+         /^flat_injected=false$/,
+         /^use_ipv6=false$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end

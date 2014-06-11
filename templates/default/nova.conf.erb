@@ -122,6 +122,7 @@ use_single_default_gateway=<%= node["openstack"]["compute"]["network"]["use_sing
 vlan_interface=<%= node["openstack"]["compute"]["network"]["vlan_interface"] %>
 auto_assign_floating_ip=<%= node["openstack"]["compute"]["network"]["auto_assign_floating_ip"] %>
 <% end -%>
+use_ipv6=<%= node["openstack"]["compute"]["network"]["use_ipv6"] %>
 
 ##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService
@@ -263,6 +264,7 @@ force_config_drive=<%= node["openstack"]["compute"]["config"]["force_config_driv
 <% end %>
 mkisofs_cmd=<%= node["openstack"]["compute"]["config"]["mkisofs_cmd"] %>
 injected_network_template=<%= node["openstack"]["compute"]["config"]["injected_network_template"] %>
+flat_injected=<%= node["openstack"]["compute"]["config"]["flat_injected"] %>
 
 <% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 # The IP address on which the EC2 API will listen. (string value)
