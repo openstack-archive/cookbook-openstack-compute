@@ -10,6 +10,7 @@ describe 'openstack-compute::api-os-compute' do
 
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
+    include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_upgrades_python_keystoneclient'
 

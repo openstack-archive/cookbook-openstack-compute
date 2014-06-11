@@ -59,6 +59,20 @@ directory '/etc/nova' do
   action :create
 end
 
+directory node['openstack']['compute']['state_path'] do
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+  mode 00755
+  recursive true
+end
+
+directory node['openstack']['compute']['lock_path'] do
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+  mode 00755
+  recursive true
+end
+
 db_user = node['openstack']['db']['compute']['username']
 db_pass = get_password 'db', 'nova'
 sql_connection = db_uri('compute', db_user, db_pass)

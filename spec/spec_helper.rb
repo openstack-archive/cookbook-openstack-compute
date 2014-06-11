@@ -102,12 +102,32 @@ shared_examples 'expect_upgrades_python_keystoneclient' do
   end
 end
 
-shared_examples 'expect_creates_nova_lock_dir' do
-  it 'creates the /var/lock/nova directory' do
-    expect(chef_run).to create_directory('/var/lock/nova').with(
+shared_examples 'expect_creates_nova_state_dir' do
+  it 'creates the /var/lib/nova/lock directory' do
+    expect(chef_run).to create_directory('/var/lib/nova').with(
       user: 'nova',
       group: 'nova',
-      mode: 0700
+      mode: 0755
+    )
+  end
+end
+
+shared_examples 'expect_creates_nova_lock_dir' do
+  it 'creates the /var/lib/nova/lock directory' do
+    expect(chef_run).to create_directory('/var/lib/nova/lock').with(
+      user: 'nova',
+      group: 'nova',
+      mode: 0755
+    )
+  end
+end
+
+shared_examples 'expect_creates_nova_instances_dir' do
+  it 'creates the /var/lib/nova/lock directory' do
+    expect(chef_run).to create_directory('/var/lib/nova/instances').with(
+      user: 'nova',
+      group: 'nova',
+      mode: 0755
     )
   end
 end
