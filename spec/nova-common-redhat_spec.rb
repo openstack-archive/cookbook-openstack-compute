@@ -9,6 +9,8 @@ describe 'openstack-compute::nova-common' do
     let(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
+    include_examples 'expect_creates_nova_state_dir'
+    include_examples 'expect_creates_nova_lock_dir'
 
     it 'upgrades nova common package' do
       expect(chef_run).to upgrade_package 'openstack-nova-common'

@@ -1,6 +1,9 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.2.5
+* Create state and lock directories
+
 ## 9.2.4
 * Allow dnsmasq_config_file to have attribute overrides
 

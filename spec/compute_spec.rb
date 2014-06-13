@@ -10,6 +10,9 @@ describe 'openstack-compute::compute' do
 
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
+    include_examples 'expect_creates_nova_state_dir'
+    include_examples 'expect_creates_nova_lock_dir'
+    include_examples 'expect_creates_nova_instances_dir'
 
     it 'includes api-metadata recipe' do
       expect(chef_run).to include_recipe 'openstack-compute::api-metadata'
@@ -97,14 +100,6 @@ describe 'openstack-compute::compute' do
 
     it 'runs libvirt recipe' do
       expect(chef_run).to include_recipe 'openstack-compute::libvirt'
-    end
-
-    it 'creates instances_path directory' do
-      expect(chef_run).to create_directory('/var/lib/nova/instances').with(
-        owner: 'nova',
-        group: 'nova',
-        mode: 0755
-      )
     end
   end
 end

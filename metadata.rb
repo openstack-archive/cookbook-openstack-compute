@@ -4,7 +4,7 @@ maintainer_email 'matt@opscode.com'
 license          'Apache 2.0'
 description      'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '9.2.4'
+version          '9.2.5'
 
 recipe 'openstack-compute::api-ec2', 'Installs AWS EC2 compatible API'
 recipe 'openstack-compute::api-metadata', 'Installs the nova metadata package'

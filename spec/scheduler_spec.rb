@@ -10,6 +10,7 @@ describe 'openstack-compute::scheduler' do
 
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
+    include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
     it 'upgrades nova scheduler package' do
