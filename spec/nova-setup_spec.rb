@@ -28,9 +28,16 @@ describe 'openstack-compute::nova-setup' do
       expect(chef_run).to run_execute(cmd).with(user: 'nova', group: 'nova')
     end
 
-    it 'add_floaters.py has proper modes' do
-      file = chef_run.cookbook_file('/usr/local/bin/add_floaters.py')
-      expect(sprintf('%o', file.mode)).to eq '755'
+    it 'adds a private nova network address' do
+      expect(chef_run).to run_execute('nova-manage network create --label=private')
+    end
+
+    it 'creates add_floaters.py' do
+      expect(chef_run).to create_cookbook_file('/usr/local/bin/add_floaters.py').with(
+        user:  'root',
+        group: 'root',
+        mode:  00755
+      )
     end
 
     it 'adds cidr range of floating ipv4 addresses' do
@@ -67,8 +74,13 @@ describe 'openstack-compute::nova-setup' do
       end
 
       it 'adds cidr range of floating ipv4 addresses to neutron' do
-        resource = chef_run.find_resource('execute', 'neutron floating create').to_hash
-        expect(resource).to include(action: [:run], command: '. /root/openrc && /usr/local/bin/add_floaters.py neutron --cidr=10.10.10.0/24 --pool=public')
+        # used to stub the only_if { File.exist?('/root/openrc') } in
+        # execute[neutron floating create]
+        Chef::Resource::Execute.any_instance.stub(:should_skip?).and_return(false)
+
+        expect(chef_run).to run_execute('neutron floating create').with(
+          command: '. /root/openrc && /usr/local/bin/add_floaters.py neutron --cidr=10.10.10.0/24 --pool=public'
+        )
       end
     end
   end

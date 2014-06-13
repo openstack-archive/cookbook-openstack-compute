@@ -21,6 +21,10 @@ describe 'openstack-compute::libvirt' do
       expect(chef_run).to upgrade_package 'libvirt'
     end
 
+    it 'creates libvirtd group and adds nova as a member' do
+      expect(chef_run).to create_group('libvirt').with(members: ['openstack-nova'])
+    end
+
     it 'starts libvirt' do
       expect(chef_run).to start_service 'libvirtd'
     end

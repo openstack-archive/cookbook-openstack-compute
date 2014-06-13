@@ -15,11 +15,11 @@ describe 'openstack-compute::libvirt' do
     end
 
     it 'does not create libvirtd group and add to nova' do
-      pending 'TODO: how to test this'
+      expect(chef_run).not_to create_group 'libvirtd'
     end
 
     it 'does not symlink qemu-kvm' do
-      pending 'TODO: how to test this'
+      expect(chef_run).not_to create_link '/usr/bin/qemu-system-x86_64'
     end
 
     it 'starts dbus' do
@@ -108,7 +108,7 @@ describe 'openstack-compute::libvirt' do
     end
 
     it 'does not create /etc/sysconfig/libvirtd' do
-      pending 'TODO: how to test this'
+      expect(chef_run).not_to create_template '/etc/sysconfig/libvirtd'
     end
   end
 end
