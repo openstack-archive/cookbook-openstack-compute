@@ -328,9 +328,6 @@ default['openstack']['compute']['network']['force_dhcp_release'] = true
 case platform_family
 when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
-    'mysql_python_packages' => ['MySQL-python'],
-    'db2_python_packages' => ['python-ibm-db', 'python-ibm-db-sa'],
-    'postgresql_python_packages' => ['python-psycopg2'],
     'api_ec2_packages' => ['openstack-nova-api'],
     'api_ec2_service' => 'openstack-nova-api',
     'api_os_compute_packages' => ['openstack-nova-api'],
@@ -367,7 +364,6 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
     'package_overrides' => ''
   }
   if platform_family == 'suse'
-    default['openstack']['compute']['platform']['mysql_python_packages'] = ['python-mysql']
     default['openstack']['compute']['platform']['dbus_service'] = 'dbus'
     default['openstack']['compute']['platform']['neutron_python_packages'] = ['python-neutronclient', 'python-pyparsing']
     default['openstack']['compute']['platform']['common_packages'] = ['openstack-nova']
@@ -381,8 +377,6 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['network']['force_dhcp_release'] = false
 when 'debian'
   default['openstack']['compute']['platform'] = {
-    'mysql_python_packages' => ['python-mysqldb'],
-    'postgresql_python_packages' => ['python-psycopg2'],
     'api_ec2_packages' => ['nova-api-ec2'],
     'api_ec2_service' => 'nova-api-ec2',
     'api_os_compute_packages' => ['nova-api-os-compute'],

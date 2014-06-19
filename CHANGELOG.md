@@ -1,6 +1,10 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+
+## 9.3.0
+* python_packages database client attributes have been migrated to the -common cookbook
+
 ## 9.2.10
 * Allow flat_injected and use_ipv6 to have attribute overrides
 

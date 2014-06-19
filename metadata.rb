@@ -4,7 +4,7 @@ maintainer_email 'matt@opscode.com'
 license          'Apache 2.0'
 description      'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '9.2.10'
+version          '9.3.0'
 
 recipe 'openstack-compute::api-ec2', 'Installs AWS EC2 compatible API'
 recipe 'openstack-compute::api-metadata', 'Installs the nova metadata package'
@@ -25,7 +25,7 @@ recipe 'openstack-compute::vncproxy', 'Installs and configures the vncproxy serv
   supports os
 end
 
-depends 'openstack-common', '~> 9.4'
+depends 'openstack-common', '~> 9.5'
 depends 'openstack-identity', '~> 9.0'
 depends 'openstack-image', '~> 9.0'
 depends 'openstack-network', '~> 9.0'
