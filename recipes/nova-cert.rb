@@ -32,7 +32,7 @@ end
 
 service 'nova-cert' do
   service_name platform_options['compute_cert_service']
-  supports statusi: true, restart: true
+  supports status: true, restart: true
   subscribes :restart, resources('template[/etc/nova/nova.conf]')
 
   action :enable
