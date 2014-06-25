@@ -133,6 +133,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["allow_resize_to_same_host"]` - Allow destination machine to match source for resize. Useful when testing in single-host environments (default is false)
 * `openstack["compute"]["config"]["resize_confirm_window"]` -  Automatically confirm resizes after N seconds, Set to 0 to disable (default is 0)
 * `openstack["compute"]["config"]["disk_cachemodes"]` - Cachemodes to use for different disk types e.g: "file=directsync,block=none".  Valid cache values are "default", "none", "writethrough", "writeback", "directsync" and "unsafe".
+* `openstack["compute"]["config"]["live_migration_retry_count"]` - Number of 1 second retries needed in live_migration
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["rpc_thread_pool_size"]` - Size of RPC thread pool (default 64)
@@ -239,6 +240,10 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["images_rbd_pool"]` - When images_type is rbd: use this RBD pool
 * `openstack["compute"]["libvirt"]["images_rbd_ceph_conf"]` - When images_type is rbd: use this ceph.conf
 * `openstack["compute"]["libvirt"]["unix_sock_rw_perms"]` - Set the UNIX socket permissions for the R/W socket. This is used for full management of VMs.
+* `openstack["compute"]["libvirt"]["live_migration_bandwidth"]` - Maximum bandwidth to be used during migration, in Mbps.
+* `openstack["compute"]["libvirt"]["live_migration_flag"]` - Migration flags to be set for live migration.
+* `openstack["compute"]["libvirt"]["block_migration_flag"]` - Migration flags to be set for block migration.
+* `openstack["compute"]["libvirt"]["live_migration_uri"]` - Migration target URI (any included "%s" is replaced with the migration target hostname).
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_secret_name"]` - The name of the databag item containing the UUID shared between Cinder and nova-compute.  `libvirt_rbd` will define a libvirt secret with this UUID, containing the `rbd_user`'s password.  The password itself will be retrieved using `get_password` on the service `rbd_block_storage`.  Creating the cephx user in a Ceph cluster has to be done outside of the scope of this cookbook.
 

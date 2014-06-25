@@ -206,6 +206,7 @@ start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_gues
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
 allow_resize_to_same_host=<%= node["openstack"]["compute"]["config"]["allow_resize_to_same_host"] %>
 resize_confirm_window=<%= node["openstack"]["compute"]["config"]["resize_confirm_window"] %>
+live_migration_retry_count=<%= node["openstack"]["compute"]["config"]["live_migration_retry_count"] %>
 
 ##### QUOTAS #####
 # (StrOpt) default driver to use for quota checks (default: nova.quota.DbQuotaDriver)
@@ -461,17 +462,17 @@ inject_partition=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_par
 
 # Migration target URI (any included "%s" is replaced with the
 # migration target hostname) (string value)
-#live_migration_uri=qemu+tcp://%s/system
+live_migration_uri=<%= node["openstack"]["compute"]["libvirt"]["live_migration_uri"] %>
 
 # Migration flags to be set for live migration (string value)
-#live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER
+live_migration_flag=<%= node["openstack"]["compute"]["libvirt"]["live_migration_flag"] %>
 
 # Migration flags to be set for block migration (string value)
-#block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC
+block_migration_flag=<%= node["openstack"]["compute"]["libvirt"]["block_migration_flag"] %>
 
 # Maximum bandwidth to be used during migration, in Mbps
 # (integer value)
-#live_migration_bandwidth=0
+live_migration_bandwidth=<%= node["openstack"]["compute"]["libvirt"]["live_migration_bandwidth"] %>
 
 # Snapshot image format (valid options are : raw, qcow2, vmdk,
 # vdi). Defaults to same as source image (string value)

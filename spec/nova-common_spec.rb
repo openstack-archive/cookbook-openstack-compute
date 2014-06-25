@@ -92,7 +92,8 @@ describe 'openstack-compute::nova-common' do
          /^preallocate_images=none$/,
          /^use_cow_images=true$/,
          /^vif_plugging_is_fatal=true$/,
-         /^vif_plugging_timeout=300$/].each do |line|
+         /^vif_plugging_timeout=300$/,
+         /^live_migration_retry_count=30$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
@@ -340,7 +341,11 @@ describe 'openstack-compute::nova-common' do
            /^images_type=default$/,
            /^inject_key=true$/,
            /^inject_password=false$/,
-           /^inject_partition=-2$/].each do |line|
+           /^inject_partition=-2$/,
+           /^live_migration_bandwidth=0$/,
+           /^live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER$/,
+           /^block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC$/,
+           %r{live_migration_uri=qemu\+tcp://%s/system$}].each do |line|
              expect(chef_run).to render_file(file.name).with_content(line)
            end
         end

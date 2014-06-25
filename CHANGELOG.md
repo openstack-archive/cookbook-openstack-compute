@@ -1,6 +1,8 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.2.9
+* Allow live migration to have attribute overrides
 
 ## 9.2.8
 * Allow inject_partition to have attribute overrides

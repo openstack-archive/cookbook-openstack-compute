@@ -221,6 +221,12 @@ default['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/ceph/
 default['openstack']['compute']['libvirt']['volume_backend'] = nil
 default['openstack']['compute']['libvirt']['rbd']['rbd_secret_name'] = 'rbd_secret_uuid'
 default['openstack']['compute']['libvirt']['rbd']['rbd_user'] = 'cinder'
+# live migration
+default['openstack']['compute']['libvirt']['live_migration_bandwidth'] = 0
+default['openstack']['compute']['libvirt']['live_migration_flag'] = 'VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER'
+default['openstack']['compute']['libvirt']['block_migration_flag'] = 'VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC'
+default['openstack']['compute']['libvirt']['live_migration_uri'] = 'qemu+tcp://%s/system'
+
 default['openstack']['compute']['config']['availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
 default['openstack']['compute']['config']['force_raw_images'] = false
@@ -274,6 +280,8 @@ default['openstack']['compute']['config']['quota_metadata_items'] = 128
 default['openstack']['compute']['config']['quota_ram'] = 51200
 # disk cache modes
 default['openstack']['compute']['config']['disk_cache_modes'] = nil
+# Number of 1 second retries needed in live_migration
+default['openstack']['compute']['config']['live_migration_retry_count'] = 30
 
 default['openstack']['compute']['ratelimit']['settings'] = {
   'generic-post-limit' => { 'verb' => 'POST', 'uri' => '*', 'regex' => '.*', 'limit' => '10', 'interval' => 'MINUTE' },
