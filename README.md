@@ -107,6 +107,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["metadata_workers"]` - Number of metadata workders
 * `openstack["compute"]["config"]["volume_api_class"]` - API Class used for Volume support
 * `openstack['compute']['driver'] = Driver to use for controlling virtualization
+* `openstack['compute']['manager'] = Full class name for the Manager for compute
 * `openstack['compute']['default_ephemeral_format'] = The default format an ephemeral_volume will be formatted with on creation
 * `openstack['compute']['preallocate_images'] = VM image preallocation mode
 * `openstack['compute']['use_cow_images'] = Whether to use cow images
@@ -254,6 +255,7 @@ Scheduler Configuration Attributes
 
 * `openstack["compute"]["scheduler"]["scheduler_driver"]` - the scheduler driver to use
 NOTE: The filter scheduler currently does not work with ec2.
+* `openstack["compute"]["scheduler"]["available_filters"]` - Filter classes available to the scheduler which may be specified more than once.
 * `openstack["compute"]["scheduler"]["default_filters"]` - a list of filters enabled for schedulers that support them.
 
 Syslog Configuration Attributes

@@ -89,6 +89,7 @@ describe 'openstack-compute::nova-common' do
 
       it 'has compute driver attributes defaults set' do
         [/^compute_driver=libvirt.LibvirtDriver$/,
+         /^compute_manager=nova.compute.manager.ComputeManager$/,
          /^preallocate_images=none$/,
          /^use_cow_images=true$/,
          /^vif_plugging_is_fatal=true$/,
@@ -457,6 +458,15 @@ describe 'openstack-compute::nova-common' do
 
         it 'has wsdl_location line' do
           expect(chef_run).to render_file(file.name).with_content('wsdl_location = http://127.0.0.1/')
+        end
+      end
+
+      it 'has scheduler options' do
+        [/^compute_scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
+         /^scheduler_available_filters=nova.scheduler.filters.all_filters$/,
+         /^scheduler_default_filters=AvailabilityZoneFilter,RamFilter,ComputeFilter,CoreFilter,SameHostFilter,DifferentHostFilter$/
+        ].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
 

@@ -73,7 +73,7 @@ qpid_topology_version=<%= node['openstack']['mq']['compute']['qpid']['topology_v
 ##### SCHEDULER #####
 # scheduler_manager=nova.scheduler.manager.SchedulerManager
 compute_scheduler_driver=<%= node["openstack"]["compute"]["scheduler"]["scheduler_driver"] %>
-scheduler_available_filters=nova.scheduler.filters.all_filters
+scheduler_available_filters=<%= node["openstack"]["compute"]["scheduler"]["available_filters"] %>
 # which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
 default_availability_zone=<%= node["openstack"]["compute"]["config"]["availability_zone"] %>
@@ -137,7 +137,7 @@ preallocate_images=<%= node["openstack"]["compute"]["preallocate_images"] %>
 use_cow_images=<%= node["openstack"]["compute"]["use_cow_images"] %>
 vif_plugging_is_fatal=<%= node["openstack"]["compute"]["vif_plugging_is_fatal"] %>
 vif_plugging_timeout=<%= node["openstack"]["compute"]["vif_plugging_timeout"] %>
-compute_manager=nova.compute.manager.ComputeManager
+compute_manager=<%= node["openstack"]["compute"]["manager"] %>
 sql_connection=<%= @sql_connection %>
 connection_type=libvirt
 

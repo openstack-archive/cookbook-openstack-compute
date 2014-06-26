@@ -169,6 +169,7 @@ default['openstack']['compute']['network']['use_single_default_gateway'] = false
 default['openstack']['compute']['network']['use_ipv6'] = false
 
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
+default['openstack']['compute']['scheduler']['available_filters'] = 'nova.scheduler.filters.all_filters'
 default['openstack']['compute']['scheduler']['default_filters'] = %W(
   AvailabilityZoneFilter
   RamFilter
@@ -178,6 +179,7 @@ default['openstack']['compute']['scheduler']['default_filters'] = %W(
   DifferentHostFilter)
 
 default['openstack']['compute']['driver'] = 'libvirt.LibvirtDriver'
+default['openstack']['compute']['manager'] = 'nova.compute.manager.ComputeManager'
 default['openstack']['compute']['default_ephemeral_format'] = nil
 default['openstack']['compute']['preallocate_images'] = 'none'
 default['openstack']['compute']['use_cow_images'] = true
