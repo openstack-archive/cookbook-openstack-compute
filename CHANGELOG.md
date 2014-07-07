@@ -5,6 +5,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 ## 9.3.0
 * python_packages database client attributes have been migrated to the -common cookbook
 * bump berkshelf to 2.0.18 to allow Supermarket support
+* Allow metadata listen host and port to be configured
 
 ## 9.2.10
 * Allow flat_injected and use_ipv6 to have attribute overrides
