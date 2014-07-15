@@ -143,25 +143,6 @@ def expect_creates_api_paste(service, action = :restart) # rubocop:disable Metho
       )
     end
 
-    describe 'keystone_authtoken' do
-      it 'has correct auth_token settings' do
-        [
-          'auth_uri = http://127.0.0.1:5000/v2.0',
-          'auth_host = 127.0.0.1',
-          'auth_port = 35357',
-          'auth_protocol = http',
-          'auth_version = v2.0',
-          'admin_tenant_name = service',
-          'admin_user = nova',
-          'admin_password = nova-pass',
-          'signing_dir = /var/cache/nova/api'
-        ].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(
-            /^#{Regexp.quote(line)}$/)
-        end
-      end
-    end
-
     context 'template contents' do
       context 'ec2 enabled' do
         before do

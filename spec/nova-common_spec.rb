@@ -173,6 +173,25 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      context 'keystone_authtoken' do
+        it 'has correct auth_token settings' do
+          [
+            'auth_uri = http://127.0.0.1:5000/v2.0',
+            'auth_host = 127.0.0.1',
+            'auth_port = 35357',
+            'auth_protocol = http',
+            'auth_version = v2.0',
+            'admin_tenant_name = service',
+            'admin_user = nova',
+            'admin_password = nova-pass',
+            'signing_dir = /var/cache/nova/api'
+          ].each do |line|
+            expect(chef_run).to render_file(file.name).with_content(
+              /^#{Regexp.quote(line)}$/)
+          end
+        end
+      end
+
       context 'rabbit mq backend' do
         before do
           node.set['openstack']['mq']['compute']['service_type'] = 'rabbitmq'

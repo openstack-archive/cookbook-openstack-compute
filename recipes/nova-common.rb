@@ -124,6 +124,10 @@ if node['openstack']['compute']['driver'].split('.').first == 'vmwareapi'
   vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
 end
 
+identity_admin_endpoint = endpoint 'identity-admin'
+auth_uri = auth_uri_transform identity_endpoint.to_s, node['openstack']['compute']['api']['auth']['version']
+service_pass = get_password 'service', 'openstack-compute'
+
 template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   owner node['openstack']['compute']['user']
@@ -159,7 +163,10 @@ template '/etc/nova/nova.conf' do
     ec2_api_bind_ip: ec2_api_bind.host,
     ec2_api_bind_port: ec2_api_bind.port,
     rbd_secret_uuid: rbd_secret_uuid,
-    vmware_host_pass: vmware_host_pass
+    vmware_host_pass: vmware_host_pass,
+    auth_uri: auth_uri,
+    identity_admin_endpoint: identity_admin_endpoint,
+    service_pass: service_pass
   )
 end
 
