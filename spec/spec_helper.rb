@@ -11,12 +11,12 @@ require 'securerandom'
 LOG_LEVEL = :fatal
 SUSE_OPTS = {
   platform: 'suse',
-  version: '11.03',
+  version: '11.3',
   log_level: LOG_LEVEL
 }
 REDHAT_OPTS = {
   platform: 'redhat',
-  version: '6.3',
+  version: '6.5',
   log_level: LOG_LEVEL
 }
 UBUNTU_OPTS = {
