@@ -592,7 +592,7 @@ describe 'openstack-compute::nova-common' do
           [
             %r(^filters_path=/etc/nova/rootwrap.d,/usr/share/nova/rootwrap$),
             %r(^exec_dirs=/sbin,/usr/sbin,/bin,/usr/bin$),
-            /^use_syslog=False$/,
+            /^use_syslog=false$/,
             /^syslog_log_facility=syslog$/,
             /^syslog_log_level=ERROR$/
           ].each do |line|

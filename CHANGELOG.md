@@ -9,6 +9,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Move auth configuration from api-paste.ini to nova.conf
 * fix fauxhai version for suse and redhat
 * Allow scheduler_available_filters and compute_manager to have attribute overrides
+* Allow rootwrap.conf attributes
 
 ## 9.3.0
 * python_packages database client attributes have been migrated to the -common cookbook
