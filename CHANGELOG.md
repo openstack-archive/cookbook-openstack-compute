@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
 
+## 10.0.0
+* Upgrading to Juno
+
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
 * fix fauxhai version for suse and redhat

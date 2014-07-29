@@ -1,5 +1,0 @@
-# Strainerfile
-rubocop: rubocop $SANDBOX/$COOKBOOK
-knife test: knife cookbook test $COOKBOOK
-foodcritic: foodcritic -f any -t ~FC003 -t ~FC023 $SANDBOX/$COOKBOOK
-chefspec: rspec --format documentation $SANDBOX/$COOKBOOK/spec
