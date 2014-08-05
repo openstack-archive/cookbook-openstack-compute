@@ -7,7 +7,7 @@ describe 'openstack-compute::libvirt' do
     # This is stubbed b/c systems without '/boot/grub/menul.lst`,
     # fail to pass tests.  This can be removed if a check verifies
     # the files existence prior to File#open.
-    ::File.stub(:open).and_call_original
+    allow(File).to receive(:open).and_call_original
   end
 
   describe 'suse' do

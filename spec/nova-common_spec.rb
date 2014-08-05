@@ -82,6 +82,25 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default quota options set' do
+        [/^quota_driver=nova.quota.DbQuotaDriver$/,
+         /^quota_security_groups=50$/,
+         /^quota_security_group_rules=20$/,
+         /^quota_cores=20$/,
+         /^quota_fixed_ips=-1$/,
+         /^quota_floating_ips=10$/,
+         /^quota_injected_file_content_bytes=10240$/,
+         /^quota_injected_file_path_length=255$/,
+         /^quota_injected_files=5$/,
+         /^quota_instances=10$/,
+         /^quota_key_pairs=100$/,
+         /^quota_metadata_items=128$/,
+         /^quota_ram=51200$/
+        ].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
       it 'has an instance_name_template setting' do
         expect(chef_run).to render_file(file.name).with_content(
           /^instance_name_template=instance-%08x$/)
