@@ -1,12 +1,12 @@
+source "https://supermarket.getchef.com"
+
 metadata
 
 cookbook "openstack-image",
-  git: "git://github.com/stackforge/cookbook-openstack-image.git"
+  github: "stackforge/cookbook-openstack-image"
 cookbook "openstack-identity",
-  git: "git://github.com/stackforge/cookbook-openstack-identity.git"
+  github: "stackforge/cookbook-openstack-identity"
 cookbook "openstack-common",
-  git: "git://github.com/stackforge/cookbook-openstack-common.git"
+  github: "stackforge/cookbook-openstack-common"
 cookbook "openstack-network",
-  git: "git://github.com/stackforge/cookbook-openstack-network.git"
-cookbook "sysctl",
-  git: "git://github.com/Fewbytes/sysctl-cookbook.git"
+  github: "stackforge/cookbook-openstack-network"

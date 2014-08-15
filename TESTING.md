@@ -11,7 +11,7 @@ To run all of the tests with Strainer:
 Or you may run the tests individually:
 
     $ bundle install --path=.bundle # install gem dependencies
-    $ bundle exec berks install --path=.cookbooks # install cookbook dependencies
+    $ bundle exec berks vendor .cookbooks # install cookbook dependencies and create the folder .cookbooks
     $ bundle exec strainer test -s Strainerfile # run tests
 
 ## Rubocop  ##
