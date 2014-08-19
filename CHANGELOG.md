@@ -4,6 +4,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 
 ## 10.0.0
 * Upgrading to Juno
+* Sync conf files with Juno
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

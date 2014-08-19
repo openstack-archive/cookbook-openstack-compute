@@ -278,7 +278,7 @@ default['openstack']['compute']['config']['quota_floating_ips'] = 10
 # number of bytes allowed per injected file (default: 10240)
 default['openstack']['compute']['config']['quota_injected_file_content_bytes'] = 10240
 # number of bytes allowed per injected file path (default: 255)
-default['openstack']['compute']['config']['quota_injected_file_path_bytes'] = 255
+default['openstack']['compute']['config']['quota_injected_file_path_length'] = 255
 # number of injected files allowed (default: 5)
 default['openstack']['compute']['config']['quota_injected_files'] = 5
 # number of instances allowed per project (defailt: 10)

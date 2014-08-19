@@ -19,7 +19,7 @@ exec_dirs=<%= node['openstack']['compute']['rootwrap']['exec_dirs'] %>
 use_syslog=<%= node['openstack']['compute']['rootwrap']['use_syslog'] %>
 
 # Which syslog facility to use.
-# Valid values include auth, authpriv, syslog, user0, user1...
+# Valid values include auth, authpriv, syslog, local0, local1...
 # Default value is 'syslog'
 syslog_log_facility=<%= node['openstack']['compute']['rootwrap']['syslog_log_facility'] %>
 
