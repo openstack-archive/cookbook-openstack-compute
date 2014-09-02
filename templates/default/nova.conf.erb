@@ -194,6 +194,8 @@ novncproxy_port=<%= @novncproxy_bind_port %>
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
+vnc_keymap=<%= node['openstack']['compute']['vnc']['keymap'] %>
+
 # store consoleauth tokens in memcached
 <% unless @memcache_servers.empty? -%>
 memcached_servers=<%= @memcache_servers %>

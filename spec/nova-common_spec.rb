@@ -357,7 +357,8 @@ describe 'openstack-compute::nova-common' do
         node.set['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
 
         [/^vncserver_listen=127.0.1.1$/,
-         /^vncserver_proxyclient_address=127.0.1.1$/].each do |line|
+         /^vncserver_proxyclient_address=127.0.1.1$/,
+         /^vnc_keymap=en-us$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end

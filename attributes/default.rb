@@ -444,6 +444,9 @@ when 'debian'
   }
 end
 
+# VNC keymap
+default['openstack']['compute']['vnc']['keymap'] = 'en-us'
+
 # plugins
 default['openstack']['compute']['plugins'] = nil
 
