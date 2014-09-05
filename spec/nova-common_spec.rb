@@ -69,6 +69,15 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
+      it 'has no rng_dev_path by default' do
+        expect(chef_run).not_to render_file(file.name).with_content(/^rng_dev_path=/)
+      end
+
+      it 'has rng_dev_path config if provided from attribute' do
+        node.set['openstack']['compute']['libvirt']['rng_dev_path'] = '/dev/random'
+        expect(chef_run).to render_file(file.name).with_content(%r{^rng_dev_path=/dev/random$})
+      end
+
       it 'has dnsmasq_config_file' do
         expect(chef_run).to render_file(file.name).with_content(/^dnsmasq_config_file=$/)
       end

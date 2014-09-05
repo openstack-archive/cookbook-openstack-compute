@@ -216,6 +216,8 @@ default['openstack']['compute']['libvirt']['unix_sock_rw_perms'] = '0770'
 default['openstack']['compute']['libvirt']['libvirt_inject_key'] = true
 default['openstack']['compute']['libvirt']['libvirt_inject_password'] = false
 default['openstack']['compute']['libvirt']['libvirt_inject_partition'] = -2
+# A path to a device that will be used as source of entropy on the host. Permitted options are: /dev/random or /dev/hwrng (string value)
+default['openstack']['compute']['libvirt']['rng_dev_path'] = nil
 # VM Images format. Acceptable values are: raw, qcow2, lvm,
 # rbd, default. If default is specified, then use_cow_images
 # flag is used instead of this one. (string value)
