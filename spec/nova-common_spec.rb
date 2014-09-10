@@ -371,6 +371,16 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has override vncserver_* options set' do
+        node.set['openstack']['endpoints']['compute-vnc-bind']['host'] = '1.1.1.1'
+        node.set['openstack']['endpoints']['compute-vnc-proxy-bind']['host'] = '2.2.2.2'
+
+        [/^vncserver_listen=1.1.1.1$/,
+         /^vncserver_proxyclient_address=2.2.2.2$/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
       it 'has default *vncproxy_* options set' do
         [/^xvpvncproxy_host=127.0.0.1$/,
          /^xvpvncproxy_port=6081$/,

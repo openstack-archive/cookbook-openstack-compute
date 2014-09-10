@@ -358,6 +358,9 @@ The following attributes are defined in attributes/default.rb of the common cook
 * `openstack['endpoints']['compute-vnc-bind']['host']` - The IP address to bind the vnc service to
 * `openstack['endpoints']['compute-vnc-bind']['bind_interface']` - The interface name to bind the vnc service to
 
+* `openstack['endpoints']['compute-vnc-proxy-bind']['host']` - The IP address to bind the vnc proxy service to
+* `openstack['endpoints']['compute-vnc-proxy-bind']['bind_interface']` - The interface name to bind the vnc proxy service to
+
 If the value of the 'bind_interface' attribute is non-nil, then the service will be bound to the first IP address on that interface.  If the value of the 'bind_interface' attribute is nil, then the service will be bound to the IP address specified in the host attribute.
 
 Testing

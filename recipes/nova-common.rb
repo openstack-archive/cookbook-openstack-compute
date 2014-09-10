@@ -96,6 +96,7 @@ xvpvnc_bind = endpoint 'compute-xvpvnc-bind' || {}
 novnc_endpoint = endpoint 'compute-novnc' || {}
 novnc_bind = endpoint 'compute-novnc-bind' || {}
 vnc_bind = endpoint 'compute-vnc-bind' || {}
+vnc_proxy_bind = endpoint 'compute-vnc-proxy-bind' || {}
 compute_api_bind = endpoint 'compute-api-bind' || {}
 compute_api_endpoint = endpoint 'compute-api' || {}
 ec2_api_bind = endpoint 'compute-ec2-api-bind' || {}
@@ -142,7 +143,7 @@ template '/etc/nova/nova.conf' do
     novncproxy_bind_host: novnc_bind.host,
     novncproxy_bind_port: novnc_bind.port,
     vncserver_listen: vnc_bind.host,
-    vncserver_proxyclient_address: vnc_bind.host,
+    vncserver_proxyclient_address: vnc_proxy_bind.host,
     memcache_servers: memcache_servers,
     mq_service_type: mq_service_type,
     mq_password: mq_password,
