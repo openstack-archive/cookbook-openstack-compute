@@ -65,7 +65,7 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'nova',
           group: 'nova',
-          mode: 0644
+          mode: 0640
         )
       end
 

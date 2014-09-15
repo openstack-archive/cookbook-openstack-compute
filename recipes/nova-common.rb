@@ -132,7 +132,7 @@ template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00644
+  mode 00640
   variables(
     sql_connection: sql_connection,
     novncproxy_base_url: novnc_endpoint.to_s,
