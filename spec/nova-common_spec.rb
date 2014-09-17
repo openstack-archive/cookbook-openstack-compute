@@ -91,6 +91,14 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default ssl options set' do
+        %W(ssl_only=false
+           cert=self.pem
+           key=).each do |line|
+          expect(chef_run).to render_file(file.name).with_content(/^#{line}$/)
+        end
+      end
+
       it 'has default quota options set' do
         [/^quota_driver=nova.quota.DbQuotaDriver$/,
          /^quota_security_groups=50$/,

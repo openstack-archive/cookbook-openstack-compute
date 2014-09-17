@@ -42,6 +42,15 @@ default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 # The dnsmasq config file path
 default['openstack']['compute']['dnsmasq_config_file'] = ''
 
+# Disallow non-encrypted connections
+default['openstack']['compute']['ssl_only'] = false
+
+# SSL certificate file
+default['openstack']['compute']['cert'] = 'self.pem'
+
+# SSL key file (if separate from cert)
+default['openstack']['compute']['key'] = ''
+
 # Common rpc definitions
 default['openstack']['compute']['rpc_thread_pool_size'] = 64
 default['openstack']['compute']['rpc_conn_pool_size'] = 30

@@ -11,6 +11,8 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Update nova.conf mode from 644 to 640
 * Add support vnc_keymap from attribute ( default: en-us )
 
+* Add vnc attributes for ssl_only, cert and key
+
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
 * fix fauxhai version for suse and redhat

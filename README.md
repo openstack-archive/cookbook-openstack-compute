@@ -113,6 +113,9 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack['compute']['use_cow_images'] = Whether to use cow images
 * `openstack['compute']['vif_plugging_is_fatal'] = Fail instance boot if vif plugging fails
 * `openstack['compute']['vif_plugging_timeout'] = Number of seconds to wait for neutron vif plugging events to arrive before continuing or failing
+* `openstack['compute']['ssl_only'] = Disallow non-encrypted connections
+* `openstack['compute']['cert'] = SSL certificate file
+* `openstack['compute']['key'] = SSL key file (if separate from cert)
 * `openstack["compute"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
 * `openstack["compute"]["compute"]["api"]["port"]` - Port on which OS API runs
 * `openstack["compute"]["compute"]["api"]["version"]` - Version of the OS API used

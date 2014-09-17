@@ -18,6 +18,10 @@ instance_name_template=<%= node["openstack"]["compute"]["instance_name_template"
 network_allocate_retries=<%= node['openstack']['compute']['network_allocate_retries'] %>
 lock_path=<%= node["openstack"]["compute"]["lock_path"] %>
 
+ssl_only=<%= node['openstack']['compute']['ssl_only'] %>
+cert=<%= node['openstack']['compute']['cert'] %>
+key=<%= node['openstack']['compute']['key'] %>
+
 # Command prefix to use for running commands as root (default: sudo)
 rootwrap_config=/etc/nova/rootwrap.conf
 
