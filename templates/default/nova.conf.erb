@@ -542,7 +542,9 @@ disk_cachemodes=<%= node["openstack"]["compute"]["config"]["disk_cachemodes"] %>
 # A path to a device that will be used as source of entropy on
 # the host. Permitted options are: /dev/random or /dev/hwrng
 # (string value)
-#rng_dev_path=<None>
+<% if node["openstack"]["compute"]["libvirt"]["rng_dev_path"] -%>
+rng_dev_path=<%= node["openstack"]["compute"]["libvirt"]["rng_dev_path"] %>
+<% end -%>
 
 #
 # Options defined in nova.virt.libvirt.imagecache

@@ -249,6 +249,7 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["live_migration_uri"]` - Migration target URI (any included "%s" is replaced with the migration target hostname).
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)
 * `openstack["compute"]["libvirt"]["rbd"]["rbd_secret_name"]` - The name of the databag item containing the UUID shared between Cinder and nova-compute.  `libvirt_rbd` will define a libvirt secret with this UUID, containing the `rbd_user`'s password.  The password itself will be retrieved using `get_password` on the service `rbd_block_storage`.  Creating the cephx user in a Ceph cluster has to be done outside of the scope of this cookbook.
+* `openstack["compute"]["libvirt"]["rng_dev_path"]` - A path to a device that will be used as source of entropy on the host. Permitted options are: /dev/random or /dev/hwrng (string value)
 
 Scheduler Configuration Attributes
 ----------------------------------
