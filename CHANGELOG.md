@@ -7,6 +7,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Sync conf files with Juno
 * Upgrading berkshelf from 2.0.18 to 3.1.5
 * rng_dev_path in nova.conf configured from node attribute
+* Add cafile, memcached_servers, memcache_security_strategy, memcache_secret_key, insecure and hash_algorithms so that they are configurable.
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

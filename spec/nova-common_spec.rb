@@ -228,6 +228,49 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'uses default values for attributes' do
+        expect(chef_run).not_to render_file(file.name).with_content(
+          /^memcached_servers =/)
+        expect(chef_run).not_to render_file(file.name).with_content(
+          /^memcache_security_strategy =/)
+        expect(chef_run).not_to render_file(file.name).with_content(
+          /^memcache_secret_key =/)
+        expect(chef_run).not_to render_file(file.name).with_content(
+          /^cafile =/)
+        expect(chef_run).to render_file(file.name).with_content(/^hash_algorithms = md5$/)
+        expect(chef_run).to render_file(file.name).with_content(/^insecure = false$/)
+      end
+
+      it 'sets memcached server(s)' do
+        node.set['openstack']['compute']['api']['auth']['memcached_servers'] = 'localhost:11211'
+        expect(chef_run).to render_file(file.name).with_content(/^memcached_servers = localhost:11211$/)
+      end
+
+      it 'sets memcache security strategy' do
+        node.set['openstack']['compute']['api']['auth']['memcache_security_strategy'] = 'MAC'
+        expect(chef_run).to render_file(file.name).with_content(/^memcache_security_strategy = MAC$/)
+      end
+
+      it 'sets memcache secret key' do
+        node.set['openstack']['compute']['api']['auth']['memcache_secret_key'] = '0123456789ABCDEF'
+        expect(chef_run).to render_file(file.name).with_content(/^memcache_secret_key = 0123456789ABCDEF$/)
+      end
+
+      it 'sets cafile' do
+        node.set['openstack']['compute']['api']['auth']['cafile'] = 'dir/to/path'
+        expect(chef_run).to render_file(file.name).with_content(%r{^cafile = dir/to/path$})
+      end
+
+      it 'sets token hash algorithms' do
+        node.set['openstack']['compute']['api']['auth']['hash_algorithms'] = 'sha2'
+        expect(chef_run).to render_file(file.name).with_content(/^hash_algorithms = sha2$/)
+      end
+
+      it 'sets insecure' do
+        node.set['openstack']['compute']['api']['auth']['insecure'] = true
+        expect(chef_run).to render_file(file.name).with_content(/^insecure = true$/)
+      end
+
       context 'rabbit mq backend' do
         before do
           node.set['openstack']['mq']['compute']['service_type'] = 'rabbitmq'

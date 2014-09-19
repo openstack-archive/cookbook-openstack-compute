@@ -144,6 +144,12 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 TODO: Add DB2 support on other platforms
 * `openstack["compute"]["platform"]["db2_python_packages"]` - Array of DB2 python packages, only available on redhat platform
 * `openstack['compute']['api']['auth']['version']` - Select v2.0 or v3.0. Default v2.0. The auth API version used to interact with identity service.
+* `openstack['compute']['api']['auth']['memcached_servers']` - A list of memcached server(s) for caching
+* `openstack['compute']['api']['auth']['memcache_security_strategy']` - Whether token data should be authenticated or authenticated and encrypted. Acceptable values are MAC or ENCRYPT.
+* `openstack['compute']['api']['auth']['memcache_secret_key']` - This string is used for key derivation.
+* `openstack['compute']['api']['auth']['hash_algorithms']` - Hash algorithms to use for hashing PKI tokens.
+* `openstack['compute']['api']['auth']['cafile']` - A PEM encoded Certificate Authority to use when verifying HTTPs connections.
+* `openstack['compute']['api']['auth']['insecure']` - Whether to allow the client to perform insecure SSL (https) requests.
 * `openstack['compute']['conductor']['workers']` = Number of conductor workers
 
 

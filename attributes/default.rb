@@ -325,6 +325,24 @@ default['openstack']['compute']['api']['auth_strategy'] = 'keystone'
 
 default['openstack']['compute']['api']['auth']['version'] = node['openstack']['api']['auth']['version']
 
+# A list of memcached server(s) for caching
+default['openstack']['compute']['api']['auth']['memcached_servers'] = nil
+
+# Whether token data should be authenticated or authenticated and encrypted. Acceptable values are MAC or ENCRYPT.
+default['openstack']['compute']['api']['auth']['memcache_security_strategy'] = nil
+
+# This string is used for key derivation.
+default['openstack']['compute']['api']['auth']['memcache_secret_key'] = nil
+
+# Hash algorithms to use for hashing PKI tokens.
+default['openstack']['compute']['api']['auth']['hash_algorithms'] = 'md5'
+
+# A PEM encoded Certificate Authority to use when verifying HTTPs connections.
+default['openstack']['compute']['api']['auth']['cafile'] = nil
+
+# Whether to allow the client to perform insecure SSL (https) requests
+default['openstack']['compute']['api']['auth']['insecure'] = false
+
 # Keystone PKI signing directories
 default['openstack']['compute']['api']['auth']['cache_dir'] = '/var/cache/nova/api'
 

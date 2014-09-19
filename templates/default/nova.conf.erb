@@ -605,3 +605,17 @@ admin_tenant_name = <%= node["openstack"]["compute"]["service_tenant_name"] %>
 admin_user = <%= node["openstack"]["compute"]["service_user"] %>
 admin_password = <%= @service_pass %>
 signing_dir = <%= node["openstack"]["compute"]["api"]["auth"]["cache_dir"] %>
+<% unless node['openstack']['compute']['api']['auth']['cafile'].nil? %>
+cafile = <%= node['openstack']['compute']['api']['auth']['cafile'] %>
+<% end %>
+<% unless node['openstack']['compute']['api']['auth']['memcached_servers'].nil? %>
+memcached_servers = <%= node['openstack']['compute']['api']['auth']['memcached_servers'] %>
+<% end %>
+<% unless node['openstack']['compute']['api']['auth']['memcache_security_strategy'].nil? %>
+memcache_security_strategy = <%= node['openstack']['compute']['api']['auth']['memcache_security_strategy'] %>
+<% end %>
+<% unless node['openstack']['compute']['api']['auth']['memcache_secret_key'].nil? %>
+memcache_secret_key = <%= node['openstack']['compute']['api']['auth']['memcache_secret_key'] %>
+<% end %>
+hash_algorithms = <%= node['openstack']['compute']['api']['auth']['hash_algorithms'] %>
+insecure = <%= node['openstack']['compute']['api']['auth']['insecure'] %>
