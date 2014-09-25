@@ -14,9 +14,9 @@
       "ref": "3a99613b89fb28d21def8cbeaa63e40da32768f5"
     },
     "openstack-common": {
-      "locked_version": "9.7.0",
+      "locked_version": "9.7.1",
       "git": "git://github.com/stackforge/cookbook-openstack-common.git",
-      "ref": "b8633843349809e2675744f211c89bf06d249b7e"
+      "ref": "9de44a87fc61ede65ea386b87c3a186058779f37"
     },
     "openstack-network": {
       "locked_version": "9.1.1",

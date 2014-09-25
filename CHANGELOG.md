@@ -1,6 +1,8 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.3.2
+* Updated Berksfile.lock for the UTF8 issue in common
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
@@ -135,4 +137,3 @@ This file is used to list changes made in each version of cookbook-openstack-com
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
 
 The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.
-
