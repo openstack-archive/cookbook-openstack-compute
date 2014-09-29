@@ -10,8 +10,8 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Add cafile, memcached_servers, memcache_security_strategy, memcache_secret_key, insecure and hash_algorithms so that they are configurable.
 * Update nova.conf mode from 644 to 640
 * Add support vnc_keymap from attribute ( default: en-us )
-
 * Add vnc attributes for ssl_only, cert and key
+* Bump Chef gem to 11.16
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
