@@ -13,6 +13,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Add vnc attributes for ssl_only, cert and key
 * Bump Chef gem to 11.16
 * Separate endpoints for vncserver_listen and vncserver_proxyclient_address
+* Add more neutron section attributes
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

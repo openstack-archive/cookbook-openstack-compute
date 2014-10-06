@@ -104,6 +104,11 @@ neutron_admin_tenant_name=<%= node["openstack"]["compute"]["network"]["neutron"]
 neutron_admin_username=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_username"] %>
 neutron_admin_password=<%= @neutron_admin_password %>
 neutron_admin_auth_url=<%= @identity_endpoint.to_s %>
+neutron_url_timeout=<%= node["openstack"]["compute"]["network"]["neutron"]["url_timeout"] %>
+neutron_region_name=<%= node["openstack"]["compute"]["network"]["neutron"]["region_name"] %>
+neutron_ovs_bridge=<%= node["openstack"]["compute"]["network"]["neutron"]["ovs_bridge"] %>
+neutron_extension_sync_interval=<%= node["openstack"]["compute"]["network"]["neutron"]["extension_sync_interval"] %>
+neutron_ca_certificates_file=<%= node["openstack"]["compute"]["network"]["neutron"]["ca_certificates_file"] %>
 linuxnet_interface_driver=<%= node["openstack"]["compute"]["network"]["neutron"]["linuxnet_interface_driver"] %>
 firewall_driver = nova.virt.firewall.NoopFirewallDriver
 security_group_api=<%= node["openstack"]["compute"]["network"]["neutron"]["security_group_api"] %>

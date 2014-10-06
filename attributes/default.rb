@@ -113,6 +113,16 @@ default['openstack']['compute']['network']['neutron']['service_neutron_metadata_
 default['openstack']['compute']['network']['neutron']['metadata_secret_name'] = 'neutron_metadata_shared_secret'
 default['openstack']['compute']['network']['neutron']['public_network_name'] = 'public'
 default['openstack']['compute']['network']['neutron']['dns_server'] = '8.8.8.8'
+# Timeout value for connecting to neutron in seconds
+default['openstack']['compute']['network']['neutron']['url_timeout'] = 30
+# Region name for connecting to neutron in admin context
+default['openstack']['compute']['network']['neutron']['region_name'] = nil
+# Name of Integration Bridge used by Open vSwitch
+default['openstack']['compute']['network']['neutron']['ovs_bridge'] = 'br-int'
+# Number of seconds before querying neutron for extensions
+default['openstack']['compute']['network']['neutron']['extension_sync_interval'] = 600
+# Location of CA certificates file to use for neutron client requests
+default['openstack']['compute']['network']['neutron']['ca_certificates_file'] = nil
 
 # TODO(shep): This should probably be ['openstack']['compute']['network']['fixed']
 default['openstack']['compute']['networks'] = [
