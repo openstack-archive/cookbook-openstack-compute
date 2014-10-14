@@ -1,6 +1,6 @@
 name             'openstack-compute'
-maintainer       'Opscode, Inc.'
-maintainer_email 'matt@opscode.com'
+maintainer       'openstack-chef'
+maintainer_email 'opscode-chef-openstack@googlegroups.com'
 license          'Apache 2.0'
 description      'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))

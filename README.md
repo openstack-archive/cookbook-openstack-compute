@@ -15,14 +15,12 @@ Cookbooks
 
 The following cookbooks are dependencies:
 
-* apache2
 * openstack-common
 * openstack-identity
 * openstack-image
 * openstack-network
 * selinux (Fedora)
-* sysctl
-* yum
+* python
 
 Usage
 =====
