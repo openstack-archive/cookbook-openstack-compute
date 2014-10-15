@@ -96,8 +96,9 @@ when "neutron" -%>
 <% if @network_endpoint.port == 443 -%>
 neutron_url=http://<%= @network_endpoint.host %>:80
 <% else -%>
-neutron_url=http://<%= @network_endpoint.host %>:<%= @network_endpoint.port %>
+neutron_url=<%= @network_endpoint.scheme %>://<%= @network_endpoint.host %>:<%= @network_endpoint.port %>
 <% end -%>
+neutron_api_insecure=<%= node['openstack']['compute']['network']['neutron']['api_insecure'] %>
 network_api_class=<%= node["openstack"]["compute"]["network"]["neutron"]["network_api_class"]  %>
 neutron_auth_strategy=<%= node["openstack"]["compute"]["network"]["neutron"]["auth_strategy"] %>
 neutron_admin_tenant_name=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_tenant_name"] %>
@@ -135,7 +136,8 @@ use_ipv6=<%= node["openstack"]["compute"]["network"]["use_ipv6"] %>
 
 ##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService
-glance_api_servers=<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
+glance_api_servers=<%= @glance_api_scheme %>://<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
+glance_api_insecure=<%= node['openstack']['compute']['image']['glance_api_insecure'] %>
 
 ##### COMPUTE #####
 compute_driver=<%= node["openstack"]["compute"]["driver"] %>

@@ -247,6 +247,29 @@ describe 'openstack-compute::nova-common' do
           /^cafile =/)
         expect(chef_run).to render_file(file.name).with_content(/^hash_algorithms = md5$/)
         expect(chef_run).to render_file(file.name).with_content(/^insecure = false$/)
+        expect(chef_run).to render_file(file.name).with_content(/^glance_api_insecure=false$/)
+        expect(chef_run).to render_file(file.name).with_content(%r{^glance_api_servers=http://127.0.0.1:9292$})
+      end
+
+      it 'sets service_type to neutron' do
+        node.set['openstack']['compute']['network']['service_type'] = 'neutron'
+        expect(chef_run).to render_file(file.name).with_content(/^neutron_api_insecure=false$/)
+        expect(chef_run).to render_file(file.name).with_content(%r{^neutron_url=http://127.0.0.1:9696$})
+      end
+
+      it 'sets service_type and insecure and scheme for neutron' do
+        node.set['openstack']['compute']['network']['service_type'] = 'neutron'
+        node.set['openstack']['compute']['network']['neutron']['api_insecure'] = true
+        node.set['openstack']['endpoints']['network-api']['scheme'] = 'https'
+        expect(chef_run).to render_file(file.name).with_content(/^neutron_api_insecure=true$/)
+        expect(chef_run).to render_file(file.name).with_content(%r{^neutron_url=https://127.0.0.1:9696$})
+      end
+
+      it 'sets scheme and insecure for glance' do
+        node.set['openstack']['endpoints']['image-api']['scheme'] = 'https'
+        node.set['openstack']['compute']['image']['glance_api_insecure'] = true
+        expect(chef_run).to render_file(file.name).with_content(/^glance_api_insecure=true$/)
+        expect(chef_run).to render_file(file.name).with_content(%r{^glance_api_servers=https://127.0.0.1:9292$})
       end
 
       it 'sets memcached server(s)' do

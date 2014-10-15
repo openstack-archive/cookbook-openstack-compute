@@ -151,6 +151,7 @@ template '/etc/nova/nova.conf' do
     identity_endpoint: identity_endpoint,
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
+    glance_api_scheme: image_endpoint.scheme,
     glance_api_ipaddress: image_endpoint.host,
     glance_api_port: image_endpoint.port,
     iscsi_helper: platform_options['iscsi_helper'],

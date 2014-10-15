@@ -14,6 +14,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Bump Chef gem to 11.16
 * Separate endpoints for vncserver_listen and vncserver_proxyclient_address
 * Add more neutron section attributes
+* Add glance_api_insecure and neutron_api_insecure; make glance_api_servers and neutron_url to be prefixed with scheme
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

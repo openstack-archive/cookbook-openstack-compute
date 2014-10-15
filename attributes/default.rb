@@ -101,7 +101,16 @@ default['openstack']['compute']['rootwrap']['use_syslog'] = false
 default['openstack']['compute']['rootwrap']['syslog_log_facility'] = 'syslog'
 default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 
+# If True, this indicates that glance-api allows the client to perform
+# insecure SSL(https) requests; this should be the same as the setting
+# in the glance-api service.
+default['openstack']['compute']['image']['glance_api_insecure'] = false
+
 # Neutron options
+# If True, this indicates that neutron api allows the client to perform
+# insecure SSL (https) requests. This should be the same as the setting
+# in the neutron api service.
+default['openstack']['compute']['network']['neutron']['api_insecure'] = false
 default['openstack']['compute']['network']['neutron']['network_api_class'] = 'nova.network.neutronv2.api.API'
 default['openstack']['compute']['network']['neutron']['auth_strategy'] = 'keystone'
 default['openstack']['compute']['network']['neutron']['admin_tenant_name'] = 'service'

@@ -179,6 +179,10 @@ TODO: move rabbit parameters under openstack["compute"]["mq"]
 * `openstack["compute"]["mq"]["qpid"]["protocol"]` - Protocol to use. Default tcp.
 * `openstack["compute"]["mq"]["qpid"]["tcp_nodelay"]` - Disable the Nagle algorithm. default disabled.
 
+Glance Attributes
+-----------------
+* `openstack["compute"]["image"]["glance_api_insecure"]` - If True, this indicates that glance-api allows the client to perform insecure SSL(https) requests, this should be the same as the setting in the glance-api service.
+
 Networking Attributes
 ---------------------
 
@@ -191,6 +195,7 @@ Basic networking configuration is controlled with the following attributes:
 * `openstack["compute"]["network"]["auto_assign_floating_ip"]` - Defaults to false. Autoassigning floating ip to VM, this should be only for nova network.
 * `openstack["compute"]["network"]["force_dhcp_release"]` - If True, send a dhcp release on instance termination. (Default is false on "fedora", "redhat", "centos")
 * `openstack["compute"]["network"]["use_ipv6"]` - If True, use ipv6 support.
+* `openstack["compute"]["network"]["neutron"]["api_insecure"]` - If True, this indicates that neutron-api allows the client to perform insecure SSL (https) requests. This should be the same as the setting in the neutron api service.
 
 You can have the cookbook automatically create networks in Nova for you by adding a Hash to the `openstack["compute"]["networks"]` Array.
 **Note**: The `openstack-compute::nova-setup` recipe contains the code that creates these pre-defined networks.
