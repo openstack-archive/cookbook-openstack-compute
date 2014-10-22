@@ -245,6 +245,11 @@ describe 'openstack-compute::nova-common' do
           /^memcache_secret_key =/)
         expect(chef_run).not_to render_file(file.name).with_content(
           /^cafile =/)
+        expect(chef_run).to render_file(file.name).with_content(/^ca_file=$/)
+        expect(chef_run).to render_file(file.name).with_content(/^cert_file=$/)
+        expect(chef_run).to render_file(file.name).with_content(/^key_file=$/)
+        expect(chef_run).to render_file(file.name).with_content(/^cinder_ca_certificates_file=$/)
+        expect(chef_run).to render_file(file.name).with_content(/^cinder_api_insecure=false/)
         expect(chef_run).to render_file(file.name).with_content(/^hash_algorithms = md5$/)
         expect(chef_run).to render_file(file.name).with_content(/^insecure = false$/)
         expect(chef_run).to render_file(file.name).with_content(/^glance_api_insecure=false$/)
@@ -268,8 +273,21 @@ describe 'openstack-compute::nova-common' do
       it 'sets scheme and insecure for glance' do
         node.set['openstack']['endpoints']['image-api']['scheme'] = 'https'
         node.set['openstack']['compute']['image']['glance_api_insecure'] = true
+        node.set['openstack']['compute']['image']['ssl']['ca_file'] = 'dir/to/path'
+        node.set['openstack']['compute']['image']['ssl']['cert_file'] = 'dir/to/path2'
+        node.set['openstack']['compute']['image']['ssl']['key_file'] = 'dir/to/path3'
         expect(chef_run).to render_file(file.name).with_content(/^glance_api_insecure=true$/)
         expect(chef_run).to render_file(file.name).with_content(%r{^glance_api_servers=https://127.0.0.1:9292$})
+        expect(chef_run).to render_file(file.name).with_content(%r{^ca_file=dir/to/path$})
+        expect(chef_run).to render_file(file.name).with_content(%r{^cert_file=dir/to/path2$})
+        expect(chef_run).to render_file(file.name).with_content(%r{^key_file=dir/to/path3$})
+      end
+
+      it 'sets cinder options' do
+        node.set['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] = 'dir/to/path'
+        node.set['openstack']['compute']['block-storage']['cinder_api_insecure'] = true
+        expect(chef_run).to render_file(file.name).with_content(/^cinder_api_insecure=true$/)
+        expect(chef_run).to render_file(file.name).with_content(%r{^cinder_ca_certificates_file=dir/to/path$})
       end
 
       it 'sets memcached server(s)' do

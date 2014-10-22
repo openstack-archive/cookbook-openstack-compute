@@ -139,6 +139,13 @@ image_service=nova.image.glance.GlanceImageService
 glance_api_servers=<%= @glance_api_scheme %>://<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
 glance_api_insecure=<%= node['openstack']['compute']['image']['glance_api_insecure'] %>
 
+##### Cinder #####
+# Location of ca certificates file to use for cinder client requests
+cinder_ca_certificates_file=<%= node['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] %>
+
+# Allow to perform insecure SSL requests to cinder
+cinder_api_insecure=<%= node['openstack']['compute']['block-storage']['cinder_api_insecure'] %>
+
 ##### COMPUTE #####
 compute_driver=<%= node["openstack"]["compute"]["driver"] %>
 <% if node["openstack"]["compute"]["default_ephemeral_format"] %>
@@ -340,6 +347,17 @@ osapi_compute_extension=<%= p %>
 <%= m %>
 <% end %>
 <% end %>
+
+[ssl]
+
+# CA certificate file to use to verify connecting clients
+ca_file=<%= node['openstack']['compute']['image']['ssl']['ca_file'] %>
+
+# Certificate file to use when starting the server securely
+cert_file=<%= node['openstack']['compute']['image']['ssl']['cert_file'] %>
+
+# Private key file to use when starting the server securely
+key_file=<%= node['openstack']['compute']['image']['ssl']['key_file'] %>
 
 [conductor]
 

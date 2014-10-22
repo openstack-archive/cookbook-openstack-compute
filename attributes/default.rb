@@ -106,6 +106,15 @@ default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 # in the glance-api service.
 default['openstack']['compute']['image']['glance_api_insecure'] = false
 
+# CA certificate file to use to verify connecting clients
+default['openstack']['compute']['image']['ssl']['ca_file'] = nil
+
+# Certificate file to use when starting the server securely
+default['openstack']['compute']['image']['ssl']['cert_file'] = nil
+
+# Private key file to use when starting the server securely
+default['openstack']['compute']['image']['ssl']['key_file'] = nil
+
 # Neutron options
 # If True, this indicates that neutron api allows the client to perform
 # insecure SSL (https) requests. This should be the same as the setting
@@ -293,6 +302,13 @@ default['openstack']['compute']['config']['flat_injected'] = false
 
 # Volume API class (driver)
 default['openstack']['compute']['config']['volume_api_class'] = 'nova.volume.cinder.API'
+
+# Cinder options
+# Location of ca certificates file to use for cinder client requests.
+default['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] = nil
+
+# Allow to perform insecure SSL requests to cinder
+default['openstack']['compute']['block-storage']['cinder_api_insecure'] = false
 
 # quota settings
 default['openstack']['compute']['config']['quota_security_groups'] = 50

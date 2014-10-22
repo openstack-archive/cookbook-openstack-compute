@@ -181,7 +181,17 @@ TODO: move rabbit parameters under openstack["compute"]["mq"]
 
 Glance Attributes
 -----------------
+
 * `openstack["compute"]["image"]["glance_api_insecure"]` - If True, this indicates that glance-api allows the client to perform insecure SSL(https) requests, this should be the same as the setting in the glance-api service.
+* `openstack["compute"]["image"]["ssl"]["ca_file"]` - CA certificate file to use to verify connecting clients.
+* `openstack["compute"]["image"]["ssl"]["cert_file"]` - Certificate file to use when starting the server securely.
+* `openstack["compute"]["image"]["ssl"]["key_file"]` - Private key file to use when starting the server securely.
+
+Cinder Attributes
+-----------------
+
+* `openstack["compute"]["block-storage"]["cinder_ca_certificates_file"]` - Location of ca certificates file to use for cinder client requests.
+* `openstack["compute"]["block-storage"]["cinder_api_insecure"]` - Allow to perform insecure SSL requests to cinder.
 
 Networking Attributes
 ---------------------

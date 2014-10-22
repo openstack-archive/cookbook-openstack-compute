@@ -15,6 +15,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Separate endpoints for vncserver_listen and vncserver_proxyclient_address
 * Add more neutron section attributes
 * Add glance_api_insecure and neutron_api_insecure; make glance_api_servers and neutron_url to be prefixed with scheme
+* Add [ssl] section, needed to communicate with Glance when using https; add cinder_ca_certificates_file and cinder_api_insecure
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
