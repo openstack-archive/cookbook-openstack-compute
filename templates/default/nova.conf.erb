@@ -75,7 +75,7 @@ qpid_topology_version=<%= node['openstack']['mq']['compute']['qpid']['topology_v
 
 
 ##### SCHEDULER #####
-# scheduler_manager=nova.scheduler.manager.SchedulerManager
+scheduler_manager=<%= node["openstack"]["compute"]["scheduler"]["scheduler_manager"] %>
 compute_scheduler_driver=<%= node["openstack"]["compute"]["scheduler"]["scheduler_driver"] %>
 scheduler_available_filters=<%= node["openstack"]["compute"]["scheduler"]["available_filters"] %>
 # which filter class names to use for filtering hosts when not specified in the request.
@@ -165,6 +165,12 @@ connection_type=libvirt
 <% node['openstack']['compute']['config']['notification_drivers'].each do |d| %>
 notification_driver=<%= d %>
 <% end %>
+<% end %>
+
+<% if node['openstack']['compute']['config']['notification_topics'] %>
+# AMQP topic used for OpenStack notifications. (list value)
+# Deprecated group/name - [rpc_notifier2]/topics
+notification_topics=<%= node['openstack']['compute']['config']['notification_topics'].join(",") %>
 <% end %>
 
 # Generate periodic compute.instance.exists notifications
@@ -323,6 +329,19 @@ osapi_compute_workers=<%= node["openstack"]["compute"]["osapi_compute_workers"] 
 <% end %>
 <% if node["openstack"]["compute"]["metadata_workers"] %>
 metadata_workers=<%= node["openstack"]["compute"]["metadata_workers"] %>
+<% end %>
+
+##### MONITORS ######
+<% node['openstack']['compute']['config']['compute_available_monitors'].each do |m| %>
+# Monitor classes available to the compute which may be
+# specified more than once. (multi valued)
+compute_available_monitors=<%= m %>
+<% end %>
+
+<% if node["openstack"]["compute"]["config"]["compute_monitors"] %>
+# A list of monitors that can be used for getting compute
+# metrics. (list value)
+compute_monitors=<%= node["openstack"]["compute"]["config"]["compute_monitors"].join(",") %>
 <% end %>
 
 ##### VOLUMES #####

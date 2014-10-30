@@ -212,6 +212,7 @@ default['openstack']['compute']['network']['auto_assign_floating_ip'] = false
 default['openstack']['compute']['network']['use_single_default_gateway'] = false
 default['openstack']['compute']['network']['use_ipv6'] = false
 
+default['openstack']['compute']['scheduler']['scheduler_manager'] = 'nova.scheduler.manager.SchedulerManager'
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
 default['openstack']['compute']['scheduler']['available_filters'] = 'nova.scheduler.filters.all_filters'
 default['openstack']['compute']['scheduler']['default_filters'] = %W(
@@ -357,12 +358,18 @@ if node['openstack']['compute']['metering']
   default['openstack']['compute']['config']['instance_usage_audit'] = 'True'
   default['openstack']['compute']['config']['instance_usage_audit_period'] = 'hour'
   default['openstack']['compute']['config']['notify_on_state_change'] = 'vm_and_task_state'
+  default['openstack']['compute']['config']['notification_topics'] = ['notifications']
 else
   default['openstack']['compute']['config']['notification_drivers'] = []
   default['openstack']['compute']['config']['instance_usage_audit'] = 'False'
   default['openstack']['compute']['config']['instance_usage_audit_period'] = 'month'
   default['openstack']['compute']['config']['notify_on_state_change'] = ''
+  default['openstack']['compute']['config']['notification_topics'] = []
 end
+
+# Monitor settings
+default['openstack']['compute']['config']['compute_available_monitors'] = ['nova.compute.monitors.all_monitors']
+default['openstack']['compute']['config']['compute_monitors'] = []
 
 # Keystone settings
 default['openstack']['compute']['api']['auth_strategy'] = 'keystone'

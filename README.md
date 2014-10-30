@@ -276,6 +276,7 @@ Libvirt Configuration Attributes
 Scheduler Configuration Attributes
 ----------------------------------
 
+* `openstack["compute"]["scheduler"]["scheduler_manager"]` - the scheduler manager to use
 * `openstack["compute"]["scheduler"]["scheduler_driver"]` - the scheduler driver to use
 NOTE: The filter scheduler currently does not work with ec2.
 * `openstack["compute"]["scheduler"]["available_filters"]` - Filter classes available to the scheduler which may be specified more than once.
@@ -314,6 +315,7 @@ Notification Attributes
 * `openstack["compute"]["config"]["instance_usage_audit"]`- Boolean that indicates whether to generate intance usage audits.
 * `openstack["compute"]["config"]["instance_usage_audit_period"]`- Time period to generate instance usages for.  Time period must be "hour", "day", "month" or "year".
 * `openstack["compute"]["config"]["notify_on_state_change"]`- If set, send compute.instance.update notifications on instance state changes.  Valid values are None, "vm_state" or "vm_and_task_state".
+* `openstack["compute"]["config"]["notification_topics"]`- AMQP topic used for OpenStack notifications.
 
 When enabling nova metering with ceilometer, the notification configuration
 properties need to be set to values that are different from the default values
@@ -326,6 +328,12 @@ One of the notification_drivers that is set when metering is on comes from
 ceilometer. In order for the notification driver to be available, make sure
 the `os-telemetry-agent-compute` role (or the openstack-telemetry::agent-compute recipe)
 are set on this node.
+
+Monitor Attributes
+-----------------------
+
+* `openstack["compute"]["config"]["compute_available_monitors"]`- Monitor classes available to the compute.
+* `openstack["compute"]["config"]["compute_monitors"]`- An array of monitors that can be used for getting compute metrics.
 
 VMware Configuration Attributes
 -------------------------------

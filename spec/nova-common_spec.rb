@@ -402,6 +402,15 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has monitor options' do
+        node.set['openstack']['compute']['config']['compute_monitors'] = ['CustomMonitor']
+
+        [/^compute_available_monitors=nova.compute.monitors.all_monitors$/,
+         /^compute_monitors=CustomMonitor$/].each do |line|
+          expect(chef_run).to render_file(file.name).with_content(line)
+        end
+      end
+
       it 'has default vncserver_* options set' do
         node.set['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
 
@@ -487,7 +496,8 @@ describe 'openstack-compute::nova-common' do
              'notification_driver=ceilometer.compute.nova_notifier',
              'instance_usage_audit=True',
              'instance_usage_audit_period=hour',
-             'notify_on_state_change=vm_and_task_state'
+             'notify_on_state_change=vm_and_task_state',
+             'notification_topics=notifications'
             ].each do |line|
               expect(chef_run).to render_file(file.name).with_content(line)
             end
@@ -593,7 +603,8 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has scheduler options' do
-        [/^compute_scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
+        [/^scheduler_manager=nova.scheduler.manager.SchedulerManager$/,
+         /^compute_scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
          /^scheduler_available_filters=nova.scheduler.filters.all_filters$/,
          /^scheduler_default_filters=AvailabilityZoneFilter,RamFilter,ComputeFilter,CoreFilter,SameHostFilter,DifferentHostFilter$/
         ].each do |line|
