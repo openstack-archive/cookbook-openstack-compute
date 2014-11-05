@@ -76,7 +76,7 @@ qpid_topology_version=<%= node['openstack']['mq']['compute']['qpid']['topology_v
 
 ##### SCHEDULER #####
 scheduler_manager=<%= node["openstack"]["compute"]["scheduler"]["scheduler_manager"] %>
-compute_scheduler_driver=<%= node["openstack"]["compute"]["scheduler"]["scheduler_driver"] %>
+scheduler_driver=<%= node["openstack"]["compute"]["scheduler"]["scheduler_driver"] %>
 scheduler_available_filters=<%= node["openstack"]["compute"]["scheduler"]["available_filters"] %>
 # which filter class names to use for filtering hosts when not specified in the request.
 scheduler_default_filters=<%= @scheduler_default_filters %>
@@ -270,10 +270,6 @@ quota_metadata_items=<%= node["openstack"]["compute"]["config"]["quota_metadata_
 # megabytes of instance ram allowed per project (default: 51200)
 quota_ram=<%= node["openstack"]["compute"]["config"]["quota_ram"] %>
 
-
-<%- if /FilterScheduler/.match(node["openstack"]["compute"]["scheduler"]["scheduler_driver"]) or
-       /MultiScheduler/.match(node["openstack"]["compute"]["scheduler"]["scheduler_driver"]) %>
-# FilterScheduler Only Options
 <%- if /ComputeFilter/.match(@scheduler_default_filters) %>
 # virtual CPU to Physical CPU allocation ratio (default: 16.0)
 cpu_allocation_ratio=<%= node["openstack"]["compute"]["config"]["cpu_allocation_ratio"] %>
@@ -285,11 +281,6 @@ ram_allocation_ratio=<%= node["openstack"]["compute"]["config"]["ram_allocation_
 <%- if /DiskFilter/.match(@scheduler_default_filters) %>
 # virtual disk to physical disk allocation ratio (default: 1.0)
 disk_allocation_ratio=<%= node["openstack"]["compute"]["config"]["disk_allocation_ratio"] %>
-<%- end %>
-<%- elsif /SimpleScheduler/.match(node["openstack"]["compute"]["scheduler"]["scheduler_driver"]) %>
-# SimpleScheduler Only Options
-# maximum number of instance cores to allow per host
-max_cores=<%= node["openstack"]["compute"]["config"]["cpu_allocation_ratio"].to_i * node["cpu"]["total"].to_i %>
 <%- end %>
 
 <% if node["openstack"]["compute"]["config"]["force_config_drive"] %>

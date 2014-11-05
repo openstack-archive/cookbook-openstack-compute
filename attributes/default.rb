@@ -364,7 +364,7 @@ else
   default['openstack']['compute']['config']['instance_usage_audit'] = 'False'
   default['openstack']['compute']['config']['instance_usage_audit_period'] = 'month'
   default['openstack']['compute']['config']['notify_on_state_change'] = ''
-  default['openstack']['compute']['config']['notification_topics'] = []
+  default['openstack']['compute']['config']['notification_topics'] = ['notifications']
 end
 
 # Monitor settings

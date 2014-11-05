@@ -604,7 +604,7 @@ describe 'openstack-compute::nova-common' do
 
       it 'has scheduler options' do
         [/^scheduler_manager=nova.scheduler.manager.SchedulerManager$/,
-         /^compute_scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
+         /^scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
          /^scheduler_available_filters=nova.scheduler.filters.all_filters$/,
          /^scheduler_default_filters=AvailabilityZoneFilter,RamFilter,ComputeFilter,CoreFilter,SameHostFilter,DifferentHostFilter$/
         ].each do |line|
