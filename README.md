@@ -192,6 +192,7 @@ Cinder Attributes
 
 * `openstack["compute"]["block-storage"]["cinder_ca_certificates_file"]` - Location of ca certificates file to use for cinder client requests.
 * `openstack["compute"]["block-storage"]["cinder_api_insecure"]` - Allow to perform insecure SSL requests to cinder.
+* `openstack["compute"]["block-storage"]["cinder_catalog_info"]` - Info to match when looking for cinder in the service catalog.
 
 Networking Attributes
 ---------------------

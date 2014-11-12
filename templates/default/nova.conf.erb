@@ -146,6 +146,9 @@ cinder_ca_certificates_file=<%= node['openstack']['compute']['block-storage']['c
 # Allow to perform insecure SSL requests to cinder
 cinder_api_insecure=<%= node['openstack']['compute']['block-storage']['cinder_api_insecure'] %>
 
+# Info to match when looking for cinder in the service catalog
+cinder_catalog_info=<%= node['openstack']['compute']['block-storage']['cinder_catalog_info'] %>
+
 ##### COMPUTE #####
 compute_driver=<%= node["openstack"]["compute"]["driver"] %>
 <% if node["openstack"]["compute"]["default_ephemeral_format"] %>

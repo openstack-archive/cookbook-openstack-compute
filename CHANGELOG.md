@@ -18,6 +18,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Add [ssl] section, needed to communicate with Glance when using https; add cinder_ca_certificates_file and cinder_api_insecure
 * Add more attributes for nova.conf DEFAULT section
 * Update and remove the outdated options
+* Add cinder_catalog_info
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

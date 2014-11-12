@@ -311,6 +311,9 @@ default['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] 
 # Allow to perform insecure SSL requests to cinder
 default['openstack']['compute']['block-storage']['cinder_api_insecure'] = false
 
+# Info to match when looking for cinder in the service catalog
+default['openstack']['compute']['block-storage']['cinder_catalog_info'] = 'volumev2:cinderv2:publicURL'
+
 # quota settings
 default['openstack']['compute']['config']['quota_security_groups'] = 50
 default['openstack']['compute']['config']['quota_security_group_rules'] = 20
