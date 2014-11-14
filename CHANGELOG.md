@@ -19,6 +19,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Add more attributes for nova.conf DEFAULT section
 * Update and remove the outdated options
 * Add cinder_catalog_info
+* Updated the nova-networking to start metadata-api
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
@@ -154,4 +155,3 @@ This file is used to list changes made in each version of cookbook-openstack-com
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
 
 The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.
-

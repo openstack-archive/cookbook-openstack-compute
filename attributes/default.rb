@@ -418,7 +418,7 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
     'neutron_python_packages' => ['python-neutronclient', 'pyparsing'],
     'memcache_python_packages' => ['python-memcached'],
     'compute_api_metadata_packages' => ['openstack-nova-api'],
-    'compute_api_metadata_service' => 'openstack-nova-api',
+    'compute_api_metadata_service' => 'openstack-nova-metadata-api',
     'compute_client_packages' => ['python-novaclient'],
     'compute_compute_packages' => ['openstack-nova-compute'],
     'qemu_compute_packages' => [],
