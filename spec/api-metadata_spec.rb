@@ -22,6 +22,10 @@ describe 'openstack-compute::api-metadata' do
       expect(chef_run).to enable_service 'nova-api-metadata'
     end
 
+    it 'starts metadata api now' do
+      expect(chef_run).to start_service 'nova-api-metadata'
+    end
+
     expect_creates_api_paste 'service[nova-api-metadata]'
   end
 end

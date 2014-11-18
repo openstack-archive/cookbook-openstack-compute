@@ -1,6 +1,9 @@
 # CHANGELOG for cookbook-openstack-compute
 
 This file is used to list changes made in each version of cookbook-openstack-compute.
+## 9.3.3
+* Updated the nova-networking to start metadata-api
+
 ## 9.3.2
 * Updated Berksfile.lock for the UTF8 issue in common
 
