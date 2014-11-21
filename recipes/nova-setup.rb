@@ -28,6 +28,7 @@ nova_user = node['openstack']['compute']['user']
 nova_group = node['openstack']['compute']['group']
 
 execute 'nova-manage db sync' do
+  timeout node['openstack']['compute']['dbsync_timeout']
   user nova_user
   group nova_group
   command 'nova-manage db sync'

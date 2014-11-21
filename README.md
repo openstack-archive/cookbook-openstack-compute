@@ -114,6 +114,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack['compute']['ssl_only'] = Disallow non-encrypted connections
 * `openstack['compute']['cert'] = SSL certificate file
 * `openstack['compute']['key'] = SSL key file (if separate from cert)
+* `openstack['compute']['dbsync_timeout']` - Set dbsync command timeout value
 * `openstack["compute"]["compute"]["api"]["protocol"]` - Protocol used for the OS API
 * `openstack["compute"]["compute"]["api"]["port"]` - Port on which OS API runs
 * `openstack["compute"]["compute"]["api"]["version"]` - Version of the OS API used

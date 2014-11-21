@@ -11,8 +11,21 @@ describe 'openstack-compute::nova-setup' do
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
 
-    it 'runs db migrations' do
-      expect(chef_run).to run_execute('nova-manage db sync').with(user: 'nova', group: 'nova')
+    it 'runs db migrations with default timeout' do
+      expect(chef_run).to run_execute('nova-manage db sync').with(
+        user: 'nova',
+        group: 'nova',
+        timeout: 3600
+      )
+    end
+
+    it 'runs db migrations with timeout override' do
+      node.set['openstack']['compute']['dbsync_timeout'] = 1234
+      expect(chef_run).to run_execute('nova-manage db sync').with(
+        user: 'nova',
+        group: 'nova',
+        timeout: 1234
+      )
     end
 
     it 'adds nova network ipv4 addresses' do

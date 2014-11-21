@@ -36,6 +36,9 @@ default['openstack']['compute']['ec2_workers'] = nil
 default['openstack']['compute']['osapi_compute_workers'] = nil
 default['openstack']['compute']['metadata_workers'] = nil
 
+# Set dbsync command timeout value
+default['openstack']['compute']['dbsync_timeout'] = 3600
+
 # The name of the Chef role that sets up the Keystone Service API
 default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 

@@ -22,6 +22,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Updated the nova-networking to start metadata-api
 * Allow rabbit ssl in the ha case
 * Move deprecated neutron_*/glance_*/cinder_* configurations to [neutron]/[glance]/[cinder] sections in nova.conf
+* Allow dbsync_timeout to be configurable
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
