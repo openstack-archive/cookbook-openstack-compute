@@ -40,22 +40,28 @@ describe 'openstack-compute::network' do
 
       it 'includes neutron section defaults' do
         [
-          %r{^neutron_url=http://127.0.0.1:9696$},
+          %r{^url=http://127.0.0.1:9696$},
+          /^auth_strategy=keystone$/,
+          /^admin_tenant_name=service$/,
+          /^admin_username=neutron$/,
+          /^admin_password=neutron-pass$/,
+          %r{^admin_auth_url=http://127.0.0.1:5000/v2.0$},
+          /^url_timeout=30$/,
+          /^region_name=$/,
+          /^ovs_bridge=br-int$/,
+          /^extension_sync_interval=600$/,
+          /^ca_certificates_file=$/,
+          /^service_metadata_proxy=true$/,
+          /^metadata_proxy_shared_secret=metadata-secret$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('neutron', line)
+        end
+
+        [
           /^network_api_class=nova.network.neutronv2.api.API$/,
-          /^neutron_auth_strategy=keystone$/,
-          /^neutron_admin_tenant_name=service$/,
-          /^neutron_admin_username=neutron$/,
-          /^neutron_admin_password=neutron-pass$/,
-          %r{^neutron_admin_auth_url=http://127.0.0.1:5000/v2.0$},
-          /^neutron_url_timeout=30$/,
-          /^neutron_region_name=$/,
-          /^neutron_ovs_bridge=br-int$/,
-          /^neutron_extension_sync_interval=600$/,
-          /^neutron_ca_certificates_file=$/,
           /^linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver$/,
           /^security_group_api=neutron$/,
-          /^service_neutron_metadata_proxy=true$/,
-          /^neutron_metadata_proxy_shared_secret=metadata-secret$/,
           /^default_floating_pool=public$/,
           /^dns_server=8.8.8.8$/
         ].each do |line|

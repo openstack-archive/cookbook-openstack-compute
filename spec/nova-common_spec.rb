@@ -70,12 +70,14 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has no rng_dev_path by default' do
-        expect(chef_run).not_to render_file(file.name).with_content(/^rng_dev_path=/)
+        expect(chef_run).not_to render_config_file(file.name)\
+          .with_section_content('libvirt', /^rng_dev_path=/)
       end
 
       it 'has rng_dev_path config if provided from attribute' do
         node.set['openstack']['compute']['libvirt']['rng_dev_path'] = '/dev/random'
-        expect(chef_run).to render_file(file.name).with_content(%r{^rng_dev_path=/dev/random$})
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('libvirt', %r{^rng_dev_path=/dev/random$})
       end
 
       it 'has dnsmasq_config_file' do
@@ -230,45 +232,77 @@ describe 'openstack-compute::nova-common' do
             'admin_password = nova-pass',
             'signing_dir = /var/cache/nova/api'
           ].each do |line|
-            expect(chef_run).to render_file(file.name).with_content(
-              /^#{Regexp.quote(line)}$/)
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('keystone_authtoken', /^#{Regexp.quote(line)}$/)
           end
         end
       end
 
       it 'uses default values for attributes' do
-        expect(chef_run).not_to render_file(file.name).with_content(
-          /^memcached_servers =/)
-        expect(chef_run).not_to render_file(file.name).with_content(
-          /^memcache_security_strategy =/)
-        expect(chef_run).not_to render_file(file.name).with_content(
-          /^memcache_secret_key =/)
-        expect(chef_run).not_to render_file(file.name).with_content(
-          /^cafile =/)
-        expect(chef_run).to render_file(file.name).with_content(/^ca_file=$/)
-        expect(chef_run).to render_file(file.name).with_content(/^cert_file=$/)
-        expect(chef_run).to render_file(file.name).with_content(/^key_file=$/)
-        expect(chef_run).to render_file(file.name).with_content(/^cinder_ca_certificates_file=$/)
-        expect(chef_run).to render_file(file.name).with_content(/^cinder_api_insecure=false/)
-        expect(chef_run).to render_file(file.name).with_content(/^cinder_catalog_info=volumev2:cinderv2:publicURL$/)
-        expect(chef_run).to render_file(file.name).with_content(/^hash_algorithms = md5$/)
-        expect(chef_run).to render_file(file.name).with_content(/^insecure = false$/)
-        expect(chef_run).to render_file(file.name).with_content(/^glance_api_insecure=false$/)
-        expect(chef_run).to render_file(file.name).with_content(%r{^glance_api_servers=http://127.0.0.1:9292$})
+        [
+          /^memcached_servers =/,
+          /^memcache_security_strategy =/,
+          /^memcache_secret_key =/,
+          /^cafile =/
+        ].each do |line|
+          expect(chef_run).not_to render_config_file(file.name)\
+            .with_section_content('keystone_authtoken', line)
+        end
+
+        [
+          /^hash_algorithms = md5$/,
+          /^insecure = false$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('keystone_authtoken', line)
+        end
+
+        [
+          /^ca_file=$/,
+          /^cert_file=$/,
+          /^key_file=$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('ssl', line)
+        end
+
+        [
+          /^ca_certificates_file=$/,
+          /^api_insecure=false/,
+          /^catalog_info=volumev2:cinderv2:publicURL$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('cinder', line)
+        end
+
+        [
+          /^api_insecure=false$/,
+          %r{^api_servers=http://127.0.0.1:9292$}
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('glance', line)
+        end
       end
 
       it 'sets service_type to neutron' do
         node.set['openstack']['compute']['network']['service_type'] = 'neutron'
-        expect(chef_run).to render_file(file.name).with_content(/^neutron_api_insecure=false$/)
-        expect(chef_run).to render_file(file.name).with_content(%r{^neutron_url=http://127.0.0.1:9696$})
+        [
+          /^api_insecure=false$/,
+          %r{^url=http://127.0.0.1:9696$}
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('neutron', line)
+        end
       end
 
       it 'sets service_type and insecure and scheme for neutron' do
         node.set['openstack']['compute']['network']['service_type'] = 'neutron'
         node.set['openstack']['compute']['network']['neutron']['api_insecure'] = true
         node.set['openstack']['endpoints']['network-api']['scheme'] = 'https'
-        expect(chef_run).to render_file(file.name).with_content(/^neutron_api_insecure=true$/)
-        expect(chef_run).to render_file(file.name).with_content(%r{^neutron_url=https://127.0.0.1:9696$})
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('neutron', /^api_insecure=true$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('neutron', %r{^url=https://127.0.0.1:9696$})
       end
 
       it 'sets scheme and insecure for glance' do
@@ -277,50 +311,74 @@ describe 'openstack-compute::nova-common' do
         node.set['openstack']['compute']['image']['ssl']['ca_file'] = 'dir/to/path'
         node.set['openstack']['compute']['image']['ssl']['cert_file'] = 'dir/to/path2'
         node.set['openstack']['compute']['image']['ssl']['key_file'] = 'dir/to/path3'
-        expect(chef_run).to render_file(file.name).with_content(/^glance_api_insecure=true$/)
-        expect(chef_run).to render_file(file.name).with_content(%r{^glance_api_servers=https://127.0.0.1:9292$})
-        expect(chef_run).to render_file(file.name).with_content(%r{^ca_file=dir/to/path$})
-        expect(chef_run).to render_file(file.name).with_content(%r{^cert_file=dir/to/path2$})
-        expect(chef_run).to render_file(file.name).with_content(%r{^key_file=dir/to/path3$})
+
+        [
+          /^api_insecure=true$/,
+          %r{^api_servers=https://127.0.0.1:9292$}
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('glance', line)
+        end
+
+        [
+          %r{^ca_file=dir/to/path$},
+          %r{^cert_file=dir/to/path2$},
+          %r{^key_file=dir/to/path3$}
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('ssl', line)
+        end
       end
 
       it 'sets cinder options' do
         node.set['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] = 'dir/to/path'
         node.set['openstack']['compute']['block-storage']['cinder_api_insecure'] = true
         node.set['openstack']['compute']['block-storage']['cinder_catalog_info'] = 'volume:cinder:publicURL'
-        expect(chef_run).to render_file(file.name).with_content(/^cinder_api_insecure=true$/)
-        expect(chef_run).to render_file(file.name).with_content(%r{^cinder_ca_certificates_file=dir/to/path$})
-        expect(chef_run).to render_file(file.name).with_content(/^cinder_catalog_info=volume:cinder:publicURL$/)
+
+        [
+          /^api_insecure=true$/,
+          %r{^ca_certificates_file=dir/to/path$},
+          /^catalog_info=volume:cinder:publicURL$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('cinder', line)
+        end
       end
 
       it 'sets memcached server(s)' do
         node.set['openstack']['compute']['api']['auth']['memcached_servers'] = 'localhost:11211'
-        expect(chef_run).to render_file(file.name).with_content(/^memcached_servers = localhost:11211$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keystone_authtoken', /^memcached_servers = localhost:11211$/)
       end
 
       it 'sets memcache security strategy' do
         node.set['openstack']['compute']['api']['auth']['memcache_security_strategy'] = 'MAC'
-        expect(chef_run).to render_file(file.name).with_content(/^memcache_security_strategy = MAC$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keystone_authtoken', /^memcache_security_strategy = MAC$/)
       end
 
       it 'sets memcache secret key' do
         node.set['openstack']['compute']['api']['auth']['memcache_secret_key'] = '0123456789ABCDEF'
-        expect(chef_run).to render_file(file.name).with_content(/^memcache_secret_key = 0123456789ABCDEF$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keystone_authtoken', /^memcache_secret_key = 0123456789ABCDEF$/)
       end
 
       it 'sets cafile' do
         node.set['openstack']['compute']['api']['auth']['cafile'] = 'dir/to/path'
-        expect(chef_run).to render_file(file.name).with_content(%r{^cafile = dir/to/path$})
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keystone_authtoken', %r{^cafile = dir/to/path$})
       end
 
       it 'sets token hash algorithms' do
         node.set['openstack']['compute']['api']['auth']['hash_algorithms'] = 'sha2'
-        expect(chef_run).to render_file(file.name).with_content(/^hash_algorithms = sha2$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keystone_authtoken', /^hash_algorithms = sha2$/)
       end
 
       it 'sets insecure' do
         node.set['openstack']['compute']['api']['auth']['insecure'] = true
-        expect(chef_run).to render_file(file.name).with_content(/^insecure = true$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keystone_authtoken', /^insecure = true$/)
       end
 
       context 'rabbit mq backend' do
@@ -463,14 +521,14 @@ describe 'openstack-compute::nova-common' do
 
       it 'has a os_region_name setting' do
         chef_run.node.set['openstack']['node'] = 'RegionOne'
-        expect(chef_run).to render_file(file.name).with_content(
-          /^os_region_name=RegionOne$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('cinder', /^os_region_name=RegionOne$/)
       end
 
       it 'has a disk_cachemodes setting' do
         chef_run.node.set['openstack']['compute']['config']['disk_cachemodes'] = 'disk:writethrough'
-        expect(chef_run).to render_file(file.name).with_content(
-          /^disk_cachemodes=disk:writethrough$/)
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('libvirt', /^disk_cachemodes=disk:writethrough$/)
       end
 
       context 'metering' do
@@ -511,38 +569,41 @@ describe 'openstack-compute::nova-common' do
 
       context 'libvirt configuration' do
         it 'has default libvirt_* options set' do
-          [/^use_virtio_for_bridges=true$/,
-           /^images_type=default$/,
-           /^inject_key=true$/,
-           /^inject_password=false$/,
-           /^inject_partition=-2$/,
-           /^live_migration_bandwidth=0$/,
-           /^live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER$/,
-           /^block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC$/,
-           %r{live_migration_uri=qemu\+tcp://%s/system$}].each do |line|
-             expect(chef_run).to render_file(file.name).with_content(line)
-           end
+          [
+            /^use_virtio_for_bridges=true$/,
+            /^images_type=default$/,
+            /^inject_key=true$/,
+            /^inject_password=false$/,
+            /^inject_partition=-2$/,
+            /^live_migration_bandwidth=0$/,
+            /^live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER$/,
+            /^block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC$/,
+            %r{live_migration_uri=qemu\+tcp://%s/system$}
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('libvirt', line)
+          end
         end
 
         it "the libvirt cpu_mode is none when virt_type is 'qemu'" do
           node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
 
-          expect(chef_run).to render_file(file.name).with_content(
-            'cpu_mode=none')
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('libvirt', /^cpu_mode=none$/)
         end
 
         it 'has a configurable inject_key setting' do
           node.set['openstack']['compute']['libvirt']['libvirt_inject_key'] = false
 
-          expect(chef_run).to render_file(file.name).with_content(
-            /^inject_key=false$/)
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('libvirt', /^inject_key=false$/)
         end
 
         it 'has a configurable inject_password setting' do
           node.set['openstack']['compute']['libvirt']['libvirt_inject_password'] = true
 
-          expect(chef_run).to render_file(file.name).with_content(
-            /^inject_password=true$/)
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('libvirt', /^inject_password=true$/)
         end
       end
 
@@ -569,16 +630,19 @@ describe 'openstack-compute::nova-common' do
             /^maximum_objects = 100$/,
             /^integration_bridge = br-int$/
           ].each do |line|
-            expect(chef_run).to render_file(file.name).with_content(line)
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('vmware', line)
           end
         end
 
         it 'has no datastore_regex line' do
-          expect(chef_run).not_to render_file(file.name).with_content('datastore_regex = ')
+          expect(chef_run).not_to render_config_file(file.name)\
+            .with_section_content('vmware', 'datastore_regex = ')
         end
 
         it 'has no wsdl_location line' do
-          expect(chef_run).not_to render_file(file.name).with_content('wsdl_location = ')
+          expect(chef_run).not_to render_config_file(file.name)\
+            .with_section_content('vmware', 'wsdl_location = ')
         end
       end
 
@@ -593,16 +657,20 @@ describe 'openstack-compute::nova-common' do
         end
 
         it 'has multiple cluster name lines' do
-          expect(chef_run).to render_file(file.name).with_content('cluster_name = cluster1')
-          expect(chef_run).to render_file(file.name).with_content('cluster_name = cluster2')
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('vmware', 'cluster_name = cluster1')
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('vmware', 'cluster_name = cluster2')
         end
 
         it 'has datastore_regex line' do
-          expect(chef_run).to render_file(file.name).with_content('datastore_regex = *.')
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('vmware', 'datastore_regex = *.')
         end
 
         it 'has wsdl_location line' do
-          expect(chef_run).to render_file(file.name).with_content('wsdl_location = http://127.0.0.1/')
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('vmware', 'wsdl_location = http://127.0.0.1/')
         end
       end
 
@@ -656,7 +724,8 @@ describe 'openstack-compute::nova-common' do
               /^rbd_user=cinder$/,
               /^rbd_secret_uuid=00000000-0000-0000-0000-000000000000$/
             ].each do |line|
-              expect(chef_run).to render_file(file.name).with_content(line)
+              expect(chef_run).to render_config_file(file.name)\
+                .with_section_content('libvirt', line)
             end
           end
         end
@@ -674,7 +743,8 @@ describe 'openstack-compute::nova-common' do
               /^images_rbd_pool=myrbd$/,
               %r{^images_rbd_ceph_conf=/etc/myceph/ceph.conf$}
             ].each do |line|
-              expect(chef_run).to render_file(file.name).with_content(line)
+              expect(chef_run).to render_config_file(file.name)\
+                .with_section_content('libvirt', line)
             end
           end
         end
@@ -692,7 +762,8 @@ describe 'openstack-compute::nova-common' do
             /^images_volume_group=instances$/,
             /^sparse_logical_volumes=false$/
           ].each do |line|
-            expect(chef_run).to render_file(file.name).with_content(line)
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('libvirt', line)
           end
         end
 
@@ -709,7 +780,8 @@ describe 'openstack-compute::nova-common' do
               /^images_volume_group=instances$/,
               /^sparse_logical_volumes=true$/
             ].each do |line|
-              expect(chef_run).to render_file(file.name).with_content(line)
+              expect(chef_run).to render_config_file(file.name)\
+                .with_section_content('libvirt', line)
             end
           end
         end

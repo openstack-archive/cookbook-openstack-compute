@@ -91,31 +91,10 @@ default_schedule_zone=<%= node["openstack"]["compute"]["config"]["default_schedu
 
 when "neutron" -%>
 
-# N.B. due to https://bugs.launchpad.net/nova/+bug/1206330
-# we override the endpoint scheme below, ignore the port
-# and essentially force http
-<% if @network_endpoint.port == 443 -%>
-neutron_url=http://<%= @network_endpoint.host %>:80
-<% else -%>
-neutron_url=<%= @network_endpoint.scheme %>://<%= @network_endpoint.host %>:<%= @network_endpoint.port %>
-<% end -%>
-neutron_api_insecure=<%= node['openstack']['compute']['network']['neutron']['api_insecure'] %>
 network_api_class=<%= node["openstack"]["compute"]["network"]["neutron"]["network_api_class"]  %>
-neutron_auth_strategy=<%= node["openstack"]["compute"]["network"]["neutron"]["auth_strategy"] %>
-neutron_admin_tenant_name=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_tenant_name"] %>
-neutron_admin_username=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_username"] %>
-neutron_admin_password=<%= @neutron_admin_password %>
-neutron_admin_auth_url=<%= @identity_endpoint.to_s %>
-neutron_url_timeout=<%= node["openstack"]["compute"]["network"]["neutron"]["url_timeout"] %>
-neutron_region_name=<%= node["openstack"]["compute"]["network"]["neutron"]["region_name"] %>
-neutron_ovs_bridge=<%= node["openstack"]["compute"]["network"]["neutron"]["ovs_bridge"] %>
-neutron_extension_sync_interval=<%= node["openstack"]["compute"]["network"]["neutron"]["extension_sync_interval"] %>
-neutron_ca_certificates_file=<%= node["openstack"]["compute"]["network"]["neutron"]["ca_certificates_file"] %>
 linuxnet_interface_driver=<%= node["openstack"]["compute"]["network"]["neutron"]["linuxnet_interface_driver"] %>
 firewall_driver = nova.virt.firewall.NoopFirewallDriver
 security_group_api=<%= node["openstack"]["compute"]["network"]["neutron"]["security_group_api"] %>
-service_neutron_metadata_proxy=<%= node["openstack"]["compute"]["network"]["neutron"]["service_neutron_metadata_proxy"] %>
-neutron_metadata_proxy_shared_secret=<%= @neutron_metadata_proxy_shared_secret %>
 default_floating_pool=<%= node["openstack"]["compute"]["network"]["neutron"]["public_network_name"] %>
 dns_server=<%= node["openstack"]["compute"]["network"]["neutron"]["dns_server"] %>
 
@@ -137,18 +116,6 @@ use_ipv6=<%= node["openstack"]["compute"]["network"]["use_ipv6"] %>
 
 ##### GLANCE #####
 image_service=nova.image.glance.GlanceImageService
-glance_api_servers=<%= @glance_api_scheme %>://<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
-glance_api_insecure=<%= node['openstack']['compute']['image']['glance_api_insecure'] %>
-
-##### Cinder #####
-# Location of ca certificates file to use for cinder client requests
-cinder_ca_certificates_file=<%= node['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] %>
-
-# Allow to perform insecure SSL requests to cinder
-cinder_api_insecure=<%= node['openstack']['compute']['block-storage']['cinder_api_insecure'] %>
-
-# Info to match when looking for cinder in the service catalog
-cinder_catalog_info=<%= node['openstack']['compute']['block-storage']['cinder_catalog_info'] %>
 
 ##### COMPUTE #####
 compute_driver=<%= node["openstack"]["compute"]["driver"] %>
@@ -343,8 +310,6 @@ compute_monitors=<%= node["openstack"]["compute"]["config"]["compute_monitors"].
 # iscsi target user-land tool to use
 iscsi_helper=<%= @iscsi_helper %>
 volume_api_class=<%= node["openstack"]["compute"]["config"]["volume_api_class"] %>
-# Region name of this node (string value)
-os_region_name=<%= node['openstack']['region'] %>
 
 # Override the default dnsmasq settings with this file (String value)
 dnsmasq_config_file=<%= node['openstack']['compute']['dnsmasq_config_file'] %>
@@ -664,3 +629,47 @@ memcache_secret_key = <%= node['openstack']['compute']['api']['auth']['memcache_
 <% end %>
 hash_algorithms = <%= node['openstack']['compute']['api']['auth']['hash_algorithms'] %>
 insecure = <%= node['openstack']['compute']['api']['auth']['insecure'] %>
+
+<% if node['openstack']['compute']['network']['service_type'] == 'neutron' %>
+
+[neutron]
+# N.B. due to https://bugs.launchpad.net/nova/+bug/1206330
+# we override the endpoint scheme below, ignore the port
+# and essentially force http
+<% if @network_endpoint.port == 443 -%>
+url=http://<%= @network_endpoint.host %>:80
+<% else -%>
+url=<%= @network_endpoint.scheme %>://<%= @network_endpoint.host %>:<%= @network_endpoint.port %>
+<% end -%>
+api_insecure=<%= node['openstack']['compute']['network']['neutron']['api_insecure'] %>
+auth_strategy=<%= node["openstack"]["compute"]["network"]["neutron"]["auth_strategy"] %>
+admin_tenant_name=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_tenant_name"] %>
+admin_username=<%= node["openstack"]["compute"]["network"]["neutron"]["admin_username"] %>
+admin_password=<%= @neutron_admin_password %>
+admin_auth_url=<%= @identity_endpoint.to_s %>
+url_timeout=<%= node["openstack"]["compute"]["network"]["neutron"]["url_timeout"] %>
+region_name=<%= node["openstack"]["compute"]["network"]["neutron"]["region_name"] %>
+ovs_bridge=<%= node["openstack"]["compute"]["network"]["neutron"]["ovs_bridge"] %>
+extension_sync_interval=<%= node["openstack"]["compute"]["network"]["neutron"]["extension_sync_interval"] %>
+ca_certificates_file=<%= node["openstack"]["compute"]["network"]["neutron"]["ca_certificates_file"] %>
+service_metadata_proxy=<%= node["openstack"]["compute"]["network"]["neutron"]["service_neutron_metadata_proxy"] %>
+metadata_proxy_shared_secret=<%= @neutron_metadata_proxy_shared_secret %>
+
+<% end %>
+
+[glance]
+api_servers=<%= @glance_api_scheme %>://<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
+api_insecure=<%= node['openstack']['compute']['image']['glance_api_insecure'] %>
+
+[cinder]
+# Location of ca certificates file to use for cinder client requests
+ca_certificates_file=<%= node['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] %>
+
+# Allow to perform insecure SSL requests to cinder
+api_insecure=<%= node['openstack']['compute']['block-storage']['cinder_api_insecure'] %>
+
+# Info to match when looking for cinder in the service catalog
+catalog_info=<%= node['openstack']['compute']['block-storage']['cinder_catalog_info'] %>
+
+# Region name of this node (string value)
+os_region_name=<%= node['openstack']['region'] %>
