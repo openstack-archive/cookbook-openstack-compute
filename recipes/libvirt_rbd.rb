@@ -22,47 +22,54 @@ class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
 
-include_recipe 'openstack-common::ceph_client'
+include_recipe 'ceph'
 
-platform_options = node['openstack']['compute']['platform']
+ceph_user = node['openstack']['compute']['libvirt']['rbd']['cinder']['user']
+cinder_pool = node['openstack']['compute']['libvirt']['rbd']['cinder']['pool']
+nova_pool = node['openstack']['compute']['libvirt']['rbd']['nova']['pool']
+glance_pool =  node['openstack']['compute']['libvirt']['rbd']['glance']['pool']
 
-platform_options['libvirt_ceph_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+secret_uuid = node['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid']
+ceph_keyname = "client.#{ceph_user}"
+ceph_keyring = "/etc/ceph/ceph.#{ceph_keyname}.keyring"
+
+caps = { 'mon' => 'allow r',
+         'osd' => "allow class-read object_prefix rbd_children, allow rwx pool=#{cinder_pool}, allow rwx pool=#{nova_pool}, allow rx pool=#{glance_pool}" }
+
+ceph_client ceph_user do
+  name ceph_user
+  caps caps
+  keyname ceph_keyname
+  filename ceph_keyring
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+
+  action :add
 end
 
-# TODO(srenatus) there might be multiple secrets, cinder will tell nova-compute
-# which one should be used for each single volume mount request
-Chef::Log.info("rbd_secret_name: #{node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']}")
-secret_uuid = get_secret node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
-ceph_key = get_password 'service', 'rbd_block_storage'
+Chef::Log.info("rbd_secret_name: #{secret_uuid}")
 
-require 'securerandom'
-filename = SecureRandom.hex
-
-template "/tmp/#{filename}.xml" do
+template '/tmp/secret.xml' do
   source 'secret.xml.erb'
   user 'root'
   group 'root'
-  mode '700'
+  mode '00600'
   variables(
     uuid: secret_uuid,
-    client_name: node['openstack']['compute']['libvirt']['rbd']['rbd_user']
+    client_name: node['openstack']['compute']['libvirt']['rbd']['cinder']['user']
   )
   not_if "virsh secret-list | grep #{secret_uuid}"
 end
 
-execute "virsh secret-define --file /tmp/#{filename}.xml" do
+execute 'virsh secret-define --file /tmp/secret.xml' do
   not_if "virsh secret-list | grep #{secret_uuid}"
 end
 
 # this will update the key if necessary
-execute "virsh secret-set-value --secret #{secret_uuid} '#{ceph_key}'" do
-  not_if "virsh secret-get-value #{secret_uuid} | grep '#{ceph_key}'"
+execute "virsh secret-set-value --secret #{secret_uuid} --base64 $(ceph-authtool -p -n client.#{ceph_user} #{ceph_keyring})" do
+  not_if "virsh secret-get-value #{secret_uuid} | grep $(ceph-authtool -p -n #{ceph_keyname} #{ceph_keyring})"
 end
 
-file "/tmp/#{filename}.xml" do
+file '/tmp/secret.xml' do
   action :delete
 end

@@ -589,8 +589,8 @@ images_volume_group=<%= node['openstack']['compute']['libvirt']['volume_group'] 
 sparse_logical_volumes=<%= node['openstack']['compute']['libvirt']['sparse_logical_volumes'] %>
 
 <% elsif node['openstack']['compute']['libvirt']['images_type'] == 'rbd' -%>
-images_rbd_pool=<%= node['openstack']['compute']['libvirt']['images_rbd_pool'] %>
-images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] %>
+images_rbd_pool=<%= node['openstack']['compute']['libvirt']['rbd']['glance']['pool'] %>
+images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['rbd']['ceph_conf'] %>
 
 #
 # Options defined in nova.virt.libvirt.volume
@@ -600,9 +600,9 @@ images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['images_rbd_cep
 # NOTE that if these two options are set here, it will override the rbd_user that cinder provides
 # for nova in netdisk_properties:
 # https://github.com/openstack/nova/blob/c15dff2e9978fe851c73e92ab7f9b46e27de81ba/nova/virt/libvirt/volume.py#L217-L229
-rbd_user=<%= node['openstack']['compute']['libvirt']['rbd']['rbd_user'] %>
+rbd_user=<%= node['openstack']['compute']['libvirt']['rbd']['cinder']['user'] %>
 # The libvirt UUID of the secret for the rbd images (string value)
-rbd_secret_uuid=<%= @rbd_secret_uuid %>
+rbd_secret_uuid=<%= node['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid'] %>
 <% end -%>
 
 [keystone_authtoken]

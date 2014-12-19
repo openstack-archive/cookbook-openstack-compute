@@ -25,6 +25,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Allow dbsync_timeout to be configurable
 * Make libvirtd service started prior to nova compute service
 * Add [upgrade_levels] in nova.conf to enable rpc API compatible with order version
+* Add dependency on upstream ceph cookbook for better key management
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

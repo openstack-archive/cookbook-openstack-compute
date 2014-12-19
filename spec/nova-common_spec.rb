@@ -576,7 +576,7 @@ describe 'openstack-compute::nova-common' do
             /^inject_password=false$/,
             /^inject_partition=-2$/,
             /^live_migration_bandwidth=0$/,
-            /^live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER$/,
+            /^live_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST$/,
             /^block_migration_flag=VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC$/,
             %r{live_migration_uri=qemu\+tcp://%s/system$}
           ].each do |line|
@@ -719,7 +719,7 @@ describe 'openstack-compute::nova-common' do
           it 'sets the libvirt * options correctly' do
             [
               /^images_type=rbd$/,
-              /^images_rbd_pool=rbd$/,
+              /^images_rbd_pool=images$/,
               %r{^images_rbd_ceph_conf=/etc/ceph/ceph.conf$},
               /^rbd_user=cinder$/,
               /^rbd_secret_uuid=00000000-0000-0000-0000-000000000000$/
@@ -733,8 +733,8 @@ describe 'openstack-compute::nova-common' do
         describe 'override rbd settings' do
           before do
             node.set['openstack']['compute']['libvirt']['images_type'] = 'rbd'
-            node.set['openstack']['compute']['libvirt']['images_rbd_pool'] = 'myrbd'
-            node.set['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/myceph/ceph.conf'
+            node.set['openstack']['compute']['libvirt']['rbd']['glance']['pool'] = 'myrbd'
+            node.set['openstack']['compute']['libvirt']['rbd']['ceph_conf'] = '/etc/myceph/ceph.conf'
           end
 
           it 'sets the overridden libvirt options correctly' do

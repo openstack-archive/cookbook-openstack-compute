@@ -268,15 +268,18 @@ default['openstack']['compute']['libvirt']['images_type'] = 'default'
 default['openstack']['compute']['libvirt']['volume_group'] = nil
 default['openstack']['compute']['libvirt']['sparse_logical_volumes'] = false
 # rbd
-default['openstack']['compute']['libvirt']['images_rbd_pool'] = 'rbd'
-default['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/ceph/ceph.conf'
+default['openstack']['compute']['libvirt']['rbd']['ceph_conf'] = '/etc/ceph/ceph.conf'
 # use a different backend for volumes, allowed options: rbd
 default['openstack']['compute']['libvirt']['volume_backend'] = nil
-default['openstack']['compute']['libvirt']['rbd']['rbd_secret_name'] = 'rbd_secret_uuid'
-default['openstack']['compute']['libvirt']['rbd']['rbd_user'] = 'cinder'
+default['openstack']['compute']['libvirt']['rbd']['cinder']['pool'] = 'volumes'
+default['openstack']['compute']['libvirt']['rbd']['glance']['pool'] = 'images'
+default['openstack']['compute']['libvirt']['rbd']['nova']['pool'] = 'instances'
+
+default['openstack']['compute']['libvirt']['rbd']['cinder']['user'] = 'cinder'
+default['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid'] = '00000000-0000-0000-0000-000000000000'
 # live migration
 default['openstack']['compute']['libvirt']['live_migration_bandwidth'] = 0
-default['openstack']['compute']['libvirt']['live_migration_flag'] = 'VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER'
+default['openstack']['compute']['libvirt']['live_migration_flag'] = 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST'
 default['openstack']['compute']['libvirt']['block_migration_flag'] = 'VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC'
 default['openstack']['compute']['libvirt']['live_migration_uri'] = 'qemu+tcp://%s/system'
 
@@ -343,7 +346,7 @@ default['openstack']['compute']['config']['quota_metadata_items'] = 128
 # megabytes of instance ram allowed per project (default: 51200)
 default['openstack']['compute']['config']['quota_ram'] = 51200
 # disk cache modes
-default['openstack']['compute']['config']['disk_cache_modes'] = nil
+default['openstack']['compute']['config']['disk_cachemodes'] = nil
 # Number of 1 second retries needed in live_migration
 default['openstack']['compute']['config']['live_migration_retry_count'] = 30
 

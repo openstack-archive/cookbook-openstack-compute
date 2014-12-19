@@ -86,7 +86,8 @@ shared_context 'compute_stubs' do
     stub_command('ovs-vsctl br-exists br-int').and_return(true)
     stub_command('ovs-vsctl br-exists br-tun').and_return(true)
     stub_command('virsh secret-list | grep 00000000-0000-0000-0000-000000000000').and_return(false)
-    stub_command("virsh secret-get-value 00000000-0000-0000-0000-000000000000 | grep 'cinder-rbd-pass'").and_return(false)
+    stub_command('virsh secret-set-value --secret 00000000-0000-0000-0000-000000000000 --base64 $(ceph-authtool -p -n client.cinder /etc/ceph/ceph.client.cinder.keyring)').and_return(false)
+    stub_command('virsh secret-get-value 00000000-0000-0000-0000-000000000000 | grep $(ceph-authtool -p -n client.cinder /etc/ceph/ceph.client.cinder.keyring)').and_return(false)
   end
 end
 

@@ -117,10 +117,6 @@ if node['openstack']['compute']['network']['service_type'] == 'neutron'
   neutron_metadata_proxy_shared_secret = get_secret 'neutron_metadata_secret'
 end
 
-if node['openstack']['compute']['libvirt']['images_type'] == 'rbd'
-  rbd_secret_uuid = get_secret node['openstack']['compute']['libvirt']['rbd']['rbd_secret_name']
-end
-
 if node['openstack']['compute']['driver'].split('.').first == 'vmwareapi'
   vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
 end
@@ -164,7 +160,6 @@ template '/etc/nova/nova.conf' do
     compute_api_bind_port: compute_api_bind.port,
     ec2_api_bind_ip: ec2_api_bind.host,
     ec2_api_bind_port: ec2_api_bind.port,
-    rbd_secret_uuid: rbd_secret_uuid,
     vmware_host_pass: vmware_host_pass,
     auth_uri: auth_uri,
     identity_admin_endpoint: identity_admin_endpoint,

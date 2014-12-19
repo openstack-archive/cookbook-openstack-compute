@@ -52,6 +52,7 @@ describe 'openstack-compute::libvirt' do
       end
 
       it 'includes the libvirt_rbd recipe if it is the selected volume backend' do
+        node.set['ceph']['config']['fsid'] = '00000000-0000-0000-0000-000000000000'
         expect(chef_run).to include_recipe('openstack-compute::libvirt_rbd')
       end
     end

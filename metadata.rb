@@ -13,6 +13,7 @@ recipe 'openstack-compute::client', 'Install nova client packages'
 recipe 'openstack-compute::compute', 'nova-compute service'
 recipe 'openstack-compute::conductor', 'Installs nova conductor service'
 recipe 'openstack-compute::libvirt', 'Installs libvirt, used by nova compute for management of the virtual machine environment'
+recipe 'openstack-compute::libvirt_rbd', 'Manages the RBD portions of libvirt. Included by openstack-compute::libvirt'
 recipe 'openstack-compute::identity_registration', 'Registers the API and EC2 endpoints with Keystone'
 recipe 'openstack-compute::network', 'Installs nova network service'
 recipe 'openstack-compute::nova-cert', 'Installs nova-cert service'
@@ -25,6 +26,8 @@ recipe 'openstack-compute::vncproxy', 'Installs and configures the vncproxy serv
   supports os
 end
 
+depends 'ceph', '>= 0.2.1'
+depends 'ceph', '< 3.0.0'
 depends 'openstack-common', '~> 10.2'
 depends 'openstack-identity', '~> 10.0'
 depends 'openstack-image', '~> 10.0'

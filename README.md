@@ -56,7 +56,7 @@ libvirt
 libvirt_rbd
 ----
 - Prepares the compute node for interaction with a Ceph cluster for block storage (RBD)
-- Depends on `openstack-common::ceph_client` for packages and cluster connectivity (i.e. a proper `/etc/ceph/ceph.conf`)
+- Depends on `ceph::_common`, `ceph::install`, and `ceph::conf` for packages and cluster connectivity (i.e. a proper `/etc/ceph/ceph.conf`)
 
 network
 ----
@@ -264,15 +264,17 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["images_type"]` - How to store local images (ephemeral disks): raw, qcow2, lvm, rbd, or default
 * `openstack["compute"]["libvirt"]["volume_group"]` - When images_type is lvm: volume group to use
 * `openstack["compute"]["libvirt"]["sparse_logical_volumes"]` - When images_type is lvm: use sparse logical volumes
-* `openstack["compute"]["libvirt"]["images_rbd_pool"]` - When images_type is rbd: use this RBD pool
-* `openstack["compute"]["libvirt"]["images_rbd_ceph_conf"]` - When images_type is rbd: use this ceph.conf
 * `openstack["compute"]["libvirt"]["unix_sock_rw_perms"]` - Set the UNIX socket permissions for the R/W socket. This is used for full management of VMs.
 * `openstack["compute"]["libvirt"]["live_migration_bandwidth"]` - Maximum bandwidth to be used during migration, in Mbps.
 * `openstack["compute"]["libvirt"]["live_migration_flag"]` - Migration flags to be set for live migration.
 * `openstack["compute"]["libvirt"]["block_migration_flag"]` - Migration flags to be set for block migration.
 * `openstack["compute"]["libvirt"]["live_migration_uri"]` - Migration target URI (any included "%s" is replaced with the migration target hostname).
-* `openstack["compute"]["libvirt"]["rbd"]["rbd_user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)
-* `openstack["compute"]["libvirt"]["rbd"]["rbd_secret_name"]` - The name of the databag item containing the UUID shared between Cinder and nova-compute.  `libvirt_rbd` will define a libvirt secret with this UUID, containing the `rbd_user`'s password.  The password itself will be retrieved using `get_password` on the service `rbd_block_storage`.  Creating the cephx user in a Ceph cluster has to be done outside of the scope of this cookbook.
+* `openstack["compute"]["libvirt"]["rbd"]["glance"]["pool"]` - When images_type is rbd: use this RBD pool for images
+* `openstack["compute"]["libvirt"]["rbd"]["cinder"]["pool"]` - When images_type is rbd: use this RBD pool for volumes
+* `openstack["compute"]["libvirt"]["rbd"]["nova"]["pool"]` - When images_type is rbd: use this RBD pool for instances
+* `openstack["compute"]["libvirt"]["rbd"]["ceph_conf"]` - When images_type is rbd: use this ceph.conf
+* `openstack["compute"]["libvirt"]["rbd"]["cinder"]["user"]` - The cephx user used for accessing the RBD pool used for block storage. (Which pool to use is passed by cinder when nova-compute is instructed to mount a volume.)
+* `openstack["compute"]["libvirt"]["rbd"]["cinder"]["secret_uuid"]` - A shared secret between cinder and libvirt.  It should be the same as the secret_uuid that is defined in block-storage.
 * `openstack["compute"]["libvirt"]["rng_dev_path"]` - A path to a device that will be used as source of entropy on the host. Permitted options are: /dev/random or /dev/hwrng (string value)
 
 Scheduler Configuration Attributes
