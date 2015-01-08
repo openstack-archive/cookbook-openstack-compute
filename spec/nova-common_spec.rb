@@ -786,6 +786,17 @@ describe 'openstack-compute::nova-common' do
           end
         end
       end
+
+      it 'sets the upgrade levels' do
+        node.set['openstack']['compute']['upgrade_levels'] = {
+                                                              'compute' => 'juno',
+                                                              'cert' => '3.0',
+                                                              'network' => 'havana'
+                                                              }
+        node['openstack']['compute']['upgrade_levels'].each do |key, val|
+          expect(chef_run).to render_config_file(file.name).with_section_content('upgrade_levels', /^#{key} = #{val}$/)
+        end
+      end
     end
 
     describe 'rootwrap.conf' do

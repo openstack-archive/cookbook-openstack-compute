@@ -24,6 +24,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Move deprecated neutron_*/glance_*/cinder_* configurations to [neutron]/[glance]/[cinder] sections in nova.conf
 * Allow dbsync_timeout to be configurable
 * Make libvirtd service started prior to nova compute service
+* Add [upgrade_levels] in nova.conf to enable rpc API compatible with order version
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

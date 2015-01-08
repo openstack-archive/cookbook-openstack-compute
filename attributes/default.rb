@@ -548,3 +548,23 @@ default['openstack']['compute']['vmware']['wsdl_location'] = nil
 default['openstack']['compute']['vmware']['maximum_objects'] = 100
 # Name of Integration Bridge (string value, default br-int)
 default['openstack']['compute']['vmware']['integration_bridge'] = 'br-int'
+
+# Lock the version of RPC messages and allow live upgrading of the services
+# without interruption caused by version mismatch.
+# The configuration options allow the specification of RPC version numbers if desired,
+# but release name alias are also supported.
+# options e.g.:
+# default['openstack']['compute']['upgrade_levels'] = {
+#                                                       'baseapi' => 'juno',
+#                                                       'console' => 'juno',
+#                                                       'consoleauth' => 'juno',
+#                                                       'cert' => 'juno',
+#                                                       'scheduler' => 'juno',
+#                                                       'compute' => 'juno',
+#                                                       'intercell' => 'juno',
+#                                                       'conductor' => '2.0',
+#                                                       'network' => '3.0',
+#                                                       'cells' => 'juno'
+#                                                      }
+# choose the needed ones to set
+default['openstack']['compute']['upgrade_levels'] = nil

@@ -355,6 +355,9 @@ VMware Configuration Attributes
 * `openstack['compute']['vmware']['maximum_objects']` - The maximum number of ObjectContent data objects that should be returned in a single result. (integer value, default 100)
 * `openstack['compute']['vmware']['integration_bridge']` - Name of Integration Bridge (string value, default br-int)
 
+Upgrade levels Attribute
+------------------------
+* `openstack['openstack']['compute']['upgrade_levels']` - The RPC version numbers or release name alias
 
 The following attributes are defined in attributes/default.rb of the common cookbook, but are documented here due to their relevance:
 

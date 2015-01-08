@@ -673,3 +673,13 @@ catalog_info=<%= node['openstack']['compute']['block-storage']['cinder_catalog_i
 
 # Region name of this node (string value)
 os_region_name=<%= node['openstack']['region'] %>
+
+<% if node['openstack']['compute']['upgrade_levels'] -%>
+# Lock the version of RPC messages and allow live upgrading of the services
+# without interruption caused by version mismatch.
+# Add upgrade_levels for order rpc API, ex. compute = juno
+[upgrade_levels]
+<% node['openstack']['compute']['upgrade_levels'].each do |key, val| %>
+<%= key %> = <%= val %>
+<% end -%>
+<% end -%>
