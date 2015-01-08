@@ -47,6 +47,7 @@ rabbit_virtual_host=<%= node["openstack"]["mq"]["compute"]["rabbit"]["vhost"] %>
 <% if node["openstack"]["mq"]["compute"]["rabbit"]["ha"] -%>
 rabbit_hosts=<%= @rabbit_hosts %>
 rabbit_ha_queues=True
+rabbit_use_ssl=<%= node["openstack"]["mq"]["compute"]["rabbit"]["use_ssl"] %>
 <% else -%>
 rabbit_host=<%= node["openstack"]["mq"]["compute"]["rabbit"]["host"] %>
 rabbit_port=<%= node["openstack"]["mq"]["compute"]["rabbit"]["port"] %>

@@ -361,7 +361,8 @@ describe 'openstack-compute::nova-common' do
           it 'sets ha rabbit options correctly' do
             [
               /^rabbit_hosts=1.1.1.1:5672,2.2.2.2:5672$/,
-              /^rabbit_ha_queues=True$/
+              /^rabbit_ha_queues=True$/,
+              /^rabbit_use_ssl=false$/
             ].each do |line|
               expect(chef_run).to render_file(file.name).with_content(line)
             end

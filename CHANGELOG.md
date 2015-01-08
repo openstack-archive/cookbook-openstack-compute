@@ -20,6 +20,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Update and remove the outdated options
 * Add cinder_catalog_info
 * Updated the nova-networking to start metadata-api
+* Allow rabbit ssl in the ha case
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf
