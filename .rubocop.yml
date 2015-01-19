@@ -1,5 +1,5 @@
 AllCops:
-  Includes:
+  Include:
     - metadata.rb
     - Gemfile
     - attributes/**
@@ -13,6 +13,7 @@ Encoding:
   Exclude:
     - metadata.rb
     - Gemfile
+    - berks-cookbooks/**
 
 NumericLiterals:
   Enabled: false
