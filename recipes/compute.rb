@@ -74,6 +74,8 @@ directory node['openstack']['compute']['instances_path'] do
   recursive true
 end
 
+include_recipe 'openstack-compute::libvirt'
+
 service 'nova-compute' do
   service_name platform_options['compute_compute_service']
   supports status: true, restart: true
@@ -81,5 +83,3 @@ service 'nova-compute' do
 
   action [:enable, :start]
 end
-
-include_recipe 'openstack-compute::libvirt'

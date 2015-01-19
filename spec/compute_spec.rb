@@ -90,16 +90,16 @@ describe 'openstack-compute::compute' do
       end
     end
 
+    it 'runs libvirt recipe' do
+      expect(chef_run).to include_recipe 'openstack-compute::libvirt'
+    end
+
     it 'starts nova compute on boot' do
       expect(chef_run).to enable_service 'nova-compute'
     end
 
     it 'starts nova compute' do
       expect(chef_run).to start_service 'nova-compute'
-    end
-
-    it 'runs libvirt recipe' do
-      expect(chef_run).to include_recipe 'openstack-compute::libvirt'
     end
   end
 end
