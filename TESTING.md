@@ -1,18 +1,18 @@
 # Testing the Cookbook #
 
-This cookbook uses [bundler](http://gembundler.com/) and [berkshelf](http://berkshelf.com/) to isolate dependencies.
+This cookbook uses [bundler](http://gembundler.com/) and [berkshelf](http://berkshelf.com/) to isolate dependencies. Make sure you have `ruby 1.9.x`, `bundler`, `rake`, build essentials and the header files for `gecode` installed before continuing. Make sure that you're using gecode version 3. More info [here](https://github.com/opscode/dep-selector-libgecode/tree/0bad63fea305ede624c58506423ced697dd2545e#using-a-system-gecode-instead).
 
-To setup the dependencies:
+We have three test suites which you can run either, individually (there are three rake tasks):
 
-    $ bundle install --path=.bundle # install gem dependencies
-    $ bundle exec berks vendor .cookbooks # install cookbook dependencies and create the folder .cookbooks
+    $ rake lint
+    $ rake style
+    $ rake unit
 
-To run the tests:
+or altogether:
 
-    $ export COOKBOOK='openstack-compute'
-    $ bundle exec foodcritic -f any -t ~FC003 -t ~FC023 .cookbooks/$COOKBOOK
-    $ bundle exec rubocop .cookbooks/$COOKBOOK
-    $ bundle exec rspec --format documentation .cookbooks/$COOKBOOK/spec
+    $ rake test
+
+The `rake` tasks will take care of installing the needed gem dependencies and cookbooks with `berkshelf`.
 
 ## Rubocop  ##
 

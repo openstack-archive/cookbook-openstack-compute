@@ -1,5 +1,5 @@
 .bundle/
-.cookbooks/
+berks-cookbooks/
 .kitchen
 .vagrant
 .coverage/
