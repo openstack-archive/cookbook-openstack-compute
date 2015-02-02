@@ -90,7 +90,10 @@ end
 memcache_servers = memcached_servers.join ','
 
 # find the node attribute endpoint settings for the server holding a given role
-identity_endpoint = endpoint 'identity-api'
+# Note that the bind and vnc endpoints don't have possible different values for
+# internal/admin/public. We'll stick with the general endpoint routine
+# for those.
+identity_endpoint = internal_endpoint 'identity-internal'
 xvpvnc_endpoint = endpoint 'compute-xvpvnc' || {}
 xvpvnc_bind = endpoint 'compute-xvpvnc-bind' || {}
 novnc_endpoint = endpoint 'compute-novnc' || {}
@@ -98,11 +101,11 @@ novnc_bind = endpoint 'compute-novnc-bind' || {}
 vnc_bind = endpoint 'compute-vnc-bind' || {}
 vnc_proxy_bind = endpoint 'compute-vnc-proxy-bind' || {}
 compute_api_bind = endpoint 'compute-api-bind' || {}
-compute_api_endpoint = endpoint 'compute-api' || {}
+compute_api_endpoint = internal_endpoint 'compute-api' || {}
 ec2_api_bind = endpoint 'compute-ec2-api-bind' || {}
-ec2_public_endpoint = endpoint 'compute-ec2-api' || {}
-network_endpoint = endpoint 'network-api' || {}
-image_endpoint = endpoint 'image-api'
+ec2_public_endpoint = public_endpoint 'compute-ec2-api' || {}
+network_endpoint = internal_endpoint 'network-api' || {}
+image_endpoint = internal_endpoint 'image-api'
 
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
@@ -121,7 +124,7 @@ if node['openstack']['compute']['driver'].split('.').first == 'vmwareapi'
   vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
 end
 
-identity_admin_endpoint = endpoint 'identity-admin'
+identity_admin_endpoint = admin_endpoint 'identity-admin'
 auth_uri = auth_uri_transform identity_endpoint.to_s, node['openstack']['compute']['api']['auth']['version']
 service_pass = get_password 'service', 'openstack-compute'
 
