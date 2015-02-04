@@ -73,6 +73,9 @@ shared_context 'compute_stubs' do
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('service', 'rbd_block_storage')
       .and_return 'cinder-rbd-pass'
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('service', 'openstack-bare-metal')
+      .and_return 'ironic-pass'
     allow_any_instance_of(Chef::Recipe).to receive(:memcached_servers).and_return []
     allow_any_instance_of(Chef::Recipe).to receive(:system)
       .with("grub2-set-default 'openSUSE GNU/Linux, with Xen hypervisor'")

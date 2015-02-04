@@ -226,6 +226,7 @@ default['openstack']['compute']['network']['use_ipv6'] = false
 
 default['openstack']['compute']['scheduler']['scheduler_manager'] = 'nova.scheduler.manager.SchedulerManager'
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
+default['openstack']['compute']['scheduler']['scheduler_host_manager'] = 'nova.scheduler.host_manager.HostManager'
 default['openstack']['compute']['scheduler']['available_filters'] = 'nova.scheduler.filters.all_filters'
 default['openstack']['compute']['scheduler']['default_filters'] = %W(
   RetryFilter
@@ -305,6 +306,7 @@ default['openstack']['compute']['config']['disk_allocation_ratio'] = 1.0
 default['openstack']['compute']['config']['snapshot_image_format'] = 'qcow2'
 default['openstack']['compute']['config']['allow_resize_to_same_host'] = false
 default['openstack']['compute']['config']['resize_confirm_window'] = 0
+default['openstack']['compute']['config']['reserved_host_disk_mb'] = 0
 # `start` will cause nova-compute to error out if a VM is already running, where
 # `resume` checks to see if it is running first.
 default['openstack']['compute']['config']['start_guests_on_host_boot'] = false
@@ -560,6 +562,10 @@ default['openstack']['compute']['vmware']['wsdl_location'] = nil
 default['openstack']['compute']['vmware']['maximum_objects'] = 100
 # Name of Integration Bridge (string value, default br-int)
 default['openstack']['compute']['vmware']['integration_bridge'] = 'br-int'
+
+# Ironic options
+default['openstack']['compute']['bare-metal']['admin_username'] = 'ironic'
+default['openstack']['compute']['bare-metal']['admin_tenant_name'] = 'service'
 
 # Lock the version of RPC messages and allow live upgrading of the services
 # without interruption caused by version mismatch.

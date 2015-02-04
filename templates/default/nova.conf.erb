@@ -83,6 +83,7 @@ scheduler_available_filters=<%= node["openstack"]["compute"]["scheduler"]["avail
 scheduler_default_filters=<%= @scheduler_default_filters %>
 default_availability_zone=<%= node["openstack"]["compute"]["config"]["availability_zone"] %>
 default_schedule_zone=<%= node["openstack"]["compute"]["config"]["default_schedule_zone"] %>
+scheduler_host_manager=<%= node["openstack"]["compute"]["scheduler"]["scheduler_host_manager"] %>
 
 ##### NETWORK #####
 
@@ -258,6 +259,9 @@ force_config_drive=<%= node["openstack"]["compute"]["config"]["force_config_driv
 mkisofs_cmd=<%= node["openstack"]["compute"]["config"]["mkisofs_cmd"] %>
 injected_network_template=<%= node["openstack"]["compute"]["config"]["injected_network_template"] %>
 flat_injected=<%= node["openstack"]["compute"]["config"]["flat_injected"] %>
+
+# Amount of disk in MB to reserve for the host (default: 0)
+reserved_host_disk_mb=<%= node["openstack"]["compute"]["config"]["reserved_host_disk_mb"] %>
 
 <% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 # The IP address on which the EC2 API will listen. (string value)
@@ -671,6 +675,32 @@ catalog_info=<%= node['openstack']['compute']['block-storage']['cinder_catalog_i
 
 # Region name of this node (string value)
 os_region_name=<%= node['openstack']['region'] %>
+
+[ironic]
+
+#
+# Options defined in nova.virt.ironic.driver
+#
+
+# URL for Ironic API endpoint. (string value)
+api_endpoint=<%= @ironic_endpoint.scheme %>://<%= @ironic_endpoint.host %>:<%= @ironic_endpoint.port %>
+
+# Ironic keystone admin name (string value)
+admin_username=<%= node['openstack']['compute']['bare-metal']['admin_username'] %>
+
+# Ironic keystone admin password. (string value)
+admin_password=<%= @ironic_admin_password %>
+
+# Keystone public API endpoint. (string value)
+admin_url=<%= @identity_endpoint.to_s %>
+
+# Log level override for ironicclient. Set this in order to
+# override the global "default_log_levels", "verbose", and
+# "debug" settings. (string value)
+#client_log_level=<None>
+
+# Ironic keystone tenant name. (string value)
+admin_tenant_name=<%= node['openstack']['compute']['bare-metal']['admin_tenant_name'] %>
 
 <% if node['openstack']['compute']['upgrade_levels'] -%>
 # Lock the version of RPC messages and allow live upgrading of the services

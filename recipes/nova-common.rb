@@ -107,6 +107,8 @@ ec2_api_bind = endpoint 'compute-ec2-api-bind' || {}
 ec2_public_endpoint = public_endpoint 'compute-ec2-api' || {}
 network_endpoint = internal_endpoint 'network-api' || {}
 image_endpoint = internal_endpoint 'image-api'
+ironic_endpoint = internal_endpoint 'bare-metal-api'
+ironic_admin_password = get_password 'service', 'openstack-bare-metal'
 
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
@@ -115,6 +117,7 @@ Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.dec
 Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint.to_s}")
 
 if node['openstack']['compute']['network']['service_type'] == 'neutron'
   neutron_admin_password = get_password 'service', 'openstack-network'
@@ -169,6 +172,8 @@ template '/etc/nova/nova.conf' do
     vmware_host_pass: vmware_host_pass,
     auth_uri: auth_uri,
     identity_admin_endpoint: identity_admin_endpoint,
+    ironic_endpoint: ironic_endpoint,
+    ironic_admin_password: ironic_admin_password,
     service_pass: service_pass
   )
 end

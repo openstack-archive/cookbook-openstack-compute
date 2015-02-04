@@ -282,6 +282,17 @@ describe 'openstack-compute::nova-common' do
           expect(chef_run).to render_config_file(file.name)\
             .with_section_content('glance', line)
         end
+
+        [
+          %r{^api_endpoint=http://127.0.0.1:6385$},
+          /^admin_username=ironic$/,
+          /^admin_password=ironic-pass$/,
+          %r{^admin_url=http://127.0.0.1:5000/v2.0$},
+          /^admin_tenant_name=service$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('ironic', line)
+        end
       end
 
       it 'sets service_type to neutron' do
@@ -508,6 +519,7 @@ describe 'openstack-compute::nova-common' do
          /^mkisofs_cmd=genisoimage$/,
          %r{^injected_network_template=\$pybasedir/nova/virt/interfaces.template$},
          /^flat_injected=false$/,
+         /^reserved_host_disk_mb=0$/,
          /^use_ipv6=false$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
@@ -677,6 +689,7 @@ describe 'openstack-compute::nova-common' do
       it 'has scheduler options' do
         [/^scheduler_manager=nova.scheduler.manager.SchedulerManager$/,
          /^scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
+         /^scheduler_host_manager=nova.scheduler.host_manager.HostManager$/,
          /^scheduler_available_filters=nova.scheduler.filters.all_filters$/,
          /^scheduler_default_filters=RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter$/
         ].each do |line|
