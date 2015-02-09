@@ -28,9 +28,9 @@ end
 
 depends 'ceph', '>= 0.2.1'
 depends 'ceph', '< 3.0.0'
-depends 'openstack-common', '~> 10.2'
-depends 'openstack-identity', '~> 10.0'
-depends 'openstack-image', '~> 10.0'
-depends 'openstack-network', '~> 10.0'
+depends 'openstack-common', '>= 10.2.0'
+depends 'openstack-identity', '>= 10.0.0'
+depends 'openstack-image', '>= 10.0.0'
+depends 'openstack-network', '>= 10.0.0'
 depends 'selinux', '~> 0.7'
 depends 'python', '~> 1.4.6'
