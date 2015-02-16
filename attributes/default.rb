@@ -219,12 +219,14 @@ default['openstack']['compute']['scheduler']['scheduler_manager'] = 'nova.schedu
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
 default['openstack']['compute']['scheduler']['available_filters'] = 'nova.scheduler.filters.all_filters'
 default['openstack']['compute']['scheduler']['default_filters'] = %W(
+  RetryFilter
   AvailabilityZoneFilter
   RamFilter
   ComputeFilter
-  CoreFilter
-  SameHostFilter
-  DifferentHostFilter)
+  ComputeCapabilitiesFilter
+  ImagePropertiesFilter
+  ServerGroupAntiAffinityFilter
+  ServerGroupAffinityFilter)
 
 default['openstack']['compute']['driver'] = 'libvirt.LibvirtDriver'
 default['openstack']['compute']['manager'] = 'nova.compute.manager.ComputeManager'

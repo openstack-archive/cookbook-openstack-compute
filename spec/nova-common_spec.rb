@@ -678,7 +678,7 @@ describe 'openstack-compute::nova-common' do
         [/^scheduler_manager=nova.scheduler.manager.SchedulerManager$/,
          /^scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
          /^scheduler_available_filters=nova.scheduler.filters.all_filters$/,
-         /^scheduler_default_filters=AvailabilityZoneFilter,RamFilter,ComputeFilter,CoreFilter,SameHostFilter,DifferentHostFilter$/
+         /^scheduler_default_filters=RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter$/
         ].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
@@ -686,16 +686,20 @@ describe 'openstack-compute::nova-common' do
 
       it 'has disk_allocation_ratio when the right filter is set' do
         node.set['openstack']['compute']['scheduler']['default_filters'] = %w(
+          RetryFilter
           AvailabilityZoneFilter
-          DiskFilter
           RamFilter
           ComputeFilter
-          CoreFilter
-          SameHostFilter
-          DifferentHostFilter
-        )
-        expect(chef_run).to render_file(file.name).with_content(
+          ComputeCapabilitiesFilter
+          ImagePropertiesFilter
+          ServerGroupAntiAffinityFilter
+          ServerGroupAffinityFilter)
+        expect(chef_run).not_to render_file(file.name).with_content(
           'disk_allocation_ratio=1.0')
+        expect(chef_run).to render_file(file.name).with_content(
+          'cpu_allocation_ratio=16.0')
+        expect(chef_run).to render_file(file.name).with_content(
+          'ram_allocation_ratio=1.5')
       end
 
       it 'has no auto_assign_floating_ip' do
