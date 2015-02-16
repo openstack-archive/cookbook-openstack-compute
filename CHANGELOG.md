@@ -29,6 +29,7 @@ This file is used to list changes made in each version of cookbook-openstack-com
 * Use common specific_endpoint routines (bug 1412919)
 * Update default filters to match base stable openstack juno
 * Make use of new metadata endpoint in common
+* Doc floating ip keys that were missing, recipe logic was already there
 
 ## 9.3.1
 * Move auth configuration from api-paste.ini to nova.conf

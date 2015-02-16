@@ -210,7 +210,16 @@ default['openstack']['compute']['network']['dmz_cidr'] = '10.128.0.0/24'
 default['openstack']['compute']['network']['network_manager'] = 'nova.network.manager.FlatDHCPManager'
 default['openstack']['compute']['network']['public_interface'] = 'eth0'
 default['openstack']['compute']['network']['vlan_interface'] = 'eth0'
+
+# Options for floating ips for Nova
 default['openstack']['compute']['network']['auto_assign_floating_ip'] = false
+# The following two attributes can be used to enabled floating ip addresses.
+# For nova networking, you can use either the cidr or the range.
+# For neutron networking, you can use the cidr and not the range.
+# Example of valid cidr and range values.
+# ['openstack']['compute']['network']['floating']['ipv4_cidr'] = '10.10.10.0/24'
+# ['openstack']['compute']['network']['floating']['ipv4_range'] = '10.10.10.1,10.10.10.5'
+
 # https://bugs.launchpad.net/nova/+bug/1075859
 default['openstack']['compute']['network']['use_single_default_gateway'] = false
 default['openstack']['compute']['network']['use_ipv6'] = false
