@@ -10,5 +10,3 @@ cookbook "openstack-common",
   github: "stackforge/cookbook-openstack-common"
 cookbook "openstack-network",
   github: "stackforge/cookbook-openstack-network"
-cookbook "ceph",
-  github: "ceph/ceph-cookbook"
