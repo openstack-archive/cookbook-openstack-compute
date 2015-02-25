@@ -60,6 +60,15 @@ platform_options['nfs_packages'].each do |pkg|
   end
 end
 
+# More volume attach packages
+platform_options['volume_packages'].each do |pkg|
+  package pkg do
+    options platform_options['package_overrides']
+
+    action :upgrade
+  end
+end
+
 cookbook_file '/etc/nova/nova-compute.conf' do
   source 'nova-compute.conf'
   mode   00644

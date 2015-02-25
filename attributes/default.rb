@@ -461,6 +461,7 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
     'common_packages' => ['openstack-nova-common'],
     'iscsi_helper' => 'ietadm',
     'nfs_packages' => ['nfs-utils', 'nfs-utils-lib'],
+    'volume_packages' => ['sysfsutils', 'sg3_utils', 'multipath-tools'],
     'package_overrides' => ''
   }
   if platform_family == 'suse'
@@ -511,6 +512,7 @@ when 'debian'
     'common_packages' => ['nova-common'],
     'iscsi_helper' => 'tgtadm',
     'nfs_packages' => ['nfs-common'],
+    'volume_packages' => ['sysfsutils', 'sg3-utils', 'multipath-tools'],
     'package_overrides' => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end

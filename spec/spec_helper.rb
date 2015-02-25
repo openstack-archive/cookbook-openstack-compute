@@ -91,6 +91,14 @@ shared_context 'compute_stubs' do
   end
 end
 
+shared_examples 'expect_volume_packages' do
+  it 'upgrades volume utils packages' do
+    %w(sysfsutils sg3_utils multipath-tools).each do |pkg|
+      expect(chef_run).to upgrade_package(pkg)
+    end
+  end
+end
+
 shared_examples 'expect_runs_nova_common_recipe' do
   it 'includes nova-common' do
     expect(chef_run).to include_recipe 'openstack-compute::nova-common'

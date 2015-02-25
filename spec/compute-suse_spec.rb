@@ -10,6 +10,7 @@ describe 'openstack-compute::compute' do
 
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
+    include_examples 'expect_volume_packages'
 
     it 'upgrades nfs client packages' do
       expect(chef_run).to upgrade_package 'nfs-utils'

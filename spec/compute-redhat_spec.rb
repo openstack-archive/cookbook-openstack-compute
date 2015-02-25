@@ -13,6 +13,7 @@ describe 'openstack-compute::compute' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_creates_nova_instances_dir'
+    include_examples 'expect_volume_packages'
 
     it "does not upgrade kvm when virt_type is 'kvm'" do
       node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'

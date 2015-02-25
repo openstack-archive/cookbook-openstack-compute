@@ -14,6 +14,12 @@ describe 'openstack-compute::compute' do
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_creates_nova_instances_dir'
 
+    it 'upgrades volume utils packages' do
+      %w(sysfsutils sg3-utils multipath-tools).each do |pkg|
+        expect(chef_run).to upgrade_package(pkg)
+      end
+    end
+
     it 'includes api-metadata recipe' do
       expect(chef_run).to include_recipe 'openstack-compute::api-metadata'
     end
