@@ -167,12 +167,10 @@ osapi_compute_listen=<%= @compute_api_bind_ip %>
 osapi_compute_listen_port=<%= @compute_api_bind_port %>
 <% end -%>
 
-<% if node["openstack"]["compute"]["enabled_apis"].include?("metadata") %>
 # The IP address on which the metadata will listen. (string value)
-metadata_listen=<%= node['openstack']['compute']['metadata_listen'] %>
+metadata_listen=<%= @compute_metadata_api_bind_ip %>
 # The port on which the metadata will listen. (integer value)
-metadata_listen_port=<%= node['openstack']['compute']['metadata_listen_port'] %>
-<% end %>
+metadata_listen_port=<%= @compute_metadata_api_bind_port %>
 
 ##### VNCPROXY #####
 novncproxy_base_url=<%= @novncproxy_base_url %>

@@ -189,7 +189,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has default metadata ip and port options set' do
-        [/^metadata_listen=0.0.0.0$/,
+        [/^metadata_listen=127.0.0.1$/,
          /^metadata_listen_port=8775$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end

@@ -102,6 +102,7 @@ vnc_bind = endpoint 'compute-vnc-bind' || {}
 vnc_proxy_bind = endpoint 'compute-vnc-proxy-bind' || {}
 compute_api_bind = endpoint 'compute-api-bind' || {}
 compute_api_endpoint = internal_endpoint 'compute-api' || {}
+compute_metadata_api_bind = endpoint 'compute-metadata-api-bind' || {}
 ec2_api_bind = endpoint 'compute-ec2-api-bind' || {}
 ec2_public_endpoint = public_endpoint 'compute-ec2-api' || {}
 network_endpoint = internal_endpoint 'network-api' || {}
@@ -161,6 +162,8 @@ template '/etc/nova/nova.conf' do
     neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret,
     compute_api_bind_ip: compute_api_bind.host,
     compute_api_bind_port: compute_api_bind.port,
+    compute_metadata_api_bind_ip: compute_metadata_api_bind.host,
+    compute_metadata_api_bind_port: compute_metadata_api_bind.port,
     ec2_api_bind_ip: ec2_api_bind.host,
     ec2_api_bind_port: ec2_api_bind.port,
     vmware_host_pass: vmware_host_pass,

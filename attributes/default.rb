@@ -521,10 +521,6 @@ default['openstack']['compute']['misc_paste'] = nil
 # of enabled API services.
 default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute,metadata'
 
-# Metadata host and port
-default['openstack']['compute']['metadata_listen'] = '0.0.0.0'
-default['openstack']['compute']['metadata_listen_port'] = 8775
-
 # VMware driver
 default['openstack']['compute']['vmware']['secret_name'] = 'openstack_vmware_secret_name'
 # URL for connection to VMware ESX/VC host. (string value)

@@ -27,7 +27,7 @@ recipe 'openstack-compute::vncproxy', 'Installs and configures the vncproxy serv
 end
 
 depends 'ceph', '~> 0.8.0'
-depends 'openstack-common', '>= 10.2.0'
+depends 'openstack-common', '>= 10.4.0'
 depends 'openstack-identity', '>= 10.0.0'
 depends 'openstack-image', '>= 10.0.0'
 depends 'openstack-network', '>= 10.0.0'
