@@ -565,16 +565,16 @@ default['openstack']['compute']['vmware']['integration_bridge'] = 'br-int'
 # but release name alias are also supported.
 # options e.g.:
 # default['openstack']['compute']['upgrade_levels'] = {
-#                                                       'baseapi' => 'juno',
-#                                                       'console' => 'juno',
-#                                                       'consoleauth' => 'juno',
-#                                                       'cert' => 'juno',
-#                                                       'scheduler' => 'juno',
-#                                                       'compute' => 'juno',
-#                                                       'intercell' => 'juno',
+#                                                       'baseapi' => 'kilo',
+#                                                       'console' => 'kilo',
+#                                                       'consoleauth' => 'kilo',
+#                                                       'cert' => 'kilo',
+#                                                       'scheduler' => 'kilo',
+#                                                       'compute' => 'kilo',
+#                                                       'intercell' => 'kilo',
 #                                                       'conductor' => '2.0',
 #                                                       'network' => '3.0',
-#                                                       'cells' => 'juno'
+#                                                       'cells' => 'kilo'
 #                                                      }
 # choose the needed ones to set
 default['openstack']['compute']['upgrade_levels'] = nil
