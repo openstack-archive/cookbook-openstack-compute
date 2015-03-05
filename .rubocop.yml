@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Include:
     - metadata.rb
@@ -8,12 +10,15 @@ AllCops:
     - recipes/**
     - resources/**
     - spec/**
+  Exclude:
+    - .cookbooks/**/*
+    - berks-cookbooks/**/*
+    - .bundle/**/*
 
 Encoding:
   Exclude:
     - metadata.rb
     - Gemfile
-    - berks-cookbooks/**
 
 NumericLiterals:
   Enabled: false
