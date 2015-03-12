@@ -19,6 +19,7 @@ describe 'openstack-compute::libvirt' do
 
     it 'upgrade libvirt package' do
       expect(chef_run).to upgrade_package 'libvirt'
+      expect(chef_run).to upgrade_package 'device-mapper'
     end
 
     it 'creates libvirtd group and adds nova as a member' do
