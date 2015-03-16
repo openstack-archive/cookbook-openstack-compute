@@ -96,7 +96,7 @@ end
 
 shared_examples 'expect_volume_packages' do
   it 'upgrades volume utils packages' do
-    %w(sysfsutils sg3_utils multipath-tools).each do |pkg|
+    %w(sysfsutils sg3_utils device-mapper-multipath).each do |pkg|
       expect(chef_run).to upgrade_package(pkg)
     end
   end

@@ -463,7 +463,7 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
     'common_packages' => ['openstack-nova-common'],
     'iscsi_helper' => 'ietadm',
     'nfs_packages' => ['nfs-utils', 'nfs-utils-lib'],
-    'volume_packages' => ['sysfsutils', 'sg3_utils', 'multipath-tools'],
+    'volume_packages' => ['sysfsutils', 'sg3_utils', 'device-mapper-multipath'],
     'package_overrides' => ''
   }
   if platform_family == 'suse'
