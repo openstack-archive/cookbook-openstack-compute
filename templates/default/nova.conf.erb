@@ -40,6 +40,9 @@ amqp_durable_queues=<%= node['openstack']['mq']['compute']['durable_queues'] %>
 amqp_auto_delete=<%= node['openstack']['mq']['compute']['auto_delete'] %>
 
 <% if @mq_service_type == "rabbitmq"  %>
+<% if node["openstack"]["mq"]["compute"]["rabbit"]["use_ssl"] && node["openstack"]["mq"]["compute"]["rabbit"]["kombu_ssl_version"] %>
+kombu_ssl_version=<%= node["openstack"]["mq"]["compute"]["rabbit"]["kombu_ssl_version"] %>
+<% end -%>
 ##### RABBITMQ #####
 rabbit_userid=<%= node["openstack"]["mq"]["compute"]["rabbit"]["userid"] %>
 rabbit_password=<%= @mq_password %>
