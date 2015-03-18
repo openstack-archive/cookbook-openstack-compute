@@ -100,7 +100,7 @@ default['openstack']['compute']['network']['plugins'] = ['openvswitch']
 # rootwrap.conf
 default['openstack']['compute']['rootwrap']['filters_path'] = '/etc/nova/rootwrap.d,/usr/share/nova/rootwrap'
 default['openstack']['compute']['rootwrap']['exec_dirs'] = '/sbin,/usr/sbin,/bin,/usr/bin'
-default['openstack']['compute']['rootwrap']['use_syslog'] = false
+default['openstack']['compute']['rootwrap']['use_syslog'] = 'False'
 default['openstack']['compute']['rootwrap']['syslog_log_facility'] = 'syslog'
 default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 
