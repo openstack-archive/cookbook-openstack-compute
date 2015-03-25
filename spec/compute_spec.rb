@@ -107,5 +107,52 @@ describe 'openstack-compute::compute' do
     it 'starts nova compute' do
       expect(chef_run).to start_service 'nova-compute'
     end
+
+    it 'does not include docker-setup recipe' do
+      expect(chef_run).not_to include_recipe 'openstack-compute::docker-setup'
+    end
+
+    it 'does not create docker group' do
+      expect(chef_run).not_to create_group('docker')
+    end
+
+    it 'does not manage docker group' do
+      expect(chef_run).not_to manage_group('docker')
+    end
+
+    it 'does not create docker filter file' do
+      expect(chef_run).not_to create_file('/etc/nova/rootwrap.d/docker.filters')
+    end
+
+    context 'when docker is enabled' do
+      before do
+        node.set['openstack']['compute']['docker']['enable'] = true
+      end
+
+      it 'includes docker-setup recipe' do
+        expect(chef_run).to include_recipe 'openstack-compute::docker-setup'
+      end
+
+      it 'creates docker group' do
+        expect(chef_run).to create_group('docker')
+      end
+
+      it 'manages docker group' do
+        expect(chef_run).to manage_group('docker')
+      end
+
+      it 'creates a file with attributes' do
+        expect(chef_run).to create_file('/etc/nova/rootwrap.d/docker.filters').with(
+          user:   'root',
+          group:  'root',
+          mode:   0644,
+          path:   '/etc/nova/rootwrap.d/docker.filters'
+        )
+      end
+
+      it 'configures compute service to subscribe for docker filter' do
+        expect(chef_run.service('nova-compute')).to subscribe_to('file[docker.filter]')
+      end
+    end
   end
 end

@@ -464,6 +464,7 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
     'iscsi_helper' => 'ietadm',
     'nfs_packages' => ['nfs-utils', 'nfs-utils-lib'],
     'volume_packages' => ['sysfsutils', 'sg3_utils', 'device-mapper-multipath'],
+    'docker_build_pkgs' => ['git', 'python-devel', 'gcc'],
     'package_overrides' => ''
   }
   if platform_family == 'suse'
@@ -515,6 +516,7 @@ when 'debian'
     'iscsi_helper' => 'tgtadm',
     'nfs_packages' => ['nfs-common'],
     'volume_packages' => ['sysfsutils', 'sg3-utils', 'multipath-tools'],
+    'docker_build_pkgs' => ['git', 'python-dev', 'gcc'],
     'package_overrides' => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end
@@ -586,3 +588,24 @@ default['openstack']['compute']['bare-metal']['admin_tenant_name'] = 'service'
 #                                                      }
 # choose the needed ones to set
 default['openstack']['compute']['upgrade_levels'] = nil
+
+# Docker configurations
+# Docker compute configuration is supported only in Rhel and Ubuntu
+# This is to be true to make a compute docker type and use nova docker driver as compute driver
+default['openstack']['compute']['docker']['enable']  = false
+# The nova docker driver that will be configured in a docker type compute
+default['openstack']['compute']['docker']['driver'] = 'novadocker.virt.docker.driver.DockerDriver'
+# Additional python packages required for nova docker driver build and installation from git source
+default['openstack']['compute']['docker']['pip_build_pkgs'] = ['setuptools', 'pbr']
+# github repository from which nova-docker source will be downloaded
+default['openstack']['compute']['docker']['github']['repository'] = 'https://github.com/stackforge/nova-docker'
+# github branch from which nova-docker source will be downloaded. Default is master
+default['openstack']['compute']['docker']['github']['branch'] = 'master'
+# Relative path to docker filter files in nova-docker source which will be cloned from git repo
+default['openstack']['compute']['docker']['filter_source_path'] = '/etc/nova/rootwrap.d'
+# Path to docker service sock file
+default['openstack']['compute']['docker']['service_sock'] = '/var/run/docker.sock'
+# Permission level to be assigned to docker service sock file
+default['openstack']['compute']['docker']['service_sock_mode'] = 666
+# Docker group which will be created and added with openstack compute user
+default['openstack']['compute']['docker']['group'] = 'docker'

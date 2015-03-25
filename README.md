@@ -361,6 +361,20 @@ Upgrade levels Attribute
 ------------------------
 * `openstack['openstack']['compute']['upgrade_levels']` - The RPC version numbers or release name alias
 
+Docker configuration Attributes
+-------------------------------
+
+* `['openstack']['compute']['docker']['enable']` - Mark this as true to make compute docker type and use nova docker driver as compute driver. Docker computes are supported only in Ubuntu and Rhel
+* `['openstack']['compute']['docker']['driver']` - The nova docker driver that will be configured in a docker type compute
+* `['openstack']['compute']['platform']['docker_build_pkgs']` - Additoinal packages required for nova docker driver build and installation from git source
+* `['openstack']['compute']['docker']['pip_build_pkgs']` - Additional python packages required for nova docker driver build and installation from git source
+* `['openstack']['compute']['docker']['github']['repository']` - github repository from which nova-docker source will be downloaded
+* `['openstack']['compute']['docker']['github']['branch']` - github branch from which nova-docker source will be downloaded. Default is master
+* `['openstack']['compute']['docker']['filter_source_path']` - Relative path to docker filter files in nova-docker source which will be cloned from git repo
+* `['openstack']['compute']['docker']['service_sock']` - Path to docker service sock file
+* `['openstack']['compute']['docker']['service_sock_mode']` - Permission level to be assigned to docker sock file
+* `['openstack']['compute']['docker']['group']` - Docker group which will be created and added with openstack compute user
+
 The following attributes are defined in attributes/default.rb of the common cookbook, but are documented here due to their relevance:
 
 * `openstack['endpoints']['compute-compute api-bind']['host']` - The IP address to bind the compute api service to
