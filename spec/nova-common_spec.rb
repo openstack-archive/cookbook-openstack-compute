@@ -238,9 +238,7 @@ describe 'openstack-compute::nova-common' do
         it 'has correct auth_token settings' do
           [
             'auth_uri = http://127.0.0.1:5000/v2.0',
-            'auth_host = 127.0.0.1',
-            'auth_port = 35357',
-            'auth_protocol = http',
+            'identity_uri = http://127.0.0.1:35357/',
             'auth_version = v2.0',
             'admin_tenant_name = service',
             'admin_user = nova',

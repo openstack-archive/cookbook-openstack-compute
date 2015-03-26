@@ -696,9 +696,7 @@ rbd_secret_uuid=<%= node['openstack']['compute']['libvirt']['rbd']['cinder']['se
 
 [keystone_authtoken]
 auth_uri = <%= @auth_uri %>
-auth_host = <%= @identity_admin_endpoint.host %>
-auth_port = <%= @identity_admin_endpoint.port %>
-auth_protocol = <%= @identity_admin_endpoint.scheme %>
+identity_uri = <%= @identity_uri %>
 auth_version = <%= node["openstack"]["compute"]["api"]["auth"]["version"] %>
 admin_tenant_name = <%= node["openstack"]["compute"]["service_tenant_name"] %>
 admin_user = <%= node["openstack"]["compute"]["service_user"] %>

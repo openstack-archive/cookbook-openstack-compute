@@ -130,6 +130,7 @@ end
 
 identity_admin_endpoint = admin_endpoint 'identity-admin'
 auth_uri = auth_uri_transform identity_endpoint.to_s, node['openstack']['compute']['api']['auth']['version']
+identity_uri = identity_uri_transform(identity_admin_endpoint)
 service_pass = get_password 'service', 'openstack-compute'
 
 template '/etc/nova/nova.conf' do
@@ -170,6 +171,7 @@ template '/etc/nova/nova.conf' do
     ec2_api_bind_port: ec2_api_bind.port,
     vmware_host_pass: vmware_host_pass,
     auth_uri: auth_uri,
+    identity_uri: identity_uri,
     identity_admin_endpoint: identity_admin_endpoint,
     ironic_endpoint: ironic_endpoint,
     ironic_admin_password: ironic_admin_password,
