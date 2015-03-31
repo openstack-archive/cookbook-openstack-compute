@@ -16,7 +16,7 @@ SUSE_OPTS = {
 }
 REDHAT_OPTS = {
   platform: 'redhat',
-  version: '7.0',
+  version: '7.1',
   log_level: LOG_LEVEL
 }
 UBUNTU_OPTS = {
