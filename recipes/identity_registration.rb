@@ -64,8 +64,8 @@ openstack_identity_register 'Register Service User' do
   action :create_user
 end
 
-## Grant Admin role to Service User for Service Tenant ##
-openstack_identity_register "Grant 'admin' Role to Service User for Service Tenant" do
+## Grant Service role to Service User for Service Tenant ##
+openstack_identity_register "Grant 'service' Role to Service User for Service Tenant" do
   auth_uri auth_uri
   bootstrap_token bootstrap_token
   tenant_name service_tenant_name
