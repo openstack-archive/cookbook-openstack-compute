@@ -46,11 +46,11 @@ describe 'openstack-compute::network' do
           /^admin_username=neutron$/,
           /^admin_password=neutron-pass$/,
           %r{^admin_auth_url=http://127.0.0.1:5000/v2.0$},
-          /^url_timeout=30$/,
+          /^timeout=30$/,
           /^region_name=$/,
           /^ovs_bridge=br-int$/,
           /^extension_sync_interval=600$/,
-          /^ca_certificates_file=$/,
+          /^cafile=$/,
           /^service_metadata_proxy=true$/,
           /^metadata_proxy_shared_secret=metadata-secret$/
         ].each do |line|

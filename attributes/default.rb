@@ -107,7 +107,7 @@ default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 # If True, this indicates that glance-api allows the client to perform
 # insecure SSL(https) requests; this should be the same as the setting
 # in the glance-api service.
-default['openstack']['compute']['image']['glance_api_insecure'] = false
+default['openstack']['compute']['image']['glance_insecure'] = false
 
 # CA certificate file to use to verify connecting clients
 default['openstack']['compute']['image']['ssl']['ca_file'] = nil
@@ -122,7 +122,7 @@ default['openstack']['compute']['image']['ssl']['key_file'] = nil
 # If True, this indicates that neutron api allows the client to perform
 # insecure SSL (https) requests. This should be the same as the setting
 # in the neutron api service.
-default['openstack']['compute']['network']['neutron']['api_insecure'] = false
+default['openstack']['compute']['network']['neutron']['insecure'] = false
 default['openstack']['compute']['network']['neutron']['network_api_class'] = 'nova.network.neutronv2.api.API'
 default['openstack']['compute']['network']['neutron']['auth_strategy'] = 'keystone'
 default['openstack']['compute']['network']['neutron']['admin_tenant_name'] = 'service'
@@ -135,7 +135,7 @@ default['openstack']['compute']['network']['neutron']['metadata_secret_name'] = 
 default['openstack']['compute']['network']['neutron']['public_network_name'] = 'public'
 default['openstack']['compute']['network']['neutron']['dns_server'] = '8.8.8.8'
 # Timeout value for connecting to neutron in seconds
-default['openstack']['compute']['network']['neutron']['url_timeout'] = 30
+default['openstack']['compute']['network']['neutron']['timeout'] = 30
 # Region name for connecting to neutron in admin context
 default['openstack']['compute']['network']['neutron']['region_name'] = nil
 # Name of Integration Bridge used by Open vSwitch
@@ -143,7 +143,7 @@ default['openstack']['compute']['network']['neutron']['ovs_bridge'] = 'br-int'
 # Number of seconds before querying neutron for extensions
 default['openstack']['compute']['network']['neutron']['extension_sync_interval'] = 600
 # Location of CA certificates file to use for neutron client requests
-default['openstack']['compute']['network']['neutron']['ca_certificates_file'] = nil
+default['openstack']['compute']['network']['neutron']['cafile'] = nil
 
 # TODO(shep): This should probably be ['openstack']['compute']['network']['fixed']
 default['openstack']['compute']['networks'] = [
@@ -325,10 +325,10 @@ default['openstack']['compute']['config']['volume_api_class'] = 'nova.volume.cin
 
 # Cinder options
 # Location of ca certificates file to use for cinder client requests.
-default['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] = nil
+default['openstack']['compute']['block-storage']['cinder_cafile'] = nil
 
 # Allow to perform insecure SSL requests to cinder
-default['openstack']['compute']['block-storage']['cinder_api_insecure'] = false
+default['openstack']['compute']['block-storage']['cinder_insecure'] = false
 
 # Info to match when looking for cinder in the service catalog
 default['openstack']['compute']['block-storage']['cinder_catalog_info'] = 'volumev2:cinderv2:publicURL'

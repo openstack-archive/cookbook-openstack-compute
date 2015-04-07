@@ -160,9 +160,7 @@ describe 'openstack-compute::nova-common' do
         [/^rpc_backend=nova.openstack.common.rpc.impl_kombu$/,
          /^rpc_thread_pool_size=64$/,
          /^rpc_conn_pool_size=30$/,
-         /^rpc_response_timeout=60$/,
-         /^amqp_durable_queues=false$/,
-         /^amqp_auto_delete=false$/].each do |line|
+         /^rpc_response_timeout=60$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
@@ -267,8 +265,8 @@ describe 'openstack-compute::nova-common' do
         end
 
         [
-          /^ca_certificates_file=$/,
-          /^api_insecure=false/,
+          /^cafile=$/,
+          /^insecure=false/,
           /^catalog_info=volumev2:cinderv2:publicURL$/
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
@@ -276,7 +274,7 @@ describe 'openstack-compute::nova-common' do
         end
 
         [
-          /^api_insecure=false$/,
+          /^insecure=false$/,
           %r{^api_servers=http://127.0.0.1:9292$}
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
@@ -298,7 +296,7 @@ describe 'openstack-compute::nova-common' do
       it 'sets service_type to neutron' do
         node.set['openstack']['compute']['network']['service_type'] = 'neutron'
         [
-          /^api_insecure=false$/,
+          /^insecure=false$/,
           %r{^url=http://127.0.0.1:9696$}
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
@@ -308,23 +306,23 @@ describe 'openstack-compute::nova-common' do
 
       it 'sets service_type and insecure and scheme for neutron' do
         node.set['openstack']['compute']['network']['service_type'] = 'neutron'
-        node.set['openstack']['compute']['network']['neutron']['api_insecure'] = true
+        node.set['openstack']['compute']['network']['neutron']['insecure'] = true
         node.set['openstack']['endpoints']['network-api']['scheme'] = 'https'
         expect(chef_run).to render_config_file(file.name)\
-          .with_section_content('neutron', /^api_insecure=true$/)
+          .with_section_content('neutron', /^insecure=true$/)
         expect(chef_run).to render_config_file(file.name)\
           .with_section_content('neutron', %r{^url=https://127.0.0.1:9696$})
       end
 
       it 'sets scheme and insecure for glance' do
         node.set['openstack']['endpoints']['image-api']['scheme'] = 'https'
-        node.set['openstack']['compute']['image']['glance_api_insecure'] = true
+        node.set['openstack']['compute']['image']['glance_insecure'] = true
         node.set['openstack']['compute']['image']['ssl']['ca_file'] = 'dir/to/path'
         node.set['openstack']['compute']['image']['ssl']['cert_file'] = 'dir/to/path2'
         node.set['openstack']['compute']['image']['ssl']['key_file'] = 'dir/to/path3'
 
         [
-          /^api_insecure=true$/,
+          /^insecure=true$/,
           %r{^api_servers=https://127.0.0.1:9292$}
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
@@ -342,13 +340,13 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'sets cinder options' do
-        node.set['openstack']['compute']['block-storage']['cinder_ca_certificates_file'] = 'dir/to/path'
-        node.set['openstack']['compute']['block-storage']['cinder_api_insecure'] = true
+        node.set['openstack']['compute']['block-storage']['cinder_cafile'] = 'dir/to/path'
+        node.set['openstack']['compute']['block-storage']['cinder_insecure'] = true
         node.set['openstack']['compute']['block-storage']['cinder_catalog_info'] = 'volume:cinder:publicURL'
 
         [
-          /^api_insecure=true$/,
-          %r{^ca_certificates_file=dir/to/path$},
+          /^insecure=true$/,
+          %r{^cafile=dir/to/path$},
           /^catalog_info=volume:cinder:publicURL$/
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
@@ -405,17 +403,18 @@ describe 'openstack-compute::nova-common' do
           end
 
           it 'has default rabbit_* options set' do
-            [/^rabbit_userid=guest$/, /^rabbit_password=mq-pass$/,
+            [/^amqp_durable_queues=false$/, /^amqp_auto_delete=false$/,
+             /^rabbit_userid=guest$/, /^rabbit_password=mq-pass$/,
              /^rabbit_virtual_host=\/$/, /^rabbit_host=127.0.0.1$/,
              /^rabbit_port=5672$/, /^rabbit_use_ssl=false$/].each do |line|
-              expect(chef_run).to render_file(file.name).with_content(line)
+              expect(chef_run).to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', line)
             end
           end
 
           it 'does not have ha rabbit options set' do
             [/^rabbit_hosts=/, /^rabbit_ha_queues=/,
              /^ec2_private_dns_show_ip$/].each do |line|
-              expect(chef_run).not_to render_file(file.name).with_content(line)
+              expect(chef_run).not_to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', line)
             end
           end
         end
@@ -433,26 +432,26 @@ describe 'openstack-compute::nova-common' do
               /^rabbit_ha_queues=True$/,
               /^rabbit_use_ssl=false$/
             ].each do |line|
-              expect(chef_run).to render_file(file.name).with_content(line)
+              expect(chef_run).to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', line)
             end
           end
 
           it 'does not have non-ha rabbit options set' do
             [/^rabbit_host=127\.0\.0\.1$/, /^rabbit_port=5672$/].each do |line|
-              expect(chef_run).not_to render_file(file.name).with_content(line)
+              expect(chef_run).not_to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', line)
             end
           end
         end
 
         it 'does not have kombu ssl version set' do
-          expect(chef_run).not_to render_config_file(file.name).with_section_content('DEFAULT', /^kombu_ssl_version=TLSv1.2$/)
+          expect(chef_run).not_to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', /^kombu_ssl_version=TLSv1.2$/)
         end
 
         it 'sets kombu ssl version' do
           node.override['openstack']['mq']['compute']['rabbit']['use_ssl'] = true
           node.override['openstack']['mq']['compute']['rabbit']['kombu_ssl_version'] = 'TLSv1.2'
 
-          expect(chef_run).to render_config_file(file.name).with_section_content('DEFAULT', /^kombu_ssl_version=TLSv1.2$/)
+          expect(chef_run).to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', /^kombu_ssl_version=TLSv1.2$/)
         end
       end
 
@@ -466,6 +465,8 @@ describe 'openstack-compute::nova-common' do
 
         it 'has default qpid_* options set' do
           [
+            /^amqp_durable_queues=false$/,
+            /^amqp_auto_delete=false$/,
             /^qpid_hostname=127.0.0.1$/,
             /^qpid_port=5672$/,
             /^qpid_username=guest$/,
@@ -481,7 +482,7 @@ describe 'openstack-compute::nova-common' do
             /^qpid_tcp_nodelay=true$/,
             /^qpid_topology_version=1$/
           ].each do |line|
-            expect(chef_run).to render_file(file.name).with_content(line)
+            expect(chef_run).to render_config_file(file.name).with_section_content('oslo_messaging_qpid', line)
           end
         end
       end
