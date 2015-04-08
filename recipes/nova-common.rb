@@ -159,7 +159,6 @@ template '/etc/nova/nova.conf' do
     glance_api_port: image_endpoint.port,
     iscsi_helper: platform_options['iscsi_helper'],
     scheduler_default_filters: node['openstack']['compute']['scheduler']['default_filters'].join(','),
-    osapi_compute_link_prefix: compute_api_endpoint.to_s,
     network_endpoint: network_endpoint,
     neutron_admin_password: neutron_admin_password,
     neutron_metadata_proxy_shared_secret: neutron_metadata_proxy_shared_secret,

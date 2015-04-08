@@ -127,6 +127,8 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["force_raw_images"]` - Convert all images used as backing files for instances to raw (we default to false)
 * `openstack["compute"]["config"]["allow_same_net_traffic"]` - Disable security groups for internal networks (we default to true)
 * `openstack["compute"]["config"]["osapi_max_limit"]` - The maximum number of items returned in a single response from a collection resource (default is 1000)
+* `openstack["compute"]["config"]["osapi_compute_link_prefix"]` - Base URL that will be presented to users in links to the OpenStack Compute API (default is nil)
+* `openstack["compute"]["config"]["osapi_glance_link_prefix"]` - Base URL that will be presented to users in links to glance resources(default is nil)
 * `openstack["compute"]["config"]["cpu_allocation_ratio"]` - Virtual CPU to Physical CPU allocation ratio (default 16.0)
 * `openstack["compute"]["config"]["ram_allocation_ratio"]` - Virtual RAM to Physical RAM allocation ratio (default 1.5)
 * `openstack["compute"]["config"]["snapshot_image_format"]` - Snapshot image format (valid options are : raw, qcow2, vmdk, vdi [we default to qcow2]).
