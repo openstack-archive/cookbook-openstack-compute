@@ -316,6 +316,8 @@ default['openstack']['compute']['config']['resume_guests_state_on_host_boot'] = 
 # force_config_drive can be nil or 'always',
 # if it's 'always', nova will create a config drive regardless of if the user specified --config-drive true in their nova boot call
 default['openstack']['compute']['config']['force_config_drive'] = nil
+# Config drive format, should be one of iso9660 or vfat
+default['openstack']['compute']['config']['config_drive_format'] = 'iso9660'
 default['openstack']['compute']['config']['mkisofs_cmd'] = 'genisoimage'
 default['openstack']['compute']['config']['injected_network_template'] = '$pybasedir/nova/virt/interfaces.template'
 default['openstack']['compute']['config']['flat_injected'] = false

@@ -259,6 +259,7 @@ disk_allocation_ratio=<%= node["openstack"]["compute"]["config"]["disk_allocatio
 <% if node["openstack"]["compute"]["config"]["force_config_drive"] %>
 force_config_drive=<%= node["openstack"]["compute"]["config"]["force_config_drive"] %>
 <% end %>
+config_drive_format=<%= node["openstack"]["compute"]["config"]["config_drive_format"] %>
 mkisofs_cmd=<%= node["openstack"]["compute"]["config"]["mkisofs_cmd"] %>
 injected_network_template=<%= node["openstack"]["compute"]["config"]["injected_network_template"] %>
 flat_injected=<%= node["openstack"]["compute"]["config"]["flat_injected"] %>

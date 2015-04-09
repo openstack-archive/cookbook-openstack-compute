@@ -138,6 +138,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["disk_cachemodes"]` - Cachemodes to use for different disk types e.g: "file=directsync,block=none".  Valid cache values are "default", "none", "writethrough", "writeback", "directsync" and "unsafe".
 * `openstack["compute"]["config"]["live_migration_retry_count"]` - Number of 1 second retries needed in live_migration
 * `openstack["compute"]["config"]["flat_injected"]` - Whether to attempt to inject network setup into guest. Used by config_drive support.
+* `openstack["compute"]["config"]["config_drive_format"]` - Config drive format.
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["api"]["signing_dir"]` - Keystone PKI needs a location to hold the signed tokens
 * `openstack["compute"]["rpc_thread_pool_size"]` - Size of RPC thread pool (default 64)
