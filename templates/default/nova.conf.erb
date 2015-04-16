@@ -166,7 +166,12 @@ osapi_max_limit=<%= node["openstack"]["compute"]["config"]["osapi_max_limit"] %>
 # the HTTPS scheme. Setting this overrides the default and allows
 # URIs returned in the various links collections to contain the proper
 # HTTPS endpoint.
-osapi_compute_link_prefix = <%= @osapi_compute_link_prefix %>
+<% if node["openstack"]["compute"]["config"]["osapi_compute_link_prefix"] %>
+osapi_compute_link_prefix=<%= node["openstack"]["compute"]["config"]["osapi_compute_link_prefix"] -%>
+<% end -%>
+<% if node["openstack"]["compute"]["config"]["osapi_glance_link_prefix"] %>
+osapi_glance_link_prefix=<%= node["openstack"]["compute"]["config"]["osapi_glance_link_prefix"] -%>
+<% end -%>
 start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_guests_on_host_boot"] %>
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
 allow_resize_to_same_host=<%= node["openstack"]["compute"]["config"]["allow_resize_to_same_host"] %>

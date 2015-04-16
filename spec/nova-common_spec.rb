@@ -137,6 +137,23 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default misc config attributes defaults set' do
+        [/^force_raw_images=false$/,
+         /^allow_same_net_traffic=true$/,
+         /^osapi_max_limit=1000$/,
+         /^start_guests_on_host_boot=false$/,
+         /^resume_guests_state_on_host_boot=true$/].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('DEFAULT', line)
+        end
+      end
+
+      it 'has default misc config attributes defaults not set' do
+        [/^osapi_compute_link_prefix=/,
+         /^osapi_glance_link_prefix=/].each do |line|
+          expect(chef_run).not_to render_config_file(file.name).with_section_content('DEFAULT', line)
+        end
+      end
+
       it 'does not have compute driver attribute default_ephemeral_format set by default' do
         expect(chef_run).not_to render_file(file.name).with_content(/^default_ephemeral_format=$/)
       end

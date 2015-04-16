@@ -299,7 +299,15 @@ default['openstack']['compute']['config']['availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
 default['openstack']['compute']['config']['force_raw_images'] = false
 default['openstack']['compute']['config']['allow_same_net_traffic'] = true
+# The maximum number of items returned in a single
+# response from a collection resource
 default['openstack']['compute']['config']['osapi_max_limit'] = 1000
+# Base URL that will be presented to users in links
+# to the OpenStack Compute API
+default['openstack']['compute']['config']['osapi_compute_link_prefix'] = nil
+# Base URL that will be presented to users in links
+# to glance resources
+default['openstack']['compute']['config']['osapi_glance_link_prefix'] = nil
 default['openstack']['compute']['config']['cpu_allocation_ratio'] = 16.0
 default['openstack']['compute']['config']['ram_allocation_ratio'] = 1.5
 default['openstack']['compute']['config']['disk_allocation_ratio'] = 1.0
