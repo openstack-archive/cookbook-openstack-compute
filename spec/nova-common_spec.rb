@@ -543,6 +543,11 @@ describe 'openstack-compute::nova-common' do
           /^force_config_drive=always$/)
       end
 
+      it 'has a config_drive_format setting' do
+        expect(chef_run).to render_file(file.name).with_content(
+          /^config_drive_format=iso9660$/)
+      end
+
       it 'has a os_region_name setting' do
         chef_run.node.set['openstack']['node'] = 'RegionOne'
         expect(chef_run).to render_config_file(file.name)\
