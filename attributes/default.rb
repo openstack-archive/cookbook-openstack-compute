@@ -67,7 +67,7 @@ end
 
 default['openstack']['compute']['service_tenant_name'] = 'service'
 default['openstack']['compute']['service_user'] = 'nova'
-default['openstack']['compute']['service_role'] = 'service'
+default['openstack']['compute']['service_role'] = 'admin'
 
 case platform_family
 when 'fedora', 'rhel', 'debian'

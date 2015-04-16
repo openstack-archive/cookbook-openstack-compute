@@ -33,15 +33,15 @@ describe 'openstack-compute::identity_registration' do
       )
     end
 
-    it 'grants service role to service user for service tenant' do
+    it 'grants admin role to service user for service tenant' do
       expect(chef_run).to grant_role_openstack_identity_register(
-        "Grant 'service' Role to Service User for Service Tenant"
+        "Grant 'admin' Role to Service User for Service Tenant"
       ).with(
         auth_uri: 'http://127.0.0.1:35357/v2.0',
         bootstrap_token: 'bootstrap-token',
         tenant_name: 'service',
         user_name: 'nova',
-        role_name: 'service'
+        role_name: 'admin'
       )
     end
 
