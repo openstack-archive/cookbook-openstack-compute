@@ -549,6 +549,7 @@ describe 'openstack-compute::nova-common' do
          %r{^injected_network_template=\$pybasedir/nova/virt/interfaces.template$},
          /^flat_injected=false$/,
          /^reserved_host_disk_mb=0$/,
+         /^reserved_host_memory_mb=512$/,
          /^use_ipv6=false$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end

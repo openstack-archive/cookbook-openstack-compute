@@ -230,6 +230,9 @@ flat_injected=<%= node["openstack"]["compute"]["config"]["flat_injected"] %>
 # Amount of disk in MB to reserve for the host (default: 0)
 reserved_host_disk_mb=<%= node["openstack"]["compute"]["config"]["reserved_host_disk_mb"] %>
 
+# Amount of disk in MB to reserve for the host (default: 512)
+reserved_host_memory_mb=<%= node["openstack"]["compute"]["config"]["reserved_host_memory_mb"] %>
+
 <% if node["openstack"]["compute"]["enabled_apis"].include?("ec2") %>
 # The IP address on which the EC2 API will listen. (string value)
 ec2_listen=<%= @ec2_api_bind_ip %>

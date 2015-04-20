@@ -315,6 +315,7 @@ default['openstack']['compute']['config']['snapshot_image_format'] = 'qcow2'
 default['openstack']['compute']['config']['allow_resize_to_same_host'] = false
 default['openstack']['compute']['config']['resize_confirm_window'] = 0
 default['openstack']['compute']['config']['reserved_host_disk_mb'] = 0
+default['openstack']['compute']['config']['reserved_host_memory_mb'] = 512
 # `start` will cause nova-compute to error out if a VM is already running, where
 # `resume` checks to see if it is running first.
 default['openstack']['compute']['config']['start_guests_on_host_boot'] = false

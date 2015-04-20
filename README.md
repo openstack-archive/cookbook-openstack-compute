@@ -137,6 +137,7 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["config"]["disk_allocation_ratio"]` - Virtual disk to physical disk allocation ratio (default 1.0)
 * `openstack["compute"]["config"]["allow_resize_to_same_host"]` - Allow destination machine to match source for resize. Useful when testing in single-host environments (default is false)
 * `openstack["compute"]["config"]["resize_confirm_window"]` -  Automatically confirm resizes after N seconds, Set to 0 to disable (default is 0)
+* `openstack["compute"]["config"]["reserved_host_memory_mb"]` - Amount of disk in MB to reserve for the host (default is 512)
 * `openstack["compute"]["config"]["disk_cachemodes"]` - Cachemodes to use for different disk types e.g: "file=directsync,block=none".  Valid cache values are "default", "none", "writethrough", "writeback", "directsync" and "unsafe".
 * `openstack["compute"]["config"]["live_migration_retry_count"]` - Number of 1 second retries needed in live_migration
 * `openstack["compute"]["config"]["flat_injected"]` - Whether to attempt to inject network setup into guest. Used by config_drive support.
