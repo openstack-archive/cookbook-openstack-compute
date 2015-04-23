@@ -97,6 +97,7 @@ default['openstack']['compute']['network']['neutron']['service_neutron_metadata_
 default['openstack']['compute']['network']['neutron']['metadata_secret_name'] = 'neutron_metadata_shared_secret'
 default['openstack']['compute']['network']['neutron']['public_network_name'] = 'public'
 default['openstack']['compute']['network']['neutron']['dns_server'] = '8.8.8.8'
+default['openstack']['compute']['network']['neutron']['timeout'] = 30
 
 # TODO(shep): This should probably be ['openstack']['compute']['network']['fixed']
 default['openstack']['compute']['networks'] = [

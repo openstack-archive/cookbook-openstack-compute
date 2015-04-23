@@ -490,6 +490,12 @@ describe 'openstack-compute::nova-common' do
           'auto_assign_floating_ip=false')
       end
 
+      it 'includes neutron configuration' do
+        node.set['openstack']['compute']['network']['service_type'] = 'neutron'
+        expect(chef_run).to render_file(file.name).with_content(
+          'neutron_url_timeout=30')
+      end
+
       it 'templates misc_nova array correctly' do
         node.set['openstack']['compute']['misc_nova'] = ['MISC_OPTION', 'FOO']
         expect(chef_run).to render_file(file.name).with_content(

@@ -184,6 +184,7 @@ Basic networking configuration is controlled with the following attributes:
 * `openstack["compute"]["network"]["auto_assign_floating_ip"]` - Defaults to false. Autoassigning floating ip to VM, this should be only for nova network.
 * `openstack["compute"]["network"]["force_dhcp_release"]` - If True, send a dhcp release on instance termination. (Default is false on "fedora", "redhat", "centos")
 * `openstack["compute"]["network"]["use_ipv6"]` - If True, use ipv6 support.
+* `openstack["compute"]["network"]["neutron"]["timeout"]` - Timeout value for connecting to neutron in seconds (default 30)
 
 You can have the cookbook automatically create networks in Nova for you by adding a Hash to the `openstack["compute"]["networks"]` Array.
 **Note**: The `openstack-compute::nova-setup` recipe contains the code that creates these pre-defined networks.
@@ -391,6 +392,7 @@ License and Author
 | **Author**           |  Mark Vanderwiel (<vanderwl@us.ibm.com>)           |
 | **Author**           |  Eric Zhou (<zyouzhou@cn.ibm.com>)                 |
 | **Author**           |  Mathew Odden (<mrodden@us.ibm.com>)               |
+| **Author**           |  Adrian Smith (<adrian.smith@workday.com>)         |
 |                      |                                                    |
 | **Copyright**        |  Copyright (c) 2012-2013, Rackspace US, Inc.       |
 | **Copyright**        |  Copyright (c) 2012-2013, Opscode, Inc.            |
@@ -398,6 +400,7 @@ License and Author
 | **Copyright**        |  Copyright (c) 2013, Craig Tracey                  |
 | **Copyright**        |  Copyright (c) 2013-2014, SUSE Linux GmbH          |
 | **Copyright**        |  Copyright (c) 2013-2014, IBM, Corp.               |
+| **Copyright**        |  Copyright (c) 2015, Workday, Inc.                 |
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
