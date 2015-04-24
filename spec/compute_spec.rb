@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 
 describe 'openstack-compute::compute' do
   describe 'ubuntu' do
-    let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
+    let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
     let(:chef_run) { runner.converge(described_recipe) }
 
@@ -25,7 +25,7 @@ describe 'openstack-compute::compute' do
     end
 
     it 'does not include api-metadata recipe' do
-      chef_run = ::ChefSpec::Runner.new ::UBUNTU_OPTS
+      chef_run = ::ChefSpec::SoloRunner.new ::UBUNTU_OPTS
       node = chef_run.node
       node.set['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute'
       chef_run.converge 'openstack-compute::compute'

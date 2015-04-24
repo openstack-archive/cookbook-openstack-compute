@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 
 describe 'openstack-compute::nova-common' do
   describe 'ubuntu' do
-    let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
+    let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
     let(:chef_run) do
       node.set['openstack']['mq'] = {

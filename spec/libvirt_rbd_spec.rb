@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 
 describe 'openstack-compute::libvirt_rbd' do
   describe 'ubuntu' do
-    let(:runner) { ChefSpec::Runner.new(UBUNTU_OPTS) }
+    let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
     let(:chef_run) do
       node.set['ceph']['config']['fsid'] = '00000000-0000-0000-0000-000000000000'

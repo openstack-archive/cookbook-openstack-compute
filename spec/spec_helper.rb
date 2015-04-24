@@ -22,7 +22,8 @@ REDHAT_OPTS = {
 UBUNTU_OPTS = {
   platform: 'ubuntu',
   version: '14.04',
-  log_level: LOG_LEVEL
+  log_level: LOG_LEVEL,
+  file_cache_path: Chef::Config[:file_cache_path]
 }
 
 shared_context 'compute_stubs' do

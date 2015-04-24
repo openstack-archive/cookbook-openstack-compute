@@ -1,18 +1,18 @@
 # Testing the Cookbook #
 
-This cookbook uses [bundler](http://gembundler.com/) and [berkshelf](http://berkshelf.com/) to isolate dependencies. Make sure you have `ruby 1.9.x`, `bundler`, `rake`, build essentials and the header files for `gecode` installed before continuing. Make sure that you're using gecode version 3. More info [here](https://github.com/opscode/dep-selector-libgecode/tree/0bad63fea305ede624c58506423ced697dd2545e#using-a-system-gecode-instead).
+This cookbook uses [chefdk](https://downloads.chef.io/chef-dk/) and [berkshelf](http://berkshelf.com/) to isolate dependencies. Make sure you have chefdk and the header files for `gecode` installed before continuing. Make sure that you're using gecode version 3. More info [here](https://github.com/opscode/dep-selector-libgecode/tree/0bad63fea305ede624c58506423ced697dd2545e#using-a-system-gecode-instead). For more detailed information on what needs to be installed, you can have a quick look into the bootstrap.sh file in this repository, which does install all the needed things to get going on ubuntu trusty. The tests defined in the Rakefile include lint, style and unit. For integration testing please refere to the [openstack-chef-repo](https://github.com/stackforge/openstack-chef-repo).
 
 We have three test suites which you can run either, individually (there are three rake tasks):
 
-    $ rake lint
-    $ rake style
-    $ rake unit
+    $ chef exec rake lint
+    $ chef exec rake style
+    $ chef exec rake unit
 
 or altogether:
 
-    $ rake test
+    $ chef exec rake
 
-The `rake` tasks will take care of installing the needed gem dependencies and cookbooks with `berkshelf`.
+The `rake` tasks will take care of installing the needed cookbooks with `berkshelf`.
 
 ## Rubocop  ##
 
@@ -27,4 +27,4 @@ The `rake` tasks will take care of installing the needed gem dependencies and co
 
 ## Chefspec
 
-[ChefSpec](https://github.com/sethvargo/chefspec/) is a unit testing framework for testing Chef cookbooks. ChefSpec makes it easy to write examples and get fast feedback on cookbook changes without the need for virtual machines or cloud servers.
+[ChefSpec](https://github.com/sethvargo/chefspec) is a unit testing framework for testing Chef cookbooks. ChefSpec makes it easy to write examples and get fast feedback on cookbook changes without the need for virtual machines or cloud servers.
