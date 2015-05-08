@@ -97,6 +97,9 @@ default['openstack']['compute']['network']['service_type'] = 'nova'
 # plugins from openstack-network
 default['openstack']['compute']['network']['plugins'] = ['openvswitch']
 
+# Enable guestfs debug
+default['openstack']['compute']['guestfs']['debug'] = false
+
 # rootwrap.conf
 default['openstack']['compute']['rootwrap']['filters_path'] = '/etc/nova/rootwrap.d,/usr/share/nova/rootwrap'
 default['openstack']['compute']['rootwrap']['exec_dirs'] = '/sbin,/usr/sbin,/bin,/usr/bin'

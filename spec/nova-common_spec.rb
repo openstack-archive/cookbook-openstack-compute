@@ -69,6 +69,10 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
+      it 'has default set for guestfs debug' do
+        expect(chef_run).to render_config_file(file.name).with_section_content('guestfs', /^debug=false$/)
+      end
+
       it 'has no rng_dev_path by default' do
         expect(chef_run).not_to render_config_file(file.name)\
           .with_section_content('libvirt', /^rng_dev_path=/)

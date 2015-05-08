@@ -299,6 +299,10 @@ osapi_compute_extension=<%= p %>
 <% end %>
 <% end %>
 
+[guestfs]
+
+# Enable guestfs debug
+debug=<%= node['openstack']['compute']['guestfs']['debug'] %>
 
 [database]
 
