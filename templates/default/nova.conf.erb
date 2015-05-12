@@ -850,6 +850,12 @@ kombu_ssl_version=<%= node["openstack"]["mq"]["compute"]["rabbit"]["kombu_ssl_ve
 rabbit_userid=<%= node["openstack"]["mq"]["compute"]["rabbit"]["userid"] %>
 rabbit_password=<%= @mq_password %>
 rabbit_virtual_host=<%= node["openstack"]["mq"]["compute"]["rabbit"]["vhost"] %>
+# Maximum retries with trying to connect to RabbitMQ
+# (the default of 0 implies an infinite retry count)
+rabbit_max_retries=<%= node["openstack"]["mq"]["compute"]["rabbit"]["rabbit_max_retries"] %>
+# RabbitMQ connection retry interval
+rabbit_retry_interval=<%= node["openstack"]["mq"]["compute"]["rabbit"]["rabbit_retry_interval"] %>
+
 <% if node["openstack"]["mq"]["compute"]["rabbit"]["ha"] -%>
 rabbit_hosts=<%= @rabbit_hosts %>
 rabbit_ha_queues=True
