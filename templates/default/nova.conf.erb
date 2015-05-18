@@ -38,6 +38,12 @@ rpc_backend=<%= node["openstack"]["compute"]["rpc_backend"] %>
 
 
 ##### SCHEDULER #####
+# Flag to decide whether to use baremetal_scheduler_default_filters or not (boolean value).
+scheduler_use_baremetal_filters=<%= node["openstack"]["compute"]["scheduler"]["use_baremetal_filters"] %>
+
+# Which filter class names to use for filtering baremetal hosts when not specified in the request.
+baremetal_scheduler_default_filters=<%= node["openstack"]["compute"]["scheduler"]["baremetal_default_filters"].join(",") %>
+
 scheduler_manager=<%= node["openstack"]["compute"]["scheduler"]["scheduler_manager"] %>
 scheduler_driver=<%= node["openstack"]["compute"]["scheduler"]["scheduler_driver"] %>
 scheduler_available_filters=<%= node["openstack"]["compute"]["scheduler"]["available_filters"] %>

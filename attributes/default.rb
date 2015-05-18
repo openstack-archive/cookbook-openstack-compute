@@ -587,6 +587,28 @@ default['openstack']['compute']['vmware']['integration_bridge'] = 'br-int'
 default['openstack']['compute']['bare-metal']['admin_username'] = 'ironic'
 default['openstack']['compute']['bare-metal']['admin_tenant_name'] = 'service'
 
+# Boolean to decide whether to use baremetal_scheduler_default_filters or not.
+default['openstack']['compute']['scheduler']['use_baremetal_filters'] = false
+
+default['openstack']['compute']['scheduler']['baremetal_default_filters'] = %w(
+  RetryFilter
+  AvailabilityZoneFilter
+  ComputeFilter
+  ComputeCapabilitiesFilter
+  ImagePropertiesFilter
+  ExactRamFilter
+  ExactDiskFilter
+  ExactCoreFilter)
+
+# For true case, this logic allows the following ironic-related attribtes to be overwritten automatically.
+if node['openstack']['compute']['scheduler']['use_baremetal_filters']
+  default['openstack']['compute']['driver'] = 'nova.virt.ironic.IronicDriver'
+  default['openstack']['compute']['manager'] = 'ironic.nova.compute.manager.ClusteredComputeManager'
+  default['openstack']['compute']['scheduler']['scheduler_host_manager'] = 'nova.scheduler.ironic_host_manager.IronicHostManager'
+  default['openstack']['compute']['config']['ram_allocation_ratio'] = 1.0
+  default['openstack']['compute']['config']['reserved_host_memory_mb'] = 0
+end
+
 # Lock the version of RPC messages and allow live upgrading of the services
 # without interruption caused by version mismatch.
 # The configuration options allow the specification of RPC version numbers if desired,
