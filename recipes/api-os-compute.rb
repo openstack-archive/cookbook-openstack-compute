@@ -55,8 +55,8 @@ end
 
 template '/etc/nova/api-paste.ini' do
   source 'api-paste.ini.erb'
-  owner  node['openstack']['compute']['user']
-  group  node['openstack']['compute']['group']
-  mode   00644
+  owner node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+  mode 00644
   notifies :restart, 'service[nova-api-os-compute]'
 end

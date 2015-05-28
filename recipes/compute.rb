@@ -75,7 +75,7 @@ end
 
 cookbook_file '/etc/nova/nova-compute.conf' do
   source 'nova-compute.conf'
-  mode   00644
+  mode 00644
 
   action :create
 end
@@ -103,10 +103,10 @@ group docker_group do
 end
 
 file 'docker.filter' do
-  owner  'root'
-  group  'root'
-  mode   00644
-  path   filter_target_path
+  owner 'root'
+  group 'root'
+  mode 00644
+  path filter_target_path
   content lazy { ::File.open(filter_source_path).read }
   action :create
   only_if { node['openstack']['compute']['docker']['enable'] }

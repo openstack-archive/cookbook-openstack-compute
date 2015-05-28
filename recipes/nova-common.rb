@@ -56,7 +56,7 @@ end
 directory '/etc/nova' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode  00750
+  mode 00750
   action :create
 end
 
@@ -110,14 +110,14 @@ image_endpoint = internal_endpoint 'image-api'
 ironic_endpoint = internal_endpoint 'bare-metal-api'
 ironic_admin_password = get_password 'service', 'openstack-bare-metal'
 
-Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint}")
+Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
+Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint}")
+Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint}")
+Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint}")
+Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint}")
 
 if node['openstack']['compute']['network']['service_type'] == 'neutron'
   neutron_admin_password = get_password 'service', 'openstack-network'
@@ -182,9 +182,9 @@ end
 template '/etc/nova/rootwrap.conf' do
   source 'rootwrap.conf.erb'
   # Must be root!
-  owner  'root'
-  group  'root'
-  mode   00644
+  owner 'root'
+  group 'root'
+  mode 00644
 end
 
 execute 'enable nova login' do

@@ -48,7 +48,7 @@ when 'nova'
       # are 'label' and 'ipv4_cidr'.
       cmd = "nova-manage network create --label=#{net['label']} --fixed_range_v4=#{net['ipv4_cidr']}"
       cmd += " --multi_host='#{net['multi_host']}'" if net.key?('multi_host')
-      %w{num_networks network_size bridge dns1 dns2}.each do |v|
+      %w(num_networks network_size bridge dns1 dns2).each do |v|
         cmd += " --#{v}=#{net[v]}" if net.key?(v)
       end
       # Older attributes have the key as 'bridge_dev' instead
@@ -61,7 +61,7 @@ when 'nova'
         cmd += " --vlan=#{net['vlan']}"
       elsif node['openstack']['compute']['network']['network_manager'] == 'nova.network.manager.VlanManager'
         cmd += " --vlan=#{next_vlan}"
-        next_vlan = next_vlan + 1
+        next_vlan += 1
       end
       command cmd
       not_if "nova-manage network list | grep #{net['ipv4_cidr']}", user: nova_user, group: nova_group
@@ -74,7 +74,7 @@ when 'nova'
     user 'root'
     group 'root'
     source 'add_floaters.py'
-    mode   00755
+    mode 00755
 
     action :create
   end
@@ -116,7 +116,7 @@ when 'neutron'
     user 'root'
     group 'root'
     source 'add_floaters.py'
-    mode   00755
+    mode 00755
 
     action :create
   end
@@ -128,7 +128,7 @@ when 'neutron'
     execute 'neutron floating create' do
       command cmd
       not_if ". /root/openrc && neutron floatingip-list |grep -E '.*([0-9]{1,3}[\.]){3}[0-9]{1,3}*'"
-      only_if { File.exists?('/root/openrc') }
+      only_if { File.exist?('/root/openrc') }
 
       action :run
     end
