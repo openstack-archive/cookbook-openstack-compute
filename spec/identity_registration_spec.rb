@@ -288,7 +288,7 @@ describe 'openstack-compute::identity_registration' do
 
     describe "when 'ec2' is not in the list of enabled_apis" do
       before do
-        node.set['openstack']['compute']['enabled_apis'] = 'osapi_compute,metadata'
+        node.set['openstack']['compute']['enabled_apis'] = 'osapi_compute'
       end
 
       it 'does not register ec2 service' do

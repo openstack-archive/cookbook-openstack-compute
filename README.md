@@ -313,7 +313,7 @@ Arrays whose elements will be copied exactly into the respective config files (c
 EC2 Configuration Attributes
 ----------------------------
 
-* `openstack["compute"]["enabled_apis"]` - Which apis have been enabled in nova compute
+* `openstack["compute"]["enabled_apis"]` - Which apis have been enabled in nova compute, only for ec2 and osapi_compute. For metadata, include the api-metadata recipe.
 
 Notification Attributes
 -----------------------

@@ -29,7 +29,10 @@ end
 
 include_recipe 'openstack-compute::nova-common'
 if node['openstack']['compute']['enabled_apis'].include?('metadata')
-  include_recipe 'openstack-compute::api-metadata'
+  Chef::Log.warn('Attribute enabled_apis contains metadata, this '\
+                 'could result in a timing issue starting the service. '\
+                 'Please remove this value and include the api-metadata '\
+                 'recipe instead')
 end
 include_recipe 'openstack-compute::network'
 

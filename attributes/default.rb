@@ -548,7 +548,11 @@ default['openstack']['compute']['misc_paste'] = nil
 
 # To disable the EC2 API endpoint, simply remove 'ec2,' from the list
 # of enabled API services.
-default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute,metadata'
+# NOTE: The metadata api service is enabled via including it's recipe
+# NOTE: api-metadata.  By default the api-metadata recipe is included in
+# NOTE: the os-compute-api role which is included in the
+# NOTE: os-compute-single-controller role.
+default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute'
 
 # VMware driver
 default['openstack']['compute']['vmware']['secret_name'] = 'openstack_vmware_secret_name'
