@@ -164,25 +164,25 @@ def expect_creates_api_paste(service, action = :restart) # rubocop:disable Metho
 
         it 'sets the pipeline attribute' do
           expect(chef_run).to render_file(file.name)
-                               .with_content(/^pipeline = ec2faultwrap logrequest metaapp$/)
+            .with_content(/^pipeline = ec2faultwrap logrequest metaapp$/)
         end
 
         it 'sets ec2 attributes' do
           expect(chef_run).to render_file(file.name)
-                               .with_content(/^\[composite:ec2\]$/)
+            .with_content(/^\[composite:ec2\]$/)
         end
       end
 
       it 'sets the pipeline attribute when ec2 api is disabled' do
         node.set['openstack']['compute']['enabled_apis'] = []
         expect(chef_run).to render_file(file.name)
-                             .with_content(/^pipeline = faultwrap metaapp$/)
+          .with_content(/^pipeline = faultwrap metaapp$/)
       end
 
       it 'pastes the misc attributes' do
         node.set['openstack']['compute']['misc_paste'] = %w(paste1 paste2)
         expect(chef_run).to render_file(file.name)
-                             .with_content(/^paste1$/).with_content(/^paste2$/)
+          .with_content(/^paste1$/).with_content(/^paste2$/)
       end
     end
 

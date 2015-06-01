@@ -68,7 +68,7 @@ describe 'openstack-compute::compute' do
       expect(chef_run).to upgrade_package('nova-compute-qemu').with(options: '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes')
     end
 
-    %w{qemu kvm}.each do |virt_type|
+    %w(qemu kvm).each do |virt_type|
       it "honors the package name platform overrides for #{virt_type}" do
         node.set['openstack']['compute']['libvirt']['virt_type'] = virt_type
         node.set['openstack']['compute']['platform']["#{virt_type}_compute_packages"] = ["my-nova-#{virt_type}"]
@@ -82,12 +82,9 @@ describe 'openstack-compute::compute' do
 
       it 'creates the file' do
         expect(chef_run).to create_cookbook_file(file.name).with(
-          source: 'nova-compute.conf'
+          source: 'nova-compute.conf',
+          mode: 00644
         )
-      end
-
-      it 'has proper modes' do
-        expect(sprintf('%o', file.mode)).to eq '644'
       end
     end
 

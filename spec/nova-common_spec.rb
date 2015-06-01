@@ -98,7 +98,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has default ssl options set' do
-        %W(ssl_only=false
+        %w(ssl_only=false
            cert=self.pem
            key=).each do |line|
           expect(chef_run).to render_file(file.name).with_content(/^#{line}$/)
@@ -843,11 +843,10 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'sets the upgrade levels' do
-        node.set['openstack']['compute']['upgrade_levels'] = {
-                                                              'compute' => 'juno',
-                                                              'cert' => '3.0',
-                                                              'network' => 'havana'
-                                                              }
+        node.set['openstack']['compute']['upgrade_levels'] = { 'compute' => 'juno',
+                                                               'cert' => '3.0',
+                                                               'network' => 'havana'
+                                                             }
         node['openstack']['compute']['upgrade_levels'].each do |key, val|
           expect(chef_run).to render_config_file(file.name).with_section_content('upgrade_levels', /^#{key} = #{val}$/)
         end
@@ -874,8 +873,8 @@ describe 'openstack-compute::nova-common' do
 
         it 'sets the default attributes' do
           [
-            %r(^filters_path=/etc/nova/rootwrap.d,/usr/share/nova/rootwrap$),
-            %r(^exec_dirs=/sbin,/usr/sbin,/bin,/usr/bin$),
+            %r{^filters_path=/etc/nova/rootwrap.d,/usr/share/nova/rootwrap$},
+            %r{^exec_dirs=/sbin,/usr/sbin,/bin,/usr/bin$},
             /^use_syslog=False$/,
             /^syslog_log_facility=syslog$/,
             /^syslog_log_level=ERROR$/

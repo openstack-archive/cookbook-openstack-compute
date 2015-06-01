@@ -231,7 +231,7 @@ default['openstack']['compute']['scheduler']['scheduler_manager'] = 'nova.schedu
 default['openstack']['compute']['scheduler']['scheduler_driver'] = 'nova.scheduler.filter_scheduler.FilterScheduler'
 default['openstack']['compute']['scheduler']['scheduler_host_manager'] = 'nova.scheduler.host_manager.HostManager'
 default['openstack']['compute']['scheduler']['available_filters'] = 'nova.scheduler.filters.all_filters'
-default['openstack']['compute']['scheduler']['default_filters'] = %W(
+default['openstack']['compute']['scheduler']['default_filters'] = %w(
   RetryFilter
   AvailabilityZoneFilter
   RamFilter

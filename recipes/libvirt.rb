@@ -73,9 +73,9 @@ end
 
 def update_boot_kernel_and_trigger_reboot(flavor = 'default') # rubocop:disable MethodLength
   # only default and xen flavor is supported by this helper right now
-  if File.exists?('/boot/grub/menu.lst')
+  if File.exist?('/boot/grub/menu.lst')
     update_grub_default_kernel(flavor)
-  elsif File.exists?('/etc/default/grub')
+  elsif File.exist?('/etc/default/grub')
     update_grub2_default_kernel(flavor)
   else
     ::Chef::Application.fatal!(
@@ -141,7 +141,7 @@ group node['openstack']['compute']['libvirt']['group'] do
   members [node['openstack']['compute']['group']]
 
   action :create
-  only_if { platform_family? %w{suse fedora rhel} }
+  only_if { platform_family? %w(suse fedora rhel) }
 end
 
 # http://fedoraproject.org/wiki/Getting_started_with_OpenStack_EPEL#Installing_within_a_VM
@@ -149,7 +149,7 @@ end
 link '/usr/bin/qemu-system-x86_64' do
   to '/usr/libexec/qemu-kvm'
 
-  only_if { platform_family? %w{fedora rhel} }
+  only_if { platform_family? %w(fedora rhel) }
 end
 
 service 'dbus' do
@@ -181,9 +181,9 @@ end
 # TODO(breu): this section needs to be rewritten to support key privisioning
 template '/etc/libvirt/libvirtd.conf' do
   source 'libvirtd.conf.erb'
-  owner  'root'
-  group  'root'
-  mode   00644
+  owner 'root'
+  group 'root'
+  mode 00644
   variables(
     auth_tcp: node['openstack']['compute']['libvirt']['auth_tcp'],
     libvirt_group: node['openstack']['compute']['libvirt']['group']
@@ -195,24 +195,24 @@ end
 
 template '/etc/default/libvirt-bin' do
   source 'libvirt-bin.erb'
-  owner  'root'
-  group  'root'
-  mode   00644
+  owner 'root'
+  group 'root'
+  mode 00644
 
   notifies :restart, 'service[libvirt-bin]', :immediately
 
-  only_if { platform_family? %w{debian} }
+  only_if { platform_family? 'debian' }
 end
 
 template '/etc/sysconfig/libvirtd' do
   source 'libvirtd.erb'
-  owner  'root'
-  group  'root'
-  mode   00644
+  owner 'root'
+  group 'root'
+  mode 00644
 
   notifies :restart, 'service[libvirt-bin]', :immediately
 
-  only_if { platform_family? %w{fedora rhel} }
+  only_if { platform_family? %w(fedora rhel) }
 end
 
 volume_backend = node['openstack']['compute']['libvirt']['volume_backend']

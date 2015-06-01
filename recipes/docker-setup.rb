@@ -51,7 +51,7 @@ git_download_directory  = "#{Chef::Config['file_cache_path']}/nova-docker"
 
 git git_download_directory do
   repository github_repository
-  revision  github_branch
+  revision github_branch
   action :sync
 end
 
