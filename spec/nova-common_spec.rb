@@ -770,11 +770,11 @@ describe 'openstack-compute::nova-common' do
           node.set['openstack']['compute']['libvirt']['images_type'] = 'rbd'
         end
 
-        describe 'default rdb settings' do
+        describe 'default rbd settings' do
           it 'sets the libvirt * options correctly' do
             [
               /^images_type=rbd$/,
-              /^images_rbd_pool=images$/,
+              /^images_rbd_pool=instances$/,
               %r{^images_rbd_ceph_conf=/etc/ceph/ceph.conf$},
               /^rbd_user=cinder$/,
               /^rbd_secret_uuid=00000000-0000-0000-0000-000000000000$/
@@ -788,7 +788,7 @@ describe 'openstack-compute::nova-common' do
         describe 'override rbd settings' do
           before do
             node.set['openstack']['compute']['libvirt']['images_type'] = 'rbd'
-            node.set['openstack']['compute']['libvirt']['rbd']['glance']['pool'] = 'myrbd'
+            node.set['openstack']['compute']['libvirt']['rbd']['nova']['pool'] = 'myrbd'
             node.set['openstack']['compute']['libvirt']['rbd']['ceph_conf'] = '/etc/myceph/ceph.conf'
           end
 

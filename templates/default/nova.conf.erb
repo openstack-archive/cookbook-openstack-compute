@@ -682,7 +682,7 @@ images_volume_group=<%= node['openstack']['compute']['libvirt']['volume_group'] 
 sparse_logical_volumes=<%= node['openstack']['compute']['libvirt']['sparse_logical_volumes'] %>
 
 <% elsif node['openstack']['compute']['libvirt']['images_type'] == 'rbd' -%>
-images_rbd_pool=<%= node['openstack']['compute']['libvirt']['rbd']['glance']['pool'] %>
+images_rbd_pool=<%= node['openstack']['compute']['libvirt']['rbd']['nova']['pool'] %>
 images_rbd_ceph_conf=<%= node['openstack']['compute']['libvirt']['rbd']['ceph_conf'] %>
 
 #
