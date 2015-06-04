@@ -281,6 +281,18 @@ Libvirt Configuration Attributes
 * `openstack["compute"]["libvirt"]["rbd"]["cinder"]["secret_uuid"]` - A shared secret between cinder and libvirt.  It should be the same as the secret_uuid that is defined in block-storage.
 * `openstack["compute"]["libvirt"]["rng_dev_path"]` - A path to a device that will be used as source of entropy on the host. Permitted options are: /dev/random or /dev/hwrng (string value)
 
+Bare Metal Configuration Attributes
+-----------------------------------
+
+* `openstack['compute']['scheduler']['use_baremetal_filters']` Boolean that decides whether to use baremetal_scheduler_default_filters or not.
+  If this attribute is set to true, the following attributes will be overwritten:
+  `openstack['compute']['driver']`
+  `openstack['compute']['manager']`
+  `openstack['compute']['scheduler']['scheduler_host_manager']`
+  `openstack['compute']['config']['ram_allocation_ratio']`
+  `openstack['compute']['config']['reserved_host_memory_mb']`
+* `openstack['compute']['scheduler']['baremetal_default_filters']` A list of filters enabled for baremetal schedulers that support them.
+
 Scheduler Configuration Attributes
 ----------------------------------
 

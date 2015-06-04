@@ -725,13 +725,36 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has scheduler options' do
-        [/^scheduler_manager=nova.scheduler.manager.SchedulerManager$/,
+        [/^scheduler_use_baremetal_filters=false$/,
+         /^baremetal_scheduler_default_filters=RetryFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ExactRamFilter,ExactDiskFilter,ExactCoreFilter$/,
+         /^scheduler_manager=nova.scheduler.manager.SchedulerManager$/,
          /^scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler$/,
          /^scheduler_host_manager=nova.scheduler.host_manager.HostManager$/,
          /^scheduler_available_filters=nova.scheduler.filters.all_filters$/,
          /^scheduler_default_filters=RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter$/
         ].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
+          expect(chef_run).to render_config_file(file.name).with_section_content('DEFAULT', line)
+        end
+      end
+
+      it 'sets to use baremetal default attributes' do
+        node.set['openstack']['compute']['scheduler']['use_baremetal_filters'] = true
+
+        expect(chef_run.node['openstack']['compute']['driver']).to eq('nova.virt.ironic.IronicDriver')
+        expect(chef_run.node['openstack']['compute']['manager']).to eq('ironic.nova.compute.manager.ClusteredComputeManager')
+        expect(chef_run.node['openstack']['compute']['scheduler']['scheduler_host_manager']).to eq('nova.scheduler.ironic_host_manager.IronicHostManager')
+        expect(chef_run.node['openstack']['compute']['config']['ram_allocation_ratio']).to eq(1.0)
+        expect(chef_run.node['openstack']['compute']['config']['reserved_host_memory_mb']).to eq(0)
+
+        [
+          /^scheduler_use_baremetal_filters=true$/,
+          /^compute_driver=nova.virt.ironic.IronicDriver$/,
+          /^compute_manager=ironic.nova.compute.manager.ClusteredComputeManager$/,
+          /^scheduler_host_manager=nova.scheduler.ironic_host_manager.IronicHostManager$/,
+          /^ram_allocation_ratio=1.0$/,
+          /^reserved_host_memory_mb=0$/
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('DEFAULT', line)
         end
       end
 
