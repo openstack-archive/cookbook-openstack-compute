@@ -803,13 +803,13 @@ admin_tenant_name=<%= node['openstack']['compute']['bare-metal']['admin_tenant_n
 lock_path=<%= node["openstack"]["compute"]["lock_path"] %>
 
 
+<% if @mq_service_type == "qpid"  %>
 [oslo_messaging_qpid]
 
 #
 # From oslo.messaging
 #
 
-<% if @mq_service_type == "qpid"  %>
 # Use durable queues in AMQP. (boolean value)
 # Deprecated group/name - [DEFAULT]/rabbit_durable_queues
 amqp_durable_queues=<%= node['openstack']['mq']['compute']['durable_queues'] %>
@@ -835,13 +835,19 @@ qpid_tcp_nodelay=<%= node["openstack"]["mq"]["compute"]["qpid"]["tcp_nodelay"] %
 qpid_topology_version=<%= node['openstack']['mq']['compute']['qpid']['topology_version'] %>
 <% end %>
 
+<% if @mq_service_type == "rabbitmq"  %>
 [oslo_messaging_rabbit]
 
 #
 # From oslo.messaging
 #
 
-<% if @mq_service_type == "rabbitmq"  %>
+# Number of seconds after which the Rabbit broker is considered down if heartbeat's keep-alive fails (0 disable the heartbeat)
+heartbeat_timeout_threshold=<%= node['openstack']['mq']['compute']['rabbit']['heartbeat_timeout_threshold'] %>
+
+# How often times during the heartbeat_timeout_threshold we check the heartbeat
+heartbeat_rate=<%= node['openstack']['mq']['compute']['rabbit']['heartbeat_rate'] %>
+
 # Use durable queues in AMQP. (boolean value)
 # Deprecated group/name - [DEFAULT]/rabbit_durable_queues
 amqp_durable_queues=<%= node['openstack']['mq']['compute']['durable_queues'] %>

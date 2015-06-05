@@ -168,6 +168,8 @@ TODO: move rabbit parameters under openstack["compute"]["mq"]
 * `openstack["compute"]["rabbit"]["port"]` - The rabbit port to use
 * `openstack["compute"]["rabbit"]["host"]` - The rabbit host to use (must set when `openstack["compute"]["rabbit"]["ha"]` false).
 * `openstack["compute"]["rabbit"]["ha"]` - Whether or not to use rabbit ha
+* `openstack["compute"]["rabbit"]["heartbeat_timeout_threshold"]` - Number of seconds after which the Rabbit broker is considered down if heartbeat's keep-alive fails (0 disable the heartbeat)
+* `openstack["compute"]["rabbit"]["heartbeat_rate"]` - How often times during the heartbeat_timeout_threshold we check the heartbeat
 
 * `openstack["compute"]["mq"]["qpid"]["host"]` - The qpid host to use
 * `openstack["compute"]["mq"]["qpid"]["port"]` - The qpid port to use
