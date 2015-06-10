@@ -121,6 +121,53 @@ default['openstack']['compute']['image']['ssl']['cert_file'] = nil
 # Private key file to use when starting the server securely
 default['openstack']['compute']['image']['ssl']['key_file'] = nil
 
+# A list of url scheme that can be downloaded directly
+# via the direct_url.  Currently supported schemes: [file].
+default['openstack']['compute']['image']['allowed_direct_url_schemes'] = []
+
+# Image file url support
+# For each entry in the filesystem list a new configuration section must be
+# added with the following format:
+#
+#  filesystem name:
+#
+#    id:
+#        An opaque string.  In order for this module to know that the remote
+#        FS is the same one that is mounted locally it must share information
+#        with the glance deployment.  Both glance and nova-compute must be
+#        configured with a unique matching string.  This ensures that the
+#        file:// advertised URL is describing a file system that is known
+#        to nova-compute
+#    mountpoint:
+#        The location at which the file system is locally mounted.  Glance
+#        may mount a shared file system on a different path than nova-compute.
+#        This value will be compared against the metadata advertised with
+#        glance and paths will be adjusted to ensure that the correct file
+#        is copied.
+#
+# For example: {
+#                'some_fs' => {
+#                  'id' => '00000000-0000-0000-0000-000000000000',
+#                  'mountpoint' => '/mount/some_fs/images'
+#                },
+#                'another_fs' => {
+#                  'id' => '1111111-1111-1111-1111-1111111111111',
+#                  'mountpoint' => '/mount/another_fs/images'
+#                }
+#              }
+#
+# This will produce the following in nova.conf
+#
+# [image_file_url]
+# filesystems=some_fs,another_fs
+# [image_file_url:some_fs]
+# id=00000000-0000-0000-0000-000000000000
+# mountpoint=/mount/some_fs/images
+# [image_file_url:another_fs]
+# id=1111111-1111-1111-1111-1111111111111
+# mountpoint=/mount/another_fs/images
+default['openstack']['compute']['image']['filesystems'] = nil
+
 # Neutron options
 # If True, this indicates that neutron api allows the client to perform
 # insecure SSL (https) requests. This should be the same as the setting
