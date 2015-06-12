@@ -424,6 +424,7 @@ describe 'openstack-compute::nova-common' do
 
           it 'has default rabbit_* options set' do
             [/^amqp_durable_queues=false$/, /^amqp_auto_delete=false$/,
+             /^heartbeat_timeout_threshold=0$/, /^heartbeat_rate=2$/,
              /^rabbit_userid=guest$/, /^rabbit_password=mq-pass$/,
              /^rabbit_virtual_host=\/$/, /^rabbit_host=127.0.0.1$/,
              /^rabbit_max_retries=0$/, /^rabbit_retry_interval=1$/,
