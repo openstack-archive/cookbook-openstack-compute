@@ -294,7 +294,8 @@ describe 'openstack-compute::nova-common' do
 
         [
           /^insecure=false$/,
-          %r{^api_servers=http://127.0.0.1:9292$}
+          %r{^api_servers=http://127.0.0.1:9292$},
+          /^allowed_direct_url_schemes=$/
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
             .with_section_content('glance', line)
@@ -872,6 +873,37 @@ describe 'openstack-compute::nova-common' do
                                                              }
         node['openstack']['compute']['upgrade_levels'].each do |key, val|
           expect(chef_run).to render_config_file(file.name).with_section_content('upgrade_levels', /^#{key} = #{val}$/)
+        end
+      end
+
+      context 'image file systems' do
+        it 'no image_file_url section by default' do
+          expect(chef_run).not_to render_file(file.name).with_content(/^\[image_file_url/)
+        end
+
+        it 'build image_file_url sections' do
+          node.set['openstack']['compute']['image']['filesystems'] = {
+            'some_fs' => {
+              'id' => '00000000-0000-0000-0000-000000000000',
+              'mountpoint' => '/mount/some_fs/images'
+            },
+            'another_fs' => {
+              'id' => '1111111-1111-1111-1111-1111111111111',
+              'mountpoint' => '/mount/another_fs/images'
+            }
+          }
+          [
+            /^id=00000000-0000-0000-0000-000000000000$/,
+            %r{^mountpoint=/mount/some_fs/images$}
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name).with_section_content('image_file_url:some_fs', line)
+          end
+          [
+            /^id=1111111-1111-1111-1111-1111111111111$/,
+            %r{^mountpoint=/mount/another_fs/images$}
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name).with_section_content('image_file_url:another_fs', line)
+          end
         end
       end
     end

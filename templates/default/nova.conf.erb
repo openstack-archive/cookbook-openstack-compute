@@ -757,6 +757,7 @@ metadata_proxy_shared_secret=<%= @neutron_metadata_proxy_shared_secret %>
 [glance]
 api_servers=<%= @glance_api_scheme %>://<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
 insecure=<%= node['openstack']['compute']['image']['glance_insecure'] %>
+allowed_direct_url_schemes=<%= node['openstack']['compute']['image']['allowed_direct_url_schemes'].join(',') %>
 
 [cinder]
 # Location of ca certificates file to use for cinder client requests
@@ -882,3 +883,15 @@ rabbit_use_ssl=<%= node["openstack"]["mq"]["compute"]["rabbit"]["use_ssl"] %>
 <%= key %> = <%= val %>
 <% end -%>
 <% end -%>
+
+# Image file url support, add new sections here
+<% if node['openstack']['compute']['image']['filesystems'] -%>
+[image_file_url]
+filesystems=node['openstack']['compute']['image']['filesystems'].join(',')
+<%   node['openstack']['compute']['image']['filesystems'].each do |section, opts| %>
+[image_file_url:<%= section %>]
+<%     opts.each do |key, value| %>
+<%= key %>=<%= value %>
+<%     end %>
+<%   end %>
+<% end %>
