@@ -44,17 +44,17 @@ shared_context 'compute_stubs' do
           }
         }]
       )
-    allow_any_instance_of(Chef::Recipe).to receive(:get_secret)
-      .with('openstack_identity_bootstrap_token')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('token', 'openstack_identity_bootstrap_token')
       .and_return('bootstrap-token')
-    allow_any_instance_of(Chef::Recipe).to receive(:get_secret)
-      .with('neutron_metadata_secret')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('token', 'neutron_metadata_secret')
       .and_return('metadata-secret')
-    allow_any_instance_of(Chef::Recipe).to receive(:get_secret) # this is the rbd_uuid default name
-      .with('rbd_secret_uuid')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password) # this is the rbd_uuid default name
+      .with('token', 'rbd_secret_uuid')
       .and_return '00000000-0000-0000-0000-000000000000'
-    allow_any_instance_of(Chef::Recipe).to receive(:get_secret)
-      .with('openstack_vmware_secret_name')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('token', 'openstack_vmware_secret_name')
       .and_return 'vmware_secret_name'
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('db', anything)

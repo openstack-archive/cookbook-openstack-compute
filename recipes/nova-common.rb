@@ -121,11 +121,11 @@ Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoin
 
 if node['openstack']['compute']['network']['service_type'] == 'neutron'
   neutron_admin_password = get_password 'service', 'openstack-network'
-  neutron_metadata_proxy_shared_secret = get_secret 'neutron_metadata_secret'
+  neutron_metadata_proxy_shared_secret = get_password 'token', 'neutron_metadata_secret'
 end
 
 if node['openstack']['compute']['driver'].split('.').first == 'vmwareapi'
-  vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
+  vmware_host_pass = get_password 'token', node['openstack']['compute']['vmware']['secret_name']
 end
 
 identity_admin_endpoint = admin_endpoint 'identity-admin'
