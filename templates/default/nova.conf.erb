@@ -155,6 +155,9 @@ novncproxy_port=<%= @novncproxy_bind_port %>
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 
+# Enable VNC related features (boolean value)
+vnc_enabled=<%= node['openstack']['compute']['vnc']['enabled'] %>
+
 vnc_keymap=<%= node['openstack']['compute']['vnc']['keymap'] %>
 
 # store consoleauth tokens in memcached
@@ -574,9 +577,8 @@ inject_key=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_key"] %>
 # Deprecated group/name - [DEFAULT]/libvirt_inject_partition
 inject_partition=<%= node["openstack"]["compute"]["libvirt"]["libvirt_inject_partition"] %>
 
-# Sync virtual and real mouse cursors in Windows VMs (boolean
-# value)
-#use_usb_tablet=true
+# Sync virtual and real mouse cursors in Windows VMs (boolean value)
+use_usb_tablet=<%= node["openstack"]["compute"]["config"]["use_usb_tablet"] %>
 
 # Migration target URI (any included "%s" is replaced with the
 # migration target hostname) (string value)
@@ -624,7 +626,9 @@ vif_driver=<%= node["openstack"]["compute"]["network"]["neutron"]["libvirt_vif_d
 # "host-model", otherwise it will default to "none" (string
 # value)
 # Deprecated group/name - [DEFAULT]/libvirt_cpu_mode
-<% if node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu" -%>
+<% if node["openstack"]["compute"]["libvirt"]["cpu_mode"] -%>
+cpu_mode=<%= node["openstack"]["compute"]["libvirt"]["cpu_mode"] %>
+<% elsif node["openstack"]["compute"]["libvirt"]["virt_type"] == "qemu" -%>
 cpu_mode=none
 <% end -%>
 

@@ -345,6 +345,13 @@ default['openstack']['compute']['libvirt']['live_migration_flag'] = 'VIR_MIGRATE
 default['openstack']['compute']['libvirt']['block_migration_flag'] = 'VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_NON_SHARED_INC'
 default['openstack']['compute']['libvirt']['live_migration_uri'] = 'qemu+tcp://%s/system'
 
+# Explicitly set the cpu_mode option under libvirt section
+# When this option is set, it will override all other logics related to cpu_mode
+default['openstack']['compute']['libvirt']['cpu_mode'] = nil
+
+# Sync virtual and real mouse cursors in Windows VMs (boolean value)
+default['openstack']['compute']['config']['use_usb_tablet'] = 'true'
+
 default['openstack']['compute']['config']['availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
 default['openstack']['compute']['config']['force_raw_images'] = false
@@ -581,6 +588,9 @@ when 'debian'
     'package_overrides' => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'"
   }
 end
+
+# Enable VNC related features (boolean value)
+default['openstack']['compute']['vnc']['enabled'] = 'true'
 
 # VNC keymap
 default['openstack']['compute']['vnc']['keymap'] = 'en-us'

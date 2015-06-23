@@ -542,6 +542,7 @@ describe 'openstack-compute::nova-common' do
 
         [/^vncserver_listen=127.0.1.1$/,
          /^vncserver_proxyclient_address=127.0.1.1$/,
+         /^vnc_enabled=true$/,
          /^vnc_keymap=en-us$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
@@ -600,6 +601,11 @@ describe 'openstack-compute::nova-common' do
         chef_run.node.set['openstack']['compute']['config']['disk_cachemodes'] = 'disk:writethrough'
         expect(chef_run).to render_config_file(file.name)\
           .with_section_content('libvirt', /^disk_cachemodes=disk:writethrough$/)
+      end
+
+      it 'has use_usb_tablet setting' do
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('libvirt', /^use_usb_tablet=true$/)
       end
 
       it 'has keymgr api_class attribute default set' do
@@ -885,13 +891,15 @@ describe 'openstack-compute::nova-common' do
             node.set['openstack']['compute']['libvirt']['images_type'] = 'lvm'
             node.set['openstack']['compute']['libvirt']['volume_group'] = 'instances'
             node.set['openstack']['compute']['libvirt']['sparse_logical_volumes'] = true
+            node.set['openstack']['compute']['libvirt']['cpu_mode'] = 'none'
           end
 
           it 'sets the overridden lvm options correctly' do
             [
               /^images_type=lvm$/,
               /^images_volume_group=instances$/,
-              /^sparse_logical_volumes=true$/
+              /^sparse_logical_volumes=true$/,
+              /^cpu_mode=none$/
             ].each do |line|
               expect(chef_run).to render_config_file(file.name)\
                 .with_section_content('libvirt', line)
