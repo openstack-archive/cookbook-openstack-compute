@@ -602,6 +602,20 @@ describe 'openstack-compute::nova-common' do
           .with_section_content('libvirt', /^disk_cachemodes=disk:writethrough$/)
       end
 
+      it 'has keymgr api_class attribute default set' do
+        expect(chef_run).to render_config_file(file.name).with_section_content('keymgr', /^api_class=nova.keymgr.conf_key_mgr.ConfKeyManager$/)
+      end
+
+      it 'does not have keymgr attribute fixed_key set by default' do
+        expect(chef_run).not_to render_file(file.name).with_content(/^fixed_key=$/)
+      end
+
+      it 'allow override for keymgr attribute fixed_key' do
+        chef_run.node.set['openstack']['compute']['keymgr']['fixed_key'] = '1111111111111111111111111111111111111111111111111111111111111111'
+        expect(chef_run).to render_config_file(file.name)\
+          .with_section_content('keymgr', /^fixed_key=1111111111111111111111111111111111111111111111111111111111111111$/)
+      end
+
       context 'metering' do
         describe 'metering disabled' do
           it 'leaves default audit options' do

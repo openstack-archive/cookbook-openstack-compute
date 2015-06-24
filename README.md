@@ -295,6 +295,12 @@ Bare Metal Configuration Attributes
   `openstack['compute']['config']['reserved_host_memory_mb']`
 * `openstack['compute']['scheduler']['baremetal_default_filters']` A list of filters enabled for baremetal schedulers that support them.
 
+Keymgr Configuration Attributes
+-------------------------------
+
+* `openstack["compute"]["keymgr"]["api_class"] - the full class name of the key manager API class.
+* `openstack["compute"]["keymgr"]["fixed_key"] - the fixed key returned by key manager, specified in hex (string value).
+
 Scheduler Configuration Attributes
 ----------------------------------
 

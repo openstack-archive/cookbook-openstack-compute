@@ -634,6 +634,10 @@ default['openstack']['compute']['vmware']['integration_bridge'] = 'br-int'
 default['openstack']['compute']['bare-metal']['admin_username'] = 'ironic'
 default['openstack']['compute']['bare-metal']['admin_tenant_name'] = 'service'
 
+# Keymgr options
+default['openstack']['compute']['keymgr']['api_class'] = 'nova.keymgr.conf_key_mgr.ConfKeyManager'
+default['openstack']['compute']['keymgr']['fixed_key'] = nil
+
 # Boolean to decide whether to use baremetal_scheduler_default_filters or not.
 default['openstack']['compute']['scheduler']['use_baremetal_filters'] = false
 

@@ -798,6 +798,23 @@ admin_url=<%= @identity_endpoint.to_s %>
 # Ironic keystone tenant name. (string value)
 admin_tenant_name=<%= node['openstack']['compute']['bare-metal']['admin_tenant_name'] %>
 
+[keymgr]
+
+#
+#Options defined in nova.keymgr
+#
+
+#The full class name of the key manager API class (string value)
+api_class=<%= node["openstack"]["compute"]["keymgr"]["api_class"] %>
+
+#
+# Options defined in nova.keymgr.conf_key_mgr
+#
+
+# Fixed key returned by key manager, specified in hex (string value)
+<% if node["openstack"]["compute"]["keymgr"]["fixed_key"] -%>
+fixed_key=<%= node["openstack"]["compute"]["keymgr"]["fixed_key"] %>
+<% end -%>
 
 [oslo_concurrency]
 
