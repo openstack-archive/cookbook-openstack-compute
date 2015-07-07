@@ -710,3 +710,9 @@ default['openstack']['compute']['docker']['service_sock'] = '/var/run/docker.soc
 default['openstack']['compute']['docker']['service_sock_mode'] = 666
 # Docker group which will be created and added with openstack compute user
 default['openstack']['compute']['docker']['group'] = 'docker'
+
+# Serial console configurations
+# Enable serial console related features
+default['openstack']['compute']['serial_console']['enable'] = 'False'
+# Range of TCP ports to use for serial ports on compute hosts
+default['openstack']['compute']['serial_console']['port_range'] = '10000:20000'

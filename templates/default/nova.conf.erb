@@ -947,3 +947,21 @@ filesystems=node['openstack']['compute']['image']['filesystems'].join(',')
 <%     end %>
 <%   end %>
 <% end %>
+
+[serial_console]
+
+#
+# Serial console configuration
+#
+
+# Enable serial console related features
+enabled=<%= node['openstack']['compute']['serial_console']['enable'] %>
+
+# Location of serial console proxy
+base_url=<%= @serial_console_base_url %>
+
+# Range of TCP ports to use for serial ports on compute hosts
+port_range=<%= node['openstack']['compute']['serial_console']['port_range'] %>
+
+# The address to which proxy clients (like nova-serialproxy) should connect
+proxyclient_address=<%= @serial_console_proxyclient_address %>

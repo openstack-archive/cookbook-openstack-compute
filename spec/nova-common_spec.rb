@@ -948,6 +948,39 @@ describe 'openstack-compute::nova-common' do
           end
         end
       end
+
+      context 'serial console' do
+        it 'sets default serial console options set' do
+          [
+            /^enabled=False$/,
+            %r{base_url=ws://127.0.0.1:6083/$},
+            /^port_range=10000:20000$/,
+            /^proxyclient_address=127.0.0.1$/
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('serial_console', line)
+          end
+        end
+
+        it 'sets overide serial console options set' do
+          node.set['openstack']['endpoints']['compute-serial-console-bind']['bind_interface'] = 'lo'
+          node.set['openstack']['endpoints']['compute-serial-proxy']['scheme'] = 'wss'
+          node.set['openstack']['endpoints']['compute-serial-proxy']['host'] = '1.1.1.1'
+          node.set['openstack']['endpoints']['compute-serial-proxy']['port'] = '6082'
+          node.set['openstack']['compute']['serial_console']['enable'] = 'True'
+          node.set['openstack']['compute']['serial_console']['port_range'] = '11000:15000'
+
+          [
+            /^enabled=True$/,
+            %r{base_url=wss://1.1.1.1:6082/$},
+            /^port_range=11000:15000$/,
+            /^proxyclient_address=127.0.1.1$/
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('serial_console', line)
+          end
+        end
+      end
     end
 
     describe 'rootwrap.conf' do

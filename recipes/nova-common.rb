@@ -105,6 +105,8 @@ compute_api_endpoint = internal_endpoint 'compute-api' || {}
 compute_metadata_api_bind = endpoint 'compute-metadata-api-bind' || {}
 ec2_api_bind = endpoint 'compute-ec2-api-bind' || {}
 ec2_public_endpoint = public_endpoint 'compute-ec2-api' || {}
+serial_console_bind = endpoint 'compute-serial-console-bind' || {}
+serial_proxy_endpoint = endpoint 'compute-serial-proxy' || {}
 network_endpoint = internal_endpoint 'network-api' || {}
 image_endpoint = internal_endpoint 'image-api'
 ironic_endpoint = internal_endpoint 'bare-metal-api'
@@ -175,7 +177,9 @@ template '/etc/nova/nova.conf' do
     identity_admin_endpoint: identity_admin_endpoint,
     ironic_endpoint: ironic_endpoint,
     ironic_admin_password: ironic_admin_password,
-    service_pass: service_pass
+    service_pass: service_pass,
+    serial_console_base_url: serial_proxy_endpoint.to_s,
+    serial_console_proxyclient_address: serial_console_bind.host
   )
 end
 
