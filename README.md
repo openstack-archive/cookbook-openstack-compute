@@ -87,6 +87,11 @@ vncproxy
 - Includes recipe `nova-common`
 - Installs and configures the vncproxy service for console access to VMs
 
+serialproxy
+----
+- Includes recipe `nova-common`
+- Installs and configures the serialproxy service for serial console access to VMs
+
 Attributes
 ==========
 

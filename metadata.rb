@@ -4,7 +4,7 @@ maintainer_email 'opscode-chef-openstack@googlegroups.com'
 license 'Apache 2.0'
 description 'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '11.0.0'
+version '11.1.0'
 
 recipe 'openstack-compute::api-ec2', 'Installs AWS EC2 compatible API'
 recipe 'openstack-compute::api-metadata', 'Installs the nova metadata package'
@@ -21,6 +21,7 @@ recipe 'openstack-compute::nova-common', 'Builds the basic nova.conf config file
 recipe 'openstack-compute::nova-setup', 'Sets up the nova database on the mysql server, including the initial schema and subsequent creation of the appropriate networks'
 recipe 'openstack-compute::scheduler', 'Installs nova scheduler service'
 recipe 'openstack-compute::vncproxy', 'Installs and configures the vncproxy service for console access to VMs'
+recipe 'openstack-compute::serialproxy', 'Installs and configures the serialproxy service for serial console access to VMs'
 
 %w(ubuntu fedora redhat centos suse).each do |os|
   supports os
