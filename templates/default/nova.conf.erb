@@ -939,7 +939,7 @@ rabbit_port=<%= node["openstack"]["mq"]["compute"]["rabbit"]["port"] %>
 # Image file url support, add new sections here
 <% if node['openstack']['compute']['image']['filesystems'] -%>
 [image_file_url]
-filesystems=node['openstack']['compute']['image']['filesystems'].join(',')
+filesystems=<%= node['openstack']['compute']['image']['filesystems'].keys.join(',') %>
 <%   node['openstack']['compute']['image']['filesystems'].each do |section, opts| %>
 [image_file_url:<%= section %>]
 <%     opts.each do |key, value| %>

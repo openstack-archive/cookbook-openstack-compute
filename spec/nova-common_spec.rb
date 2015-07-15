@@ -946,6 +946,9 @@ describe 'openstack-compute::nova-common' do
           ].each do |line|
             expect(chef_run).to render_config_file(file.name).with_section_content('image_file_url:another_fs', line)
           end
+
+          line = 'filesystems=some_fs,another_fs'
+          expect(chef_run).to render_config_file(file.name).with_section_content('image_file_url', line)
         end
       end
 
