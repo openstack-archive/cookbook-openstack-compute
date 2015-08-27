@@ -152,8 +152,6 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["rpc_thread_pool_size"]` - Size of RPC thread pool (default 64)
 * `openstack["compute"]["rpc_conn_pool_size"]` - Size of RPC connection pool (default 30)
 * `openstack["compute"]["rpc_response_timeout"]` - Seconds to wait for a response from call or multicall (default 60)
-TODO: Add DB2 support on other platforms
-* `openstack["compute"]["platform"]["db2_python_packages"]` - Array of DB2 python packages, only available on redhat platform
 * `openstack['compute']['api']['auth']['version']` - Select v2.0 or v3.0. Default v2.0. The auth API version used to interact with identity service.
 * `openstack['compute']['api']['auth']['memcached_servers']` - A list of memcached server(s) for caching
 * `openstack['compute']['api']['auth']['memcache_security_strategy']` - Whether token data should be authenticated or authenticated and encrypted. Acceptable values are MAC or ENCRYPT.

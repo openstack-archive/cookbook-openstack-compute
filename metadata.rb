@@ -1,10 +1,10 @@
 name 'openstack-compute'
 maintainer 'openstack-chef'
-maintainer_email 'opscode-chef-openstack@googlegroups.com'
+maintainer_email 'openstack-dev@lists.openstack.org'
 license 'Apache 2.0'
 description 'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '11.1.0'
+version '12.0.0'
 
 recipe 'openstack-compute::api-ec2', 'Installs AWS EC2 compatible API'
 recipe 'openstack-compute::api-metadata', 'Installs the nova metadata package'
@@ -28,10 +28,10 @@ recipe 'openstack-compute::serialproxy', 'Installs and configures the serialprox
 end
 
 depends 'ceph', '~> 0.8.0'
-depends 'openstack-bare-metal', '>= 11.0.0'
-depends 'openstack-common', '>= 11.5.0'
-depends 'openstack-identity', '>= 11.0.0'
-depends 'openstack-image', '>= 11.0.0'
-depends 'openstack-network', '>= 11.0.0'
+depends 'openstack-bare-metal', '>= 12.0.0'
+depends 'openstack-common', '>= 12.0.0'
+depends 'openstack-identity', '>= 12.0.0'
+depends 'openstack-image', '>= 12.0.0'
+depends 'openstack-network', '>= 12.0.0'
 depends 'selinux', '~> 0.9.0'
 depends 'python', '~> 1.4.6'

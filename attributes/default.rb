@@ -680,16 +680,16 @@ end
 # but release name alias are also supported.
 # options e.g.:
 # default['openstack']['compute']['upgrade_levels'] = {
-#                                                       'baseapi' => 'kilo',
-#                                                       'console' => 'kilo',
-#                                                       'consoleauth' => 'kilo',
-#                                                       'cert' => 'kilo',
-#                                                       'scheduler' => 'kilo',
-#                                                       'compute' => 'kilo',
-#                                                       'intercell' => 'kilo',
+#                                                       'baseapi' => 'liberty',
+#                                                       'console' => 'liberty',
+#                                                       'consoleauth' => 'liberty',
+#                                                       'cert' => 'liberty',
+#                                                       'scheduler' => 'liberty',
+#                                                       'compute' => 'liberty',
+#                                                       'intercell' => 'liberty',
 #                                                       'conductor' => '2.0',
 #                                                       'network' => '3.0',
-#                                                       'cells' => 'kilo'
+#                                                       'cells' => 'liberty'
 #                                                      }
 # choose the needed ones to set
 default['openstack']['compute']['upgrade_levels'] = nil

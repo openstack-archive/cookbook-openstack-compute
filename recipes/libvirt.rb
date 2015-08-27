@@ -31,7 +31,8 @@ platform_options['libvirt_packages'].each do |pkg|
 end
 
 def update_grub_default_kernel(flavor = 'default') # rubocop:disable MethodLength
-  default_boot, current_default = 0, nil
+  default_boot = 0
+  current_default =		 nil
 
   # parse menu.lst, to find boot index for selected flavor
   File.open('/boot/grub/menu.lst') do |f|

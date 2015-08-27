@@ -426,7 +426,7 @@ describe 'openstack-compute::nova-common' do
             [/^amqp_durable_queues=false$/, /^amqp_auto_delete=false$/,
              /^heartbeat_timeout_threshold=0$/, /^heartbeat_rate=2$/,
              /^rabbit_userid=guest$/, /^rabbit_password=mq-pass$/,
-             /^rabbit_virtual_host=\/$/, /^rabbit_host=127.0.0.1$/,
+             %r{^rabbit_virtual_host=/$}, /^rabbit_host=127.0.0.1$/,
              /^rabbit_max_retries=0$/, /^rabbit_retry_interval=1$/,
              /^rabbit_port=5672$/].each do |line|
               expect(chef_run).to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', line)
