@@ -984,6 +984,28 @@ describe 'openstack-compute::nova-common' do
           end
         end
       end
+
+      context 'set enabled_slave attribute' do
+        it 'sets overide database enabled_slave attribute as true' do
+          node.set['openstack']['endpoints']['db']['enabled_slave'] = true
+          node.set['openstack']['endpoints']['db']['slave_host'] = '10.10.1.1'
+          node.set['openstack']['endpoints']['db']['slave_port'] = '3326'
+          node.set['openstack']['db']['compute']['username'] = 'nova1'
+
+          expect(chef_run).to render_config_file(file.name)\
+            .with_section_content('database', %r{slave_connection=mysql://nova1:@10.10.1.1:3326/nova\?charset=utf8$})
+        end
+
+        it 'sets overide database enabled_slave attribute as false' do
+          node.set['openstack']['endpoints']['db']['enabled_slave'] = false
+          node.set['openstack']['endpoints']['db']['slave_host'] = '10.10.1.1'
+          node.set['openstack']['endpoints']['db']['slave_port'] = '3326'
+          node.set['openstack']['db']['compute']['username'] = 'nova1'
+
+          expect(chef_run).to_not render_config_file(file.name)\
+            .with_section_content('database', %r{slave_connection=mysql://nova1:@10.10.1.1:3326/nova\?charset=utf8$})
+        end
+      end
     end
 
     describe 'rootwrap.conf' do
