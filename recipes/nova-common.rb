@@ -77,6 +77,9 @@ end
 db_user = node['openstack']['db']['compute']['username']
 db_pass = get_password 'db', 'nova'
 sql_connection = db_uri('compute', db_user, db_pass)
+if node['openstack']['endpoints']['db']['enabled_slave']
+  slave_connection = db_uri('compute', db_user, db_pass, true)
+end
 
 mq_service_type = node['openstack']['mq']['compute']['service_type']
 
@@ -142,6 +145,7 @@ template '/etc/nova/nova.conf' do
   mode 00640
   variables(
     sql_connection: sql_connection,
+    slave_connection: slave_connection,
     novncproxy_base_url: novnc_endpoint.to_s,
     xvpvncproxy_base_url: xvpvnc_endpoint.to_s,
     xvpvncproxy_bind_host: xvpvnc_bind.host,

@@ -339,6 +339,9 @@ connection=<%= @sql_connection %>
 # The SQLAlchemy connection string to use to connect to the
 # slave database. (string value)
 #slave_connection=<None>
+<% if node['openstack']['endpoints']['db']['enabled_slave'] %>
+slave_connection=<%= @slave_connection %>
+<% end %>
 
 # The SQL mode to be used for MySQL sessions. This option,
 # including the default, overrides any server-set SQL mode. To
