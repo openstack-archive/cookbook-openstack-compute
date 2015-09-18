@@ -27,7 +27,7 @@ recipe 'openstack-compute::serialproxy', 'Installs and configures the serialprox
   supports os
 end
 
-depends 'ceph', '~> 0.8.0'
+depends 'ceph', '>= 0.8.1'
 depends 'openstack-bare-metal', '>= 12.0.0'
 depends 'openstack-common', '>= 12.0.0'
 depends 'openstack-identity', '>= 12.0.0'
