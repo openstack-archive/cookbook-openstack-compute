@@ -167,12 +167,6 @@ service 'libvirt-bin' do
   action [:enable, :start]
 end
 
-execute 'Disabling default libvirt network' do
-  command 'virsh net-autostart default --disable'
-
-  only_if 'virsh net-list | grep -q default'
-end
-
 execute 'Deleting default libvirt network' do
   command 'virsh net-destroy default'
 

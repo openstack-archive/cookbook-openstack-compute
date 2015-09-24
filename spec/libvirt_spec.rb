@@ -40,10 +40,6 @@ describe 'openstack-compute::libvirt' do
       expect(chef_run).to enable_service 'libvirt-bin'
     end
 
-    it 'disables default libvirt network' do
-      expect(chef_run).to run_execute('virsh net-autostart default --disable')
-    end
-
     it 'deletes default libvirt network' do
       expect(chef_run).to run_execute('virsh net-destroy default')
     end
