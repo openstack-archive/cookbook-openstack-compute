@@ -371,6 +371,7 @@ default['openstack']['compute']['config']['disk_allocation_ratio'] = 1.0
 default['openstack']['compute']['config']['snapshot_image_format'] = 'qcow2'
 default['openstack']['compute']['config']['allow_resize_to_same_host'] = false
 default['openstack']['compute']['config']['resize_confirm_window'] = 0
+default['openstack']['compute']['config']['heal_instance_info_cache_interval'] = 60
 default['openstack']['compute']['config']['reserved_host_disk_mb'] = 0
 default['openstack']['compute']['config']['reserved_host_memory_mb'] = 512
 # `start` will cause nova-compute to error out if a VM is already running, where

@@ -185,6 +185,8 @@ start_guests_on_host_boot=<%= node["openstack"]["compute"]["config"]["start_gues
 resume_guests_state_on_host_boot=<%= node["openstack"]["compute"]["config"]["resume_guests_state_on_host_boot"] %>
 allow_resize_to_same_host=<%= node["openstack"]["compute"]["config"]["allow_resize_to_same_host"] %>
 resize_confirm_window=<%= node["openstack"]["compute"]["config"]["resize_confirm_window"] %>
+# (IntOpt) Number of seconds between instance network information cache updates.
+heal_instance_info_cache_interval=<%= node['openstack']['compute']['config']['heal_instance_info_cache_interval'] %>
 live_migration_retry_count=<%= node["openstack"]["compute"]["config"]["live_migration_retry_count"] %>
 
 ##### QUOTAS #####

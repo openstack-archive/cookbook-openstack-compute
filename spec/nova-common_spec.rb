@@ -97,6 +97,11 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      it 'has default heal_instance_info_cache_interval set' do
+        line = 'heal_instance_info_cache_interval=60'
+        expect(chef_run).to render_file(file.name).with_content(/^#{line}$/)
+      end
+
       it 'has default ssl options set' do
         %w(ssl_only=false
            cert=self.pem
