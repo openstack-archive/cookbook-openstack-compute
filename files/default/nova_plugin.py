@@ -70,7 +70,7 @@ def get_stats(user, passwd, tenant, url):
 
         for server in server_list:
             flavor = client.flavors.get(int(server.flavor["id"]))
-            tenant_uuid = keystone.tenants.get(server.tenant_id).name
+            tenant_uuid = keystone.tenants.get(server.project_id).name
             data["%s.tenant.%s.count" % (prefix,tenant_uuid)] += 1
             for counter in counters:
                 data["%s.total.%s" % (prefix,counter)] += int(flavor.__getattribute__(counter))
