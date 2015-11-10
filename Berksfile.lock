@@ -1,0 +1,93 @@
+DEPENDENCIES
+  openstack-bare-metal
+    git: git://github.com/openstack/cookbook-openstack-bare-metal.git
+    revision: 4d2c7e12a8a08dfba67d0af46ea1cf5753a6b5dd
+    branch: stable/liberty
+  openstack-common
+    git: git://github.com/openstack/cookbook-openstack-common.git
+    revision: 42214704acfc26c6ac0ac1b21d38b8693fd7f68c
+    branch: stable/liberty
+  openstack-compute
+    path: .
+    metadata: true
+  openstack-identity
+    git: git://github.com/openstack/cookbook-openstack-identity.git
+    revision: 98030c26e065f39c545db48bc36414a15e9bd83d
+    branch: stable/liberty
+  openstack-image
+    git: git://github.com/openstack/cookbook-openstack-image.git
+    revision: a2bbb0bd87cfa16764bbf781e6ed1d677c9681f2
+    branch: stable/liberty
+  openstack-network
+    git: git://github.com/openstack/cookbook-openstack-network.git
+    revision: 94596e7aa4e8d29258e9e0f04c675182e1c0fdd3
+    branch: stable/liberty
+
+GRAPH
+  apache2 (3.1.0)
+  apt (2.9.2)
+  build-essential (2.2.4)
+  ceph (0.9.2)
+    apache2 (>= 1.1.12)
+    apt (>= 0.0.0)
+    yum (>= 3.0)
+    yum-epel (>= 0.0.0)
+  chef-sugar (3.1.1)
+  database (4.0.9)
+    postgresql (>= 1.0.0)
+  galera (0.4.1)
+  mariadb (0.3.1)
+    apt (>= 0.0.0)
+    yum (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  mysql (6.0.31)
+    smf (>= 0.0.0)
+    yum-mysql-community (>= 0.0.0)
+  openssl (4.4.0)
+    chef-sugar (>= 3.1.1)
+  openstack-bare-metal (12.0.0)
+    openstack-common (>= 12.0.0)
+    openstack-identity (>= 12.0.0)
+  openstack-common (12.0.0)
+    apt (~> 2.8)
+    database (~> 4.0.2)
+    galera (~> 0.4.1)
+    mariadb (~> 0.3.1)
+    mysql (~> 6.0.13)
+    yum (~> 3.5.4)
+    yum-epel (~> 0.6.0)
+  openstack-compute (12.0.0)
+    ceph (>= 0.8.1)
+    openstack-bare-metal (>= 12.0.0)
+    openstack-common (>= 12.0.0)
+    openstack-identity (>= 12.0.0)
+    openstack-image (>= 12.0.0)
+    openstack-network (>= 12.0.0)
+    python (~> 1.4.6)
+    selinux (~> 0.9.0)
+  openstack-identity (12.0.0)
+    apache2 (~> 3.1.0)
+    openstack-common (>= 12.0.0)
+  openstack-image (12.0.0)
+    ceph (>= 0.8.1)
+    openstack-common (>= 12.0.0)
+    openstack-identity (>= 12.0.0)
+  openstack-network (12.0.0)
+    openstack-common (>= 12.0.0)
+    openstack-identity (>= 12.0.0)
+  postgresql (3.4.21)
+    apt (>= 1.9.0)
+    build-essential (>= 0.0.0)
+    openssl (~> 4.0)
+  python (1.4.6)
+    build-essential (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  rbac (1.0.3)
+  selinux (0.9.0)
+  smf (2.2.7)
+    rbac (>= 1.0.1)
+  yum (3.5.4)
+  yum-epel (0.6.4)
+    yum (~> 3.2)
+  yum-mysql-community (0.1.19)
+    yum (>= 3.2)
