@@ -292,6 +292,11 @@ compute_monitors=<%= node["openstack"]["compute"]["config"]["compute_monitors"].
 iscsi_helper=<%= @iscsi_helper %>
 volume_api_class=<%= node["openstack"]["compute"]["config"]["volume_api_class"] %>
 
+# Number of times to retry block device allocation on failures
+block_device_allocate_retries=<%= node["openstack"]["compute"]["config"]["block_device_allocate_retries"]%>
+# Waiting time interval (seconds) between block device allocation on failures
+block_device_allocate_retries_interval=<%= node["openstack"]["compute"]["config"]["block_device_allocate_retries_interval"]%>
+
 # Override the default dnsmasq settings with this file (String value)
 dnsmasq_config_file=<%= node['openstack']['compute']['dnsmasq_config_file'] %>
 
