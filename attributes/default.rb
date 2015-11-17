@@ -392,6 +392,10 @@ default['openstack']['compute']['config']['flat_injected'] = false
 # Volume API class (driver)
 default['openstack']['compute']['config']['volume_api_class'] = 'nova.volume.cinder.API'
 
+# Volume configuation option
+default['openstack']['compute']['config']['block_device_allocate_retries'] = 60
+default['openstack']['compute']['config']['block_device_allocate_retries_interval'] = 3
+
 # Cinder options
 # Location of ca certificates file to use for cinder client requests.
 default['openstack']['compute']['block-storage']['cinder_cafile'] = nil

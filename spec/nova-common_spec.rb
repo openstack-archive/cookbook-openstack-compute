@@ -177,6 +177,13 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to render_file(file.name).with_content(line)
       end
 
+      it 'has default block_device_allocate_retries set' do
+        [/^block_device_allocate_retries=60$/,
+         /^block_device_allocate_retries_interval=3$/].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('DEFAULT', line)
+        end
+      end
+
       it 'has default resize_confirm_window set' do
         line = /^resize_confirm_window=0$/
         expect(chef_run).to render_file(file.name).with_content(line)
