@@ -31,11 +31,6 @@ describe 'openstack-compute::compute' do
       expect(chef_run).to upgrade_package('openstack-nova-compute')
     end
 
-    it 'upgrades nfs client package' do
-      expect(chef_run).to upgrade_package('nfs-utils')
-      expect(chef_run).to upgrade_package('nfs-utils-lib')
-    end
-
     it 'starts nova compute on boot' do
       expected = 'openstack-nova-compute'
       expect(chef_run).to enable_service(expected)

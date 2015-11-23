@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe
   include ::Openstack
 end
 
@@ -34,17 +34,8 @@ end
 platform_options['api_ec2_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
-end
-
-service 'nova-api-ec2' do
-  service_name platform_options['api_ec2_service']
-  supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-
-  action :enable
 end
 
 template '/etc/nova/api-paste.ini' do
@@ -52,5 +43,14 @@ template '/etc/nova/api-paste.ini' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 00644
-  notifies :restart, 'service[nova-api-ec2]'
+end
+
+service 'nova-api-ec2' do
+  service_name platform_options['api_ec2_service']
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, [
+    'template[/etc/nova/nova.conf]',
+    'template[/etc/nova/api-paste.ini]'
+  ]
 end

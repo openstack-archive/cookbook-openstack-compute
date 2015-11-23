@@ -6,24 +6,24 @@
 [DEFAULT]
 # List of directories to load filter definitions from (separated by ',').
 # These directories MUST all be only writeable by root !
-filters_path=<%= node['openstack']['compute']['rootwrap']['filters_path'] %>
+filters_path = <%= node['openstack']['compute']['rootwrap']['filters_path'] %>
 
 # List of directories to search executables in, in case filters do not
 # explicitely specify a full path (separated by ',')
 # If not specified, defaults to system PATH environment variable.
 # These directories MUST all be only writeable by root !
-exec_dirs=<%= node['openstack']['compute']['rootwrap']['exec_dirs'] %>
+exec_dirs = <%= node['openstack']['compute']['rootwrap']['exec_dirs'] %>
 
 # Enable logging to syslog
 # Default value is False
-use_syslog=<%= node['openstack']['compute']['rootwrap']['use_syslog'] %>
+use_syslog = <%= node['openstack']['compute']['rootwrap']['use_syslog'] %>
 
 # Which syslog facility to use.
 # Valid values include auth, authpriv, syslog, local0, local1...
 # Default value is 'syslog'
-syslog_log_facility=<%= node['openstack']['compute']['rootwrap']['syslog_log_facility'] %>
+syslog_log_facility = <%= node['openstack']['compute']['rootwrap']['syslog_log_facility'] %>
 
 # Which messages to log.
 # INFO means log all usage
 # ERROR means only log unsuccessful attempts
-syslog_log_level=<%= node['openstack']['compute']['rootwrap']['syslog_log_level'] %>
+syslog_log_level = <%= node['openstack']['compute']['rootwrap']['syslog_log_level'] %>

@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe
   include ::Openstack
 end
 
@@ -26,7 +26,7 @@ include_recipe 'openstack-compute::nova-common'
 
 platform_options = node['openstack']['compute']['platform']
 
-directory ::File.dirname(node['openstack']['compute']['api']['auth']['cache_dir']) do
+directory ::File.dirname(node['openstack']['compute']['conf']['keystone_authtoken']['signing_dir']) do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 00700
@@ -40,17 +40,8 @@ end
 platform_options['api_os_compute_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
-end
-
-service 'nova-api-os-compute' do
-  service_name platform_options['api_os_compute_service']
-  supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-
-  action [:enable, :start]
 end
 
 template '/etc/nova/api-paste.ini' do
@@ -58,5 +49,14 @@ template '/etc/nova/api-paste.ini' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 00644
-  notifies :restart, 'service[nova-api-os-compute]'
+end
+
+service 'nova-api-os-compute' do
+  service_name platform_options['api_os_compute_service']
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, [
+    'template[/etc/nova/nova.conf]',
+    'template[/etc/nova/api-paste.ini]'
+  ]
 end

@@ -26,7 +26,6 @@ platform_options = node['openstack']['compute']['platform']
 platform_options['compute_vncproxy_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end
@@ -43,15 +42,13 @@ proxy_service = platform_options['compute_vncproxy_service']
 service proxy_service do
   service_name proxy_service
   supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'nova-consoleauth' do
   service_name platform_options['compute_vncproxy_consoleauth_service']
   supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end

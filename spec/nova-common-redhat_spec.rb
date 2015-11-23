@@ -23,15 +23,5 @@ describe 'openstack-compute::nova-common' do
     it 'upgrades memcache python packages' do
       expect(chef_run).to upgrade_package 'python-memcached'
     end
-
-    describe 'nova.conf' do
-      let(:file) { chef_run.template('/etc/nova/nova.conf') }
-
-      [/^ec2_private_dns_show_ip=True$/, /^force_dhcp_release=false$/].each do |content|
-        it "has a #{content.source[1...-1]} line" do
-          expect(chef_run).to render_file(file.name).with_content(content)
-        end
-      end
-    end
   end
 end

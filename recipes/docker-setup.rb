@@ -32,7 +32,6 @@ pip_build_pkgs = node['openstack']['compute']['docker']['pip_build_pkgs']
 platform_options['docker_build_pkgs'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end
@@ -47,7 +46,7 @@ end
 # Below code downloads docker driver from configured git repo and branch
 github_repository = node['openstack']['compute']['docker']['github']['repository']
 github_branch =   node['openstack']['compute']['docker']['github']['branch']
-git_download_directory  = "#{Chef::Config['file_cache_path']}/nova-docker"
+git_download_directory = "#{Chef::Config['file_cache_path']}/nova-docker"
 
 git git_download_directory do
   repository github_repository

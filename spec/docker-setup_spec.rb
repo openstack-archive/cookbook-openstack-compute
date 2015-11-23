@@ -6,7 +6,7 @@ describe 'openstack-compute::docker-setup' do
   describe 'ubuntu' do
     let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
-    let(:chef_run) { runner.converge(described_recipe) }
+    cached(:chef_run) { runner.converge(described_recipe) }
 
     it 'runs a run python pip setuptools' do
       expect(chef_run).to upgrade_python_pip('setuptools')

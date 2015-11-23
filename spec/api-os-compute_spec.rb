@@ -13,6 +13,7 @@ describe 'openstack-compute::api-os-compute' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_upgrades_python_keystoneclient'
+    include_examples 'expect_creates_api_paste_template'
 
     it 'creates the /var/cache/nova directory' do
       expect(chef_run).to create_directory('/var/cache/nova').with(
@@ -33,7 +34,10 @@ describe 'openstack-compute::api-os-compute' do
     it 'starts openstack api now' do
       expect(chef_run).to start_service 'nova-api-os-compute'
     end
-
-    expect_creates_api_paste 'service[nova-api-os-compute]'
+    it do
+      template = chef_run.template('/etc/nova/api-paste.ini')
+      expect(template).to notify('service[nova-api-os-compute]').to(:restart)
+    end
+    # expect_creates_api_paste 'service[nova-api-os-compute]'
   end
 end

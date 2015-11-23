@@ -25,7 +25,6 @@ platform_options = node['openstack']['compute']['platform']
 platform_options['compute_cert_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end
@@ -33,7 +32,6 @@ end
 service 'nova-cert' do
   service_name platform_options['compute_cert_service']
   supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-
-  action :enable
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end

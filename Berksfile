@@ -2,8 +2,6 @@ source "https://supermarket.chef.io"
 
 metadata
 
-cookbook "openstack-bare-metal",
-  github: "openstack/cookbook-openstack-bare-metal"
 cookbook "openstack-image",
   github: "openstack/cookbook-openstack-image"
 cookbook "openstack-identity",

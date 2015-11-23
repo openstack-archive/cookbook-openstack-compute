@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe
   include ::Openstack
 end
 
@@ -28,41 +28,20 @@ if node['openstack']['compute']['docker']['enable']
 end
 
 include_recipe 'openstack-compute::nova-common'
-if node['openstack']['compute']['enabled_apis'].include?('metadata')
-  Chef::Log.warn('Attribute enabled_apis contains metadata, this '\
-                 'could result in a timing issue starting the service. '\
-                 'Please remove this value and include the api-metadata '\
-                 'recipe instead')
-end
-include_recipe 'openstack-compute::network'
-
 platform_options = node['openstack']['compute']['platform']
 
 platform_options['compute_compute_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end
 
-virt_type = node['openstack']['compute']['libvirt']['virt_type']
+virt_type = node['openstack']['compute']['conf']['libvirt']['virt_type']
 
 platform_options["#{virt_type}_compute_packages"].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
-    action :upgrade
-  end
-end
-
-# Installing nfs client packages because in grizzly, cinder nfs is supported
-# Never had to install iscsi packages because nova-compute package depends it
-# So volume-attach 'just worked' before - alop
-platform_options['nfs_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-
     action :upgrade
   end
 end
@@ -71,19 +50,18 @@ end
 platform_options['volume_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end
 
+# TODO: (jklare) this has to be refactored!!!
 cookbook_file '/etc/nova/nova-compute.conf' do
   source 'nova-compute.conf'
   mode 00644
-
   action :create
 end
 
-directory node['openstack']['compute']['instances_path'] do
+directory node['openstack']['compute']['conf']['DEFAULT']['instances_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 00755
@@ -93,7 +71,7 @@ end
 include_recipe 'openstack-compute::libvirt'
 
 docker_filter_source_path = node['openstack']['compute']['docker']['filter_source_path']
-install_directory  = "#{Chef::Config['file_cache_path']}/nova-docker"
+install_directory = "#{Chef::Config['file_cache_path']}/nova-docker"
 docker_group = node['openstack']['compute']['docker']['group']
 docker_group_members = node['openstack']['compute']['service_user']
 filter_target_path = docker_filter_source_path + '/docker.filters'
@@ -118,8 +96,9 @@ end
 service 'nova-compute' do
   service_name platform_options['compute_compute_service']
   supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-  subscribes :restart, resources('file[docker.filter]')
-
   action [:enable, :start]
+  subscribes :restart, [
+    'template[/etc/nova/nova.conf]',
+    'file[docker.filter]'
+  ]
 end

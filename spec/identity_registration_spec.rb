@@ -72,84 +72,17 @@ describe 'openstack-compute::identity_registration' do
         )
       end
 
-      it 'with different admin URL' do
-        admin_url = 'https://admin.host:123/admin_path'
-        general_url = 'http://general.host:456/general_path'
-
-        # Set the general endpoint
-        node.set['openstack']['endpoints']['compute-api']['uri'] = general_url
-        # Set the admin endpoint override
-        node.set['openstack']['endpoints']['admin']['compute-api']['uri'] = admin_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register Compute Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'compute',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: admin_url,
-          endpoint_internalurl: general_url,
-          endpoint_publicurl: general_url
-        )
-      end
-
-      it 'with different public URL' do
-        public_url = 'https://public.host:789/public_path'
-        general_url = 'http://general.host:456/general_path'
-
-        # Set the general endpoint
-        node.set['openstack']['endpoints']['compute-api']['uri'] = general_url
-        # Set the public endpoint override
-        node.set['openstack']['endpoints']['public']['compute-api']['uri'] = public_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register Compute Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'compute',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: general_url,
-          endpoint_internalurl: general_url,
-          endpoint_publicurl: public_url
-        )
-      end
-
-      it 'with different internal URL' do
-        internal_url = 'http://internal.host:456/internal_path'
-        general_url = 'http://general.host:456/general_path'
-
-        # Set the general endpoint
-        node.set['openstack']['endpoints']['compute-api']['uri'] = general_url
-        # Set the internal endpoint override
-        node.set['openstack']['endpoints']['internal']['compute-api']['uri'] = internal_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register Compute Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'compute',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: general_url,
-          endpoint_internalurl: internal_url,
-          endpoint_publicurl: general_url
-        )
-      end
-
-      it 'with different URLs for all endpoints' do
-        admin_url = 'https://admin.host:123/admin_path'
+      it 'register endpoint with all different URLs' do
         public_url = 'https://public.host:789/public_path'
         internal_url = 'http://internal.host:456/internal_path'
+        admin_url = 'https://admin.host:123/admin_path'
+        node.set['openstack']['endpoints']['compute-api']['public']['uri'] = public_url
+        node.set['openstack']['endpoints']['compute-api']['internal']['uri'] = internal_url
+        node.set['openstack']['endpoints']['compute-api']['admin']['uri'] = admin_url
 
-        node.set['openstack']['endpoints']['admin']['compute-api']['uri'] = admin_url
-        node.set['openstack']['endpoints']['internal']['compute-api']['uri'] = internal_url
-        node.set['openstack']['endpoints']['public']['compute-api']['uri'] = public_url
         expect(chef_run).to create_endpoint_openstack_identity_register(
           'Register Compute Endpoint'
         ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'compute',
-          endpoint_region: 'RegionOne',
           endpoint_adminurl: admin_url,
           endpoint_internalurl: internal_url,
           endpoint_publicurl: public_url
@@ -157,7 +90,7 @@ describe 'openstack-compute::identity_registration' do
       end
 
       it 'with custom region override' do
-        node.set['openstack']['compute']['region'] = 'computeRegion'
+        node.set['openstack']['region'] = 'computeRegion'
         expect(chef_run).to create_endpoint_openstack_identity_register(
           'Register Compute Endpoint'
         ).with(endpoint_region: 'computeRegion')
@@ -191,80 +124,14 @@ describe 'openstack-compute::identity_registration' do
         )
       end
 
-      it 'with different admin URL' do
-        admin_url = 'https://admin.host:123/admin_path'
-        general_url = 'http://general.host:456/general_path'
-
-        # Set the general endpoint
-        node.set['openstack']['endpoints']['compute-ec2-api']['uri'] = general_url
-        node.set['openstack']['endpoints']['compute-ec2-admin']['uri'] = general_url
-        # Set the admin endpoint override
-        node.set['openstack']['endpoints']['admin']['compute-ec2-admin']['uri'] = admin_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'ec2',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: admin_url,
-          endpoint_internalurl: general_url,
-          endpoint_publicurl: general_url
-        )
-      end
-
-      it 'with different public URL' do
-        public_url = 'https://public.host:789/public_path'
-        general_url = 'http://general.host:456/general_path'
-
-        # Set the general endpoint
-        node.set['openstack']['endpoints']['compute-ec2-api']['uri'] = general_url
-        node.set['openstack']['endpoints']['compute-ec2-admin']['uri'] = general_url
-        # Set the public endpoint override
-        node.set['openstack']['endpoints']['public']['compute-ec2-api']['uri'] = public_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'ec2',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: general_url,
-          endpoint_internalurl: general_url,
-          endpoint_publicurl: public_url
-        )
-      end
-
-      it 'with different internal URL' do
-        internal_url = 'http://internal.host:456/internal_path'
-        general_url = 'http://general.host:456/general_path'
-
-        # Set the general endpoint
-        node.set['openstack']['endpoints']['compute-ec2-api']['uri'] = general_url
-        node.set['openstack']['endpoints']['compute-ec2-admin']['uri'] = general_url
-        # Set the internal endpoint override
-        node.set['openstack']['endpoints']['internal']['compute-ec2-api']['uri'] = internal_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'ec2',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: general_url,
-          endpoint_internalurl: internal_url,
-          endpoint_publicurl: general_url
-        )
-      end
-
       it 'with different URLs for all endpoints' do
         admin_url = 'https://admin.host:123/admin_path'
         public_url = 'https://public.host:789/public_path'
         internal_url = 'http://internal.host:456/internal_path'
 
-        node.set['openstack']['endpoints']['admin']['compute-ec2-admin']['uri'] = admin_url
-        node.set['openstack']['endpoints']['internal']['compute-ec2-api']['uri'] = internal_url
-        node.set['openstack']['endpoints']['public']['compute-ec2-api']['uri'] = public_url
+        node.set['openstack']['endpoints']['compute-ec2']['admin']['uri'] = admin_url
+        node.set['openstack']['endpoints']['compute-ec2-api']['internal']['uri'] = internal_url
+        node.set['openstack']['endpoints']['compute-ec2-api']['public']['uri'] = public_url
         expect(chef_run).to create_endpoint_openstack_identity_register(
           'Register EC2 Endpoint'
         ).with(
@@ -279,7 +146,7 @@ describe 'openstack-compute::identity_registration' do
       end
 
       it 'with customer region override' do
-        node.set['openstack']['compute']['region'] = 'ec2Region'
+        node.set['openstack']['region'] = 'ec2Region'
         expect(chef_run).to create_endpoint_openstack_identity_register(
           'Register EC2 Endpoint'
         ).with(endpoint_region: 'ec2Region')
@@ -288,7 +155,7 @@ describe 'openstack-compute::identity_registration' do
 
     describe "when 'ec2' is not in the list of enabled_apis" do
       before do
-        node.set['openstack']['compute']['enabled_apis'] = 'osapi_compute'
+        node.set['openstack']['compute']['conf']['DEFAULT']['enabled_apis'] = 'osapi_compute'
       end
 
       it 'does not register ec2 service' do

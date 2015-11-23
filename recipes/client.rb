@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe
   include ::Openstack
 end
 
@@ -26,7 +26,6 @@ platform_options = node['openstack']['compute']['platform']
 platform_options['compute_client_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end

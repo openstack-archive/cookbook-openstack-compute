@@ -21,27 +21,27 @@
 
 require 'uri'
 
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe
   include ::Openstack
 end
 
-identity_admin_endpoint = admin_endpoint 'identity-admin'
+identity_admin_endpoint = admin_endpoint 'identity'
 bootstrap_token = get_password 'token', 'openstack_identity_bootstrap_token'
 auth_uri = ::URI.decode identity_admin_endpoint.to_s
 service_pass = get_password 'service', 'openstack-compute'
-service_user = node['openstack']['compute']['service_user']
+service_user = node['openstack']['compute']['conf']['keystone_authtoken']['username']
 service_role = node['openstack']['compute']['service_role']
-service_tenant_name = node['openstack']['compute']['service_tenant_name']
+service_tenant_name = node['openstack']['compute']['conf']['keystone_authtoken']['tenant_name']
 public_nova_api_endpoint = public_endpoint 'compute-api'
 admin_nova_api_endpoint = admin_endpoint 'compute-api'
 internal_nova_api_endpoint = internal_endpoint 'compute-api'
 # TBD, another clean up opportunity. We could use the 'admin', and
 # 'internal' endpoints for a single service name. For now, we'll
 # leave the old names in place.
-ec2_admin_endpoint = admin_endpoint 'compute-ec2-admin'
+ec2_admin_endpoint = admin_endpoint 'compute-ec2'
 ec2_public_endpoint = public_endpoint 'compute-ec2-api'
 ec2_internal_endpoint = internal_endpoint 'compute-ec2-api'
-region = node['openstack']['compute']['region']
+region = node['openstack']['region']
 
 # Register Service Tenant
 openstack_identity_register 'Register Service Tenant' do
@@ -49,7 +49,6 @@ openstack_identity_register 'Register Service Tenant' do
   bootstrap_token bootstrap_token
   tenant_name service_tenant_name
   tenant_description 'Service Tenant'
-
   action :create_tenant
 end
 
@@ -60,7 +59,6 @@ openstack_identity_register 'Register Service User' do
   tenant_name service_tenant_name
   user_name service_user
   user_pass service_pass
-
   action :create_user
 end
 
@@ -71,7 +69,6 @@ openstack_identity_register "Grant 'admin' Role to Service User for Service Tena
   tenant_name service_tenant_name
   user_name service_user
   role_name service_role
-
   action :grant_role
 end
 
@@ -82,7 +79,6 @@ openstack_identity_register 'Register Compute Service' do
   service_name 'nova'
   service_type 'compute'
   service_description 'Nova Compute Service'
-
   action :create_service
 end
 
@@ -95,11 +91,10 @@ openstack_identity_register 'Register Compute Endpoint' do
   endpoint_adminurl ::URI.decode admin_nova_api_endpoint.to_s
   endpoint_internalurl ::URI.decode internal_nova_api_endpoint.to_s
   endpoint_publicurl ::URI.decode public_nova_api_endpoint.to_s
-
   action :create_endpoint
 end
 
-if node['openstack']['compute']['enabled_apis'].include?('ec2')
+if node['openstack']['compute']['conf']['DEFAULT']['enabled_apis'].include?('ec2')
   # Register EC2 Service
   openstack_identity_register 'Register EC2 Service' do
     auth_uri auth_uri
@@ -107,7 +102,6 @@ if node['openstack']['compute']['enabled_apis'].include?('ec2')
     service_name 'ec2'
     service_type 'ec2'
     service_description 'EC2 Compatibility Layer'
-
     action :create_service
   end
 
@@ -120,7 +114,6 @@ if node['openstack']['compute']['enabled_apis'].include?('ec2')
     endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
     endpoint_internalurl ::URI.decode ec2_internal_endpoint.to_s
     endpoint_publicurl ::URI.decode ec2_public_endpoint.to_s
-
     action :create_endpoint
   end
 end

@@ -26,7 +26,6 @@ platform_options = node['openstack']['compute']['platform']
 platform_options['compute_scheduler_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
-
     action :upgrade
   end
 end
@@ -34,7 +33,6 @@ end
 service 'nova-scheduler' do
   service_name platform_options['compute_scheduler_service']
   supports status: true, restart: true
-  subscribes :restart, resources('template[/etc/nova/nova.conf]')
-
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end

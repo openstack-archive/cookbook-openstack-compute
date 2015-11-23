@@ -18,16 +18,16 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe
   include ::Openstack
 end
 
 include_recipe 'ceph'
 
-ceph_user = node['openstack']['compute']['libvirt']['rbd']['cinder']['user']
+ceph_user = node['openstack']['compute']['libvirt']['rbd']['cinder']['user'] # ['conf']['libvirt']['rbd_user']
 cinder_pool = node['openstack']['compute']['libvirt']['rbd']['cinder']['pool']
-nova_pool = node['openstack']['compute']['libvirt']['rbd']['nova']['pool']
-glance_pool =  node['openstack']['compute']['libvirt']['rbd']['glance']['pool']
+nova_pool = node['openstack']['compute']['conf']['DEFAULT']['images_rbd_pool']
+glance_pool = node['openstack']['compute']['libvirt']['rbd']['glance']['pool']
 
 secret_uuid = node['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid']
 ceph_keyname = "client.#{ceph_user}"
@@ -56,7 +56,7 @@ template '/tmp/secret.xml' do
   mode '00600'
   variables(
     uuid: secret_uuid,
-    client_name: node['openstack']['compute']['libvirt']['rbd']['cinder']['user']
+    client_name: ceph_user
   )
   not_if "virsh secret-list | grep #{secret_uuid}"
 end

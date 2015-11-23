@@ -16,7 +16,11 @@ describe 'openstack-compute::api-ec2' do
     it 'upgrades ec2 api packages' do
       expect(chef_run).to upgrade_package 'openstack-nova-api'
     end
-
+    %w(python-keystoneclient).each do |pkg|
+      it do
+        expect(chef_run).to upgrade_package pkg
+      end
+    end
     it 'starts ec2 api on boot' do
       expect(chef_run).to enable_service 'openstack-nova-api'
     end

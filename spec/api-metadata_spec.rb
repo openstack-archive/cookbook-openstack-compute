@@ -13,6 +13,7 @@ describe 'openstack-compute::api-metadata' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_upgrades_python_keystoneclient'
+    include_examples 'expect_creates_api_paste_template'
 
     it 'upgrades metadata api packages' do
       expect(chef_run).to upgrade_package 'nova-api-metadata'
@@ -25,7 +26,11 @@ describe 'openstack-compute::api-metadata' do
     it 'starts metadata api now' do
       expect(chef_run).to start_service 'nova-api-metadata'
     end
+    it do
+      template = chef_run.template('/etc/nova/api-paste.ini')
+      expect(template).to notify('service[nova-api-metadata]').to(:restart)
+    end
 
-    expect_creates_api_paste 'service[nova-api-metadata]'
+    # expect_creates_api_paste 'service[nova-api-metadata]'
   end
 end

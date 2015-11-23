@@ -6,10 +6,12 @@ describe 'openstack-compute::docker-setup' do
   describe 'redhat' do
     let(:runner) { ChefSpec::SoloRunner.new(REDHAT_OPTS) }
     let(:node) { runner.node }
-    let(:chef_run) { runner.converge(described_recipe) }
+    cached(:chef_run) { runner.converge(described_recipe) }
 
-    it 'upgrades python-devel package' do
-      expect(chef_run).to upgrade_package 'python-devel'
+    %w(python-devel git gcc).each do |pkg|
+      it do
+        expect(chef_run).to upgrade_package pkg
+      end
     end
   end
 end

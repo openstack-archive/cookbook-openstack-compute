@@ -28,41 +28,33 @@ describe 'openstack-compute::compute' do
       expect(chef_run).not_to include_recipe 'openstack-compute::api-metadata'
     end
 
-    it 'runs network recipe' do
-      expect(chef_run).to include_recipe 'openstack-compute::network'
-    end
-
     it 'upgrades nova compute package' do
       expect(chef_run).to upgrade_package 'nova-compute'
     end
 
-    it 'upgrades nfs client package' do
-      expect(chef_run).to upgrade_package 'nfs-common'
-    end
-
     it "upgrades kvm when virt_type is 'kvm'" do
-      node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
+      node.set['openstack']['compute']['conf']['libvirt']['virt_type'] = 'kvm'
 
       expect(chef_run).to upgrade_package 'nova-compute-kvm'
       expect(chef_run).not_to upgrade_package 'nova-compute-qemu'
     end
 
     it 'honors the package options platform overrides for kvm' do
-      node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
+      node.set['openstack']['compute']['conf']['libvirt']['virt_type'] = 'kvm'
       node.set['openstack']['compute']['platform']['package_overrides'] = '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes'
 
       expect(chef_run).to upgrade_package('nova-compute-kvm').with(options: '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes')
     end
 
     it 'upgrades qemu when virt_type is qemu' do
-      node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
+      node.set['openstack']['compute']['conf']['libvirt']['virt_type'] = 'qemu'
 
       expect(chef_run).to upgrade_package 'nova-compute-qemu'
       expect(chef_run).not_to upgrade_package 'nova-compute-kvm'
     end
 
     it 'honors the package options platform overrides for qemu' do
-      node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
+      node.set['openstack']['compute']['conf']['libvirt']['virt_type'] = 'qemu'
       node.set['openstack']['compute']['platform']['package_overrides'] = '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes'
 
       expect(chef_run).to upgrade_package('nova-compute-qemu').with(options: '-o Dpkg::Options::=\'--force-confold\' -o Dpkg::Options::=\'--force-confdef\' --force-yes')
@@ -70,7 +62,7 @@ describe 'openstack-compute::compute' do
 
     %w(qemu kvm).each do |virt_type|
       it "honors the package name platform overrides for #{virt_type}" do
-        node.set['openstack']['compute']['libvirt']['virt_type'] = virt_type
+        node.set['openstack']['compute']['conf']['libvirt']['virt_type'] = virt_type
         node.set['openstack']['compute']['platform']["#{virt_type}_compute_packages"] = ["my-nova-#{virt_type}"]
 
         expect(chef_run).to upgrade_package("my-nova-#{virt_type}")
