@@ -161,8 +161,8 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'sets service_type and insecure and scheme for neutron' do
-        node.set['openstack']['endpoints']['network']['internal']['scheme'] = 'https'
+      it 'sets scheme for neutron' do
+        node.set['openstack']['endpoints']['internal']['network']['scheme'] = 'https'
         expect(chef_run).to render_config_file(file.name)\
           .with_section_content('neutron', %r{^url = https://127.0.0.1:9696$})
       end
@@ -195,8 +195,8 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has override vncserver_* options set' do
-        node.set['openstack']['endpoints']['compute-vnc-bind']['public']['host'] = '1.1.1.1'
-        node.set['openstack']['endpoints']['compute-vnc-proxy-bind']['public']['host'] = '2.2.2.2'
+        node.set['openstack']['bind_service']['all']['compute-vnc']['host'] = '1.1.1.1'
+        node.set['openstack']['bind_service']['all']['compute-vnc-proxy']['host'] = '2.2.2.2'
 
         [/^vncserver_listen = 1.1.1.1$/,
          /^vncserver_proxyclient_address = 2.2.2.2$/].each do |line|
@@ -347,9 +347,9 @@ describe 'openstack-compute::nova-common' do
 
         it 'sets overide serial console options set' do
           node.set['openstack']['endpoints']['compute-serial-console-bind']['bind_interface'] = 'lo'
-          node.set['openstack']['endpoints']['compute-serial-proxy']['public']['scheme'] = 'wss'
-          node.set['openstack']['endpoints']['compute-serial-proxy']['public']['host'] = '1.1.1.1'
-          node.set['openstack']['endpoints']['compute-serial-proxy']['public']['port'] = '6082'
+          node.set['openstack']['endpoints']['public']['compute-serial-proxy']['scheme'] = 'wss'
+          node.set['openstack']['endpoints']['public']['compute-serial-proxy']['host'] = '1.1.1.1'
+          node.set['openstack']['endpoints']['public']['compute-serial-proxy']['port'] = '6082'
           # node.set['openstack']['compute']['serial_console']['enable'] = 'True'
           # node.set['openstack']['compute']['serial_console']['port_range'] = '11000:15000'
 

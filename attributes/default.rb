@@ -240,53 +240,49 @@ default['openstack']['compute']['docker']['group'] = 'docker'
 # ****************** OpenStack Compute Endpoints ******************************
 
 # The OpenStack Compute (Nova) XVPvnc endpoint
-%w(compute-xvpvnc-bind compute-xvpvnc compute-novnc-bind compute-novnc
-   compute-ec2-admin-bind compute-ec2 compute-metadata-api compute-vnc-bind
-   compute-vnc compute-vnc-proxy-bind compute-metadata-api-bind
-   compute-api-bind compute-api compute-ec2-api-bind compute-ec2-api
-   compute-serial-console-bind compute-serial-proxy).each do |service|
+%w(
+  compute-xvpvnc compute-novnc
+  compute-ec2 compute-metadata-api
+  compute-vnc compute-api
+  compute-ec2-api
+).each do |service|
+  default['openstack']['bind_service']['all'][service]['host'] = '127.0.0.1'
   %w(public internal admin).each do |type|
-    default['openstack']['endpoints'][service][type]['host'] = '127.0.0.1'
-    default['openstack']['endpoints'][service][type]['port'] = '6081'
-    default['openstack']['endpoints'][service][type]['bind_interface'] = '127.0.0.1'
-    default['openstack']['endpoints'][service][type]['scheme'] = 'http'
-    default['openstack']['endpoints'][service][type]['path'] = '/console'
-    default['openstack']['endpoints'][service][type]['bind_interface'] = nil
+    default['openstack']['endpoints'][type][service]['host'] = '127.0.0.1'
+    default['openstack']['endpoints'][type][service]['scheme'] = 'http'
   end
 end
 %w(public internal admin).each do |type|
-  default['openstack']['endpoints']['compute-api'][type]['port'] = '8774'
-  default['openstack']['endpoints']['compute-api'][type]['path'] = '/v2/%(tenant_id)s'
-
-  # The OpenStack Compute (Nova) novnc endpoint
-  default['openstack']['endpoints']['compute-novnc-bind'][type]['port'] = '6080'
-  default['openstack']['endpoints']['compute-novnc'][type]['port'] = '6080'
-  default['openstack']['endpoints']['compute-novnc'][type]['path'] = '/vnc_auto.html'
-
-  # The OpenStack Compute (Nova) EC2 Admin API endpoint
-  default['openstack']['endpoints']['compute-ec2-admin-bind'][type]['port'] = '8773'
-  default['openstack']['endpoints']['compute-ec2']['admin']['port'] = '8773'
-  default['openstack']['endpoints']['compute-ec2']['admin']['path'] = '/services/Admin'
-  default['openstack']['endpoints']['compute-metadata-api'][type]['port'] = '8775'
-  default['openstack']['endpoints']['compute-metadata-api'][type]['path'] = nil
-
-  default['openstack']['endpoints']['compute-vnc'][type]['scheme'] = nil
-  default['openstack']['endpoints']['compute-vnc'][type]['port'] = nil
-  default['openstack']['endpoints']['compute-vnc'][type]['path'] = nil
-
-  # The OpenStack Compute (Nova) metadata API endpoint
-  default['openstack']['endpoints']['compute-metadata-api-bind'][type]['port'] = '8775'
-
+  default['openstack']['endpoints'][type]['compute-xvpvnc']['port'] = '6081'
+  default['openstack']['endpoints'][type]['compute-xvpvnc']['path'] = '/console'
   # The OpenStack Compute (Nova) Native API endpoint
-  default['openstack']['endpoints']['compute-api-bind'][type]['port'] = '8774'
-
+  default['openstack']['endpoints'][type]['compute-api']['port'] = '8774'
+  default['openstack']['endpoints'][type]['compute-api']['path'] = '/v2/%(tenant_id)s'
+  # The OpenStack Compute (Nova) novnc endpoint
+  default['openstack']['endpoints'][type]['compute-novnc']['port'] = '6080'
+  default['openstack']['endpoints'][type]['compute-novnc']['path'] = '/vnc_auto.html'
+  # The OpenStack Compute (Nova) EC2 Admin API endpoint
+  default['openstack']['endpoints']['admin']['compute-ec2']['port'] = '8773'
+  default['openstack']['endpoints']['admin']['compute-ec2']['path'] = '/services/Admin'
   # The OpenStack Compute (Nova) EC2 API endpoint
-  default['openstack']['endpoints']['compute-ec2-api-bind'][type]['port'] = '8773'
-  default['openstack']['endpoints']['compute-ec2-api'][type]['port'] = '8773'
-  default['openstack']['endpoints']['compute-ec2-api'][type]['path'] = '/services/Cloud'
-
+  default['openstack']['endpoints'][type]['compute-ec2-api']['port'] = '8773'
+  default['openstack']['endpoints'][type]['compute-ec2-api']['path'] = '/services/Cloud'
+  # The OpenStack Compute (Nova) metadata API endpoint
+  default['openstack']['endpoints'][type]['compute-metadata-api']['port'] = '8775'
   # The OpenStack Compute (Nova) serial proxy endpoint
-  default['openstack']['endpoints']['compute-serial-proxy'][type]['scheme'] = 'ws'
-  default['openstack']['endpoints']['compute-serial-proxy'][type]['port'] = '6083'
-  default['openstack']['endpoints']['compute-serial-proxy'][type]['path'] = '/'
+  default['openstack']['endpoints'][type]['compute-serial-proxy']['scheme'] = 'ws'
+  default['openstack']['endpoints'][type]['compute-serial-proxy']['port'] = '6083'
+  default['openstack']['endpoints'][type]['compute-serial-proxy']['path'] = '/'
+  default['openstack']['endpoints'][type]['compute-serial-proxy']['host'] = '127.0.0.1'
 end
+default['openstack']['bind_service']['all']['compute-serial-proxy']['host'] = '127.0.0.1'
+default['openstack']['bind_service']['all']['compute-vnc-proxy']['host'] = '127.0.0.1'
+default['openstack']['bind_service']['all']['compute-serial-console']['host'] = '127.0.0.1'
+default['openstack']['bind_service']['all']['compute-xvpvnc']['port'] = '6081'
+default['openstack']['bind_service']['all']['compute-vnc']['port'] = '6081'
+default['openstack']['bind_service']['all']['compute-serial-proxy']['port'] = '6081'
+default['openstack']['bind_service']['all']['compute-novnc']['port'] = '6080'
+default['openstack']['bind_service']['all']['compute-ec2-admin']['port'] = '8773'
+default['openstack']['bind_service']['all']['compute-metadata-api']['port'] = '8775'
+default['openstack']['bind_service']['all']['compute-api']['port'] = '8774'
+default['openstack']['bind_service']['all']['compute-ec2-api']['port'] = '8773'

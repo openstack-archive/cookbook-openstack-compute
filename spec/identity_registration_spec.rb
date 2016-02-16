@@ -76,9 +76,9 @@ describe 'openstack-compute::identity_registration' do
         public_url = 'https://public.host:789/public_path'
         internal_url = 'http://internal.host:456/internal_path'
         admin_url = 'https://admin.host:123/admin_path'
-        node.set['openstack']['endpoints']['compute-api']['public']['uri'] = public_url
-        node.set['openstack']['endpoints']['compute-api']['internal']['uri'] = internal_url
-        node.set['openstack']['endpoints']['compute-api']['admin']['uri'] = admin_url
+        node.set['openstack']['endpoints']['public']['compute-api']['uri'] = public_url
+        node.set['openstack']['endpoints']['internal']['compute-api']['uri'] = internal_url
+        node.set['openstack']['endpoints']['admin']['compute-api']['uri'] = admin_url
 
         expect(chef_run).to create_endpoint_openstack_identity_register(
           'Register Compute Endpoint'
@@ -129,9 +129,9 @@ describe 'openstack-compute::identity_registration' do
         public_url = 'https://public.host:789/public_path'
         internal_url = 'http://internal.host:456/internal_path'
 
-        node.set['openstack']['endpoints']['compute-ec2']['admin']['uri'] = admin_url
-        node.set['openstack']['endpoints']['compute-ec2-api']['internal']['uri'] = internal_url
-        node.set['openstack']['endpoints']['compute-ec2-api']['public']['uri'] = public_url
+        node.set['openstack']['endpoints']['admin']['compute-ec2']['uri'] = admin_url
+        node.set['openstack']['endpoints']['internal']['compute-ec2-api']['uri'] = internal_url
+        node.set['openstack']['endpoints']['public']['compute-ec2-api']['uri'] = public_url
         expect(chef_run).to create_endpoint_openstack_identity_register(
           'Register EC2 Endpoint'
         ).with(
