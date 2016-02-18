@@ -38,7 +38,7 @@ internal_nova_api_endpoint = internal_endpoint 'compute-api'
 # TBD, another clean up opportunity. We could use the 'admin', and
 # 'internal' endpoints for a single service name. For now, we'll
 # leave the old names in place.
-ec2_admin_endpoint = admin_endpoint 'compute-ec2'
+ec2_admin_endpoint = admin_endpoint 'compute-ec2-api'
 ec2_public_endpoint = public_endpoint 'compute-ec2-api'
 ec2_internal_endpoint = internal_endpoint 'compute-ec2-api'
 region = node['openstack']['region']

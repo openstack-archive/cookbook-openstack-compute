@@ -242,7 +242,7 @@ default['openstack']['compute']['docker']['group'] = 'docker'
 # The OpenStack Compute (Nova) XVPvnc endpoint
 %w(
   compute-xvpvnc compute-novnc
-  compute-ec2 compute-metadata-api
+  compute-metadata-api
   compute-vnc compute-api
   compute-ec2-api
 ).each do |service|
@@ -261,12 +261,11 @@ end
   # The OpenStack Compute (Nova) novnc endpoint
   default['openstack']['endpoints'][type]['compute-novnc']['port'] = '6080'
   default['openstack']['endpoints'][type]['compute-novnc']['path'] = '/vnc_auto.html'
-  # The OpenStack Compute (Nova) EC2 Admin API endpoint
-  default['openstack']['endpoints']['admin']['compute-ec2']['port'] = '8773'
-  default['openstack']['endpoints']['admin']['compute-ec2']['path'] = '/services/Admin'
   # The OpenStack Compute (Nova) EC2 API endpoint
   default['openstack']['endpoints'][type]['compute-ec2-api']['port'] = '8773'
-  default['openstack']['endpoints'][type]['compute-ec2-api']['path'] = '/services/Cloud'
+  default['openstack']['endpoints']['admin']['compute-ec2-api']['path'] = '/services/Admin'
+  default['openstack']['endpoints']['public']['compute-ec2-api']['path'] = '/services/Cloud'
+  default['openstack']['endpoints']['internal']['compute-ec2-api']['path'] = '/services/Cloud'
   # The OpenStack Compute (Nova) metadata API endpoint
   default['openstack']['endpoints'][type]['compute-metadata-api']['port'] = '8775'
   # The OpenStack Compute (Nova) serial proxy endpoint
@@ -282,7 +281,6 @@ default['openstack']['bind_service']['all']['compute-xvpvnc']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-vnc']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-serial-proxy']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-novnc']['port'] = '6080'
-default['openstack']['bind_service']['all']['compute-ec2-admin']['port'] = '8773'
 default['openstack']['bind_service']['all']['compute-metadata-api']['port'] = '8775'
 default['openstack']['bind_service']['all']['compute-api']['port'] = '8774'
 default['openstack']['bind_service']['all']['compute-ec2-api']['port'] = '8773'

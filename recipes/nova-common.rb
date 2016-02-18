@@ -104,16 +104,24 @@ memcache_servers = memcached_servers.join ','
 identity_endpoint = public_endpoint 'identity'
 xvpvnc_endpoint = public_endpoint 'compute-xvpvnc'
 xvpvnc_bind = node['openstack']['bind_service']['all']['compute-xvpvnc']
+xvpvnc_bind_address = bind_address xvpvnc_bind
 novnc_endpoint = public_endpoint 'compute-novnc'
 novnc_bind = node['openstack']['bind_service']['all']['compute-novnc']
+novnc_bind_address = bind_address novnc_bind
 vnc_bind = node['openstack']['bind_service']['all']['compute-vnc']
+vnc_bind_address = bind_address vnc_bind
 vnc_proxy_bind = node['openstack']['bind_service']['all']['compute-vnc-proxy']
+vnc_proxy_bind_address = bind_address vnc_proxy_bind
 compute_api_bind = node['openstack']['bind_service']['all']['compute-api']
+compute_api_bind_address = bind_address compute_api_bind
 compute_api_endpoint = internal_endpoint 'compute-api'
 compute_metadata_api_bind = node['openstack']['bind_service']['all']['compute-metadata-api']
+compute_metadata_api_bind_address = bind_address compute_metadata_api_bind
 ec2_api_bind = node['openstack']['bind_service']['all']['compute-ec2-api']
+ec2_api_bind_address = bind_address ec2_api_bind
 ec2_public_endpoint = public_endpoint 'compute-ec2-api'
 serial_console_bind = node['openstack']['bind_service']['all']['compute-serial-console']
+serial_console_bind_address = bind_address serial_console_bind
 serial_proxy_endpoint = public_endpoint 'compute-serial-proxy'
 network_endpoint = internal_endpoint 'network'
 image_endpoint = internal_endpoint 'image_api'
@@ -149,29 +157,29 @@ node.default['openstack']['compute']['conf_secrets']
   get_password 'service', 'openstack-compute'
 
 node.default['openstack']['compute']['conf'].tap do |conf|
-  conf['DEFAULT']['ec2_listen'] = ec2_api_bind.host
+  conf['DEFAULT']['ec2_listen'] = ec2_api_bind_address
   conf['DEFAULT']['ec2_listen_port'] = ec2_api_bind.port
   conf['DEFAULT']['keystone_ec2_url'] = "#{identity_endpoint.scheme}://#{identity_endpoint.host}:#{identity_endpoint.port}/v2.0/ec2tokens"
   conf['DEFAULT']['iscsi_helper'] = platform_options['iscsi_helper']
   # conf['DEFAULT']['scheduler_default_filters'] = node['openstack']['compute']['scheduler']['default_filters'].join(',')
 
   if node['openstack']['compute']['conf']['DEFAULT']['enabled_apis'].include?('osapi_compute')
-    conf['DEFAULT']['osapi_compute_listen'] = compute_api_bind.host
+    conf['DEFAULT']['osapi_compute_listen'] = compute_api_bind_address
     conf['DEFAULT']['osapi_compute_listen_port'] = compute_api_bind.port
   end
   # if node['openstack']['mq']['compute']['rabbit']['ha']
   #   conf['DEFAULT']['rabbit_hosts'] = rabbit_hosts
   # end
-  conf['DEFAULT']['metadata_listen'] = compute_metadata_api_bind.host
+  conf['DEFAULT']['metadata_listen'] = compute_metadata_api_bind_address
   conf['DEFAULT']['metadata_listen_port'] = compute_metadata_api_bind.port
   conf['vnc']['novncproxy_base_url'] = novnc_endpoint.to_s
   conf['vnc']['xvpvncproxy_base_url'] = xvpvnc_endpoint.to_s
-  conf['vnc']['xvpvncproxy_host'] = xvpvnc_bind.host
+  conf['vnc']['xvpvncproxy_host'] = xvpvnc_bind_address
   conf['vnc']['xvpvncproxy_port'] = xvpvnc_bind.port
-  conf['vnc']['novncproxy_host'] = novnc_bind.host
+  conf['vnc']['novncproxy_host'] = novnc_bind_address
   conf['vnc']['novncproxy_port'] = novnc_bind.port
-  conf['vnc']['vncserver_listen'] = vnc_bind.host
-  conf['vnc']['vncserver_proxyclient_address'] = vnc_proxy_bind.host
+  conf['vnc']['vncserver_listen'] = vnc_bind_address
+  conf['vnc']['vncserver_proxyclient_address'] = vnc_proxy_bind_address
   unless memcache_servers.empty?
     conf['DEFAULT']['memcached_servers'] = memcache_servers
   end
@@ -190,7 +198,7 @@ node.default['openstack']['compute']['conf'].tap do |conf|
 
   # [serial_console] section
   conf['serial_console']['base_url'] = "#{serial_proxy_endpoint.scheme}://#{serial_proxy_endpoint.host}:#{serial_proxy_endpoint.port}"
-  conf['serial_console']['proxyclient_address'] = serial_console_bind.host
+  conf['serial_console']['proxyclient_address'] = serial_console_bind_address
 end
 
 # merge all config options and secrets to be used in the nova.conf.erb
