@@ -49,6 +49,9 @@ default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 
 default['openstack']['compute']['driver'] = 'libvirt.LibvirtDriver'
 
+# libvirtd_opts used in template for /etc/default/libvirt-bin
+default['openstack']['compute']['libvirt']['libvirtd_opts'] = '-d -l'
+
 default['openstack']['compute']['libvirt']['auth_tcp'] = 'none'
 # libvirt.max_clients (default: 20)
 default['openstack']['compute']['libvirt']['max_clients'] = 20

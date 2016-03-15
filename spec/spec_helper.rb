@@ -53,8 +53,11 @@ shared_context 'compute_stubs' do
       .with('token', 'openstack_vmware_secret_name')
       .and_return 'vmware_secret_name'
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
-      .with('db', anything)
-      .and_return('')
+      .with('db', 'nova')
+      .and_return('nova_db_pass')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('db', 'nova_api')
+      .and_return('nova_api_db_pass')
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('user', 'guest')
       .and_return('mq-pass')

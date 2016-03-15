@@ -51,6 +51,16 @@ template '/etc/nova/api-paste.ini' do
   mode 00644
 end
 
+nova_user = node['openstack']['compute']['user']
+nova_group = node['openstack']['compute']['group']
+execute 'nova-manage api_db sync' do
+  timeout node['openstack']['compute']['dbsync_timeout']
+  user nova_user
+  group nova_group
+  command 'nova-manage api_db sync'
+  action :run
+end
+
 service 'nova-api-os-compute' do
   service_name platform_options['api_os_compute_service']
   supports status: true, restart: true

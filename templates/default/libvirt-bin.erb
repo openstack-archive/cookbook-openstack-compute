@@ -7,7 +7,7 @@
 start_libvirtd="yes"
 
 # options passed to libvirtd, add "-l" to listen on tcp
-libvirtd_opts="-d -l"
+libvirtd_opts="<%=node['openstack']['compute']['libvirt']['libvirtd_opts']%>"
 
 # pass in location of kerberos keytab
 #export KRB5_KTNAME=/etc/libvirt/libvirt.keytab

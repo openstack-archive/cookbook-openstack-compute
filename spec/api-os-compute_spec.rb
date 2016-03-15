@@ -23,6 +23,14 @@ describe 'openstack-compute::api-os-compute' do
       )
     end
 
+    it do
+      expect(chef_run).to run_execute('nova-manage api_db sync')
+        .with(timeout: 3600,
+              user: 'nova',
+              group: 'nova',
+              command: 'nova-manage api_db sync')
+    end
+
     it 'upgrades openstack api packages' do
       expect(chef_run).to upgrade_package 'nova-api-os-compute'
     end

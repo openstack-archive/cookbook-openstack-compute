@@ -75,15 +75,23 @@ directory node['openstack']['compute']['conf']['oslo_concurrency']['lock_path'] 
 end
 
 db_user = node['openstack']['db']['compute']['username']
+api_db_user = node['openstack']['db']['compute_api']['username']
 db_pass = get_password 'db', 'nova'
+api_db_pass = get_password 'db', 'nova_api'
+
 node.default['openstack']['compute']['conf_secrets']
   .[]('database')['connection'] =
   db_uri('compute', db_user, db_pass)
-
+node.default['openstack']['compute']['conf_secrets']
+  .[]('api_database')['connection'] =
+  db_uri('compute_api', api_db_user, api_db_pass)
 if node['openstack']['endpoints']['db']['enabled_slave']
   node.default['openstack']['compute']['conf_secrets']
     .[]('database')['slave_connection'] =
     db_uri('compute', db_user, db_pass, true)
+  node.default['openstack']['compute']['conf_secrets']
+    .[]('api_database')['slave_connection'] =
+    db_uri('compute_api', api_db_user, api_db_pass, true)
 end
 
 if node['openstack']['compute']['conf']['DEFAULT']['rpc_backend'] == 'rabbit'
