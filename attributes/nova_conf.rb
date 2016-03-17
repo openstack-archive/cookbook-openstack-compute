@@ -9,7 +9,7 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['auth_version'] = node['openstack']['api']['auth']['version']
   conf['DEFAULT']['rpc_backend'] = node['openstack']['mq']['service_type']
   conf['DEFAULT']['instances_path'] = "#{node['openstack']['compute']['conf']['DEFAULT']['state_path']}/instances"
-  conf['DEFAULT']['enabled_apis'] = 'ec2,osapi_compute'
+  conf['DEFAULT']['enabled_apis'] = 'osapi_compute'
   if node['openstack']['compute']['syslog']['use'] #= false
     conf['DEFAULT']['log_config'] = '/etc/openstack/logging.conf'
   end

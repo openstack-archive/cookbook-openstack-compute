@@ -127,8 +127,6 @@ default['openstack']['compute']['api']['auth']['cache_dir'] = '/var/cache/nova/a
 case platform_family
 when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
-    'api_ec2_packages' => ['openstack-nova-api'],
-    'api_ec2_service' => 'openstack-nova-api',
     'api_os_compute_packages' => ['openstack-nova-api'],
     'api_os_compute_service' => 'openstack-nova-api',
     'neutron_python_packages' => ['python-neutronclient', 'pyparsing'],
@@ -165,8 +163,6 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   }
 when 'debian'
   default['openstack']['compute']['platform'] = {
-    'api_ec2_packages' => ['nova-api-ec2'],
-    'api_ec2_service' => 'nova-api-ec2',
     'api_os_compute_packages' => ['nova-api-os-compute'],
     'api_os_compute_service' => 'nova-api-os-compute',
     'memcache_python_packages' => ['python-memcache'],
@@ -207,8 +203,6 @@ end
 # Array of options for `api-paste.ini` (e.g. ['option1=value1', ...])
 default['openstack']['compute']['misc_paste'] = nil
 
-# To disable the EC2 API endpoint, simply remove 'ec2,' from the list
-# of enabled API services.
 # NOTE: The metadata api service is enabled via including it's recipe
 # NOTE: api-metadata.  By default the api-metadata recipe is included in
 # NOTE: the os-compute-api role which is included in the
@@ -244,7 +238,6 @@ default['openstack']['compute']['docker']['group'] = 'docker'
   compute-xvpvnc compute-novnc
   compute-metadata-api
   compute-vnc compute-api
-  compute-ec2-api
 ).each do |service|
   default['openstack']['bind_service']['all'][service]['host'] = '127.0.0.1'
   %w(public internal admin).each do |type|
@@ -261,11 +254,6 @@ end
   # The OpenStack Compute (Nova) novnc endpoint
   default['openstack']['endpoints'][type]['compute-novnc']['port'] = '6080'
   default['openstack']['endpoints'][type]['compute-novnc']['path'] = '/vnc_auto.html'
-  # The OpenStack Compute (Nova) EC2 API endpoint
-  default['openstack']['endpoints'][type]['compute-ec2-api']['port'] = '8773'
-  default['openstack']['endpoints']['admin']['compute-ec2-api']['path'] = '/services/Admin'
-  default['openstack']['endpoints']['public']['compute-ec2-api']['path'] = '/services/Cloud'
-  default['openstack']['endpoints']['internal']['compute-ec2-api']['path'] = '/services/Cloud'
   # The OpenStack Compute (Nova) metadata API endpoint
   default['openstack']['endpoints'][type]['compute-metadata-api']['port'] = '8775'
   # The OpenStack Compute (Nova) serial proxy endpoint
@@ -283,4 +271,3 @@ default['openstack']['bind_service']['all']['compute-serial-proxy']['port'] = '6
 default['openstack']['bind_service']['all']['compute-novnc']['port'] = '6080'
 default['openstack']['bind_service']['all']['compute-metadata-api']['port'] = '8775'
 default['openstack']['bind_service']['all']['compute-api']['port'] = '8774'
-default['openstack']['bind_service']['all']['compute-ec2-api']['port'] = '8773'

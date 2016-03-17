@@ -38,9 +38,6 @@ internal_nova_api_endpoint = internal_endpoint 'compute-api'
 # TBD, another clean up opportunity. We could use the 'admin', and
 # 'internal' endpoints for a single service name. For now, we'll
 # leave the old names in place.
-ec2_admin_endpoint = admin_endpoint 'compute-ec2-api'
-ec2_public_endpoint = public_endpoint 'compute-ec2-api'
-ec2_internal_endpoint = internal_endpoint 'compute-ec2-api'
 region = node['openstack']['region']
 
 # Register Service Tenant
@@ -92,28 +89,4 @@ openstack_identity_register 'Register Compute Endpoint' do
   endpoint_internalurl ::URI.decode internal_nova_api_endpoint.to_s
   endpoint_publicurl ::URI.decode public_nova_api_endpoint.to_s
   action :create_endpoint
-end
-
-if node['openstack']['compute']['conf']['DEFAULT']['enabled_apis'].include?('ec2')
-  # Register EC2 Service
-  openstack_identity_register 'Register EC2 Service' do
-    auth_uri auth_uri
-    bootstrap_token bootstrap_token
-    service_name 'ec2'
-    service_type 'ec2'
-    service_description 'EC2 Compatibility Layer'
-    action :create_service
-  end
-
-  # Register EC2 Endpoint
-  openstack_identity_register 'Register EC2 Endpoint' do
-    auth_uri auth_uri
-    bootstrap_token bootstrap_token
-    service_type 'ec2'
-    endpoint_region region
-    endpoint_adminurl ::URI.decode ec2_admin_endpoint.to_s
-    endpoint_internalurl ::URI.decode ec2_internal_endpoint.to_s
-    endpoint_publicurl ::URI.decode ec2_public_endpoint.to_s
-    action :create_endpoint
-  end
 end

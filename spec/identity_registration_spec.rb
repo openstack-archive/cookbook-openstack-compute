@@ -97,62 +97,6 @@ describe 'openstack-compute::identity_registration' do
       end
     end
 
-    it 'registers ec2 service' do
-      expect(chef_run).to create_service_openstack_identity_register(
-        'Register EC2 Service'
-      ).with(
-        auth_uri: 'http://127.0.0.1:35357/v2.0',
-        bootstrap_token: 'bootstrap-token',
-        service_name: 'ec2',
-        service_type: 'ec2',
-        service_description: 'EC2 Compatibility Layer'
-      )
-    end
-
-    context 'registers ec2 endpoint' do
-      it 'with default values' do
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'ec2',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: 'http://127.0.0.1:8773/services/Admin',
-          endpoint_internalurl: 'http://127.0.0.1:8773/services/Cloud',
-          endpoint_publicurl: 'http://127.0.0.1:8773/services/Cloud'
-        )
-      end
-
-      it 'with different URLs for all endpoints' do
-        admin_url = 'https://admin.host:123/admin_path'
-        public_url = 'https://public.host:789/public_path'
-        internal_url = 'http://internal.host:456/internal_path'
-
-        node.set['openstack']['endpoints']['admin']['compute-ec2-api']['uri'] = admin_url
-        node.set['openstack']['endpoints']['internal']['compute-ec2-api']['uri'] = internal_url
-        node.set['openstack']['endpoints']['public']['compute-ec2-api']['uri'] = public_url
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'ec2',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: admin_url,
-          endpoint_internalurl: internal_url,
-          endpoint_publicurl: public_url
-        )
-      end
-
-      it 'with customer region override' do
-        node.set['openstack']['region'] = 'ec2Region'
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        ).with(endpoint_region: 'ec2Region')
-      end
-    end
-
     describe "when 'ec2' is not in the list of enabled_apis" do
       before do
         node.set['openstack']['compute']['conf']['DEFAULT']['enabled_apis'] = 'osapi_compute'

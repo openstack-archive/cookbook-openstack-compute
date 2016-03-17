@@ -105,13 +105,6 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'has default ec2 ip and port options set' do
-        [/^ec2_listen = 127.0.0.1$/,
-         /^ec2_listen_port = 8773$/].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
-        end
-      end
-
       it 'has default metadata ip and port options set' do
         [/^metadata_listen = 127.0.0.1$/,
          /^metadata_listen_port = 8775$/].each do |line|
@@ -120,8 +113,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'confirms default min value for workers' do
-        [/^ec2_workers = /,
-         /^osapi_compute_workers = /,
+        [/^osapi_compute_workers = /,
          /^metadata_workers = /,
          /^workers = /].each do |line|
           expect(chef_run).to_not render_file(file.name).with_content(line)
@@ -176,8 +168,7 @@ describe 'openstack-compute::nova-common' do
           end
 
           it 'does not have ha rabbit options set' do
-            [/^rabbit_hosts = /, /^rabbit_ha_queues = /,
-             /^ec2_private_dns_show_ip$/].each do |line|
+            [/^rabbit_hosts = /, /^rabbit_ha_queues = /].each do |line|
               expect(chef_run).not_to render_config_file(file.name).with_section_content('oslo_messaging_rabbit', line)
             end
           end

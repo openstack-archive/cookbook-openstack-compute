@@ -117,9 +117,6 @@ compute_api_bind_address = bind_address compute_api_bind
 compute_api_endpoint = internal_endpoint 'compute-api'
 compute_metadata_api_bind = node['openstack']['bind_service']['all']['compute-metadata-api']
 compute_metadata_api_bind_address = bind_address compute_metadata_api_bind
-ec2_api_bind = node['openstack']['bind_service']['all']['compute-ec2-api']
-ec2_api_bind_address = bind_address ec2_api_bind
-ec2_public_endpoint = public_endpoint 'compute-ec2-api'
 serial_console_bind = node['openstack']['bind_service']['all']['compute-serial-console']
 serial_console_bind_address = bind_address serial_console_bind
 serial_proxy_endpoint = public_endpoint 'compute-serial-proxy'
@@ -130,7 +127,6 @@ Chef::Log.debug("openstack-compute::nova-common:identity_public_endpoint|#{ident
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
-Chef::Log.debug("openstack-compute::nova-common:ec2_public_endpoint|#{ec2_public_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint}")
 # Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint}")
@@ -157,9 +153,6 @@ node.default['openstack']['compute']['conf_secrets']
   get_password 'service', 'openstack-compute'
 
 node.default['openstack']['compute']['conf'].tap do |conf|
-  conf['DEFAULT']['ec2_listen'] = ec2_api_bind_address
-  conf['DEFAULT']['ec2_listen_port'] = ec2_api_bind.port
-  conf['DEFAULT']['keystone_ec2_url'] = "#{identity_endpoint.scheme}://#{identity_endpoint.host}:#{identity_endpoint.port}/v2.0/ec2tokens"
   conf['DEFAULT']['iscsi_helper'] = platform_options['iscsi_helper']
   # conf['DEFAULT']['scheduler_default_filters'] = node['openstack']['compute']['scheduler']['default_filters'].join(',')
 
