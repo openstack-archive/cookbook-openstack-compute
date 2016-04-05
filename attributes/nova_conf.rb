@@ -14,16 +14,15 @@ default['openstack']['compute']['conf'].tap do |conf|
     conf['DEFAULT']['log_config'] = '/etc/openstack/logging.conf'
   end
 
-  conf['DEFAULT']['network_api_class'] = 'nova.network.neutronv2.api.API' # nova.network.api.API
+  conf['DEFAULT']['use_neutron'] = 'true'
   conf['DEFAULT']['linuxnet_interface_driver'] = 'nova.network.linux_net.LinuxOVSInterfaceDriver'
   conf['DEFAULT']['firewall_driver'] = 'nova.virt.firewall.NoopFirewallDriver'
-  conf['DEFAULT']['security_group_api'] = 'neutron'
   conf['DEFAULT']['default_floating_pool'] = 'public' # not listed
   conf['DEFAULT']['dns_server'] = '8.8.8.8' # [] in docs
 
   # [keystone_authtoken]
   conf['keystone_authtoken']['signing_dir'] = '/var/cache/nova/api'
-  conf['keystone_authtoken']['auth_plugin'] = 'v2password'
+  conf['keystone_authtoken']['auth_type'] = 'v2password'
   conf['keystone_authtoken']['region_name'] = node['openstack']['region']
   conf['keystone_authtoken']['username'] = 'nova'
   conf['keystone_authtoken']['tenant_name'] = 'service'
@@ -45,7 +44,7 @@ default['openstack']['compute']['conf'].tap do |conf|
   end
 
   # [neutron]
-  conf['neutron']['auth_plugin'] = 'v2password'
+  conf['neutron']['auth_type'] = 'v2password'
   conf['neutron']['region_name'] = node['openstack']['region']
   conf['neutron']['username'] = 'neutron'
   conf['neutron']['tenant_name'] = 'service'

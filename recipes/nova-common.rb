@@ -143,7 +143,7 @@ Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpo
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint}")
 # Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint}")
 
-if node['openstack']['compute']['conf']['neutron']['auth_plugin'] == 'v2password'
+if node['openstack']['compute']['conf']['neutron']['auth_type'] == 'v2password'
   node.default['openstack']['compute']['conf_secrets']
   .[]('neutron')['password'] =
     get_password 'service', 'openstack-network'
@@ -189,7 +189,8 @@ node.default['openstack']['compute']['conf'].tap do |conf|
   conf['vnc']['vncserver_listen'] = vnc_bind_address
   conf['vnc']['vncserver_proxyclient_address'] = vnc_proxy_bind_address
   unless memcache_servers.empty?
-    conf['DEFAULT']['memcached_servers'] = memcache_servers
+    conf['cache']['enabled'] = 'true'
+    conf['cache']['memcache_servers'] = memcache_servers
   end
 
   # [keystone_authtoken] section
