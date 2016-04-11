@@ -152,23 +152,6 @@ shared_examples 'expect_creates_api_paste_template' do
   end
 
   context 'template contents' do
-    context 'ec2 enabled' do
-      before do
-        node.set['openstack']['compute']['conf']['DEFAULT']['enabled_apis'] =
-          %w(ec2)
-      end
-
-      it 'sets the pipeline attribute' do
-        expect(chef_run).to render_file(file.name)
-          .with_content(/^pipeline = ec2faultwrap logrequest metaapp$/)
-      end
-
-      it 'sets ec2 attributes' do
-        expect(chef_run).to render_file(file.name)
-          .with_content(/^\[composite:ec2\]$/)
-      end
-    end
-
     it 'sets the pipeline attribute when ec2 api is disabled' do
       node.set['openstack']['compute']['conf']['DEFAULT']['enabled_apis'] = []
       expect(chef_run).to render_file(file.name)

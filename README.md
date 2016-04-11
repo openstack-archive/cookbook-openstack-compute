@@ -8,7 +8,7 @@ http://nova.openstack.org
 Requirements
 ============
 
-Chef 0.10.0 or higher required (for Chef environment use).
+Chef 12 or higher required.
 
 Cookbooks
 ---------
@@ -27,8 +27,7 @@ Usage
 
 api-ec2
 ----
-- Includes recipe `nova-common`
-- Installs AWS EC2 compatible API and configures the service and endpoints in keystone
+- This is obsoleted by https://github.com/cloudscaling/cookbook-openstack-ec2
 
 api-metadata
 ----
@@ -105,7 +104,6 @@ Openstack Compute attributes are in the attribute namespace ["openstack"]["compu
 * `openstack["compute"]["service_user"]` - User name used by nova when interacting with keystone
 * `openstack["compute"]["service_role"]` - User role used by nova when interacting with keystone
 * `openstack["compute"]["floating_cmd"]` - Path to the `nova-manage floating create` wrapper script.
-* `openstack["compute"]["ec2_workers"]` - Number of ec2 workers
 * `openstack["compute"]["osapi_compute_workers"]` - Number of api workers
 * `openstack["compute"]["metadata_workers"]` - Number of metadata workders
 * `openstack["compute"]["config"]["volume_api_class"]` - API Class used for Volume support
@@ -333,10 +331,10 @@ Arrays whose elements will be copied exactly into the respective config files (c
 * `openstack["compute"]["misc_nova"]` - Array of bare options for `nova.conf`.
 * `openstack["compute"]["misc_paste"]` - Array of bare options for `api-paste.ini`
 
-EC2 Configuration Attributes
+API Configuration Attributes
 ----------------------------
 
-* `openstack["compute"]["enabled_apis"]` - Which apis have been enabled in nova compute, only for ec2 and osapi_compute. For metadata, include the api-metadata recipe.
+* `openstack["compute"]["enabled_apis"]` - Which apis have been enabled in nova compute, only for osapi_compute. For metadata, include the api-metadata recipe.
 
 Notification Attributes
 -----------------------
@@ -407,14 +405,6 @@ The following attributes are defined in attributes/default.rb of the common cook
 * `openstack['endpoints']['compute-compute api-bind']['host']` - The IP address to bind the compute api service to
 * `openstack['endpoints']['compute-compute api-bind']['port']` - The port to bind the compute api service to
 * `openstack['endpoints']['compute-compute api-bind']['bind_interface']` - The interface name to bind the compute api service to
-
-* `openstack['endpoints']['compute-ec2-api-bind']['host']` - The IP address to bind the ec2 api service to
-* `openstack['endpoints']['compute-ec2-api-bind']['port']` - The port to bind the ec2 api service to
-* `openstack['endpoints']['compute-ec2-api-bind']['bind_interface']` - The interface name to bind the ec2 api service to
-
-* `openstack['endpoints']['compute-ec2-admin-bind']['host']` - The IP address to bind the ec2 admin api service to
-* `openstack['endpoints']['compute-ec2-admin-bind']['port']` - The port to bind the ec2 admin api service to
-* `openstack['endpoints']['compute-ec2-admin-bind']['bind_interface']` - The interface name to bind the ec2 admin api service to
 
 * `openstack['endpoints']['compute-xvpvnc-bind']['host']` - The IP address to bind the xvpvnc service to
 * `openstack['endpoints']['compute-xvpvnc-bind']['port']` - The port to bind the xvpvnc service to

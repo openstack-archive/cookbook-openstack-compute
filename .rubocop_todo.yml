@@ -26,7 +26,6 @@ Metrics/MethodLength:
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/ClassAndModuleChildren:
   Exclude:
-    - 'recipes/api-ec2.rb'
     - 'recipes/api-metadata.rb'
     - 'recipes/api-os-compute.rb'
     - 'recipes/client.rb'
@@ -42,7 +41,6 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'recipes/api-ec2.rb'
     - 'recipes/api-metadata.rb'
     - 'recipes/api-os-compute.rb'
     - 'recipes/client.rb'
