@@ -99,18 +99,18 @@ default['openstack']['compute']['ratelimit']['settings'] = {
 default['openstack']['compute']['metering'] = false ####
 
 # Notification settings
+default['openstack']['compute']['config']['notification_topics'] = ['notifications']
+
 if node['openstack']['compute']['metering']
   default['openstack']['compute']['config']['notification_drivers'] = ['nova.openstack.common.notifier.rpc_notifier', 'ceilometer.compute.nova_notifier']
   default['openstack']['compute']['config']['instance_usage_audit'] = 'True'
   default['openstack']['compute']['config']['instance_usage_audit_period'] = 'hour'
   default['openstack']['compute']['config']['notify_on_state_change'] = 'vm_and_task_state'
-  default['openstack']['compute']['config']['notification_topics'] = ['notifications']
 else
   default['openstack']['compute']['config']['notification_drivers'] = []
   default['openstack']['compute']['config']['instance_usage_audit'] = 'False'
   default['openstack']['compute']['config']['instance_usage_audit_period'] = 'month'
   default['openstack']['compute']['config']['notify_on_state_change'] = ''
-  default['openstack']['compute']['config']['notification_topics'] = ['notifications']
 end
 
 # Monitor settings
