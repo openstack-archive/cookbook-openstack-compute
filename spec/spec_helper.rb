@@ -17,7 +17,7 @@ REDHAT_OPTS = {
 }.freeze
 UBUNTU_OPTS = {
   platform: 'ubuntu',
-  version: '14.04',
+  version: '16.04',
   log_level: LOG_LEVEL,
   file_cache_path: Chef::Config[:file_cache_path]
 }.freeze
