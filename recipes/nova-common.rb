@@ -139,7 +139,7 @@ Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpo
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint}")
 # Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint}")
 
-if node['openstack']['compute']['conf']['neutron']['auth_type'] == 'v2password'
+if node['openstack']['compute']['conf']['neutron']['auth_type'] == 'v3password'
   node.default['openstack']['compute']['conf_secrets']
   .[]('neutron')['password'] =
     get_password 'service', 'openstack-network'
