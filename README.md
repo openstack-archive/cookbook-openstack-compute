@@ -34,6 +34,7 @@ The following cookbooks are dependencies:
 - 'openstack-image', '>= 14.0.0'
 - 'openstack-network', '>= 14.0.0'
 - 'python', '~> 1.4.6'
+- 'openstackclient', '>= 0.1.0'
 
 Attributes
 ==========

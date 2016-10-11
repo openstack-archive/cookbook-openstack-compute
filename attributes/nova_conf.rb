@@ -22,10 +22,13 @@ default['openstack']['compute']['conf'].tap do |conf|
 
   # [keystone_authtoken]
   conf['keystone_authtoken']['signing_dir'] = '/var/cache/nova/api'
-  conf['keystone_authtoken']['auth_type'] = 'v2password'
+  conf['keystone_authtoken']['auth_type'] = 'v3password'
   conf['keystone_authtoken']['region_name'] = node['openstack']['region']
   conf['keystone_authtoken']['username'] = 'nova'
-  conf['keystone_authtoken']['tenant_name'] = 'service'
+  conf['keystone_authtoken']['user_domain_name'] = 'Default'
+  conf['keystone_authtoken']['project_domain_name'] = 'Default'
+  conf['keystone_authtoken']['project_name'] = 'service'
+  conf['keystone_authtoken']['auth_version'] = 'v3'
 
   # [libvirt]
   conf['libvirt']['virt_type'] = 'kvm'
@@ -44,11 +47,13 @@ default['openstack']['compute']['conf'].tap do |conf|
   end
 
   # [neutron]
-  conf['neutron']['auth_type'] = 'v2password'
+  conf['neutron']['auth_type'] = 'v3password'
   conf['neutron']['region_name'] = node['openstack']['region']
   conf['neutron']['username'] = 'neutron'
-  conf['neutron']['tenant_name'] = 'service'
+  conf['neutron']['user_domain_name'] = 'Default'
   conf['neutron']['service_metadata_proxy'] = true
+  conf['neutron']['project_name'] = 'service'
+  conf['neutron']['project_domain_name'] = 'Default'
 
   # [cinder] section
   conf['cinder']['os_region_name'] = node['openstack']['region']

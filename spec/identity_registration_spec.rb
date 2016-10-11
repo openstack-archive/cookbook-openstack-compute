@@ -10,109 +10,86 @@ describe 'openstack-compute::identity_registration' do
 
     include_context 'compute_stubs'
 
-    it 'registers service tenant' do
-      expect(chef_run).to create_tenant_openstack_identity_register(
-        'Register Service Tenant'
+    connection_params = {
+      openstack_auth_url: 'http://127.0.0.1:35357/v3/auth/tokens',
+      openstack_username: 'admin',
+      openstack_api_key: 'admin',
+      openstack_project_name: 'admin',
+      openstack_domain_name: 'default'
+    }
+    service_name = 'nova'
+    service_type = 'compute'
+    service_user = 'nova'
+    url = 'http://127.0.0.1:8774/v2.1/%(tenant_id)s'
+    region = 'RegionOne'
+    project_name = 'service'
+    role_name = 'admin'
+    password = 'nova-pass'
+    domain_name = 'Default'
+
+    it "registers #{project_name} Project" do
+      expect(chef_run).to create_openstack_project(
+        project_name
       ).with(
-        auth_uri: 'http://127.0.0.1:35357/v2.0',
-        bootstrap_token: 'bootstrap-token',
-        tenant_name: 'service',
-        tenant_description: 'Service Tenant'
+        connection_params: connection_params
       )
+    end
+
+    it "registers #{service_name} service" do
+      expect(chef_run).to create_openstack_service(
+        service_name
+      ).with(
+        connection_params: connection_params,
+        type: service_type
+      )
+    end
+
+    context "registers #{service_name} endpoint" do
+      %w(admin internal public).each do |interface|
+        it "#{interface} endpoint with default values" do
+          expect(chef_run).to create_openstack_endpoint(
+            service_type
+          ).with(
+            service_name: service_name,
+            # interface: interface,
+            url: url,
+            region: region,
+            connection_params: connection_params
+          )
+        end
+      end
     end
 
     it 'registers service user' do
-      expect(chef_run).to create_user_openstack_identity_register(
-        'Register Service User'
+      expect(chef_run).to create_openstack_user(
+        service_user
       ).with(
-        auth_uri: 'http://127.0.0.1:35357/v2.0',
-        bootstrap_token: 'bootstrap-token',
-        tenant_name: 'service',
-        user_name: 'nova',
-        user_pass: 'nova-pass'
+        project_name: project_name,
+        role_name: role_name,
+        password: password,
+        connection_params: connection_params
       )
     end
 
-    it 'grants admin role to service user for service tenant' do
-      expect(chef_run).to grant_role_openstack_identity_register(
-        "Grant 'admin' Role to Service User for Service Tenant"
+    it do
+      expect(chef_run).to grant_domain_openstack_user(
+        service_user
       ).with(
-        auth_uri: 'http://127.0.0.1:35357/v2.0',
-        bootstrap_token: 'bootstrap-token',
-        tenant_name: 'service',
-        user_name: 'nova',
-        role_name: 'admin'
+        domain_name: domain_name,
+        role_name: role_name,
+        connection_params: connection_params
       )
     end
 
-    it 'registers compute service' do
-      expect(chef_run).to create_service_openstack_identity_register(
-        'Register Compute Service'
+    it do
+      expect(chef_run).to grant_role_openstack_user(
+        service_user
       ).with(
-        auth_uri: 'http://127.0.0.1:35357/v2.0',
-        bootstrap_token: 'bootstrap-token',
-        service_name: 'nova',
-        service_type: 'compute',
-        service_description: 'Nova Compute Service'
+        project_name: project_name,
+        role_name: role_name,
+        password: password,
+        connection_params: connection_params
       )
-    end
-
-    context 'registers compute endpoint' do
-      it 'with default values' do
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register Compute Endpoint'
-        ).with(
-          auth_uri: 'http://127.0.0.1:35357/v2.0',
-          bootstrap_token: 'bootstrap-token',
-          service_type: 'compute',
-          endpoint_region: 'RegionOne',
-          endpoint_adminurl: 'http://127.0.0.1:8774/v2/%(tenant_id)s',
-          endpoint_internalurl: 'http://127.0.0.1:8774/v2/%(tenant_id)s',
-          endpoint_publicurl: 'http://127.0.0.1:8774/v2/%(tenant_id)s'
-        )
-      end
-
-      it 'register endpoint with all different URLs' do
-        public_url = 'https://public.host:789/public_path'
-        internal_url = 'http://internal.host:456/internal_path'
-        admin_url = 'https://admin.host:123/admin_path'
-        node.set['openstack']['endpoints']['public']['compute-api']['uri'] = public_url
-        node.set['openstack']['endpoints']['internal']['compute-api']['uri'] = internal_url
-        node.set['openstack']['endpoints']['admin']['compute-api']['uri'] = admin_url
-
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register Compute Endpoint'
-        ).with(
-          endpoint_adminurl: admin_url,
-          endpoint_internalurl: internal_url,
-          endpoint_publicurl: public_url
-        )
-      end
-
-      it 'with custom region override' do
-        node.set['openstack']['region'] = 'computeRegion'
-        expect(chef_run).to create_endpoint_openstack_identity_register(
-          'Register Compute Endpoint'
-        ).with(endpoint_region: 'computeRegion')
-      end
-    end
-
-    describe "when 'ec2' is not in the list of enabled_apis" do
-      before do
-        node.set['openstack']['compute']['conf']['DEFAULT']['enabled_apis'] = 'osapi_compute'
-      end
-
-      it 'does not register ec2 service' do
-        expect(chef_run).not_to create_service_openstack_identity_register(
-          'Register EC2 Service'
-        )
-      end
-
-      it 'does not register ec2 endpoint' do
-        expect(chef_run).not_to create_endpoint_openstack_identity_register(
-          'Register EC2 Endpoint'
-        )
-      end
     end
   end
 end

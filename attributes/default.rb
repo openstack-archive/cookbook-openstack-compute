@@ -253,7 +253,7 @@ end
   default['openstack']['endpoints'][type]['compute-xvpvnc']['path'] = '/console'
   # The OpenStack Compute (Nova) Native API endpoint
   default['openstack']['endpoints'][type]['compute-api']['port'] = '8774'
-  default['openstack']['endpoints'][type]['compute-api']['path'] = '/v2/%(tenant_id)s'
+  default['openstack']['endpoints'][type]['compute-api']['path'] = '/v2.1/%(tenant_id)s'
   # The OpenStack Compute (Nova) novnc endpoint
   default['openstack']['endpoints'][type]['compute-novnc']['port'] = '6080'
   default['openstack']['endpoints'][type]['compute-novnc']['path'] = '/vnc_auto.html'

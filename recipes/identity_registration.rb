@@ -26,67 +26,77 @@ class ::Chef::Recipe
 end
 
 identity_admin_endpoint = admin_endpoint 'identity'
-bootstrap_token = get_password 'token', 'openstack_identity_bootstrap_token'
-auth_uri = ::URI.decode identity_admin_endpoint.to_s
+interfaces = {
+  public: { url: public_endpoint('compute-api') },
+  internal: { url: internal_endpoint('compute-api') },
+  admin: { url: admin_endpoint('compute-api') }
+}
+auth_url = ::URI.decode identity_admin_endpoint.to_s
 service_pass = get_password 'service', 'openstack-compute'
 service_user = node['openstack']['compute']['conf']['keystone_authtoken']['username']
 service_role = node['openstack']['compute']['service_role']
-service_tenant_name = node['openstack']['compute']['conf']['keystone_authtoken']['tenant_name']
-public_nova_api_endpoint = public_endpoint 'compute-api'
-admin_nova_api_endpoint = admin_endpoint 'compute-api'
-internal_nova_api_endpoint = internal_endpoint 'compute-api'
+service_project_name = node['openstack']['compute']['conf']['keystone_authtoken']['project_name']
+service_domain_name = node['openstack']['compute']['conf']['keystone_authtoken']['user_domain_name']
+
 # TBD, another clean up opportunity. We could use the 'admin', and
 # 'internal' endpoints for a single service name. For now, we'll
 # leave the old names in place.
 region = node['openstack']['region']
+admin_user = node['openstack']['identity']['admin_user']
+admin_pass = get_password 'user', node['openstack']['identity']['admin_user']
+admin_project = node['openstack']['identity']['admin_project']
+admin_domain = node['openstack']['identity']['admin_domain_name']
+
+connection_params = {
+  openstack_auth_url:     "#{auth_url}/auth/tokens",
+  openstack_username:     admin_user,
+  openstack_api_key:      admin_pass,
+  openstack_project_name: admin_project,
+  openstack_domain_name:    admin_domain
+}
+
+# Register Compute Service
+openstack_service 'nova' do
+  type 'compute'
+  connection_params connection_params
+end
+
+interfaces.each do |interface, res|
+  # Register Compute Endpoints
+  openstack_endpoint 'compute' do
+    service_name 'nova'
+    interface interface.to_s
+    url res[:url].to_s
+    region region
+    connection_params connection_params
+  end
+end
 
 # Register Service Tenant
-openstack_identity_register 'Register Service Tenant' do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  tenant_name service_tenant_name
-  tenant_description 'Service Tenant'
-  action :create_tenant
+openstack_project service_project_name do
+  connection_params connection_params
 end
 
 # Register Service User
-openstack_identity_register 'Register Service User' do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  tenant_name service_tenant_name
-  user_name service_user
-  user_pass service_pass
-  action :create_user
+openstack_user service_user do
+  project_name service_project_name
+  role_name service_role
+  password service_pass
+  connection_params connection_params
 end
 
-## Grant Admin role to Service User for Service Tenant ##
-openstack_identity_register "Grant 'admin' Role to Service User for Service Tenant" do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  tenant_name service_tenant_name
-  user_name service_user
+## Grant Service role to Service User for Service Tenant ##
+openstack_user service_user do
   role_name service_role
+  project_name service_project_name
+  connection_params connection_params
   action :grant_role
 end
 
-# Register Compute Service
-openstack_identity_register 'Register Compute Service' do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_name 'nova'
-  service_type 'compute'
-  service_description 'Nova Compute Service'
-  action :create_service
-end
-
-# Register Compute Endpoint
-openstack_identity_register 'Register Compute Endpoint' do
-  auth_uri auth_uri
-  bootstrap_token bootstrap_token
-  service_type 'compute'
-  endpoint_region region
-  endpoint_adminurl ::URI.decode admin_nova_api_endpoint.to_s
-  endpoint_internalurl ::URI.decode internal_nova_api_endpoint.to_s
-  endpoint_publicurl ::URI.decode public_nova_api_endpoint.to_s
-  action :create_endpoint
+openstack_user service_user do
+  domain_name service_domain_name
+  role_name service_role
+  user_name service_user
+  connection_params connection_params
+  action :grant_domain
 end

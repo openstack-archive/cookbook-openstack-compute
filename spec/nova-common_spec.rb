@@ -123,8 +123,12 @@ describe 'openstack-compute::nova-common' do
       context 'keystone_authtoken' do
         it 'has correct auth_token settings' do
           [
-            'auth_url = http://127.0.0.1:5000/v2.0',
-            'password = nova-pass'
+            'auth_url = http://127.0.0.1:5000/v3',
+            'password = nova-pass',
+            'username = nova',
+            'project_name = service',
+            'user_domain_name = Default',
+            'project_domain_name = Default'
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('keystone_authtoken', /^#{Regexp.quote(line)}$/)
@@ -145,7 +149,10 @@ describe 'openstack-compute::nova-common' do
 
       it do
         [
-
+          /^username = neutron$/,
+          /^project_name = service$/,
+          /^user_domain_name = Default/,
+          /^project_domain_name = Default/,
           %r{^url = http://127.0.0.1:9696$}
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
