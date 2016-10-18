@@ -12,7 +12,6 @@ describe 'openstack-compute::api-metadata' do
     include_examples 'expect_runs_nova_common_recipe'
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
-    include_examples 'expect_upgrades_python_keystoneclient'
     include_examples 'expect_creates_api_paste_template'
 
     it 'upgrades metadata api packages' do

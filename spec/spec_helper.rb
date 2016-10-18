@@ -105,12 +105,6 @@ shared_examples 'expect_runs_nova_common_recipe' do
   end
 end
 
-shared_examples 'expect_upgrades_python_keystoneclient' do
-  it 'upgrades python-keystoneclient' do
-    expect(chef_run).to upgrade_package 'python-keystoneclient'
-  end
-end
-
 shared_examples 'expect_creates_nova_state_dir' do
   it 'creates the /var/lib/nova/lock directory' do
     expect(chef_run).to create_directory('/var/lib/nova').with(
