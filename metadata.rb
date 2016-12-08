@@ -12,10 +12,10 @@ version '14.0.0'
   supports os
 end
 
-depends 'ceph', '>= 0.8.1'
+depends 'ceph', '>= 0.9.2'
 depends 'openstack-common', '>= 14.0.0'
 depends 'openstack-identity', '>= 14.0.0'
 depends 'openstack-image', '>= 14.0.0'
 depends 'openstack-network', '>= 14.0.0'
-depends 'python', '~> 1.4.6'
+depends 'python', '~> 1.4'
 depends 'openstackclient'
