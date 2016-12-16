@@ -92,8 +92,8 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'has default RPC/AMQP options set' do
-        [/^rpc_backend = rabbit$/].each do |line|
+      it 'has default transport_url/AMQP options set' do
+        [%r{^transport_url = rabbit://guest:mypass@127.0.0.1:5672$}].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end

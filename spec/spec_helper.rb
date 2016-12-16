@@ -73,9 +73,9 @@ shared_context 'compute_stubs' do
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('service', 'rbd_block_storage')
       .and_return 'cinder-rbd-pass'
-    # allow_any_instance_of(Chef::Recipe).to receive(:get_password)
-    #   .with('service', 'openstack-bare-metal')
-    #   .and_return 'ironic-pass'
+    allow_any_instance_of(Chef::Recipe).to receive(:rabbit_transport_url)
+      .with('compute')
+      .and_return('rabbit://guest:mypass@127.0.0.1:5672')
     allow_any_instance_of(Chef::Recipe).to receive(:memcached_servers).and_return []
     allow(Chef::Application).to receive(:fatal!)
     allow(SecureRandom).to receive(:hex).and_return('ad3313264ea51d8c6a3d1c5b140b9883')

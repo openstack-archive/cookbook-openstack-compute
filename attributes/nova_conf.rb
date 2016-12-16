@@ -7,7 +7,6 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['state_path'] = '/var/lib/nova'
   conf['DEFAULT']['compute_driver'] = 'libvirt.LibvirtDriver'
   conf['DEFAULT']['auth_version'] = node['openstack']['api']['auth']['version']
-  conf['DEFAULT']['rpc_backend'] = node['openstack']['mq']['service_type']
   conf['DEFAULT']['instances_path'] = "#{node['openstack']['compute']['conf']['DEFAULT']['state_path']}/instances"
   conf['DEFAULT']['enabled_apis'] = 'osapi_compute'
   if node['openstack']['compute']['syslog']['use'] #= false

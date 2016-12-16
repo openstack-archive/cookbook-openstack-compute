@@ -94,13 +94,8 @@ if node['openstack']['endpoints']['db']['enabled_slave']
     db_uri('compute_api', api_db_user, api_db_pass, true)
 end
 
-if node['openstack']['compute']['conf']['DEFAULT']['rpc_backend'] == 'rabbit'
-  user = node['openstack']['mq']['compute']['rabbit']['userid']
-  node.default['openstack']['compute']['conf_secrets']
-    .[]('oslo_messaging_rabbit')['rabbit_userid'] = user
-  node.default['openstack']['compute']['conf_secrets']
-    .[]('oslo_messaging_rabbit')['rabbit_password'] =
-    get_password 'user', user
+if node['openstack']['mq']['service_type'] == 'rabbit'
+  node.default['openstack']['compute']['conf_secrets']['DEFAULT']['transport_url'] = rabbit_transport_url 'compute'
 end
 
 memcache_servers = memcached_servers.join ','
