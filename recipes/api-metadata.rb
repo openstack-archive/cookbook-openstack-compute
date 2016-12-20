@@ -29,11 +29,6 @@ include_recipe 'openstack-compute::nova-common'
 
 platform_options = node['openstack']['compute']['platform']
 
-# NOTE(mrodden): required for keystone auth middleware
-package 'python-keystoneclient' do
-  action :upgrade
-end
-
 platform_options['compute_api_metadata_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']
