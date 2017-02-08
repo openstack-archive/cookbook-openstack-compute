@@ -23,10 +23,6 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-if node['openstack']['compute']['docker']['enable']
-  include_recipe 'openstack-compute::docker-setup'
-end
-
 include_recipe 'openstack-compute::nova-common'
 platform_options = node['openstack']['compute']['platform']
 
@@ -69,29 +65,6 @@ directory node['openstack']['compute']['conf']['DEFAULT']['instances_path'] do
 end
 
 include_recipe 'openstack-compute::libvirt'
-
-docker_filter_source_path = node['openstack']['compute']['docker']['filter_source_path']
-install_directory = "#{Chef::Config['file_cache_path']}/nova-docker"
-docker_group = node['openstack']['compute']['docker']['group']
-docker_group_members = node['openstack']['compute']['service_user']
-filter_target_path = docker_filter_source_path + '/docker.filters'
-filter_source_path = install_directory + filter_target_path
-
-group docker_group do
-  members docker_group_members
-  action [:create, :manage]
-  only_if { node['openstack']['compute']['docker']['enable'] }
-end
-
-file 'docker.filter' do
-  owner 'root'
-  group 'root'
-  mode 00644
-  path filter_target_path
-  content lazy { ::File.open(filter_source_path).read }
-  action :create
-  only_if { node['openstack']['compute']['docker']['enable'] }
-end
 
 service 'nova-compute' do
   service_name platform_options['compute_compute_service']
