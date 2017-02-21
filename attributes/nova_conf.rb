@@ -20,7 +20,6 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['dns_server'] = '8.8.8.8' # [] in docs
 
   # [keystone_authtoken]
-  conf['keystone_authtoken']['signing_dir'] = '/var/cache/nova/api'
   conf['keystone_authtoken']['auth_type'] = 'v3password'
   conf['keystone_authtoken']['region_name'] = node['openstack']['region']
   conf['keystone_authtoken']['username'] = 'nova'
@@ -59,4 +58,12 @@ default['openstack']['compute']['conf'].tap do |conf|
 
   # [oslo_concurrency] section
   conf['oslo_concurrency']['lock_path'] = "#{node['openstack']['compute']['conf']['DEFAULT']['state_path']}/lock"
+
+  # [placement] section
+  conf['placement']['auth_type'] = 'password'
+  conf['placement']['os_region_name'] = node['openstack']['region']
+  conf['placement']['username'] = 'placement'
+  conf['placement']['user_domain_name'] = 'Default'
+  conf['placement']['project_domain_name'] = 'Default'
+  conf['placement']['project_name'] = 'service'
 end

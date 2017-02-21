@@ -26,12 +26,6 @@ include_recipe 'openstack-compute::nova-common'
 
 platform_options = node['openstack']['compute']['platform']
 
-directory ::File.dirname(node['openstack']['compute']['conf']['keystone_authtoken']['signing_dir']) do
-  owner node['openstack']['compute']['user']
-  group node['openstack']['compute']['group']
-  mode 00700
-end
-
 platform_options['api_os_compute_packages'].each do |pkg|
   package pkg do
     options platform_options['package_overrides']

@@ -136,6 +136,23 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
+      context 'placement' do
+        it 'has correct authentication settings' do
+          [
+            'auth_type = password',
+            'os_region_name = RegionOne',
+            'password = placement-pass',
+            'username = placement',
+            'project_name = service',
+            'user_domain_name = Default',
+            'project_domain_name = Default'
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name)\
+              .with_section_content('placement', /^#{Regexp.quote(line)}$/)
+          end
+        end
+      end
+
       it 'uses default values for attributes' do
         [
 

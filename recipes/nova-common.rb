@@ -155,6 +155,10 @@ node.default['openstack']['compute']['conf_secrets']
   .[]('keystone_authtoken')['password'] =
   get_password 'service', 'openstack-compute'
 
+node.default['openstack']['compute']['conf_secrets']
+  .[]('placement')['password'] =
+  get_password 'service', 'openstack-placement'
+
 node.default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['iscsi_helper'] = platform_options['iscsi_helper']
   # conf['DEFAULT']['scheduler_default_filters'] = node['openstack']['compute']['scheduler']['default_filters'].join(',')
@@ -185,6 +189,9 @@ node.default['openstack']['compute']['conf'].tap do |conf|
 
   # [keystone_authtoken] section
   conf['keystone_authtoken']['auth_url'] = auth_url
+
+  # [placement] section
+  conf['placement']['auth_url'] = auth_url
 
   # [glance] section
   conf['glance']['api_servers'] =

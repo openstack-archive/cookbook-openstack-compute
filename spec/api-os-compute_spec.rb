@@ -14,14 +14,6 @@ describe 'openstack-compute::api-os-compute' do
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_creates_api_paste_template'
 
-    it 'creates the /var/cache/nova directory' do
-      expect(chef_run).to create_directory('/var/cache/nova').with(
-        user: 'nova',
-        group: 'nova',
-        mode: 0700
-      )
-    end
-
     it do
       expect(chef_run).to run_execute('nova-manage api_db sync')
         .with(timeout: 3600,

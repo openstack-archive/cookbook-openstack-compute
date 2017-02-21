@@ -31,9 +31,15 @@ interfaces = {
   internal: { url: internal_endpoint('compute-api') },
   admin: { url: admin_endpoint('compute-api') }
 }
+placement_interfaces = {
+  public: { url: public_endpoint('placement-api') },
+  internal: { url: internal_endpoint('placement-api') }
+}
 auth_url = ::URI.decode identity_admin_endpoint.to_s
 service_pass = get_password 'service', 'openstack-compute'
 service_user = node['openstack']['compute']['conf']['keystone_authtoken']['username']
+placement_service_pass = get_password 'service', 'openstack-placement'
+placement_service_user = node['openstack']['compute']['conf']['placement']['username']
 service_role = node['openstack']['compute']['service_role']
 service_project_name = node['openstack']['compute']['conf']['keystone_authtoken']['project_name']
 service_domain_name = node['openstack']['compute']['conf']['keystone_authtoken']['user_domain_name']
@@ -52,12 +58,17 @@ connection_params = {
   openstack_username:     admin_user,
   openstack_api_key:      admin_pass,
   openstack_project_name: admin_project,
-  openstack_domain_name:    admin_domain
+  openstack_domain_name:  admin_domain
 }
 
-# Register Compute Service
+# Register Compute Services
 openstack_service 'nova' do
   type 'compute'
+  connection_params connection_params
+end
+
+openstack_service 'nova-placement' do
+  type 'placement'
   connection_params connection_params
 end
 
@@ -72,12 +83,22 @@ interfaces.each do |interface, res|
   end
 end
 
-# Register Service Tenant
+placement_interfaces.each do |interface, res|
+  openstack_endpoint 'placement' do
+    service_name 'nova-placement'
+    interface interface.to_s
+    url res[:url].to_s
+    region region
+    connection_params connection_params
+  end
+end
+
+# Register Service Project
 openstack_project service_project_name do
   connection_params connection_params
 end
 
-# Register Service User
+# Register Service Users
 openstack_user service_user do
   project_name service_project_name
   role_name service_role
@@ -85,18 +106,27 @@ openstack_user service_user do
   connection_params connection_params
 end
 
-## Grant Service role to Service User for Service Tenant ##
-openstack_user service_user do
-  role_name service_role
+openstack_user placement_service_user do
   project_name service_project_name
+  role_name service_role
+  password placement_service_pass
   connection_params connection_params
-  action :grant_role
 end
 
-openstack_user service_user do
-  domain_name service_domain_name
-  role_name service_role
-  user_name service_user
-  connection_params connection_params
-  action :grant_domain
+## Grant Service role to Service Users for Service Project ##
+[service_user, placement_service_user].each do |user|
+  openstack_user user do
+    role_name service_role
+    project_name service_project_name
+    connection_params connection_params
+    action :grant_role
+  end
+
+  openstack_user user do
+    domain_name service_domain_name
+    role_name service_role
+    user_name user
+    connection_params connection_params
+    action :grant_domain
+  end
 end

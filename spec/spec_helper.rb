@@ -71,6 +71,9 @@ shared_context 'compute_stubs' do
       .with('service', 'openstack-network')
       .and_return('neutron-pass')
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('service', 'openstack-placement')
+      .and_return('placement-pass')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('service', 'rbd_block_storage')
       .and_return 'cinder-rbd-pass'
     allow_any_instance_of(Chef::Recipe).to receive(:rabbit_transport_url)
@@ -82,6 +85,7 @@ shared_context 'compute_stubs' do
     # stub_command('nova-manage network list | grep 192.168.100.0/24').and_return(false)
     # stub_command('nova-manage network list | grep 192.168.200.0/24').and_return(false)
     # stub_command("nova-manage floating list |grep -E '.*([0-9]{1,3}[.]){3}[0-9]{1,3}*'").and_return(false)
+    stub_command("/usr/sbin/apache2 -t").and_return(true)
     stub_command('virsh net-list | grep -q default').and_return(true)
     stub_command('ovs-vsctl br-exists br-int').and_return(true)
     stub_command('ovs-vsctl br-exists br-tun').and_return(true)
