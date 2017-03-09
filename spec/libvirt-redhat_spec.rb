@@ -16,8 +16,8 @@ describe 'openstack-compute::libvirt' do
       end
     end
 
-    it 'creates libvirtd group and adds nova as a member' do
-      expect(chef_run).to create_group('libvirtd').with(members: ['nova'])
+    it 'creates libvirt group and adds nova as a member' do
+      expect(chef_run).to create_group('libvirt').with(members: ['nova'])
     end
 
     it 'symlinks qemu-kvm' do

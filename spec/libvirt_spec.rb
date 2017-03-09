@@ -16,8 +16,8 @@ describe 'openstack-compute::libvirt' do
       end
     end
 
-    it 'does not create libvirtd group and add to nova' do
-      expect(chef_run).not_to create_group 'libvirtd'
+    it 'does not create libvirt group and add to nova' do
+      expect(chef_run).not_to create_group 'libvirt'
     end
 
     it 'does not symlink qemu-kvm' do

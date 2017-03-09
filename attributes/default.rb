@@ -61,7 +61,7 @@ default['openstack']['compute']['libvirt']['max_workers'] = 20
 default['openstack']['compute']['libvirt']['max_requests'] = 20
 # libvirt.max_client_requests (default: 5)
 default['openstack']['compute']['libvirt']['max_client_requests'] = 5
-default['openstack']['compute']['libvirt']['group'] = 'libvirtd'
+default['openstack']['compute']['libvirt']['group'] = 'libvirt'
 default['openstack']['compute']['libvirt']['unix_sock_rw_perms'] = '0770'
 default['openstack']['compute']['libvirt']['libvirt_inject_key'] = true
 # rbd
