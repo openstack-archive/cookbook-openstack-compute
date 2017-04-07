@@ -140,8 +140,8 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => ['openstack-nova-api'],
     'api_os_compute_service' => 'openstack-nova-api',
-    'api_placement_packages' => ['nova-placement-api'],
-    'api_placement_service' => 'nova-placement-api',
+    'api_placement_packages' => ['openstack-nova-placement-api'],
+    'api_placement_service' => 'openstack-nova-placement-api',
     'memcache_python_packages' => ['python-memcached'],
     'compute_api_metadata_packages' => ['openstack-nova-api'],
     'compute_api_metadata_service' => 'openstack-nova-metadata-api',
