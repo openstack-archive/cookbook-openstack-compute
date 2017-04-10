@@ -66,4 +66,7 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['placement']['user_domain_name'] = 'Default'
   conf['placement']['project_domain_name'] = 'Default'
   conf['placement']['project_name'] = 'service'
+
+  # [scheduler] section
+  conf['scheduler']['discover_hosts_in_cells_interval'] = 300
 end
