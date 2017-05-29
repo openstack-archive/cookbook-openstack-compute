@@ -5,6 +5,8 @@ Team and repository tags
 
 <!-- Change things from this point on -->
 
+![Chef OpenStack Logo](https://www.openstack.org/themes/openstack/images/project-mascots/Chef%20OpenStack/OpenStack_Project_Chef_horizontal.png)
+
 Description
 ===========
 
