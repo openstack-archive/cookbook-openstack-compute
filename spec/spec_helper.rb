@@ -59,6 +59,9 @@ shared_context 'compute_stubs' do
       .with('db', 'nova_api')
       .and_return('nova_api_db_pass')
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
+      .with('db', 'nova_cell0')
+      .and_return('nova_cell0_db_pass')
+    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('user', 'guest')
       .and_return('mq-pass')
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
@@ -92,6 +95,12 @@ shared_context 'compute_stubs' do
     stub_command('virsh secret-list | grep 00000000-0000-0000-0000-000000000000').and_return(false)
     stub_command('virsh secret-set-value --secret 00000000-0000-0000-0000-000000000000 --base64 $(ceph-authtool -p -n client.cinder /etc/ceph/ceph.client.cinder.keyring)').and_return(false)
     stub_command('virsh secret-get-value 00000000-0000-0000-0000-000000000000 | grep $(ceph-authtool -p -n client.cinder /etc/ceph/ceph.client.cinder.keyring)').and_return(false)
+    stub_command('nova-manage api_db sync').and_return(true)
+    stub_command('nova-manage cell_v2 map_cell0 --database_connection mysql+pymysql://nova_cell0:mypass@127.0.0.1/nova_cell0?charset=utf8').and_return(true)
+    stub_command('nova-manage cell_v2 create_cell --verbose --name cell1').and_return(true)
+    stub_command('nova-manage cell_v2 list_cells | grep -q cell0').and_return(false)
+    stub_command('nova-manage cell_v2 list_cells | grep -q cell1').and_return(false)
+    stub_command('nova-manage cell_v2 discover_hosts').and_return(true)
   end
 end
 
@@ -109,12 +118,18 @@ shared_examples 'expect_runs_nova_common_recipe' do
   end
 end
 
+shared_examples 'expect_runs_nova_cell_recipe' do
+  it 'includes _nova_cell' do
+    expect(chef_run).to include_recipe 'openstack-compute::_nova_cell'
+  end
+end
+
 shared_examples 'expect_creates_nova_state_dir' do
   it 'creates the /var/lib/nova/lock directory' do
     expect(chef_run).to create_directory('/var/lib/nova').with(
       user: 'nova',
       group: 'nova',
-      mode: 0755
+      mode: 0o755
     )
   end
 end
@@ -124,7 +139,7 @@ shared_examples 'expect_creates_nova_lock_dir' do
     expect(chef_run).to create_directory('/var/lib/nova/lock').with(
       user: 'nova',
       group: 'nova',
-      mode: 0755
+      mode: 0o755
     )
   end
 end
@@ -134,7 +149,7 @@ shared_examples 'expect_creates_nova_instances_dir' do
     expect(chef_run).to create_directory('/var/lib/nova/instances').with(
       user: 'nova',
       group: 'nova',
-      mode: 0755
+      mode: 0o755
     )
   end
 end
@@ -145,7 +160,7 @@ shared_examples 'expect_creates_api_paste_template' do
     expect(chef_run).to create_template('/etc/nova/api-paste.ini').with(
       user: 'nova',
       group: 'nova',
-      mode: 0644
+      mode: 0o644
     )
   end
 

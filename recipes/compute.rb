@@ -53,14 +53,14 @@ end
 # TODO: (jklare) this has to be refactored!!!
 cookbook_file '/etc/nova/nova-compute.conf' do
   source 'nova-compute.conf'
-  mode 00644
+  mode 0o0644
   action :create
 end
 
 directory node['openstack']['compute']['conf']['DEFAULT']['instances_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00755
+  mode 0o0755
   recursive true
 end
 

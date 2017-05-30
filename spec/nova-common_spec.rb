@@ -35,7 +35,7 @@ describe 'openstack-compute::nova-common' do
       expect(chef_run).to create_directory('/etc/nova').with(
         owner: 'nova',
         group: 'nova',
-        mode: 0750
+        mode: 0o750
       )
     end
 
@@ -66,7 +66,7 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'nova',
           group: 'nova',
-          mode: 0640
+          mode: 0o640
         )
       end
 
@@ -155,7 +155,6 @@ describe 'openstack-compute::nova-common' do
 
       it 'uses default values for attributes' do
         [
-
           %r{^api_servers = http://127.0.0.1:9292$}
 
         ].each do |line|
@@ -203,8 +202,7 @@ describe 'openstack-compute::nova-common' do
         node.set['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
 
         [/^vncserver_listen = 127.0.0.1$/,
-         /^vncserver_proxyclient_address = 127.0.0.1$/
-        ].each do |line|
+         /^vncserver_proxyclient_address = 127.0.0.1$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
@@ -265,7 +263,8 @@ describe 'openstack-compute::nova-common' do
 
       it 'has no auto_assign_floating_ip' do
         expect(chef_run).not_to render_file(file.name).with_content(
-          'auto_assign_floating_ip=false')
+          'auto_assign_floating_ip=false'
+        )
       end
 
       context 'rbd backend' do
@@ -385,7 +384,7 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to render_config_file(file.name)
           .with_section_content(
             'api_database',
-            %r{connection = mysql://nova_api:nova_api_db_pass@127.0.0.1:3306/nova_api\?charset=utf8$}
+            %(connection = mysql+pymysql://nova_api:nova_api_db_pass@127.0.0.1:3306/nova_api?charset=utf8)
           )
       end
 
@@ -397,7 +396,7 @@ describe 'openstack-compute::nova-common' do
           node.set['openstack']['db']['compute']['username'] = 'nova'
 
           expect(chef_run).to render_config_file(file.name)\
-            .with_section_content('database', %r{slave_connection = mysql://nova:nova_db_pass@10.10.1.1:3326/nova\?charset=utf8$})
+            .with_section_content('database', %(slave_connection = mysql+pymysql://nova:nova_db_pass@10.10.1.1:3326/nova?charset=utf8))
         end
 
         it 'sets overide database enabled_slave attribute as false' do
@@ -407,7 +406,7 @@ describe 'openstack-compute::nova-common' do
           node.set['openstack']['db']['compute']['username'] = 'nova'
 
           expect(chef_run).to_not render_config_file(file.name)\
-            .with_section_content('database', %r{slave_connection = mysql://nova:nova_db_pass@10.10.1.1:3326/nova\?charset=utf8$})
+            .with_section_content('database', %(slave_connection = mysql+pymysql://nova:nova_db_pass@10.10.1.1:3326/nova?charset=utf8))
         end
       end
     end
@@ -419,7 +418,7 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to create_template(file.name).with(
           user: 'root',
           group: 'root',
-          mode: 0644
+          mode: 0o644
         )
       end
 

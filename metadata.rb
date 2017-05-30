@@ -7,6 +7,7 @@ license 'Apache 2.0'
 description 'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '15.0.0'
+chef_version '>= 12.5' if respond_to?(:chef_version)
 
 %w(ubuntu redhat centos).each do |os|
   supports os
