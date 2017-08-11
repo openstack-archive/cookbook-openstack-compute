@@ -81,7 +81,8 @@ def update_boot_kernel_and_trigger_reboot(flavor = 'default')
     update_grub2_default_kernel(flavor)
   else
     ::Chef::Application.fatal!(
-      'Unknown bootloader. Could not change boot kernel.')
+      'Unknown bootloader. Could not change boot kernel.'
+    )
   end
 
   # trigger reboot through reboot_handler, if kernel-$flavor is not yet
@@ -127,7 +128,7 @@ template '/etc/libvirt/libvirtd.conf' do
   source 'libvirtd.conf.erb'
   owner 'root'
   group 'root'
-  mode 00644
+  mode 0o0644
   variables(
     auth_tcp: node['openstack']['compute']['libvirt']['auth_tcp'],
     libvirt_group: node['openstack']['compute']['libvirt']['group']
@@ -139,7 +140,7 @@ template '/etc/default/libvirt-bin' do
   source 'libvirt-bin.erb'
   owner 'root'
   group 'root'
-  mode 00644
+  mode 0o0644
   notifies :restart, 'service[libvirt-bin]', :immediately
   only_if { platform_family? 'debian' }
 end
@@ -148,7 +149,7 @@ template '/etc/sysconfig/libvirtd' do
   source 'libvirtd.erb'
   owner 'root'
   group 'root'
-  mode 00644
+  mode 0o0644
   notifies :restart, 'service[libvirt-bin]', :immediately
   only_if { platform_family? %w(rhel) }
 end

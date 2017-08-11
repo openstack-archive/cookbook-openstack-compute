@@ -62,7 +62,7 @@ describe 'openstack-compute::libvirt' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
-          mode: 0644
+          mode: 0o644
         )
       end
 
@@ -88,7 +88,7 @@ describe 'openstack-compute::libvirt' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
-          mode: 0644
+          mode: 0o644
         )
       end
 

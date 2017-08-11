@@ -75,7 +75,7 @@ describe 'openstack-compute::compute' do
       it 'creates the file' do
         expect(chef_run).to create_cookbook_file(file.name).with(
           source: 'nova-compute.conf',
-          mode: 00644
+          mode: 0o0644
         )
       end
     end

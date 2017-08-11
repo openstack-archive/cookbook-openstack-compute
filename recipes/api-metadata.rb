@@ -40,7 +40,7 @@ template '/etc/nova/api-paste.ini' do
   source 'api-paste.ini.erb'
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00644
+  mode 0o0644
 end
 
 service 'nova-api-metadata' do

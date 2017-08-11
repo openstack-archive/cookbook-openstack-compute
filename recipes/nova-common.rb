@@ -56,21 +56,21 @@ end
 directory '/etc/nova' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00750
+  mode 0o0750
   action :create
 end
 
 directory node['openstack']['compute']['conf']['DEFAULT']['state_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00755
+  mode 0o0755
   recursive true
 end
 
 directory node['openstack']['compute']['conf']['oslo_concurrency']['lock_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00755
+  mode 0o0755
   recursive true
 end
 
@@ -214,7 +214,7 @@ template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 00640
+  mode 0o0640
   variables(
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
@@ -235,7 +235,7 @@ template '/etc/nova/rootwrap.conf' do
   # Must be root!
   owner 'root'
   group 'root'
-  mode 00644
+  mode 0o0644
 end
 
 execute 'enable nova login' do

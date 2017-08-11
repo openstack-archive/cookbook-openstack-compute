@@ -33,15 +33,16 @@ platform_options['api_os_compute_packages'].each do |pkg|
   end
 end
 
-template '/etc/nova/api-paste.ini' do
-  source 'api-paste.ini.erb'
-  owner node['openstack']['compute']['user']
-  group node['openstack']['compute']['group']
-  mode 00644
-end
-
 nova_user = node['openstack']['compute']['user']
 nova_group = node['openstack']['compute']['group']
+
+template '/etc/nova/api-paste.ini' do
+  source 'api-paste.ini.erb'
+  owner nova_user
+  group nova_group
+  mode 0o0644
+end
+
 execute 'nova-manage api_db sync' do
   timeout node['openstack']['compute']['dbsync_timeout']
   user nova_user
@@ -59,3 +60,5 @@ service 'nova-api-os-compute' do
     'template[/etc/nova/api-paste.ini]'
   ]
 end
+
+include_recipe 'openstack-compute::_nova_cell'
