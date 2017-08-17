@@ -1,0 +1,107 @@
+DEPENDENCIES
+  openstack-common
+    git: https://github.com/openstack/cookbook-openstack-common.git
+    revision: 479af11fd7fb06790ab1a246d8f027b18a647cf2
+    branch: stable/ocata
+  openstack-compute
+    path: .
+    metadata: true
+  openstack-identity
+    git: https://github.com/openstack/cookbook-openstack-identity.git
+    revision: 8a967c291ac7291f2a8b4e688cf44caa48c125b9
+    branch: stable/ocata
+  openstack-image
+    git: https://github.com/openstack/cookbook-openstack-image.git
+    revision: 5d7a11aeb3f1abf51457cfaa37c1040f24681397
+    branch: stable/ocata
+  openstack-network
+    git: https://github.com/openstack/cookbook-openstack-network.git
+    revision: 3cdb3b94d432f12a2bf30b71336cccb78f404074
+    branch: stable/ocata
+  openstackclient
+    git: https://github.com/cloudbau/cookbook-openstackclient.git
+    revision: 44a257fd4b3b7178f618b5d26e56c4fe598cefe6
+    branch: stable/ocata
+
+GRAPH
+  apache2 (3.3.1)
+  apt (5.1.0)
+    compat_resource (>= 12.16.3)
+  build-essential (8.0.3)
+    mingw (>= 1.1)
+    seven_zip (>= 0.0.0)
+  ceph (0.9.2)
+    apache2 (>= 1.1.12)
+    apt (>= 0.0.0)
+    yum (>= 3.0)
+    yum-epel (>= 0.0.0)
+  compat_resource (12.19.0)
+  database (6.1.1)
+    postgresql (>= 1.0.0)
+  inifile_chef_gem (0.1.0)
+    build-essential (>= 0.0.0)
+  mariadb (1.5.1)
+    apt (>= 0.0.0)
+    build-essential (>= 0.0.0)
+    selinux_policy (~> 2.0)
+    yum (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+    yum-scl (>= 0.0.0)
+  mingw (2.0.1)
+    seven_zip (>= 0.0.0)
+  mysql (8.4.0)
+  ohai (5.1.0)
+  openssl (7.1.0)
+  openstack-common (15.0.0)
+    apt (~> 5.0)
+    database (~> 6.1)
+    mariadb (~> 1.5)
+    mysql (~> 8.2)
+    poise-python (~> 1.5)
+    yum (~> 3.13)
+    yum-epel (~> 2.0)
+  openstack-compute (15.0.0)
+    ceph (>= 0.9.2)
+    openstack-common (>= 15.0.0)
+    openstack-identity (>= 15.0.0)
+    openstack-image (>= 15.0.0)
+    openstack-network (>= 15.0.0)
+    openstackclient (>= 0.0.0)
+  openstack-identity (15.0.0)
+    apache2 (~> 3.2)
+    openstack-common (>= 15.0.0)
+    openstackclient (>= 0.0.0)
+  openstack-image (15.0.0)
+    openstack-common (>= 15.0.0)
+    openstack-identity (>= 15.0.0)
+    openstackclient (>= 0.0.0)
+  openstack-network (15.0.0)
+    openstack-common (>= 15.0.0)
+    openstack-identity (>= 15.0.0)
+    openstackclient (>= 0.0.0)
+  openstackclient (0.1.1)
+  poise (2.8.1)
+  poise-archive (1.5.0)
+    poise (~> 2.6)
+  poise-languages (2.1.1)
+    poise (~> 2.5)
+    poise-archive (~> 1.0)
+  poise-python (1.6.0)
+    poise (~> 2.7)
+    poise-languages (~> 2.0)
+  postgresql (6.1.1)
+    build-essential (>= 2.0.0)
+    compat_resource (>= 12.16.3)
+    openssl (>= 4.0)
+  selinux_policy (2.0.1)
+    compat_resource (>= 12.16.3)
+  seven_zip (2.0.2)
+    windows (>= 1.2.2)
+  windows (3.1.2)
+    ohai (>= 4.0.0)
+  yum (3.13.0)
+  yum-epel (2.1.2)
+    compat_resource (>= 12.16.3)
+  yum-scl (0.2.0)
+    inifile_chef_gem (>= 0.0.0)
+    yum (>= 0.0.0)
