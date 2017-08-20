@@ -15,7 +15,7 @@ describe 'openstack-compute::identity_registration' do
       openstack_username: 'admin',
       openstack_api_key: 'admin',
       openstack_project_name: 'admin',
-      openstack_domain_name: 'default'
+      openstack_domain_name: 'default',
     }
     service_name = 'nova'
     service_type = 'compute'
@@ -49,7 +49,7 @@ describe 'openstack-compute::identity_registration' do
       )
     end
 
-    it "registers placement service" do
+    it 'registers placement service' do
       expect(chef_run).to create_openstack_service(
         placement_service_name
       ).with(
@@ -74,7 +74,7 @@ describe 'openstack-compute::identity_registration' do
       end
     end
 
-    context "registers placement endpoint" do
+    context 'registers placement endpoint' do
       %w(internal public).each do |interface|
         it "creates #{interface} endpoint with default values" do
           expect(chef_run).to create_openstack_endpoint(
@@ -112,7 +112,7 @@ describe 'openstack-compute::identity_registration' do
       )
     end
 
-    context "grants user roles" do
+    context 'grants user roles' do
       [service_user, placement_service_user].each do |user_name|
         it do
           expect(chef_run).to grant_domain_openstack_user(

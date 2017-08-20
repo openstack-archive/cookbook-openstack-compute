@@ -29,11 +29,11 @@ identity_admin_endpoint = admin_endpoint 'identity'
 interfaces = {
   public: { url: public_endpoint('compute-api') },
   internal: { url: internal_endpoint('compute-api') },
-  admin: { url: admin_endpoint('compute-api') }
+  admin: { url: admin_endpoint('compute-api') },
 }
 placement_interfaces = {
   public: { url: public_endpoint('placement-api') },
-  internal: { url: internal_endpoint('placement-api') }
+  internal: { url: internal_endpoint('placement-api') },
 }
 auth_url = ::URI.decode identity_admin_endpoint.to_s
 service_pass = get_password 'service', 'openstack-compute'
@@ -58,7 +58,7 @@ connection_params = {
   openstack_username:     admin_user,
   openstack_api_key:      admin_pass,
   openstack_project_name: admin_project,
-  openstack_domain_name:  admin_domain
+  openstack_domain_name:  admin_domain,
 }
 
 # Register Compute Services

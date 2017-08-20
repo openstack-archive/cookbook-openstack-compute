@@ -72,6 +72,6 @@ service 'nova-compute' do
   action [:enable, :start]
   subscribes :restart, [
     'template[/etc/nova/nova.conf]',
-    'file[docker.filter]'
+    'file[docker.filter]',
   ]
 end

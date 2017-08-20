@@ -40,17 +40,16 @@ def update_grub_default_kernel(flavor = 'default')
     f.lines.each do |line|
       current_default = line.scan(/\d/).first.to_i if line.start_with?('default')
 
-      if line.start_with?('title')
-        if flavor.eql?('xen')
-          # found boot index
-          break if line.include?('Xen')
-        else
-          # take first kernel as default, unless we are searching for xen
-          # kernel
-          break
-        end
-        default_boot += 1
+      next unless line.start_with?('title')
+      if flavor.eql?('xen')
+        # found boot index
+        break if line.include?('Xen')
+      else
+        # take first kernel as default, unless we are searching for xen
+        # kernel
+        break
       end
+      default_boot += 1
     end
   end
 

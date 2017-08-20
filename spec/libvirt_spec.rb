@@ -95,7 +95,7 @@ describe 'openstack-compute::libvirt' do
       it 'template contents' do
         [
           /^start_libvirtd="yes"$/,
-          /^libvirtd_opts="-l"$/
+          /^libvirtd_opts="-l"$/,
         ].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end

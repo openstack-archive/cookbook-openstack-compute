@@ -13,12 +13,6 @@ default['openstack']['compute']['conf'].tap do |conf|
     conf['DEFAULT']['log_config'] = '/etc/openstack/logging.conf'
   end
 
-  conf['DEFAULT']['use_neutron'] = 'true'
-  conf['DEFAULT']['linuxnet_interface_driver'] = 'nova.network.linux_net.LinuxOVSInterfaceDriver'
-  conf['DEFAULT']['firewall_driver'] = 'nova.virt.firewall.NoopFirewallDriver'
-  conf['DEFAULT']['default_floating_pool'] = 'public' # not listed
-  conf['DEFAULT']['dns_server'] = '8.8.8.8' # [] in docs
-
   # [keystone_authtoken]
   conf['keystone_authtoken']['auth_type'] = 'v3password'
   conf['keystone_authtoken']['region_name'] = node['openstack']['region']

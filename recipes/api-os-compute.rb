@@ -57,7 +57,7 @@ service 'nova-api-os-compute' do
   action [:enable, :start]
   subscribes :restart, [
     'template[/etc/nova/nova.conf]',
-    'template[/etc/nova/api-paste.ini]'
+    'template[/etc/nova/api-paste.ini]',
   ]
 end
 

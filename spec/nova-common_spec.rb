@@ -8,7 +8,7 @@ describe 'openstack-compute::nova-common' do
     let(:node) { runner.node }
     let(:chef_run) do
       node.set['openstack']['mq'] = {
-        'host' => '127.0.0.1'
+        'host' => '127.0.0.1',
       }
       node.set['openstack']['mq']['compute']['rabbit']['ha'] = true
 
@@ -128,7 +128,7 @@ describe 'openstack-compute::nova-common' do
             'username = nova',
             'project_name = service',
             'user_domain_name = Default',
-            'project_domain_name = Default'
+            'project_domain_name = Default',
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('keystone_authtoken', /^#{Regexp.quote(line)}$/)
@@ -145,7 +145,7 @@ describe 'openstack-compute::nova-common' do
             'username = placement',
             'project_name = service',
             'user_domain_name = Default',
-            'project_domain_name = Default'
+            'project_domain_name = Default',
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('placement', /^#{Regexp.quote(line)}$/)
@@ -155,7 +155,7 @@ describe 'openstack-compute::nova-common' do
 
       it 'uses default values for attributes' do
         [
-          %r{^api_servers = http://127.0.0.1:9292$}
+          %r{^api_servers = http://127.0.0.1:9292$},
 
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
@@ -169,7 +169,7 @@ describe 'openstack-compute::nova-common' do
           /^project_name = service$/,
           /^user_domain_name = Default/,
           /^project_domain_name = Default/,
-          %r{^url = http://127.0.0.1:9696$}
+          %r{^url = http://127.0.0.1:9696$},
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
             .with_section_content('neutron', line)
@@ -243,7 +243,7 @@ describe 'openstack-compute::nova-common' do
 
         it 'has vmware config options set' do
           [
-            /^host_password = vmware_secret_name$/
+            /^host_password = vmware_secret_name$/,
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('vmware', line)
@@ -279,7 +279,7 @@ describe 'openstack-compute::nova-common' do
               /^images_rbd_pool = instances$/,
               %r{^images_rbd_ceph_conf = /etc/ceph/ceph.conf$},
               /^rbd_user = cinder$/,
-              /^rbd_secret_uuid = 00000000-0000-0000-0000-000000000000$/
+              /^rbd_secret_uuid = 00000000-0000-0000-0000-000000000000$/,
             ].each do |line|
               expect(chef_run).to render_config_file(file.name)\
                 .with_section_content('libvirt', line)
@@ -298,7 +298,7 @@ describe 'openstack-compute::nova-common' do
             [
               /^images_type = rbd$/,
               /^images_rbd_pool = myrbd$/,
-              %r{^images_rbd_ceph_conf = /etc/myceph/ceph.conf$}
+              %r{^images_rbd_ceph_conf = /etc/myceph/ceph.conf$},
             ].each do |line|
               expect(chef_run).to render_config_file(file.name)\
                 .with_section_content('libvirt', line)
@@ -317,7 +317,7 @@ describe 'openstack-compute::nova-common' do
           [
             /^images_type = lvm$/,
             /^images_volume_group = instances$/,
-            /^sparse_logical_volumes = false$/
+            /^sparse_logical_volumes = false$/,
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('libvirt', line)
@@ -352,7 +352,7 @@ describe 'openstack-compute::nova-common' do
             # /^enabled = False$/,
             %r{base_url = ws://127.0.0.1:6083$},
             # /^port_range = 10000:20000$/,
-            /^proxyclient_address = 127.0.0.1$/
+            /^proxyclient_address = 127.0.0.1$/,
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('serial_console', line)
@@ -371,7 +371,7 @@ describe 'openstack-compute::nova-common' do
             # /^enabled = True$/,
             %r{base_url = wss://1.1.1.1:6082$},
             # /^port_range = 11000:15000$/,
-            /^proxyclient_address = 127.0.0.1$/
+            /^proxyclient_address = 127.0.0.1$/,
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('serial_console', line)
@@ -435,7 +435,7 @@ describe 'openstack-compute::nova-common' do
             %r{^exec_dirs = /sbin,/usr/sbin,/bin,/usr/bin$},
             /^use_syslog = False$/,
             /^syslog_log_facility = syslog$/,
-            /^syslog_log_level = ERROR$/
+            /^syslog_log_level = ERROR$/,
           ].each do |line|
             expect(chef_run).to render_file(file.name).with_content(line)
           end

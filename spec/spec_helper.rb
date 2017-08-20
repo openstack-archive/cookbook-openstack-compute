@@ -13,13 +13,13 @@ LOG_LEVEL = :fatal
 REDHAT_OPTS = {
   platform: 'redhat',
   version: '7.1',
-  log_level: LOG_LEVEL
+  log_level: LOG_LEVEL,
 }.freeze
 UBUNTU_OPTS = {
   platform: 'ubuntu',
   version: '16.04',
   log_level: LOG_LEVEL,
-  file_cache_path: Chef::Config[:file_cache_path]
+  file_cache_path: Chef::Config[:file_cache_path],
 }.freeze
 
 shared_context 'compute_stubs' do
@@ -35,9 +35,9 @@ shared_context 'compute_stubs' do
           'openstack' => {
             'identity' => {
               'admin_tenant_name' => 'admin',
-              'admin_user' => 'admin'
-            }
-          }
+              'admin_user' => 'admin',
+            },
+          },
         }]
       )
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
@@ -88,7 +88,7 @@ shared_context 'compute_stubs' do
     # stub_command('nova-manage network list | grep 192.168.100.0/24').and_return(false)
     # stub_command('nova-manage network list | grep 192.168.200.0/24').and_return(false)
     # stub_command("nova-manage floating list |grep -E '.*([0-9]{1,3}[.]){3}[0-9]{1,3}*'").and_return(false)
-    stub_command("/usr/sbin/apache2 -t").and_return(true)
+    stub_command('/usr/sbin/apache2 -t').and_return(true)
     stub_command('virsh net-list | grep -q default').and_return(true)
     stub_command('ovs-vsctl br-exists br-int').and_return(true)
     stub_command('ovs-vsctl br-exists br-tun').and_return(true)
