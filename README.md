@@ -1,7 +1,7 @@
 Team and repository tags
 ========================
 
-[![Team and repository tags](http://governance.openstack.org/badges/cookbook-openstack-compute.svg)](http://governance.openstack.org/reference/tags/index.html)
+[![Team and repository tags](https://governance.openstack.org/badges/cookbook-openstack-compute.svg)](https://governance.openstack.org/reference/tags/index.html)
 
 <!-- Change things from this point on -->
 
@@ -16,7 +16,7 @@ https://github.com/openstack/openstack-chef-repo contains documentation for usin
 this cookbook in the context of a full OpenStack deployment. Nova is currently
 installed from packages.
 
-http://docs.openstack.org/mitaka/config-reference/compute.html
+https://docs.openstack.org/mitaka/config-reference/compute.html
 
 Requirements
 ============
