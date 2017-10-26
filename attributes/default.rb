@@ -25,7 +25,7 @@ default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 # Disallow non-encrypted connections
 default['openstack']['compute']['service_role'] = 'admin'
 
-case platform_family
+case node['platform_family']
 when 'rhel', 'debian'
   default['openstack']['compute']['user'] = 'nova'
   default['openstack']['compute']['group'] = 'nova'
@@ -135,7 +135,7 @@ default['openstack']['placement']['ssl']['protocol'] = ''
 default['openstack']['placement']['ssl']['ciphers'] = ''
 
 # Platform specific settings
-case platform_family
+case node['platform_family']
 when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => ['openstack-nova-api'],
