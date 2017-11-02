@@ -1,0 +1,4 @@
+- project:
+    name: openstack/cookbook-openstack-compute
+    templates:
+      - openstack-chef-repo-jobs
