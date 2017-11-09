@@ -104,6 +104,7 @@ describe 'openstack-compute::identity_registration' do
       expect(chef_run).to create_openstack_user(
         placement_service_user
       ).with(
+        domain_name: domain_name,
         project_name: project_name,
         password: placement_password,
         connection_params: connection_params
@@ -112,16 +113,6 @@ describe 'openstack-compute::identity_registration' do
 
     context 'grants user roles' do
       [service_user, placement_service_user].each do |user_name|
-        it do
-          expect(chef_run).to grant_domain_openstack_user(
-            user_name
-          ).with(
-            domain_name: domain_name,
-            role_name: role_name,
-            connection_params: connection_params
-          )
-        end
-
         it do
           expect(chef_run).to grant_role_openstack_user(
             user_name
