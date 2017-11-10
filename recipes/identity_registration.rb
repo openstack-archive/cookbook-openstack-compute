@@ -101,14 +101,12 @@ end
 # Register Service Users
 openstack_user service_user do
   project_name service_project_name
-  role_name service_role
   password service_pass
   connection_params connection_params
 end
 
 openstack_user placement_service_user do
   project_name service_project_name
-  role_name service_role
   password placement_service_pass
   connection_params connection_params
 end
