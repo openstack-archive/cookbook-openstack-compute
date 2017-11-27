@@ -12,7 +12,7 @@ LOG_LEVEL = :fatal
 
 REDHAT_OPTS = {
   platform: 'redhat',
-  version: '7.1',
+  version: '7.3',
   log_level: LOG_LEVEL,
 }.freeze
 UBUNTU_OPTS = {

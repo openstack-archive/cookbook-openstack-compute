@@ -38,4 +38,5 @@ Listen <%= @params[:server_host] %>:<%= @params[:server_port] %>
 <% end -%>
 </VirtualHost>
 
-WSGISocketPrefix /var/run/apache2
+WSGISocketPrefix <%= @params[:run_dir] -%>
+
