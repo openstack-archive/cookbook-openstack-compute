@@ -25,6 +25,7 @@ Metrics/MethodLength:
 # SupportedStyles: nested, compact
 Style/ClassAndModuleChildren:
   Exclude:
+    - 'recipes/_nova_cell.rb'
     - 'recipes/api-metadata.rb'
     - 'recipes/api-os-compute.rb'
     - 'recipes/compute.rb'
@@ -39,6 +40,7 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
+    - 'recipes/_nova_cell.rb'
     - 'recipes/api-metadata.rb'
     - 'recipes/api-os-compute.rb'
     - 'recipes/compute.rb'

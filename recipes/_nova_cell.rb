@@ -22,20 +22,20 @@
 # and not called directly. It creates a basic cellv2 setup, which is required
 # from Ocata forward.
 
+class ::Chef::Recipe
+  include ::Openstack
+end
+
 nova_user = node['openstack']['compute']['user']
 nova_group = node['openstack']['compute']['group']
+db_user = node['openstack']['db']['compute_cell0']['username']
 db_password = get_password('db', 'nova_cell0')
-bind_db = node['openstack']['bind_service']['db']
-listen_address = if bind_db['interface']
-                   address_for bind_db['interface']
-                 else
-                   listen_address = bind_db['host']
-                 end
+uri = db_uri('compute_cell0', db_user, db_password)
 
 execute 'map cell0' do
   user nova_user
   group nova_group
-  command "nova-manage cell_v2 map_cell0 --database_connection mysql+pymysql://nova_cell0:#{db_password}@#{listen_address}/nova_cell0?charset=utf8"
+  command "nova-manage cell_v2 map_cell0 --database_connection #{uri}"
   not_if 'nova-manage cell_v2 list_cells | grep -q cell0'
   action :run
 end
