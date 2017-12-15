@@ -51,7 +51,7 @@ end
 
 bind_service = node['openstack']['bind_service']['all']['placement-api']
 
-web_app 'placement-api' do
+web_app 'nova-placement-api' do
   template 'wsgi-template.conf.erb'
   daemon_process 'placement-api'
   server_host bind_service['host']
