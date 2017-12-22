@@ -58,6 +58,7 @@ web_app 'nova-placement-api' do
   server_port bind_service['port']
   server_entry '/usr/bin/nova-placement-api'
   log_dir node['apache']['log_dir']
+  run_dir node['apache']['run_dir']
   user node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   use_ssl node['openstack']['placement']['ssl']['enabled']

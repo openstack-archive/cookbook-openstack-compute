@@ -205,7 +205,7 @@ when 'debian'
     'common_packages' => ['nova-common'],
     'iscsi_helper' => 'tgtadm',
     'volume_packages' => ['sysfsutils', 'sg3-utils', 'multipath-tools'],
-    'package_overrides' => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'",
+    'package_overrides' => '',
   }
 end
 
