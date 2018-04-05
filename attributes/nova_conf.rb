@@ -29,13 +29,6 @@ default['openstack']['compute']['conf'].tap do |conf|
   if node['openstack']['compute']['conf']['libvirt']['images_type'] == 'lvm'
     conf['libvirt']['images_volume_group'] = nil
     conf['libvirt']['sparse_logical_volumes'] = false
-
-  elsif node['openstack']['compute']['conf']['libvirt']['images_type'] == 'rbd'
-    conf['libvirt']['images_rbd_pool'] = 'instances'
-    conf['libvirt']['images_rbd_ceph_conf'] = '/etc/ceph/ceph.conf' # nil
-    conf['libvirt']['rbd_user'] = 'cinder' # none
-    conf['libvirt']['rbd_secret_uuid'] = node['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid']
-
   end
 
   # [neutron]

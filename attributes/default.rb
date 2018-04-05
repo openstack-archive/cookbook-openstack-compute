@@ -64,15 +64,7 @@ default['openstack']['compute']['libvirt']['max_client_requests'] = 5
 default['openstack']['compute']['libvirt']['group'] = 'libvirt'
 default['openstack']['compute']['libvirt']['unix_sock_rw_perms'] = '0770'
 default['openstack']['compute']['libvirt']['libvirt_inject_key'] = true
-# rbd
-default['openstack']['compute']['libvirt']['rbd']['ceph_conf'] = '/etc/ceph/ceph.conf'
-# use a different backend for volumes, allowed options: rbd
 default['openstack']['compute']['libvirt']['volume_backend'] = nil
-default['openstack']['compute']['libvirt']['rbd']['cinder']['pool'] = 'volumes'
-default['openstack']['compute']['libvirt']['rbd']['glance']['pool'] = 'images'
-default['openstack']['compute']['libvirt']['rbd']['nova']['pool'] = 'instances'
-default['openstack']['compute']['libvirt']['rbd']['cinder']['user'] = 'cinder'
-default['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid'] = '00000000-0000-0000-0000-000000000000'
 
 # Base URL that will be presented to users in links
 # to the OpenStack Compute API
@@ -161,7 +153,6 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
     'compute_serialproxy_service' => 'openstack-nova-serialproxy',
     'libvirt_packages' => ['libvirt', 'device-mapper', 'python-libguestfs'],
     'libvirt_service' => 'libvirtd',
-    'libvirt_ceph_packages' => ['ceph-common'],
     'dbus_service' => 'messagebus',
     'compute_cert_packages' => ['openstack-nova-cert'],
     'compute_cert_service' => 'openstack-nova-cert',
@@ -197,7 +188,6 @@ when 'debian'
     'compute_serialproxy_service' => 'nova-serialproxy',
     'libvirt_packages' => ['libvirt-bin', 'python-guestfs'],
     'libvirt_service' => 'libvirt-bin',
-    'libvirt_ceph_packages' => ['ceph-common'],
     'dbus_service' => 'dbus',
     'compute_cert_packages' => ['nova-cert'],
     'compute_cert_service' => 'nova-cert',

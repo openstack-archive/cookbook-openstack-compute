@@ -46,9 +46,6 @@ shared_context 'compute_stubs' do
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('token', 'neutron_metadata_secret')
       .and_return('metadata-secret')
-    allow_any_instance_of(Chef::Recipe).to receive(:get_password) # this is the rbd_uuid default name
-      .with('token', 'rbd_secret_uuid')
-      .and_return '00000000-0000-0000-0000-000000000000'
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('token', 'openstack_vmware_secret_name')
       .and_return 'vmware_secret_name'
@@ -76,9 +73,6 @@ shared_context 'compute_stubs' do
     allow_any_instance_of(Chef::Recipe).to receive(:get_password)
       .with('service', 'openstack-placement')
       .and_return('placement-pass')
-    allow_any_instance_of(Chef::Recipe).to receive(:get_password)
-      .with('service', 'rbd_block_storage')
-      .and_return 'cinder-rbd-pass'
     allow_any_instance_of(Chef::Recipe).to receive(:rabbit_transport_url)
       .with('compute')
       .and_return('rabbit://guest:mypass@127.0.0.1:5672')
@@ -92,9 +86,6 @@ shared_context 'compute_stubs' do
     stub_command('virsh net-list | grep -q default').and_return(true)
     stub_command('ovs-vsctl br-exists br-int').and_return(true)
     stub_command('ovs-vsctl br-exists br-tun').and_return(true)
-    stub_command('virsh secret-list | grep 00000000-0000-0000-0000-000000000000').and_return(false)
-    stub_command('virsh secret-set-value --secret 00000000-0000-0000-0000-000000000000 --base64 $(ceph-authtool -p -n client.cinder /etc/ceph/ceph.client.cinder.keyring)').and_return(false)
-    stub_command('virsh secret-get-value 00000000-0000-0000-0000-000000000000 | grep $(ceph-authtool -p -n client.cinder /etc/ceph/ceph.client.cinder.keyring)').and_return(false)
     stub_command('nova-manage api_db sync').and_return(true)
     stub_command('nova-manage cell_v2 map_cell0 --database_connection mysql+pymysql://nova_cell0:mypass@127.0.0.1/nova_cell0?charset=utf8').and_return(true)
     stub_command('nova-manage cell_v2 create_cell --verbose --name cell1').and_return(true)

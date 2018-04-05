@@ -267,46 +267,6 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
-      context 'rbd backend' do
-        before do
-          node.set['openstack']['compute']['conf']['libvirt']['images_type'] = 'rbd'
-        end
-
-        describe 'default rbd settings' do
-          it 'sets the libvirt * options correctly' do
-            [
-              /^images_type = rbd$/,
-              /^images_rbd_pool = instances$/,
-              %r{^images_rbd_ceph_conf = /etc/ceph/ceph.conf$},
-              /^rbd_user = cinder$/,
-              /^rbd_secret_uuid = 00000000-0000-0000-0000-000000000000$/,
-            ].each do |line|
-              expect(chef_run).to render_config_file(file.name)\
-                .with_section_content('libvirt', line)
-            end
-          end
-        end
-
-        describe 'override rbd settings' do
-          before do
-            node.set['openstack']['compute']['conf']['libvirt']['images_type'] = 'rbd'
-            node.set['openstack']['compute']['conf']['libvirt']['images_rbd_pool'] = 'myrbd'
-            node.set['openstack']['compute']['conf']['libvirt']['images_rbd_ceph_conf'] = '/etc/myceph/ceph.conf'
-          end
-
-          it 'sets the overridden libvirt options correctly' do
-            [
-              /^images_type = rbd$/,
-              /^images_rbd_pool = myrbd$/,
-              %r{^images_rbd_ceph_conf = /etc/myceph/ceph.conf$},
-            ].each do |line|
-              expect(chef_run).to render_config_file(file.name)\
-                .with_section_content('libvirt', line)
-            end
-          end
-        end
-      end
-
       context 'lvm backend' do
         before do
           node.set['openstack']['compute']['conf']['libvirt']['images_type'] = 'lvm'

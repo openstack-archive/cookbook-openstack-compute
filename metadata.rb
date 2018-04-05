@@ -16,7 +16,6 @@ recipe 'openstack-compute::compute', 'Installs/Configures nova compute service'
 recipe 'openstack-compute::conductor', 'Installs/configures nova conductor service'
 recipe 'openstack-compute::identity_registration', 'Identity registration'
 recipe 'openstack-compute::libvirt', 'Installs/Configures libvirt'
-recipe 'openstack-compute::libvirt_rbd', 'Installs/Configures libvirt_rbd'
 recipe 'openstack-compute::nova-common', 'Common recipe for nova'
 recipe 'openstack-compute::_nova_cell', 'Helper recipe for configuring nova cells'
 recipe 'openstack-compute::nova-setup.rb', 'Nova setup recipe'
@@ -29,7 +28,6 @@ recipe 'openstack-compute::vncproxy', 'Installs/Configures nova vnc proxy'
   supports os
 end
 
-depends 'ceph'
 depends 'openstack-common', '>= 17.0.0'
 depends 'openstack-identity', '>= 17.0.0'
 depends 'openstack-image', '>= 17.0.0'

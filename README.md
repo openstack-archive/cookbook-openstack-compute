@@ -37,7 +37,6 @@ Cookbooks
 
 The following cookbooks are dependencies:
 
-- 'ceph', '>= 0.8.1'
 - 'openstack-common', '>= 14.0.0'
 - 'openstack-identity', '>= 14.0.0'
 - 'openstack-image', '>= 14.0.0'
@@ -79,12 +78,6 @@ Recipes
 ## openstack-compute::libvirt
 - Installs libvirt, used by nova compute for management of the virtual machine
   environment
-
-## openstack-compute::libvirt_rbd
-- Prepares the compute node for interaction with a Ceph cluster for block
-  storage (RBD)
-- Depends on `ceph::_common`, `ceph::install`, and `ceph::conf` for packages and
-  cluster connectivity (i.e. a proper `/etc/ceph/ceph.conf`)
 
 ## openstack-compute::nova-cert
 - Installs nova-cert service

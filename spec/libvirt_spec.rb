@@ -44,17 +44,6 @@ describe 'openstack-compute::libvirt' do
       expect(chef_run).to run_execute('virsh net-destroy default')
     end
 
-    describe 'rbd/ceph volume storage' do
-      before do
-        node.set['openstack']['compute']['libvirt']['volume_backend'] = 'rbd'
-      end
-
-      it 'includes the libvirt_rbd recipe if it is the selected volume backend' do
-        node.set['ceph']['config']['fsid'] = '00000000-0000-0000-0000-000000000000'
-        expect(chef_run).to include_recipe('openstack-compute::libvirt_rbd')
-      end
-    end
-
     describe '/etc/libvirt/libvirtd.conf' do
       let(:file) { chef_run.template('/etc/libvirt/libvirtd.conf') }
 
