@@ -12,33 +12,19 @@ default['openstack']['compute']['custom_template_banner'] = '
 # Any changes will be overwritten
 '
 
-# The name of the Chef role that knows about the message queue server
-# that Nova uses
-default['openstack']['compute']['rabbit_server_chef_role'] = 'os-ops-messaging'
-
 # Set dbsync command timeout value
 default['openstack']['compute']['dbsync_timeout'] = 3600
-
-# The name of the Chef role that sets up the Keystone Service API
-default['openstack']['compute']['identity_service_chef_role'] = 'os-identity'
 
 # Disallow non-encrypted connections
 default['openstack']['compute']['service_role'] = 'admin'
 
-case node['platform_family']
-when 'rhel', 'debian'
-  default['openstack']['compute']['user'] = 'nova'
-  default['openstack']['compute']['group'] = 'nova'
-end
+# Used to set correct permissions for directories and files
+default['openstack']['compute']['user'] = 'nova'
+default['openstack']['compute']['group'] = 'nova'
 
 # Logging stuff
-
 default['openstack']['compute']['syslog']['facility'] = 'LOG_LOCAL1'
 default['openstack']['compute']['syslog']['config_facility'] = 'local1'
-
-default['openstack']['compute']['region'] = node['openstack']['region']
-
-default['openstack']['compute']['floating_cmd'] = '/usr/local/bin/add_floaters.py'
 
 # rootwrap.conf
 default['openstack']['compute']['rootwrap']['filters_path'] = '/etc/nova/rootwrap.d,/usr/share/nova/rootwrap'
@@ -48,31 +34,6 @@ default['openstack']['compute']['rootwrap']['syslog_log_facility'] = 'syslog'
 default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 
 default['openstack']['compute']['driver'] = 'libvirt.LibvirtDriver'
-
-# libvirtd_opts used in template for /etc/default/libvirt-bin
-default['openstack']['compute']['libvirt']['libvirtd_opts'] = '-l'
-
-default['openstack']['compute']['libvirt']['auth_tcp'] = 'none'
-# libvirt.max_clients (default: 20)
-default['openstack']['compute']['libvirt']['max_clients'] = 20
-# libvirt.max_workers (default: 20)
-default['openstack']['compute']['libvirt']['max_workers'] = 20
-# libvirt.max_requests (default: 20)
-default['openstack']['compute']['libvirt']['max_requests'] = 20
-# libvirt.max_client_requests (default: 5)
-default['openstack']['compute']['libvirt']['max_client_requests'] = 5
-default['openstack']['compute']['libvirt']['group'] = 'libvirt'
-default['openstack']['compute']['libvirt']['unix_sock_rw_perms'] = '0770'
-default['openstack']['compute']['libvirt']['libvirt_inject_key'] = true
-# rbd
-default['openstack']['compute']['libvirt']['rbd']['ceph_conf'] = '/etc/ceph/ceph.conf'
-# use a different backend for volumes, allowed options: rbd
-default['openstack']['compute']['libvirt']['volume_backend'] = nil
-default['openstack']['compute']['libvirt']['rbd']['cinder']['pool'] = 'volumes'
-default['openstack']['compute']['libvirt']['rbd']['glance']['pool'] = 'images'
-default['openstack']['compute']['libvirt']['rbd']['nova']['pool'] = 'instances'
-default['openstack']['compute']['libvirt']['rbd']['cinder']['user'] = 'cinder'
-default['openstack']['compute']['libvirt']['rbd']['cinder']['secret_uuid'] = '00000000-0000-0000-0000-000000000000'
 
 # Base URL that will be presented to users in links
 # to the OpenStack Compute API
@@ -211,13 +172,6 @@ end
 
 # Array of options for `api-paste.ini` (e.g. ['option1=value1', ...])
 default['openstack']['compute']['misc_paste'] = nil
-
-# NOTE: The metadata api service is enabled via including it's recipe
-# NOTE: api-metadata.  By default the api-metadata recipe is included in
-# NOTE: the os-compute-api role which is included in the
-# NOTE: os-compute-single-controller role.
-
-# For true case, this logic allows the following ironic-related attribtes to be overwritten automatically.
 
 # ****************** OpenStack Compute Endpoints ******************************
 
