@@ -136,7 +136,11 @@ template '/etc/libvirt/libvirtd.conf' do
   notifies :restart, 'service[libvirt-bin]', :immediately
 end
 
-template '/etc/default/libvirt-bin' do
+# The package libvirt-bin on debian now provides the service libvirtd
+# (libvirt-bin is still defined as an alias) and reads its environment from
+# /etc/libvirt/libvirtd instead of the previously used
+# /etc/default/libvirt-bin.
+template '/etc/default/libvirtd' do
   source 'libvirt-bin.erb'
   owner 'root'
   group 'root'

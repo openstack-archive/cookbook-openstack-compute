@@ -81,10 +81,10 @@ describe 'openstack-compute::libvirt' do
       end
     end
 
-    describe '/etc/default/libvirt-bin' do
-      let(:file) { chef_run.template('/etc/default/libvirt-bin') }
+    describe '/etc/default/libvirtd' do
+      let(:file) { chef_run.template('/etc/default/libvirtd') }
 
-      it 'creates the /etc/default/libvirt-bin file' do
+      it 'creates the /etc/default/libvirtd file' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',

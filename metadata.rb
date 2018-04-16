@@ -6,7 +6,7 @@ source_url 'https://github.com/openstack/cookbook-openstack-compute' if respond_
 license 'Apache 2.0'
 description 'The OpenStack Compute service Nova.'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '15.2.0'
+version '15.2.1'
 chef_version '>= 12.5' if respond_to?(:chef_version)
 
 %w(ubuntu redhat centos).each do |os|
