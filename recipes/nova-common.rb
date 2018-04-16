@@ -144,13 +144,7 @@ node.default['openstack']['compute']['conf_secrets']
 .[]('neutron')['metadata_proxy_shared_secret'] =
   get_password 'token', 'neutron_metadata_secret'
 
-if node['openstack']['compute']['driver'].split('.').first == 'vmwareapi'
-  node.default['openstack']['compute']['conf_secrets']
-    .[]('vmware')['host_password'] =
-    get_password 'token', 'openstack_vmware_secret_name'
-end
-
-auth_url = auth_uri_transform identity_endpoint.to_s, node['openstack']['compute']['api']['auth']['version']
+auth_url = auth_uri_transform identity_endpoint.to_s, node['openstack']['api']['auth']['version']
 node.default['openstack']['compute']['conf_secrets']
   .[]('keystone_authtoken')['password'] =
   get_password 'service', 'openstack-compute'
