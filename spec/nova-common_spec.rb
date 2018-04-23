@@ -232,35 +232,6 @@ describe 'openstack-compute::nova-common' do
           .with_section_content('cinder', /^os_region_name = RegionOne$/)
       end
 
-      context 'vmware' do
-        before do
-          # README(galstrom21): There is a order of operations issue here
-          #   if you use node.set, these tests will fail.
-          node.override['openstack']['compute']['driver'] = 'vmwareapi.VMwareVCDriver'
-          # NB(srenatus) this is only one option, the other one is
-          #   'vmwareapi.VMwareESXDriver' (see templates/default/nova.conf.erb)
-        end
-
-        it 'has vmware config options set' do
-          [
-            /^host_password = vmware_secret_name$/,
-          ].each do |line|
-            expect(chef_run).to render_config_file(file.name)\
-              .with_section_content('vmware', line)
-          end
-        end
-
-        it 'has no datastore_regex line' do
-          expect(chef_run).not_to render_config_file(file.name)\
-            .with_section_content('vmware', 'datastore_regex = ')
-        end
-
-        it 'has no wsdl_location line' do
-          expect(chef_run).not_to render_config_file(file.name)\
-            .with_section_content('vmware', 'wsdl_location = ')
-        end
-      end
-
       it 'has no auto_assign_floating_ip' do
         expect(chef_run).not_to render_file(file.name).with_content(
           'auto_assign_floating_ip=false'
