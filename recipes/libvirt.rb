@@ -91,7 +91,8 @@ def update_boot_kernel_and_trigger_reboot(flavor = 'default')
   end
 end
 
-group node['openstack']['compute']['libvirt']['group'] do
+libvirt_group = node['openstack']['compute']['libvirt']['group']
+group libvirt_group do
   append true
   members [node['openstack']['compute']['group']]
   action :create
@@ -122,15 +123,15 @@ execute 'Deleting default libvirt network' do
   only_if 'virsh net-list | grep -q default'
 end
 
-# TODO(breu): this section needs to be rewritten to support key privisioning
+node.default['openstack']['compute']['libvirt']['conf']['unix_sock_group'] = "'#{libvirt_group}'"
+
 template '/etc/libvirt/libvirtd.conf' do
   source 'libvirtd.conf.erb'
   owner 'root'
   group 'root'
   mode 0o0644
   variables(
-    auth_tcp: node['openstack']['compute']['libvirt']['auth_tcp'],
-    libvirt_group: node['openstack']['compute']['libvirt']['group']
+    service_config: node['openstack']['compute']['libvirt']['conf']
   )
   notifies :restart, 'service[libvirt-bin]', :immediately
 end
