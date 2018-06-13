@@ -11,7 +11,7 @@ describe 'openstack-compute::identity_registration' do
     include_context 'compute_stubs'
 
     connection_params = {
-      openstack_auth_url: 'http://127.0.0.1:35357/v3/auth/tokens',
+      openstack_auth_url: 'http://127.0.0.1:5000/v3/auth/tokens',
       openstack_username: 'admin',
       openstack_api_key: 'admin',
       openstack_project_name: 'admin',

@@ -25,7 +25,7 @@ class ::Chef::Recipe
   include ::Openstack
 end
 
-identity_admin_endpoint = admin_endpoint 'identity'
+identity_endpoint = public_endpoint 'identity'
 interfaces = {
   public: { url: public_endpoint('compute-api') },
   internal: { url: internal_endpoint('compute-api') },
@@ -35,7 +35,7 @@ placement_interfaces = {
   public: { url: public_endpoint('placement-api') },
   internal: { url: internal_endpoint('placement-api') },
 }
-auth_url = ::URI.decode identity_admin_endpoint.to_s
+auth_url = auth_uri_transform identity_endpoint.to_s, node['openstack']['api']['auth']['version']
 service_pass = get_password 'service', 'openstack-compute'
 service_user = node['openstack']['compute']['conf']['keystone_authtoken']['username']
 placement_service_pass = get_password 'service', 'openstack-placement'

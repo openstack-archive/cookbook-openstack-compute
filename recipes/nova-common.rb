@@ -126,7 +126,7 @@ serial_proxy_endpoint = public_endpoint 'compute-serial-proxy'
 network_endpoint = internal_endpoint 'network'
 image_endpoint = internal_endpoint 'image_api'
 
-Chef::Log.debug("openstack-compute::nova-common:identity_public_endpoint|#{identity_endpoint}")
+Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
