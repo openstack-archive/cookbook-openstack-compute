@@ -85,6 +85,7 @@ shared_context 'compute_stubs' do
     # stub_command('nova-manage network list | grep 192.168.200.0/24').and_return(false)
     # stub_command("nova-manage floating list |grep -E '.*([0-9]{1,3}[.]){3}[0-9]{1,3}*'").and_return(false)
     stub_command('/usr/sbin/apache2 -t').and_return(true)
+    stub_command('/usr/sbin/httpd -t').and_return(true)
     stub_command('virsh net-list | grep -q default').and_return(true)
     stub_command('ovs-vsctl br-exists br-int').and_return(true)
     stub_command('ovs-vsctl br-exists br-tun').and_return(true)
@@ -94,6 +95,7 @@ shared_context 'compute_stubs' do
     stub_command('nova-manage cell_v2 list_cells | grep -q cell0').and_return(false)
     stub_command('nova-manage cell_v2 list_cells | grep -q cell1').and_return(false)
     stub_command('nova-manage cell_v2 discover_hosts').and_return(true)
+    stub_command("[ ! -e /etc/httpd/conf/httpd.conf ] && [ -e /etc/redhat-release ] && [ $(/sbin/sestatus | grep -c '^Current mode:.*enforcing') -eq 1 ]").and_return(true)
   end
 end
 

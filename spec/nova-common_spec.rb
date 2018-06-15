@@ -98,13 +98,6 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'has default compute ip and port options set' do
-        [/^osapi_compute_listen = 127.0.0.1$/,
-         /^osapi_compute_listen_port = 8774$/].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
-        end
-      end
-
       it 'has default metadata ip and port options set' do
         [/^metadata_listen = 127.0.0.1$/,
          /^metadata_listen_port = 8775$/].each do |line|
@@ -129,6 +122,7 @@ describe 'openstack-compute::nova-common' do
             'project_name = service',
             'user_domain_name = Default',
             'project_domain_name = Default',
+            'service_token_roles_required = true',
           ].each do |line|
             expect(chef_run).to render_config_file(file.name)\
               .with_section_content('keystone_authtoken', /^#{Regexp.quote(line)}$/)
@@ -169,17 +163,10 @@ describe 'openstack-compute::nova-common' do
           /^project_name = service$/,
           /^user_domain_name = Default/,
           /^project_domain_name = Default/,
-          %r{^url = http://127.0.0.1:9696$},
         ].each do |line|
           expect(chef_run).to render_config_file(file.name)\
             .with_section_content('neutron', line)
         end
-      end
-
-      it 'sets scheme for neutron' do
-        node.set['openstack']['endpoints']['internal']['network']['scheme'] = 'https'
-        expect(chef_run).to render_config_file(file.name)\
-          .with_section_content('neutron', %r{^url = https://127.0.0.1:9696$})
       end
 
       context 'rabbit mq backend' do

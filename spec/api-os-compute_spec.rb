@@ -23,20 +23,15 @@ describe 'openstack-compute::api-os-compute' do
     end
 
     it 'upgrades openstack api packages' do
-      expect(chef_run).to upgrade_package 'nova-api-os-compute'
+      expect(chef_run).to upgrade_package 'nova-api'
     end
 
-    it 'starts openstack api on boot' do
-      expect(chef_run).to enable_service 'nova-api-os-compute'
+    it 'disables openstack api on boot' do
+      expect(chef_run).to disable_service 'nova-api-os-compute'
     end
 
-    it 'starts openstack api now' do
-      expect(chef_run).to start_service 'nova-api-os-compute'
+    it 'stops openstack api now' do
+      expect(chef_run).to stop_service 'nova-api-os-compute'
     end
-    it do
-      template = chef_run.template('/etc/nova/api-paste.ini')
-      expect(template).to notify('service[nova-api-os-compute]').to(:restart)
-    end
-    # expect_creates_api_paste 'service[nova-api-os-compute]'
   end
 end

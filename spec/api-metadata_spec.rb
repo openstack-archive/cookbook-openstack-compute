@@ -18,18 +18,12 @@ describe 'openstack-compute::api-metadata' do
       expect(chef_run).to upgrade_package 'nova-api-metadata'
     end
 
-    it 'starts metadata api on boot' do
-      expect(chef_run).to enable_service 'nova-api-metadata'
+    it 'disables metadata api on boot' do
+      expect(chef_run).to disable_service 'nova-api-metadata'
     end
 
-    it 'starts metadata api now' do
-      expect(chef_run).to start_service 'nova-api-metadata'
+    it 'stop metadata api now' do
+      expect(chef_run).to stop_service 'nova-api-metadata'
     end
-    it do
-      template = chef_run.template('/etc/nova/api-paste.ini')
-      expect(template).to notify('service[nova-api-metadata]').to(:restart)
-    end
-
-    # expect_creates_api_paste 'service[nova-api-metadata]'
   end
 end

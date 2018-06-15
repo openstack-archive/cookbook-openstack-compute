@@ -4,6 +4,7 @@
 # Recipe:: api-os-compute
 #
 # Copyright 2012, Rackspace US, Inc.
+# Copyright 2018, Workday, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +21,13 @@
 
 class ::Chef::Recipe
   include ::Openstack
+end
+
+execute 'nova-api: set-selinux-permissive' do
+  command '/sbin/setenforce Permissive'
+  action :run
+
+  only_if "[ ! -e /etc/httpd/conf/httpd.conf ] && [ -e /etc/redhat-release ] && [ $(/sbin/sestatus | grep -c '^Current mode:.*enforcing') -eq 1 ]"
 end
 
 include_recipe 'openstack-compute::nova-common'
@@ -54,11 +62,41 @@ end
 service 'nova-api-os-compute' do
   service_name platform_options['api_os_compute_service']
   supports status: true, restart: true
-  action [:enable, :start]
-  subscribes :restart, [
-    'template[/etc/nova/nova.conf]',
-    'template[/etc/nova/api-paste.ini]',
-  ]
+  action [:disable, :stop]
+end
+
+bind_service = node['openstack']['bind_service']['all']['compute-api']
+
+web_app 'nova-api' do
+  template 'wsgi-template.conf.erb'
+  daemon_process 'nova-api'
+  server_host bind_service['host']
+  server_port bind_service['port']
+  server_entry '/usr/bin/nova-api-wsgi'
+  log_dir node['apache']['log_dir']
+  run_dir node['apache']['run_dir']
+  user node['openstack']['compute']['user']
+  group node['openstack']['compute']['group']
+  use_ssl node['openstack']['compute']['api']['ssl']['enabled']
+  cert_file node['openstack']['compute']['api']['ssl']['certfile']
+  chain_file node['openstack']['compute']['api']['ssl']['chainfile']
+  key_file node['openstack']['compute']['api']['ssl']['keyfile']
+  ca_certs_path node['openstack']['compute']['api']['ssl']['ca_certs_path']
+  cert_required node['openstack']['compute']['api']['ssl']['cert_required']
+  protocol node['openstack']['compute']['api']['ssl']['protocol']
+  ciphers node['openstack']['compute']['api']['ssl']['ciphers']
 end
 
 include_recipe 'openstack-compute::_nova_cell'
+
+execute 'nova-api apache restart' do
+  command 'uname'
+  notifies :run, 'execute[nova-api: restore-selinux-context]', :immediately
+  notifies :restart, 'service[apache2]', :immediately
+end
+
+execute 'nova-api: restore-selinux-context' do
+  command 'restorecon -Rv /etc/httpd /etc/pki || :'
+  action :nothing
+  only_if { platform_family?('rhel') }
+end

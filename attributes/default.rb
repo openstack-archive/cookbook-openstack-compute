@@ -33,15 +33,17 @@ default['openstack']['compute']['rootwrap']['use_syslog'] = 'False'
 default['openstack']['compute']['rootwrap']['syslog_log_facility'] = 'syslog'
 default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 
-# Placement API settings
-default['openstack']['placement']['ssl']['enabled'] = false
-default['openstack']['placement']['ssl']['certfile'] = ''
-default['openstack']['placement']['ssl']['chainfile'] = ''
-default['openstack']['placement']['ssl']['keyfile'] = ''
-default['openstack']['placement']['ssl']['ca_certs_path'] = ''
-default['openstack']['placement']['ssl']['cert_required'] = false
-default['openstack']['placement']['ssl']['protocol'] = ''
-default['openstack']['placement']['ssl']['ciphers'] = ''
+# SSL settings
+%w(api placement metadata).each do |service|
+  default['openstack']['compute'][service]['ssl']['enabled'] = false
+  default['openstack']['compute'][service]['ssl']['certfile'] = ''
+  default['openstack']['compute'][service]['ssl']['chainfile'] = ''
+  default['openstack']['compute'][service]['ssl']['keyfile'] = ''
+  default['openstack']['compute'][service]['ssl']['ca_certs_path'] = ''
+  default['openstack']['compute'][service]['ssl']['cert_required'] = false
+  default['openstack']['compute'][service]['ssl']['protocol'] = ''
+  default['openstack']['compute'][service]['ssl']['ciphers'] = ''
+end
 
 # Platform specific settings
 case node['platform_family']
@@ -81,8 +83,8 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   }
 when 'debian'
   default['openstack']['compute']['platform'] = {
-    'api_os_compute_packages' => ['nova-api-os-compute'],
-    'api_os_compute_service' => 'nova-api-os-compute',
+    'api_os_compute_packages' => ['nova-api'],
+    'api_os_compute_service' => 'nova-api',
     'api_placement_packages' => ['nova-placement-api'],
     'api_placement_service' => 'nova-placement-api',
     'memcache_python_packages' => ['python-memcache'],
@@ -144,6 +146,7 @@ end
   default['openstack']['endpoints'][type]['compute-novnc']['path'] = '/vnc_auto.html'
   # The OpenStack Compute (Nova) metadata API endpoint
   default['openstack']['endpoints'][type]['compute-metadata-api']['port'] = '8775'
+  default['openstack']['endpoints'][type]['compute-metadata-api']['path'] = ''
   # The OpenStack Compute (Nova) serial proxy endpoint
   default['openstack']['endpoints'][type]['compute-serial-proxy']['scheme'] = 'ws'
   default['openstack']['endpoints'][type]['compute-serial-proxy']['port'] = '6083'
@@ -161,7 +164,9 @@ default['openstack']['bind_service']['all']['compute-xvpvnc']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-vnc']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-serial-proxy']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-novnc']['port'] = '6080'
+default['openstack']['bind_service']['all']['compute-metadata-api']['host'] = '127.0.0.1'
 default['openstack']['bind_service']['all']['compute-metadata-api']['port'] = '8775'
+default['openstack']['bind_service']['all']['compute-api']['host'] = '127.0.0.1'
 default['openstack']['bind_service']['all']['compute-api']['port'] = '8774'
 default['openstack']['bind_service']['all']['placement-api']['port'] = '8778'
 default['openstack']['bind_service']['all']['placement-api']['host'] = '127.0.0.1'

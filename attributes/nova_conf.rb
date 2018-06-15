@@ -21,6 +21,7 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['keystone_authtoken']['project_domain_name'] = 'Default'
   conf['keystone_authtoken']['project_name'] = 'service'
   conf['keystone_authtoken']['auth_version'] = 'v3'
+  conf['keystone_authtoken']['service_token_roles_required'] = true
 
   # [libvirt]
   conf['libvirt']['virt_type'] = 'kvm'

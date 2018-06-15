@@ -115,8 +115,6 @@ vnc_bind = node['openstack']['bind_service']['all']['compute-vnc']
 vnc_bind_address = bind_address vnc_bind
 vnc_proxy_bind = node['openstack']['bind_service']['all']['compute-vnc-proxy']
 vnc_proxy_bind_address = bind_address vnc_proxy_bind
-compute_api_bind = node['openstack']['bind_service']['all']['compute-api']
-compute_api_bind_address = bind_address compute_api_bind
 compute_api_endpoint = internal_endpoint 'compute-api'
 compute_metadata_api_bind = node['openstack']['bind_service']['all']['compute-metadata-api']
 compute_metadata_api_bind_address = bind_address compute_metadata_api_bind
@@ -157,13 +155,6 @@ node.default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['iscsi_helper'] = platform_options['iscsi_helper']
   # conf['DEFAULT']['scheduler_default_filters'] = node['openstack']['compute']['scheduler']['default_filters'].join(',')
 
-  if node['openstack']['compute']['conf']['DEFAULT']['enabled_apis'].include?('osapi_compute')
-    conf['DEFAULT']['osapi_compute_listen'] = compute_api_bind_address
-    conf['DEFAULT']['osapi_compute_listen_port'] = compute_api_bind['port']
-  end
-  # if node['openstack']['mq']['compute']['rabbit']['ha']
-  #   conf['DEFAULT']['rabbit_hosts'] = rabbit_hosts
-  # end
   conf['DEFAULT']['metadata_listen'] = compute_metadata_api_bind_address
   conf['DEFAULT']['metadata_listen_port'] = compute_metadata_api_bind['port']
   conf['vnc']['novncproxy_base_url'] = novnc_endpoint.to_s
@@ -192,8 +183,6 @@ node.default['openstack']['compute']['conf'].tap do |conf|
     "#{image_endpoint.scheme}://#{image_endpoint.host}:#{image_endpoint.port}"
 
   # [neutron] section
-  conf['neutron']['url'] =
-    "#{network_endpoint.scheme}://#{network_endpoint.host}:#{network_endpoint.port}"
   conf['neutron']['auth_url'] = identity_endpoint.to_s
 
   # [serial_console] section

@@ -25,12 +25,12 @@ describe 'openstack-compute::api-os-compute' do
       expect(chef_run).to upgrade_package 'openstack-nova-api'
     end
 
-    it 'starts openstack api on boot' do
-      expect(chef_run).to enable_service 'openstack-nova-api'
+    it 'disables openstack api on boot' do
+      expect(chef_run).to disable_service 'openstack-nova-api'
     end
 
-    it 'starts openstack api now' do
-      expect(chef_run).to start_service 'openstack-nova-api'
+    it 'stops openstack api now' do
+      expect(chef_run).to stop_service 'openstack-nova-api'
     end
   end
 end
