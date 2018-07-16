@@ -104,7 +104,7 @@ memcache_servers = memcached_servers.join ','
 # Note that the bind and vnc endpoints don't have possible different values for
 # internal/admin/public. We'll stick with the general endpoint routine
 # for those.
-identity_endpoint = public_endpoint 'identity'
+identity_endpoint = internal_endpoint 'identity'
 xvpvnc_endpoint = public_endpoint 'compute-xvpvnc'
 xvpvnc_bind = node['openstack']['bind_service']['all']['compute-xvpvnc']
 xvpvnc_bind_address = bind_address xvpvnc_bind
@@ -142,7 +142,7 @@ node.default['openstack']['compute']['conf_secrets']
 .[]('neutron')['metadata_proxy_shared_secret'] =
   get_password 'token', 'neutron_metadata_secret'
 
-auth_url = auth_uri_transform identity_endpoint.to_s, node['openstack']['api']['auth']['version']
+auth_url = ::URI.decode identity_endpoint.to_s
 node.default['openstack']['compute']['conf_secrets']
   .[]('keystone_authtoken')['password'] =
   get_password 'service', 'openstack-compute'
