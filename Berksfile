@@ -8,7 +8,10 @@ source 'https://supermarket.chef.io'
   end
 end
 
-cookbook 'openstackclient',
-  github: 'cloudbau/cookbook-openstackclient'
+if Dir.exist?('../cookbook-openstackclient')
+  cookbook 'openstackclient', path: '../cookbook-openstackclient'
+else
+  cookbook 'openstackclient', git: 'https://git.openstack.org/openstack/cookbook-openstackclient', branch: 'stable/queens'
+end
 
 metadata
