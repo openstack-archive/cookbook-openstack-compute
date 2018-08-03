@@ -16,13 +16,13 @@ describe 'openstack-compute::compute' do
     include_examples 'expect_volume_packages'
 
     it "does not upgrade kvm when virt_type is 'kvm'" do
-      node.set['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
+      node.override['openstack']['compute']['libvirt']['virt_type'] = 'kvm'
 
       expect(chef_run).to_not upgrade_package('nova-compute-kvm')
     end
 
     it "does not upgrade qemu when virt_type is 'qemu'" do
-      node.set['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
+      node.override['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
 
       expect(chef_run).to_not upgrade_package('nova-compute-qemu')
     end

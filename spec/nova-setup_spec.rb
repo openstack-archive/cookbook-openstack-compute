@@ -20,7 +20,7 @@ describe 'openstack-compute::nova-setup' do
     end
 
     it 'runs db migrations with timeout override' do
-      node.set['openstack']['compute']['dbsync_timeout'] = 1234
+      node.override['openstack']['compute']['dbsync_timeout'] = 1234
       expect(chef_run).to run_execute('nova-manage db sync').with(
         user: 'nova',
         group: 'nova',

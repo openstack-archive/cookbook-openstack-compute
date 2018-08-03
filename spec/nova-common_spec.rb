@@ -7,10 +7,10 @@ describe 'openstack-compute::nova-common' do
     let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
     let(:chef_run) do
-      node.set['openstack']['mq'] = {
+      node.override['openstack']['mq'] = {
         'host' => '127.0.0.1',
       }
-      node.set['openstack']['mq']['compute']['rabbit']['ha'] = true
+      node.override['openstack']['mq']['compute']['rabbit']['ha'] = true
 
       runner.converge(described_recipe)
     end
@@ -41,7 +41,7 @@ describe 'openstack-compute::nova-common' do
 
     context 'with logging enabled' do
       before do
-        node.set['openstack']['compute']['syslog']['use'] = true
+        node.override['openstack']['compute']['syslog']['use'] = true
       end
 
       it 'runs logging recipe if node attributes say to' do
@@ -51,7 +51,7 @@ describe 'openstack-compute::nova-common' do
 
     context 'with logging disabled' do
       before do
-        node.set['openstack']['compute']['syslog']['use'] = false
+        node.override['openstack']['compute']['syslog']['use'] = false
       end
 
       it "doesn't run logging recipe" do
@@ -173,7 +173,7 @@ describe 'openstack-compute::nova-common' do
         describe 'ha rabbit disabled' do
           before do
             # README(galstrom21): There is a order of operations issue here
-            #   if you use node.set, these tests will fail.
+            #   if you use node.override, these tests will fail.
             node.override['openstack']['mq']['compute']['rabbit']['ha'] = false
           end
 
@@ -186,7 +186,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has default vncserver_* options set' do
-        node.set['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
+        node.override['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
 
         [/^vncserver_listen = 127.0.0.1$/,
          /^vncserver_proxyclient_address = 127.0.0.1$/].each do |line|
@@ -195,8 +195,8 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has override vncserver_* options set' do
-        node.set['openstack']['bind_service']['all']['compute-vnc']['host'] = '1.1.1.1'
-        node.set['openstack']['bind_service']['all']['compute-vnc-proxy']['host'] = '2.2.2.2'
+        node.override['openstack']['bind_service']['all']['compute-vnc']['host'] = '1.1.1.1'
+        node.override['openstack']['bind_service']['all']['compute-vnc-proxy']['host'] = '2.2.2.2'
 
         [/^vncserver_listen = 1.1.1.1$/,
          /^vncserver_proxyclient_address = 2.2.2.2$/].each do |line|
@@ -214,7 +214,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it 'has a os_region_name setting' do
-        chef_run.node.set['openstack']['node'] = 'RegionOne'
+        chef_run.node.override['openstack']['node'] = 'RegionOne'
         expect(chef_run).to render_config_file(file.name)\
           .with_section_content('cinder', /^os_region_name = RegionOne$/)
       end
@@ -227,8 +227,8 @@ describe 'openstack-compute::nova-common' do
 
       context 'lvm backend' do
         before do
-          node.set['openstack']['compute']['conf']['libvirt']['images_type'] = 'lvm'
-          node.set['openstack']['compute']['conf']['libvirt']['images_volume_group'] = 'instances'
+          node.override['openstack']['compute']['conf']['libvirt']['images_type'] = 'lvm'
+          node.override['openstack']['compute']['conf']['libvirt']['images_volume_group'] = 'instances'
         end
 
         it 'sets the lvm options correctly' do
@@ -244,10 +244,10 @@ describe 'openstack-compute::nova-common' do
 
         describe 'override settings' do
           before do
-            node.set['openstack']['compute']['conf']['libvirt']['images_type'] = 'lvm'
-            node.set['openstack']['compute']['conf']['libvirt']['images_volume_group'] = 'instances'
-            node.set['openstack']['compute']['conf']['libvirt']['sparse_logical_volumes'] = true
-            # node.set['openstack']['compute']['libvirt']['cpu_mode'] = 'none'
+            node.override['openstack']['compute']['conf']['libvirt']['images_type'] = 'lvm'
+            node.override['openstack']['compute']['conf']['libvirt']['images_volume_group'] = 'instances'
+            node.override['openstack']['compute']['conf']['libvirt']['sparse_logical_volumes'] = true
+            # node.override['openstack']['compute']['libvirt']['cpu_mode'] = 'none'
           end
 
           it 'sets the overridden lvm options correctly' do
@@ -278,12 +278,12 @@ describe 'openstack-compute::nova-common' do
         end
 
         it 'sets overide serial console options set' do
-          node.set['openstack']['endpoints']['compute-serial-console-bind']['bind_interface'] = 'lo'
-          node.set['openstack']['endpoints']['public']['compute-serial-proxy']['scheme'] = 'wss'
-          node.set['openstack']['endpoints']['public']['compute-serial-proxy']['host'] = '1.1.1.1'
-          node.set['openstack']['endpoints']['public']['compute-serial-proxy']['port'] = '6082'
-          # node.set['openstack']['compute']['serial_console']['enable'] = 'True'
-          # node.set['openstack']['compute']['serial_console']['port_range'] = '11000:15000'
+          node.override['openstack']['endpoints']['compute-serial-console-bind']['bind_interface'] = 'lo'
+          node.override['openstack']['endpoints']['public']['compute-serial-proxy']['scheme'] = 'wss'
+          node.override['openstack']['endpoints']['public']['compute-serial-proxy']['host'] = '1.1.1.1'
+          node.override['openstack']['endpoints']['public']['compute-serial-proxy']['port'] = '6082'
+          # node.override['openstack']['compute']['serial_console']['enable'] = 'True'
+          # node.override['openstack']['compute']['serial_console']['port_range'] = '11000:15000'
 
           [
             # /^enabled = True$/,
@@ -298,7 +298,7 @@ describe 'openstack-compute::nova-common' do
       end
 
       it do
-        node.set['openstack']['db']['compute_api']['username'] = 'nova_api'
+        node.override['openstack']['db']['compute_api']['username'] = 'nova_api'
         expect(chef_run).to render_config_file(file.name)
           .with_section_content(
             'api_database',
@@ -308,20 +308,20 @@ describe 'openstack-compute::nova-common' do
 
       context 'set enabled_slave attribute' do
         it 'sets overide database enabled_slave attribute as true' do
-          node.set['openstack']['endpoints']['db']['enabled_slave'] = true
-          node.set['openstack']['endpoints']['db']['slave_host'] = '10.10.1.1'
-          node.set['openstack']['endpoints']['db']['slave_port'] = '3326'
-          node.set['openstack']['db']['compute']['username'] = 'nova'
+          node.override['openstack']['endpoints']['db']['enabled_slave'] = true
+          node.override['openstack']['endpoints']['db']['slave_host'] = '10.10.1.1'
+          node.override['openstack']['endpoints']['db']['slave_port'] = '3326'
+          node.override['openstack']['db']['compute']['username'] = 'nova'
 
           expect(chef_run).to render_config_file(file.name)\
             .with_section_content('database', %(slave_connection = mysql+pymysql://nova:nova_db_pass@10.10.1.1:3326/nova?charset=utf8))
         end
 
         it 'sets overide database enabled_slave attribute as false' do
-          node.set['openstack']['endpoints']['db']['enabled_slave'] = false
-          node.set['openstack']['endpoints']['db']['slave_host'] = '10.10.1.1'
-          node.set['openstack']['endpoints']['db']['slave_port'] = '3326'
-          node.set['openstack']['db']['compute']['username'] = 'nova'
+          node.override['openstack']['endpoints']['db']['enabled_slave'] = false
+          node.override['openstack']['endpoints']['db']['slave_host'] = '10.10.1.1'
+          node.override['openstack']['endpoints']['db']['slave_port'] = '3326'
+          node.override['openstack']['db']['compute']['username'] = 'nova'
 
           expect(chef_run).to_not render_config_file(file.name)\
             .with_section_content('database', %(slave_connection = mysql+pymysql://nova:nova_db_pass@10.10.1.1:3326/nova?charset=utf8))
@@ -342,7 +342,7 @@ describe 'openstack-compute::nova-common' do
 
       context 'template contents' do
         it 'shows the custom banner' do
-          node.set['openstack']['compute']['custom_template_banner'] = 'banner'
+          node.override['openstack']['compute']['custom_template_banner'] = 'banner'
 
           expect(chef_run).to render_file(file.name).with_content(/^banner$/)
         end

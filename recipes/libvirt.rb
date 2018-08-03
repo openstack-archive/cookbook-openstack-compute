@@ -55,8 +55,8 @@ def update_grub_default_kernel(flavor = 'default')
 
   # change default option for /boot/grub/menu.lst
   unless current_default.eql?(default_boot)
-    ::Chef::Log.info('Changed grub default to #{default_boot}')
-    Mixlib::ShellOut.new('sed -i -e \'s;^default.*;default #{default_boot};\' /boot/grub/menu.lst').run_command
+    ::Chef::Log.info("Changed grub default to #{default_boot}")
+    Mixlib::ShellOut.new("sed -i -e 's;^default.*;default #{default_boot};' /boot/grub/menu.lst").run_command
   end
 end
 

@@ -9,6 +9,6 @@ source 'https://supermarket.chef.io'
 end
 
 cookbook 'openstackclient',
-  github: 'cloudbau/cookbook-openstackclient'
+  git: 'https://git.openstack.org/openstack/cookbook-openstackclient'
 
 metadata

@@ -5,7 +5,7 @@ issues_url       'https://launchpad.net/openstack-chef' if respond_to?(:issues_u
 source_url       'https://github.com/openstack/cookbook-openstack-compute' if respond_to?(:source_url)
 license          'Apache-2.0'
 description      'The OpenStack Compute service Nova.'
-version          '17.0.0'
+version          '18.0.0'
 
 chef_version '>= 12.5' if respond_to?(:chef_version)
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
@@ -28,8 +28,8 @@ recipe 'openstack-compute::vncproxy', 'Installs/Configures nova vnc proxy'
   supports os
 end
 
-depends 'openstack-common', '>= 17.0.0'
-depends 'openstack-identity', '>= 17.0.0'
-depends 'openstack-image', '>= 17.0.0'
-depends 'openstack-network', '>= 17.0.0'
+depends 'openstack-common', '>= 18.0.0'
+depends 'openstack-identity', '>= 18.0.0'
+depends 'openstack-image', '>= 18.0.0'
+depends 'openstack-network', '>= 18.0.0'
 depends 'openstackclient'

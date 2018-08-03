@@ -161,7 +161,7 @@ shared_examples 'expect_creates_api_paste_template' do
 
   context 'template contents' do
     it 'pastes the misc attributes' do
-      node.set['openstack']['compute']['misc_paste'] = %w(paste1 paste2)
+      node.override['openstack']['compute']['misc_paste'] = %w(paste1 paste2)
       expect(chef_run).to render_file(file.name)
         .with_content(/^paste1$/).with_content(/^paste2$/)
     end
