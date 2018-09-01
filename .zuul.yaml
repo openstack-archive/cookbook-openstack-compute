@@ -1,3 +1,3 @@
 - project:
     templates:
-      - openstack-chef-repo-jobs
+      - openstack-chef-jobs
