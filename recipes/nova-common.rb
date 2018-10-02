@@ -190,11 +190,12 @@ node.default['openstack']['compute']['conf'].tap do |conf|
   conf['serial_console']['proxyclient_address'] = serial_console_bind_address
 end
 
-# merge all config options and secrets to be used in the nova.conf.erb
+# merge all config options and secrets to be used in nova.conf
 nova_conf_options = merge_config_options 'compute'
 
 template '/etc/nova/nova.conf' do
-  source 'nova.conf.erb'
+  source 'openstack-service.conf.erb'
+  cookbook 'openstack-common'
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 0o0640
