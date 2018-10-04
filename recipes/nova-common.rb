@@ -163,8 +163,8 @@ node.default['openstack']['compute']['conf'].tap do |conf|
   conf['vnc']['xvpvncproxy_port'] = xvpvnc_bind['port']
   conf['vnc']['novncproxy_host'] = novnc_bind_address
   conf['vnc']['novncproxy_port'] = novnc_bind['port']
-  conf['vnc']['vncserver_listen'] = vnc_bind_address
-  conf['vnc']['vncserver_proxyclient_address'] = vnc_proxy_bind_address
+  conf['vnc']['server_listen'] = vnc_bind_address
+  conf['vnc']['server_proxyclient_address'] = vnc_proxy_bind_address
   unless memcache_servers.empty?
     # Need to set the backend explicitly, see LP bug #1572062
     conf['cache']['backend'] = 'oslo_cache.memcache_pool'
