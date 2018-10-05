@@ -185,21 +185,21 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'has default vncserver_* options set' do
+      it 'has default server_* options set' do
         node.override['openstack']['endpoints']['compute-vnc-bind']['bind_interface'] = 'lo'
 
-        [/^vncserver_listen = 127.0.0.1$/,
-         /^vncserver_proxyclient_address = 127.0.0.1$/].each do |line|
+        [/^server_listen = 127.0.0.1$/,
+         /^server_proxyclient_address = 127.0.0.1$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
 
-      it 'has override vncserver_* options set' do
+      it 'has override server_* options set' do
         node.override['openstack']['bind_service']['all']['compute-vnc']['host'] = '1.1.1.1'
         node.override['openstack']['bind_service']['all']['compute-vnc-proxy']['host'] = '2.2.2.2'
 
-        [/^vncserver_listen = 1.1.1.1$/,
-         /^vncserver_proxyclient_address = 2.2.2.2$/].each do |line|
+        [/^server_listen = 1.1.1.1$/,
+         /^server_proxyclient_address = 2.2.2.2$/].each do |line|
           expect(chef_run).to render_file(file.name).with_content(line)
         end
       end
