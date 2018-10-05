@@ -134,7 +134,7 @@ describe 'openstack-compute::nova-common' do
         it 'has correct authentication settings' do
           [
             'auth_type = password',
-            'os_region_name = RegionOne',
+            'region_name = RegionOne',
             'password = placement-pass',
             'username = placement',
             'project_name = service',

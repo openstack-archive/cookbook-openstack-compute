@@ -49,7 +49,7 @@ default['openstack']['compute']['conf'].tap do |conf|
 
   # [placement] section
   conf['placement']['auth_type'] = 'password'
-  conf['placement']['os_region_name'] = node['openstack']['region']
+  conf['placement']['region_name'] = node['openstack']['region']
   conf['placement']['username'] = 'placement'
   conf['placement']['user_domain_name'] = 'Default'
   conf['placement']['project_domain_name'] = 'Default'
