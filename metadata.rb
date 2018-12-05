@@ -1,6 +1,6 @@
 name             'openstack-compute'
 maintainer       'openstack-chef'
-maintainer_email 'openstack-dev@lists.openstack.org'
+maintainer_email 'openstack-discuss@lists.openstack.org'
 issues_url       'https://launchpad.net/openstack-chef' if respond_to?(:issues_url)
 source_url       'https://github.com/openstack/cookbook-openstack-compute' if respond_to?(:source_url)
 license          'Apache-2.0'
