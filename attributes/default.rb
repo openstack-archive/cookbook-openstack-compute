@@ -111,7 +111,7 @@ when 'debian'
     'compute_cert_packages' => ['nova-cert'],
     'compute_cert_service' => 'nova-cert',
     'mysql_service' => 'mysql',
-    'common_packages' => ['nova-common'],
+    'common_packages' => ['nova-common', 'python-nova'],
     'iscsi_helper' => 'tgtadm',
     'volume_packages' => ['sysfsutils', 'sg3-utils', 'multipath-tools'],
     'package_overrides' => '',
