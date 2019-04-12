@@ -29,7 +29,6 @@ identity_endpoint = internal_endpoint 'identity'
 interfaces = {
   public: { url: public_endpoint('compute-api') },
   internal: { url: internal_endpoint('compute-api') },
-  admin: { url: admin_endpoint('compute-api') },
 }
 placement_interfaces = {
   public: { url: public_endpoint('placement-api') },
@@ -44,21 +43,20 @@ service_role = node['openstack']['compute']['service_role']
 service_project_name = node['openstack']['compute']['conf']['keystone_authtoken']['project_name']
 service_domain_name = node['openstack']['compute']['conf']['keystone_authtoken']['user_domain_name']
 
-# TBD, another clean up opportunity. We could use the 'admin', and
-# 'internal' endpoints for a single service name. For now, we'll
-# leave the old names in place.
 region = node['openstack']['region']
 admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', node['openstack']['identity']['admin_user']
 admin_project = node['openstack']['identity']['admin_project']
 admin_domain = node['openstack']['identity']['admin_domain_name']
+endpoint_type = node['openstack']['identity']['endpoint_type']
 
 connection_params = {
-  openstack_auth_url:     "#{auth_url}/auth/tokens",
-  openstack_username:     admin_user,
-  openstack_api_key:      admin_pass,
-  openstack_project_name: admin_project,
-  openstack_domain_name:  admin_domain,
+  openstack_auth_url:      "#{auth_url}/auth/tokens",
+  openstack_username:      admin_user,
+  openstack_api_key:       admin_pass,
+  openstack_project_name:  admin_project,
+  openstack_domain_name:   admin_domain,
+  openstack_endpoint_type: endpoint_type,
 }
 
 # Register Compute Services
