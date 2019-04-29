@@ -16,6 +16,7 @@ describe 'openstack-compute::identity_registration' do
       openstack_api_key: 'admin',
       openstack_project_name: 'admin',
       openstack_domain_name: 'default',
+      openstack_endpoint_type: 'internalURL',
     }
     service_name = 'nova'
     service_type = 'compute'
@@ -59,7 +60,7 @@ describe 'openstack-compute::identity_registration' do
     end
 
     context "registers #{service_name} endpoint" do
-      %w(admin internal public).each do |interface|
+      %w(internal public).each do |interface|
         it "creates #{interface} endpoint with default values" do
           expect(chef_run).to create_openstack_endpoint(
             service_type

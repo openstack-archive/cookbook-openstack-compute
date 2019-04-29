@@ -1,9 +1,5 @@
 # encoding: UTF-8
 #
-########################################################################
-# Toggles - These can be overridden at the environment level
-default['enable_monit'] = false # OS provides packages
-########################################################################
 
 # Set to some text value if you want templated config files
 # to contain a custom banner at the top of the written file
@@ -15,7 +11,7 @@ default['openstack']['compute']['custom_template_banner'] = '
 # Set dbsync command timeout value
 default['openstack']['compute']['dbsync_timeout'] = 3600
 
-# Disallow non-encrypted connections
+# Role to assign for the nova service user
 default['openstack']['compute']['service_role'] = 'admin'
 
 # Used to set correct permissions for directories and files
@@ -130,12 +126,12 @@ default['openstack']['compute']['misc_paste'] = nil
   compute-vnc compute-api
 ).each do |service|
   default['openstack']['bind_service']['all'][service]['host'] = '127.0.0.1'
-  %w(public internal admin).each do |type|
+  %w(public internal).each do |type|
     default['openstack']['endpoints'][type][service]['host'] = '127.0.0.1'
     default['openstack']['endpoints'][type][service]['scheme'] = 'http'
   end
 end
-%w(public internal admin).each do |type|
+%w(public internal).each do |type|
   default['openstack']['endpoints'][type]['compute-xvpvnc']['port'] = '6081'
   default['openstack']['endpoints'][type]['compute-xvpvnc']['path'] = '/console'
   # The OpenStack Compute (Nova) Native API endpoint

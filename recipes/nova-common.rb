@@ -102,7 +102,7 @@ memcache_servers = memcached_servers.join ','
 
 # find the node attribute endpoint settings for the server holding a given role
 # Note that the bind and vnc endpoints don't have possible different values for
-# internal/admin/public. We'll stick with the general endpoint routine
+# internal/public. We'll stick with the general endpoint routine
 # for those.
 identity_endpoint = internal_endpoint 'identity'
 xvpvnc_endpoint = public_endpoint 'compute-xvpvnc'
@@ -153,7 +153,6 @@ node.default['openstack']['compute']['conf_secrets']
 
 node.default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['iscsi_helper'] = platform_options['iscsi_helper']
-  # conf['DEFAULT']['scheduler_default_filters'] = node['openstack']['compute']['scheduler']['default_filters'].join(',')
 
   conf['DEFAULT']['metadata_listen'] = compute_metadata_api_bind_address
   conf['DEFAULT']['metadata_listen_port'] = compute_metadata_api_bind['port']
