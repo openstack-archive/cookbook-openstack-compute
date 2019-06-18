@@ -48,15 +48,17 @@ admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', node['openstack']['identity']['admin_user']
 admin_project = node['openstack']['identity']['admin_project']
 admin_domain = node['openstack']['identity']['admin_domain_name']
-endpoint_type = node['openstack']['identity']['endpoint_type']
+# TODO(ramereth): commenting this out until
+# https://github.com/fog/fog-openstack/pull/494 gets merged and released.
+# endpoint_type = node['openstack']['identity']['endpoint_type']
 
 connection_params = {
-  openstack_auth_url:      "#{auth_url}/auth/tokens",
+  openstack_auth_url:      auth_url,
   openstack_username:      admin_user,
   openstack_api_key:       admin_pass,
   openstack_project_name:  admin_project,
   openstack_domain_name:   admin_domain,
-  openstack_endpoint_type: endpoint_type,
+  # openstack_endpoint_type: endpoint_type,
 }
 
 # Register Compute Services
