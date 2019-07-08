@@ -25,5 +25,33 @@ describe 'openstack-compute::api-metadata' do
     it 'stop metadata api now' do
       expect(chef_run).to stop_service 'nova-api-metadata'
     end
+    it do
+      expect(chef_run).to nothing_execute('Clear nova-metadata apache restart')
+        .with(
+          command: 'rm -f /var/chef/cache/nova-metadata-apache-restarted'
+        )
+    end
+    %w(
+      /etc/nova/nova.conf
+      /etc/nova/api-paste.ini
+      /etc/apache2/sites-available/nova-metadata.conf
+    ).each do |f|
+      it "#{f} notifies execute[Clear nova-metadata apache restart]" do
+        expect(chef_run.template(f)).to notify('execute[Clear nova-metadata apache restart]').to(:run).immediately
+      end
+    end
+    it do
+      expect(chef_run).to run_execute('nova-metadata apache restart')
+        .with(
+          command: 'touch /var/chef/cache/nova-metadata-apache-restarted',
+          creates: '/var/chef/cache/nova-metadata-apache-restarted'
+        )
+    end
+    it do
+      expect(chef_run.execute('nova-metadata apache restart')).to notify('execute[nova-metadata: restore-selinux-context]').to(:run).immediately
+    end
+    it do
+      expect(chef_run.execute('nova-metadata apache restart')).to notify('service[apache2]').to(:restart).immediately
+    end
   end
 end

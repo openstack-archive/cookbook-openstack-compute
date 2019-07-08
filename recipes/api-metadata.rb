@@ -49,6 +49,7 @@ template '/etc/nova/api-paste.ini' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 0o0644
+  notifies :run, 'execute[Clear nova-metadata apache restart]', :immediately
 end
 
 service 'nova-api-metadata' do
@@ -79,8 +80,19 @@ web_app 'nova-metadata' do
   ciphers node['openstack']['compute']['metadata']['ssl']['ciphers']
 end
 
+# Hack until Apache cookbook has lwrp's for proper use of notify restart
+# apache2 after keystone if completely configured. Whenever a nova
+# config is updated, have it notify the resource which clears the lock
+# so the service can be restarted.
+# TODO(ramereth): This should be removed once this cookbook is updated
+# to use the newer apache2 cookbook which uses proper resources.
+edit_resource(:template, "#{node['apache']['dir']}/sites-available/nova-metadata.conf") do
+  notifies :run, 'execute[Clear nova-metadata apache restart]', :immediately
+end
+
 execute 'nova-metadata apache restart' do
-  command 'uname'
+  command "touch #{Chef::Config[:file_cache_path]}/nova-metadata-apache-restarted"
+  creates "#{Chef::Config[:file_cache_path]}/nova-metadata-apache-restarted"
   notifies :run, 'execute[nova-metadata: restore-selinux-context]', :immediately
   notifies :restart, 'service[apache2]', :immediately
 end

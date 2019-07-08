@@ -193,6 +193,21 @@ end
 # merge all config options and secrets to be used in nova.conf
 nova_conf_options = merge_config_options 'compute'
 
+execute 'Clear nova-api apache restart' do
+  command "rm -f #{Chef::Config[:file_cache_path]}/nova-api-apache-restarted"
+  action :nothing
+end
+
+execute 'Clear nova-metadata apache restart' do
+  command "rm -f #{Chef::Config[:file_cache_path]}/nova-metadata-apache-restarted"
+  action :nothing
+end
+
+execute 'Clear nova-placement-api apache restart' do
+  command "rm -f #{Chef::Config[:file_cache_path]}/nova-placement-api-apache-restarted"
+  action :nothing
+end
+
 template '/etc/nova/nova.conf' do
   source 'openstack-service.conf.erb'
   cookbook 'openstack-common'
@@ -204,6 +219,9 @@ template '/etc/nova/nova.conf' do
     # with the glance_api_servers configuration option...
     service_config: nova_conf_options
   )
+  notifies :run, 'execute[Clear nova-api apache restart]', :immediately
+  notifies :run, 'execute[Clear nova-metadata apache restart]', :immediately
+  notifies :run, 'execute[Clear nova-placement-api apache restart]', :immediately
 end
 
 # delete all secrets saved in the attribute

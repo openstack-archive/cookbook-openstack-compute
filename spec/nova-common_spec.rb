@@ -364,7 +364,8 @@ describe 'openstack-compute::nova-common' do
     it 'enables nova login' do
       expect(chef_run).to run_execute('usermod -s /bin/sh nova')
     end
-    it do
+
+    it 'cleans up conf_secrets' do
       expect(chef_run).to run_ruby_block("delete all attributes in node['openstack']['compute']['conf_secrets']")
     end
   end

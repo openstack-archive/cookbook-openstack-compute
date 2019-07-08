@@ -12,6 +12,7 @@ RSpec.configure do |config|
   config.color = true
   config.formatter = :documentation
   config.log_level = :fatal
+  config.file_cache_path = '/var/chef/cache'
 end
 
 REDHAT_OPTS = {
@@ -21,7 +22,6 @@ REDHAT_OPTS = {
 UBUNTU_OPTS = {
   platform: 'ubuntu',
   version: '16.04',
-  file_cache_path: Chef::Config[:file_cache_path],
 }.freeze
 
 shared_context 'compute_stubs' do
@@ -140,7 +140,7 @@ shared_examples 'expect_creates_nova_lock_dir' do
 end
 
 shared_examples 'expect_creates_nova_instances_dir' do
-  it 'creates the /var/lib/nova/lock directory' do
+  it 'creates the /var/lib/nova/instances directory' do
     expect(chef_run).to create_directory('/var/lib/nova/instances').with(
       user: 'nova',
       group: 'nova',

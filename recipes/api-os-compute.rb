@@ -49,6 +49,7 @@ template '/etc/nova/api-paste.ini' do
   owner nova_user
   group nova_group
   mode 0o0644
+  notifies :run, 'execute[Clear nova-api apache restart]', :immediately
 end
 
 execute 'nova-manage api_db sync' do
@@ -89,8 +90,19 @@ end
 
 include_recipe 'openstack-compute::_nova_cell'
 
+# Hack until Apache cookbook has lwrp's for proper use of notify restart
+# apache2 after keystone if completely configured. Whenever a nova
+# config is updated, have it notify the resource which clears the lock
+# so the service can be restarted.
+# TODO(ramereth): This should be removed once this cookbook is updated
+# to use the newer apache2 cookbook which uses proper resources.
+edit_resource(:template, "#{node['apache']['dir']}/sites-available/nova-api.conf") do
+  notifies :run, 'execute[Clear nova-api apache restart]', :immediately
+end
+
 execute 'nova-api apache restart' do
-  command 'uname'
+  command "touch #{Chef::Config[:file_cache_path]}/nova-api-apache-restarted"
+  creates "#{Chef::Config[:file_cache_path]}/nova-api-apache-restarted"
   notifies :run, 'execute[nova-api: restore-selinux-context]', :immediately
   notifies :restart, 'service[apache2]', :immediately
 end

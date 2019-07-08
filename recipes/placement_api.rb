@@ -71,3 +71,19 @@ execute 'placement-api: nova-manage api_db sync' do
   command 'nova-manage api_db sync'
   action :run
 end
+
+# Hack until Apache cookbook has lwrp's for proper use of notify restart
+# apache2 after keystone if completely configured. Whenever a nova
+# config is updated, have it notify the resource which clears the lock
+# so the service can be restarted.
+# TODO(ramereth): This should be removed once this cookbook is updated
+# to use the newer apache2 cookbook which uses proper resources.
+edit_resource(:template, "#{node['apache']['dir']}/sites-available/nova-placement-api.conf") do
+  notifies :run, 'execute[Clear nova-placement-api apache restart]', :immediately
+end
+
+execute 'nova-placement-api apache restart' do
+  command "touch #{Chef::Config[:file_cache_path]}/nova-placement-api-apache-restarted"
+  creates "#{Chef::Config[:file_cache_path]}/nova-placement-api-apache-restarted"
+  notifies :restart, 'service[apache2]', :immediately
+end
