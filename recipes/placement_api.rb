@@ -24,31 +24,7 @@ end
 
 include_recipe 'openstack-compute::nova-common'
 
-platform_options = node['openstack']['compute']['platform']
-
-platform_options['api_placement_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
-end
-
-nova_user = node['openstack']['compute']['user']
-nova_group = node['openstack']['compute']['group']
-execute 'placement-api: nova-manage api_db sync' do
-  timeout node['openstack']['compute']['dbsync_timeout']
-  user nova_user
-  group nova_group
-  command 'nova-manage api_db sync'
-  action :run
-end
-
-service 'disable nova-placement-api service' do
-  service_name platform_options['api_placement_service']
-  supports status: true, restart: true
-  action [:disable, :stop]
-end
-
+# Create valid apache site configuration file before installing package
 bind_service = node['openstack']['bind_service']['all']['placement-api']
 
 web_app 'nova-placement-api' do
@@ -69,4 +45,29 @@ web_app 'nova-placement-api' do
   cert_required node['openstack']['compute']['placement']['ssl']['cert_required']
   protocol node['openstack']['compute']['placement']['ssl']['protocol']
   ciphers node['openstack']['compute']['placement']['ssl']['ciphers']
+end
+
+platform_options = node['openstack']['compute']['platform']
+
+platform_options['api_placement_packages'].each do |pkg|
+  package pkg do
+    options platform_options['package_overrides']
+    action :upgrade
+  end
+end
+
+service 'disable nova-placement-api service' do
+  service_name platform_options['api_placement_service']
+  supports status: true, restart: true
+  action [:disable, :stop]
+end
+
+nova_user = node['openstack']['compute']['user']
+nova_group = node['openstack']['compute']['group']
+execute 'placement-api: nova-manage api_db sync' do
+  timeout node['openstack']['compute']['dbsync_timeout']
+  user nova_user
+  group nova_group
+  command 'nova-manage api_db sync'
+  action :run
 end
