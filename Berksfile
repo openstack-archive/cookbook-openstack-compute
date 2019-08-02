@@ -4,7 +4,7 @@ source 'https://supermarket.chef.io'
   if Dir.exist?("../cookbook-openstack-#{cookbook}")
     cookbook "openstack-#{cookbook}", path: "../cookbook-openstack-#{cookbook}"
   else
-    cookbook "openstack-#{cookbook}", git: "https://git.openstack.org/openstack/cookbook-openstack-#{cookbook}"
+    cookbook "openstack-#{cookbook}", git: "https://git.openstack.org/openstack/cookbook-openstack-#{cookbook}", branch: 'stable/queens'
   end
 end
 
