@@ -19,16 +19,16 @@ describe 'openstack-compute::nova-common' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
-    it 'upgrades mysql python package' do
-      expect(chef_run).to upgrade_package 'python-mysqldb'
+    it 'upgrades mysql python3 package' do
+      expect(chef_run).to upgrade_package 'python3-mysqldb'
     end
 
     it 'upgrades nova common package' do
       expect(chef_run).to upgrade_package 'nova-common'
     end
 
-    it 'upgrades memcache python package' do
-      expect(chef_run).to upgrade_package 'python-memcache'
+    it 'upgrades memcache python3 package' do
+      expect(chef_run).to upgrade_package 'python3-memcache'
     end
 
     it 'creates the /etc/nova directory' do

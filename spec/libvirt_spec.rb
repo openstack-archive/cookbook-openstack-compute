@@ -11,7 +11,7 @@ describe 'openstack-compute::libvirt' do
     include_context 'compute_stubs'
 
     it 'upgrades libvirt packages' do
-      %w(libvirt-bin python-guestfs).each do |pkg|
+      %w(libvirt-bin python3-guestfs).each do |pkg|
         expect(chef_run).to upgrade_package pkg
       end
     end
