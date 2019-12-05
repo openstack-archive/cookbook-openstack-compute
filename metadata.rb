@@ -1,14 +1,13 @@
 name             'openstack-compute'
 maintainer       'openstack-chef'
 maintainer_email 'openstack-discuss@lists.openstack.org'
-issues_url       'https://launchpad.net/openstack-chef' if respond_to?(:issues_url)
-source_url       'https://github.com/openstack/cookbook-openstack-compute' if respond_to?(:source_url)
+issues_url       'https://launchpad.net/openstack-chef'
+source_url       'https://opendev.org/openstack/cookbook-openstack-compute'
 license          'Apache-2.0'
 description      'The OpenStack Compute service Nova.'
 version          '18.0.0'
 
-chef_version '>= 12.5' if respond_to?(:chef_version)
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+chef_version '>= 14.0'
 
 recipe 'openstack-compute::api-metadata', 'Installs/Configures nova api metadata service'
 recipe 'openstack-compute::api-os-compute', 'Installs/Configures nova api service'

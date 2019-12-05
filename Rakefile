@@ -33,7 +33,7 @@ end
 desc 'All-in-One Neutron build Infra using Common task'
 task :integration do
   # Use the common integration task
-  sh %(wget -nv -t 3 -O Rakefile-Common https://raw.githubusercontent.com/openstack/cookbook-openstack-common/master/Rakefile)
+  sh %(wget -nv -t 3 -O Rakefile-Common https://opendev.org/openstack/cookbook-openstack-common/raw/branch/master/Rakefile)
   load './Rakefile-Common'
   Rake::Task['common_integration'].invoke
 end
