@@ -2,26 +2,23 @@
 
 require 'chefspec'
 require 'chefspec/berkshelf'
-
-ChefSpec::Coverage.start! { add_filter 'openstack-compute' }
-
 require 'chef/application'
 require 'securerandom'
 
 RSpec.configure do |config|
   config.color = true
   config.formatter = :documentation
-  config.log_level = :fatal
+  config.log_level = :warn
   config.file_cache_path = '/var/chef/cache'
 end
 
 REDHAT_OPTS = {
   platform: 'redhat',
-  version: '7.4',
+  version: '7',
 }.freeze
 UBUNTU_OPTS = {
   platform: 'ubuntu',
-  version: '16.04',
+  version: '18.04',
 }.freeze
 
 shared_context 'compute_stubs' do
@@ -160,8 +157,11 @@ shared_examples 'expect_creates_api_paste_template' do
   end
 
   context 'template contents' do
-    it 'pastes the misc attributes' do
+    cached(:chef_run) do
       node.override['openstack']['compute']['misc_paste'] = %w(paste1 paste2)
+      runner.converge(described_recipe)
+    end
+    it 'pastes the misc attributes' do
       expect(chef_run).to render_file(file.name)
         .with_content(/^paste1$/).with_content(/^paste2$/)
     end

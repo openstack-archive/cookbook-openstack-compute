@@ -6,7 +6,7 @@ describe 'openstack-compute::compute' do
   describe 'ubuntu' do
     let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
-    let(:chef_run) { runner.converge(described_recipe) }
+    cached(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'
@@ -32,26 +32,38 @@ describe 'openstack-compute::compute' do
       expect(chef_run).to upgrade_package 'nova-compute'
     end
 
-    it "upgrades kvm when virt_type is 'kvm'" do
-      node.override['openstack']['compute']['conf']['libvirt']['virt_type'] = 'kvm'
-
-      expect(chef_run).to upgrade_package 'nova-compute-kvm'
-      expect(chef_run).not_to upgrade_package 'nova-compute-qemu'
+    context "upgrades kvm when virt_type is 'kvm'" do
+      cached(:chef_run) do
+        node.override['openstack']['compute']['conf']['libvirt']['virt_type'] = 'kvm'
+        runner.converge(described_recipe)
+      end
+      it do
+        expect(chef_run).to upgrade_package 'nova-compute-kvm'
+        expect(chef_run).not_to upgrade_package 'nova-compute-qemu'
+      end
     end
 
-    it 'upgrades qemu when virt_type is qemu' do
-      node.override['openstack']['compute']['conf']['libvirt']['virt_type'] = 'qemu'
-
-      expect(chef_run).to upgrade_package 'nova-compute-qemu'
-      expect(chef_run).not_to upgrade_package 'nova-compute-kvm'
+    context 'upgrades qemu when virt_type is qemu' do
+      cached(:chef_run) do
+        node.override['openstack']['compute']['conf']['libvirt']['virt_type'] = 'qemu'
+        runner.converge(described_recipe)
+      end
+      it do
+        expect(chef_run).to upgrade_package 'nova-compute-qemu'
+        expect(chef_run).not_to upgrade_package 'nova-compute-kvm'
+      end
     end
 
     %w(qemu kvm).each do |virt_type|
-      it "honors the package name platform overrides for #{virt_type}" do
-        node.override['openstack']['compute']['conf']['libvirt']['virt_type'] = virt_type
-        node.override['openstack']['compute']['platform']["#{virt_type}_compute_packages"] = ["my-nova-#{virt_type}"]
-
-        expect(chef_run).to upgrade_package("my-nova-#{virt_type}")
+      context "honors the package name platform overrides for #{virt_type}" do
+        cached(:chef_run) do
+          node.override['openstack']['compute']['conf']['libvirt']['virt_type'] = virt_type
+          node.override['openstack']['compute']['platform']["#{virt_type}_compute_packages"] = ["my-nova-#{virt_type}"]
+          runner.converge(described_recipe)
+        end
+        it do
+          expect(chef_run).to upgrade_package("my-nova-#{virt_type}")
+        end
       end
     end
 

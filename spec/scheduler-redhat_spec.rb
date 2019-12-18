@@ -6,7 +6,7 @@ describe 'openstack-compute::scheduler' do
   describe 'redhat' do
     let(:runner) { ChefSpec::SoloRunner.new(REDHAT_OPTS) }
     let(:node) { runner.node }
-    let(:chef_run) { runner.converge(described_recipe) }
+    cached(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
     include_examples 'expect_runs_nova_common_recipe'

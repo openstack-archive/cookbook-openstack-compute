@@ -6,7 +6,7 @@ describe 'openstack-compute::libvirt' do
   describe 'ubuntu' do
     let(:runner) { ChefSpec::SoloRunner.new(UBUNTU_OPTS) }
     let(:node) { runner.node }
-    let(:chef_run) { runner.converge(described_recipe) }
+    cached(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
 
@@ -56,7 +56,12 @@ describe 'openstack-compute::libvirt' do
       end
 
       it 'has proper processing controls' do
-        [/^max_clients = 20$/, /^max_workers = 20$/, /^max_requests = 20$/, /^max_client_requests = 5$/].each do |content|
+        [
+          /^max_clients = 20$/,
+          /^max_workers = 20$/,
+          /^max_requests = 20$/,
+          /^max_client_requests = 5$/,
+        ].each do |content|
           expect(chef_run).to render_file(file.name).with_content(content)
         end
       end
