@@ -24,13 +24,7 @@ require 'uri'
 
 class ::Chef::Recipe
   include ::Openstack
-end
-
-execute 'nova-metadata: set-selinux-permissive' do
-  command '/sbin/setenforce Permissive'
-  action :run
-
-  only_if "[ ! -e /etc/httpd/conf/httpd.conf ] && [ -e /etc/redhat-release ] && [ $(/sbin/sestatus | grep -c '^Current mode:.*enforcing') -eq 1 ]"
+  include Apache2::Cookbook::Helpers
 end
 
 include_recipe 'openstack-compute::nova-common'
@@ -49,7 +43,7 @@ template '/etc/nova/api-paste.ini' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
   mode 0o0644
-  notifies :run, 'execute[Clear nova-metadata apache restart]', :immediately
+  notifies :restart, 'service[apache2]'
 end
 
 service 'nova-api-metadata' do
@@ -60,45 +54,45 @@ end
 
 bind_service = node['openstack']['bind_service']['all']['compute-metadata-api']
 
-web_app 'nova-metadata' do
-  template 'wsgi-template.conf.erb'
-  daemon_process 'nova-metadata'
-  server_host bind_service['host']
-  server_port bind_service['port']
-  server_entry '/usr/bin/nova-metadata-wsgi'
-  log_dir node['apache']['log_dir']
-  run_dir node['apache']['run_dir']
-  user node['openstack']['compute']['user']
-  group node['openstack']['compute']['group']
-  use_ssl node['openstack']['compute']['metadata']['ssl']['enabled']
-  cert_file node['openstack']['compute']['metadata']['ssl']['certfile']
-  chain_file node['openstack']['compute']['metadata']['ssl']['chainfile']
-  key_file node['openstack']['compute']['metadata']['ssl']['keyfile']
-  ca_certs_path node['openstack']['compute']['metadata']['ssl']['ca_certs_path']
-  cert_required node['openstack']['compute']['metadata']['ssl']['cert_required']
-  protocol node['openstack']['compute']['metadata']['ssl']['protocol']
-  ciphers node['openstack']['compute']['metadata']['ssl']['ciphers']
+# Finds and appends the listen port to the apache2_install[openstack]
+# resource which is defined in openstack-identity::server-apache.
+apache_resource = find_resource(:apache2_install, 'openstack')
+
+if apache_resource
+  apache_resource.listen = [apache_resource.listen, "#{bind_service['host']}:#{bind_service['port']}"].flatten
+else
+  apache2_install 'openstack' do
+    listen "#{bind_service['host']}:#{bind_service['port']}"
+  end
 end
 
-# Hack until Apache cookbook has lwrp's for proper use of notify restart
-# apache2 after keystone if completely configured. Whenever a nova
-# config is updated, have it notify the resource which clears the lock
-# so the service can be restarted.
-# TODO(ramereth): This should be removed once this cookbook is updated
-# to use the newer apache2 cookbook which uses proper resources.
-edit_resource(:template, "#{node['apache']['dir']}/sites-available/nova-metadata.conf") do
-  notifies :run, 'execute[Clear nova-metadata apache restart]', :immediately
+apache2_module 'wsgi'
+apache2_module 'ssl' if node['openstack']['compute']['metadata']['ssl']['enabled']
+
+template "#{apache_dir}/sites-available/nova-metadata.conf" do
+  extend Apache2::Cookbook::Helpers
+  source 'wsgi-template.conf.erb'
+  variables(
+    daemon_process: 'nova-metadata',
+    server_host: bind_service['host'],
+    server_port: bind_service['port'],
+    server_entry: '/usr/bin/nova-metadata-wsgi',
+    log_dir: default_log_dir,
+    run_dir: lock_dir,
+    user: node['openstack']['compute']['user'],
+    group: node['openstack']['compute']['group'],
+    use_ssl: node['openstack']['compute']['metadata']['ssl']['enabled'],
+    cert_file: node['openstack']['compute']['metadata']['ssl']['certfile'],
+    chain_file: node['openstack']['compute']['metadata']['ssl']['chainfile'],
+    key_file: node['openstack']['compute']['metadata']['ssl']['keyfile'],
+    ca_certs_path: node['openstack']['compute']['metadata']['ssl']['ca_certs_path'],
+    cert_required: node['openstack']['compute']['metadata']['ssl']['cert_required'],
+    protocol: node['openstack']['compute']['metadata']['ssl']['protocol'],
+    ciphers: node['openstack']['compute']['metadata']['ssl']['ciphers']
+  )
+  notifies :restart, 'service[apache2]'
 end
 
-execute 'nova-metadata apache restart' do
-  command "touch #{Chef::Config[:file_cache_path]}/nova-metadata-apache-restarted"
-  creates "#{Chef::Config[:file_cache_path]}/nova-metadata-apache-restarted"
-  notifies :run, 'execute[nova-metadata: restore-selinux-context]', :immediately
+apache2_site 'nova-metadata' do
   notifies :restart, 'service[apache2]', :immediately
-end
-
-execute 'nova-metadata: restore-selinux-context' do
-  command 'restorecon -Rv /etc/httpd /etc/pki || :'
-  action :nothing
-  only_if { platform_family?('rhel') }
 end

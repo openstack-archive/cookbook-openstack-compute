@@ -34,33 +34,5 @@ describe 'openstack-compute::api-os-compute' do
     it 'stops openstack api now' do
       expect(chef_run).to stop_service 'openstack-nova-api'
     end
-    it do
-      expect(chef_run).to nothing_execute('Clear nova-api apache restart')
-        .with(
-          command: 'rm -f /var/chef/cache/nova-api-apache-restarted'
-        )
-    end
-    %w(
-      /etc/nova/nova.conf
-      /etc/nova/api-paste.ini
-      /etc/httpd/sites-available/nova-api.conf
-    ).each do |f|
-      it "#{f} notifies execute[Clear nova-api apache restart]" do
-        expect(chef_run.template(f)).to notify('execute[Clear nova-api apache restart]').to(:run).immediately
-      end
-    end
-    it do
-      expect(chef_run).to run_execute('nova-api apache restart')
-        .with(
-          command: 'touch /var/chef/cache/nova-api-apache-restarted',
-          creates: '/var/chef/cache/nova-api-apache-restarted'
-        )
-    end
-    it do
-      expect(chef_run.execute('nova-api apache restart')).to notify('execute[nova-api: restore-selinux-context]').to(:run).immediately
-    end
-    it do
-      expect(chef_run.execute('nova-api apache restart')).to notify('service[apache2]').to(:restart).immediately
-    end
   end
 end

@@ -16,42 +16,144 @@ describe 'openstack-compute::api-metadata' do
 
     it 'upgrades metadata api packages' do
       expect(chef_run).to upgrade_package 'nova-api-metadata'
+      expect(chef_run).to upgrade_package 'python3-nova'
     end
 
-    it 'disables metadata api on boot' do
+    it do
       expect(chef_run).to disable_service 'nova-api-metadata'
-    end
-
-    it 'stop metadata api now' do
       expect(chef_run).to stop_service 'nova-api-metadata'
     end
+
     it do
-      expect(chef_run).to nothing_execute('Clear nova-metadata apache restart')
-        .with(
-          command: 'rm -f /var/chef/cache/nova-metadata-apache-restarted'
-        )
+      expect(chef_run).to install_apache2_install('openstack').with(listen: '127.0.0.1:8775')
     end
-    %w(
-      /etc/nova/nova.conf
-      /etc/nova/api-paste.ini
-      /etc/apache2/sites-available/nova-metadata.conf
-    ).each do |f|
-      it "#{f} notifies execute[Clear nova-metadata apache restart]" do
-        expect(chef_run.template(f)).to notify('execute[Clear nova-metadata apache restart]').to(:run).immediately
+
+    it do
+      expect(chef_run).to enable_apache2_module('wsgi')
+    end
+
+    it do
+      expect(chef_run).to_not enable_apache2_module('ssl')
+    end
+
+    it do
+      expect(chef_run).to create_template('/etc/apache2/sites-available/nova-metadata.conf').with(
+        source: 'wsgi-template.conf.erb',
+        variables: {
+          ca_certs_path: '',
+          cert_file: '',
+          cert_required: false,
+          chain_file: '',
+          ciphers: '',
+          daemon_process: 'nova-metadata',
+          group: 'nova',
+          key_file: '',
+          log_dir: '/var/log/apache2',
+          protocol: '',
+          run_dir: '/var/lock/apache2',
+          server_entry: '/usr/bin/nova-metadata-wsgi',
+          server_host: '127.0.0.1',
+          server_port: '8775',
+          user: 'nova',
+          use_ssl: false,
+        }
+      )
+    end
+    [
+      /<VirtualHost 127.0.0.1:8775>$/,
+      /WSGIDaemonProcess nova-metadata processes=2 threads=10 user=nova group=nova display-name=%{GROUP}$/,
+      /WSGIProcessGroup nova-metadata$/,
+      %r{WSGIScriptAlias / /usr/bin/nova-metadata-wsgi$},
+      /WSGIApplicationGroup %{GLOBAL}$/,
+      %r{ErrorLog /var/log/apache2/nova-metadata_error.log$},
+      %r{CustomLog /var/log/apache2/nova-metadata_access.log combined$},
+      %r{WSGISocketPrefix /var/lock/apache2$},
+    ].each do |line|
+      it do
+        expect(chef_run).to render_file('/etc/apache2/sites-available/nova-metadata.conf').with_content(line)
       end
     end
-    it do
-      expect(chef_run).to run_execute('nova-metadata apache restart')
-        .with(
-          command: 'touch /var/chef/cache/nova-metadata-apache-restarted',
-          creates: '/var/chef/cache/nova-metadata-apache-restarted'
-        )
+
+    [
+      /SSLEngine On$/,
+      /SSLCertificateFile/,
+      /SSLCertificateKeyFile/,
+      /SSLCACertificatePath/,
+      /SSLCertificateChainFile/,
+      /SSLProtocol/,
+      /SSLCipherSuite/,
+      /SSLVerifyClient require/,
+    ].each do |line|
+      it do
+        expect(chef_run).to_not render_file('/etc/apache2/sites-available/nova-metadata.conf').with_content(line)
+      end
     end
-    it do
-      expect(chef_run.execute('nova-metadata apache restart')).to notify('execute[nova-metadata: restore-selinux-context]').to(:run).immediately
+
+    context 'Enable SSL' do
+      cached(:chef_run) do
+        node.override['openstack']['compute']['metadata']['ssl']['enabled'] = true
+        node.override['openstack']['compute']['metadata']['ssl']['certfile'] = 'ssl.cert'
+        node.override['openstack']['compute']['metadata']['ssl']['keyfile'] = 'ssl.key'
+        node.override['openstack']['compute']['metadata']['ssl']['ca_certs_path'] = 'ca_certs_path'
+        node.override['openstack']['compute']['metadata']['ssl']['protocol'] = 'ssl_protocol_value'
+        runner.converge(described_recipe)
+      end
+
+      it do
+        expect(chef_run).to enable_apache2_module('ssl')
+      end
+
+      [
+        /SSLEngine On$/,
+        /SSLCertificateFile ssl.cert$/,
+        /SSLCertificateKeyFile ssl.key$/,
+        /SSLCACertificatePath ca_certs_path$/,
+        /SSLProtocol ssl_protocol_value$/,
+      ].each do |line|
+        it do
+          expect(chef_run).to render_file('/etc/apache2/sites-available/nova-metadata.conf').with_content(line)
+        end
+      end
+      [
+        /SSLCipherSuite/,
+        /SSLCertificateChainFile/,
+        /SSLVerifyClient require/,
+      ].each do |line|
+        it do
+          expect(chef_run).to_not render_file('/etc/apache2/sites-available/nova-metadata.conf').with_content(line)
+        end
+      end
+      context 'Enable chainfile, ciphers & cert_required' do
+        cached(:chef_run) do
+          node.override['openstack']['compute']['metadata']['ssl']['enabled'] = true
+          node.override['openstack']['compute']['metadata']['ssl']['ciphers'] = 'ssl_ciphers_value'
+          node.override['openstack']['compute']['metadata']['ssl']['chainfile'] = 'chainfile'
+          node.override['openstack']['compute']['metadata']['ssl']['cert_required'] = true
+          runner.converge(described_recipe)
+        end
+        [
+          /SSLCipherSuite ssl_ciphers_value$/,
+          /SSLCertificateChainFile chainfile$/,
+          /SSLVerifyClient require/,
+        ].each do |line|
+          it do
+            expect(chef_run).to render_file('/etc/apache2/sites-available/nova-metadata.conf').with_content(line)
+          end
+        end
+      end
     end
+
     it do
-      expect(chef_run.execute('nova-metadata apache restart')).to notify('service[apache2]').to(:restart).immediately
+      expect(chef_run.template('/etc/apache2/sites-available/nova-metadata.conf')).to \
+        notify('service[apache2]').to(:restart)
+    end
+
+    it do
+      expect(chef_run).to enable_apache2_site('nova-metadata')
+    end
+
+    it do
+      expect(chef_run.apache2_site('nova-metadata')).to notify('service[apache2]').to(:restart).immediately
     end
   end
 end

@@ -1,11 +1,9 @@
 <%= node['openstack']['compute']['custom_template_banner'] %>
 
-Listen <%= @params[:server_host] %>:<%= @params[:server_port] %>
-
-<VirtualHost <%= @params[:server_host] %>:<%= @params[:server_port] %>>
-  WSGIDaemonProcess <%= @params[:daemon_process] %> processes=2 threads=10 user=<%= @params[:user] %> group=<%= @params[:group] %> display-name=%{GROUP}
-  WSGIProcessGroup <%= @params[:daemon_process] %>
-  WSGIScriptAlias / <%= @params[:server_entry] %>
+<VirtualHost <%= @server_host %>:<%= @server_port %>>
+  WSGIDaemonProcess <%= @daemon_process %> processes=2 threads=10 user=<%= @user %> group=<%= @group %> display-name=%{GROUP}
+  WSGIProcessGroup <%= @daemon_process %>
+  WSGIScriptAlias / <%= @server_entry %>
   WSGIApplicationGroup %{GLOBAL}
   WSGIPassAuthorization On
 
@@ -14,29 +12,25 @@ Listen <%= @params[:server_host] %>:<%= @params[:server_port] %>
   </Directory>
 
   ErrorLogFormat "%{cu}t %M"
-  ErrorLog <%= @params[:log_dir] %>/<%= @params[:daemon_process] %>_error.log
-  CustomLog <%= @params[:log_dir] %>/<%= @params[:daemon_process] %>_access.log combined
-<% if [true, 'true', 'True'].include?(@params[:log_debug]) -%>
-  LogLevel debug
-<% end -%>
+  ErrorLog <%= @log_dir %>/<%= @daemon_process %>_error.log
+  CustomLog <%= @log_dir %>/<%= @daemon_process %>_access.log combined
+<% if @use_ssl -%>
 
-<% if @params[:use_ssl] -%>
   SSLEngine On
-  SSLCertificateFile <%= @params[:cert_file] %>
-  SSLCertificateKeyFile <%= @params[:key_file] %>
-  SSLCACertificatePath <%= @params[:ca_certs_path] %>
-<%   if @params[:chain_file] %>
-  SSLCertificateChainFile <%= @params[:chain_file] %>
+  SSLCertificateFile <%= @cert_file %>
+  SSLCertificateKeyFile <%= @key_file %>
+  SSLCACertificatePath <%= @ca_certs_path %>
+<%   unless @chain_file.empty? %>
+  SSLCertificateChainFile <%= @chain_file %>
 <%   end -%>
-  SSLProtocol <%= @params[:protocol] %>
-<%   if @params[:ciphers] -%>
-  SSLCipherSuite <%= @params[:ciphers] %>
+  SSLProtocol <%= @protocol %>
+<%   unless @ciphers.empty? -%>
+  SSLCipherSuite <%= @ciphers %>
 <%   end -%>
-<%   if @params[:cert_required] -%>
+<%   if @cert_required -%>
   SSLVerifyClient require
 <%   end -%>
 <% end -%>
 </VirtualHost>
 
-WSGISocketPrefix <%= @params[:run_dir] -%>
-
+WSGISocketPrefix <%= @run_dir -%>

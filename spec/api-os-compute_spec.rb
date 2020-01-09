@@ -26,42 +26,143 @@ describe 'openstack-compute::api-os-compute' do
 
     it 'upgrades openstack api packages' do
       expect(chef_run).to upgrade_package 'nova-api'
+      expect(chef_run).to upgrade_package 'python3-nova'
     end
 
-    it 'disables openstack api on boot' do
+    it do
       expect(chef_run).to disable_service 'nova-api-os-compute'
-    end
-
-    it 'stops openstack api now' do
       expect(chef_run).to stop_service 'nova-api-os-compute'
     end
     it do
-      expect(chef_run).to nothing_execute('Clear nova-api apache restart')
-        .with(
-          command: 'rm -f /var/chef/cache/nova-api-apache-restarted'
-        )
+      expect(chef_run).to install_apache2_install('openstack').with(listen: '127.0.0.1:8774')
     end
-    %w(
-      /etc/nova/nova.conf
-      /etc/nova/api-paste.ini
-      /etc/apache2/sites-available/nova-api.conf
-    ).each do |f|
-      it "#{f} notifies execute[Clear nova-api apache restart]" do
-        expect(chef_run.template(f)).to notify('execute[Clear nova-api apache restart]').to(:run).immediately
+
+    it do
+      expect(chef_run).to enable_apache2_module('wsgi')
+    end
+
+    it do
+      expect(chef_run).to_not enable_apache2_module('ssl')
+    end
+
+    it do
+      expect(chef_run).to create_template('/etc/apache2/sites-available/nova-api.conf').with(
+        source: 'wsgi-template.conf.erb',
+        variables: {
+          ca_certs_path: '',
+          cert_file: '',
+          cert_required: false,
+          chain_file: '',
+          ciphers: '',
+          daemon_process: 'nova-api',
+          group: 'nova',
+          key_file: '',
+          log_dir: '/var/log/apache2',
+          protocol: '',
+          run_dir: '/var/lock/apache2',
+          server_entry: '/usr/bin/nova-api-wsgi',
+          server_host: '127.0.0.1',
+          server_port: '8774',
+          user: 'nova',
+          use_ssl: false,
+        }
+      )
+    end
+    [
+      /<VirtualHost 127.0.0.1:8774>$/,
+      /WSGIDaemonProcess nova-api processes=2 threads=10 user=nova group=nova display-name=%{GROUP}$/,
+      /WSGIProcessGroup nova-api$/,
+      %r{WSGIScriptAlias / /usr/bin/nova-api-wsgi$},
+      /WSGIApplicationGroup %{GLOBAL}$/,
+      %r{ErrorLog /var/log/apache2/nova-api_error.log$},
+      %r{CustomLog /var/log/apache2/nova-api_access.log combined$},
+      %r{WSGISocketPrefix /var/lock/apache2$},
+    ].each do |line|
+      it do
+        expect(chef_run).to render_file('/etc/apache2/sites-available/nova-api.conf').with_content(line)
       end
     end
-    it do
-      expect(chef_run).to run_execute('nova-api apache restart')
-        .with(
-          command: 'touch /var/chef/cache/nova-api-apache-restarted',
-          creates: '/var/chef/cache/nova-api-apache-restarted'
-        )
+
+    [
+      /SSLEngine On$/,
+      /SSLCertificateFile/,
+      /SSLCertificateKeyFile/,
+      /SSLCACertificatePath/,
+      /SSLCertificateChainFile/,
+      /SSLProtocol/,
+      /SSLCipherSuite/,
+      /SSLVerifyClient require/,
+    ].each do |line|
+      it do
+        expect(chef_run).to_not render_file('/etc/apache2/sites-available/nova-api.conf').with_content(line)
+      end
     end
-    it do
-      expect(chef_run.execute('nova-api apache restart')).to notify('execute[nova-api: restore-selinux-context]').to(:run).immediately
+
+    context 'Enable SSL' do
+      cached(:chef_run) do
+        node.override['openstack']['compute']['api']['ssl']['enabled'] = true
+        node.override['openstack']['compute']['api']['ssl']['certfile'] = 'ssl.cert'
+        node.override['openstack']['compute']['api']['ssl']['keyfile'] = 'ssl.key'
+        node.override['openstack']['compute']['api']['ssl']['ca_certs_path'] = 'ca_certs_path'
+        node.override['openstack']['compute']['api']['ssl']['protocol'] = 'ssl_protocol_value'
+        runner.converge(described_recipe)
+      end
+
+      it do
+        expect(chef_run).to enable_apache2_module('ssl')
+      end
+
+      [
+        /SSLEngine On$/,
+        /SSLCertificateFile ssl.cert$/,
+        /SSLCertificateKeyFile ssl.key$/,
+        /SSLCACertificatePath ca_certs_path$/,
+        /SSLProtocol ssl_protocol_value$/,
+      ].each do |line|
+        it do
+          expect(chef_run).to render_file('/etc/apache2/sites-available/nova-api.conf').with_content(line)
+        end
+      end
+      [
+        /SSLCipherSuite/,
+        /SSLCertificateChainFile/,
+        /SSLVerifyClient require/,
+      ].each do |line|
+        it do
+          expect(chef_run).to_not render_file('/etc/apache2/sites-available/nova-api.conf').with_content(line)
+        end
+      end
+      context 'Enable chainfile, ciphers & cert_required' do
+        cached(:chef_run) do
+          node.override['openstack']['compute']['api']['ssl']['enabled'] = true
+          node.override['openstack']['compute']['api']['ssl']['ciphers'] = 'ssl_ciphers_value'
+          node.override['openstack']['compute']['api']['ssl']['chainfile'] = 'chainfile'
+          node.override['openstack']['compute']['api']['ssl']['cert_required'] = true
+          runner.converge(described_recipe)
+        end
+        [
+          /SSLCipherSuite ssl_ciphers_value$/,
+          /SSLCertificateChainFile chainfile$/,
+          /SSLVerifyClient require/,
+        ].each do |line|
+          it do
+            expect(chef_run).to render_file('/etc/apache2/sites-available/nova-api.conf').with_content(line)
+          end
+        end
+      end
     end
+
     it do
-      expect(chef_run.execute('nova-api apache restart')).to notify('service[apache2]').to(:restart).immediately
+      expect(chef_run.template('/etc/apache2/sites-available/nova-api.conf')).to \
+        notify('service[apache2]').to(:restart)
+    end
+
+    it do
+      expect(chef_run).to enable_apache2_site('nova-api')
+    end
+
+    it do
+      expect(chef_run.apache2_site('nova-api')).to notify('service[apache2]').to(:restart).immediately
     end
   end
 end

@@ -72,7 +72,7 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
     'compute_cert_packages' => ['openstack-nova-cert'],
     'compute_cert_service' => 'openstack-nova-cert',
     'mysql_service' => 'mysqld',
-    'common_packages' => ['openstack-nova-common'],
+    'common_packages' => ['openstack-nova-common', 'mod_wsgi'],
     'iscsi_helper' => 'ietadm',
     'volume_packages' => ['sysfsutils', 'sg3_utils', 'device-mapper-multipath'],
     'package_overrides' => '',

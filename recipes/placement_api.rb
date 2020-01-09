@@ -20,32 +20,15 @@
 
 class ::Chef::Recipe
   include ::Openstack
+  include Apache2::Cookbook::Helpers
 end
 
 include_recipe 'openstack-compute::nova-common'
 
 # Create valid apache site configuration file before installing package
 bind_service = node['openstack']['bind_service']['all']['placement-api']
-
-web_app 'nova-placement-api' do
-  template 'wsgi-template.conf.erb'
-  daemon_process 'placement-api'
-  server_host bind_service['host']
-  server_port bind_service['port']
-  server_entry '/usr/bin/nova-placement-api'
-  log_dir node['apache']['log_dir']
-  run_dir node['apache']['run_dir']
-  user node['openstack']['compute']['user']
-  group node['openstack']['compute']['group']
-  use_ssl node['openstack']['compute']['placement']['ssl']['enabled']
-  cert_file node['openstack']['compute']['placement']['ssl']['certfile']
-  chain_file node['openstack']['compute']['placement']['ssl']['chainfile']
-  key_file node['openstack']['compute']['placement']['ssl']['keyfile']
-  ca_certs_path node['openstack']['compute']['placement']['ssl']['ca_certs_path']
-  cert_required node['openstack']['compute']['placement']['ssl']['cert_required']
-  protocol node['openstack']['compute']['placement']['ssl']['protocol']
-  ciphers node['openstack']['compute']['placement']['ssl']['ciphers']
-end
+nova_user = node['openstack']['compute']['user']
+nova_group = node['openstack']['compute']['group']
 
 platform_options = node['openstack']['compute']['platform']
 
@@ -56,34 +39,63 @@ platform_options['api_placement_packages'].each do |pkg|
   end
 end
 
-service 'disable nova-placement-api service' do
-  service_name platform_options['api_placement_service']
+service platform_options['api_placement_service'] do
   supports status: true, restart: true
   action [:disable, :stop]
 end
 
-nova_user = node['openstack']['compute']['user']
-nova_group = node['openstack']['compute']['group']
+apache2_site 'nova-placement-api' do
+  action :disable
+  only_if { platform_family?('debian') }
+end
+
+# Finds and appends the listen port to the apache2_install[openstack]
+# resource which is defined in openstack-identity::server-apache.
+apache_resource = find_resource(:apache2_install, 'openstack')
+
+if apache_resource
+  apache_resource.listen = [apache_resource.listen, "#{bind_service['host']}:#{bind_service['port']}"].flatten
+else
+  apache2_install 'openstack' do
+    listen "#{bind_service['host']}:#{bind_service['port']}"
+  end
+end
+
+apache2_module 'wsgi'
+apache2_module 'ssl' if node['openstack']['compute']['placement']['ssl']['enabled']
+
+template "#{apache_dir}/sites-available/nova-placement.conf" do
+  extend Apache2::Cookbook::Helpers
+  source 'wsgi-template.conf.erb'
+  variables(
+    daemon_process: 'placement-api',
+    server_host: bind_service['host'],
+    server_port: bind_service['port'],
+    server_entry: '/usr/bin/nova-placement-api',
+    log_dir: default_log_dir,
+    run_dir: lock_dir,
+    user: nova_user,
+    group: nova_user,
+    use_ssl: node['openstack']['compute']['placement']['ssl']['enabled'],
+    cert_file: node['openstack']['compute']['placement']['ssl']['certfile'],
+    chain_file: node['openstack']['compute']['placement']['ssl']['chainfile'],
+    key_file: node['openstack']['compute']['placement']['ssl']['keyfile'],
+    ca_certs_path: node['openstack']['compute']['placement']['ssl']['ca_certs_path'],
+    cert_required: node['openstack']['compute']['placement']['ssl']['cert_required'],
+    protocol: node['openstack']['compute']['placement']['ssl']['protocol'],
+    ciphers: node['openstack']['compute']['placement']['ssl']['ciphers']
+  )
+  notifies :restart, 'service[apache2]'
+end
+
+apache2_site 'nova-placement' do
+  notifies :restart, 'service[apache2]', :immediately
+end
+
 execute 'placement-api: nova-manage api_db sync' do
   timeout node['openstack']['compute']['dbsync_timeout']
   user nova_user
   group nova_group
   command 'nova-manage api_db sync'
   action :run
-end
-
-# Hack until Apache cookbook has lwrp's for proper use of notify restart
-# apache2 after keystone if completely configured. Whenever a nova
-# config is updated, have it notify the resource which clears the lock
-# so the service can be restarted.
-# TODO(ramereth): This should be removed once this cookbook is updated
-# to use the newer apache2 cookbook which uses proper resources.
-edit_resource(:template, "#{node['apache']['dir']}/sites-available/nova-placement-api.conf") do
-  notifies :run, 'execute[Clear nova-placement-api apache restart]', :immediately
-end
-
-execute 'nova-placement-api apache restart' do
-  command "touch #{Chef::Config[:file_cache_path]}/nova-placement-api-apache-restarted"
-  creates "#{Chef::Config[:file_cache_path]}/nova-placement-api-apache-restarted"
-  notifies :restart, 'service[apache2]', :immediately
 end

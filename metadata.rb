@@ -27,6 +27,7 @@ recipe 'openstack-compute::vncproxy', 'Installs/Configures nova vnc proxy'
   supports os
 end
 
+depends 'apache2', '~> 8.0'
 depends 'openstack-common', '>= 18.0.0'
 depends 'openstack-identity', '>= 18.0.0'
 depends 'openstack-image', '>= 18.0.0'
