@@ -14,10 +14,8 @@ describe 'openstack-compute::compute' do
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_creates_nova_instances_dir'
 
-    it 'upgrades volume utils packages' do
-      %w(sysfsutils sg3-utils multipath-tools).each do |pkg|
-        expect(chef_run).to upgrade_package(pkg)
-      end
+    it do
+      expect(chef_run).to upgrade_package %w(sysfsutils sg3-utils multipath-tools)
     end
 
     it 'does not include the api-metadata recipe' do
@@ -28,8 +26,8 @@ describe 'openstack-compute::compute' do
       expect(chef_run).not_to include_recipe 'openstack-compute::api-metadata'
     end
 
-    it 'upgrades nova compute package' do
-      expect(chef_run).to upgrade_package 'nova-compute'
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-compute)
     end
 
     context "upgrades kvm when virt_type is 'kvm'" do
@@ -38,8 +36,8 @@ describe 'openstack-compute::compute' do
         runner.converge(described_recipe)
       end
       it do
-        expect(chef_run).to upgrade_package 'nova-compute-kvm'
-        expect(chef_run).not_to upgrade_package 'nova-compute-qemu'
+        expect(chef_run).to upgrade_package %w(python3-nova nova-compute-kvm)
+        expect(chef_run).not_to upgrade_package %w(python3-nova nova-compute-qemu)
       end
     end
 
@@ -49,8 +47,8 @@ describe 'openstack-compute::compute' do
         runner.converge(described_recipe)
       end
       it do
-        expect(chef_run).to upgrade_package 'nova-compute-qemu'
-        expect(chef_run).not_to upgrade_package 'nova-compute-kvm'
+        expect(chef_run).to upgrade_package %w(python3-nova nova-compute-qemu)
+        expect(chef_run).not_to upgrade_package %w(python3-nova nova-compute-kvm)
       end
     end
 
@@ -73,7 +71,7 @@ describe 'openstack-compute::compute' do
       it 'creates the file' do
         expect(chef_run).to create_cookbook_file(file.name).with(
           source: 'nova-compute.conf',
-          mode: 0o0644
+          mode: '644'
         )
       end
     end

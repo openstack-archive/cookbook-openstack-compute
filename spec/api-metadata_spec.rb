@@ -14,9 +14,8 @@ describe 'openstack-compute::api-metadata' do
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_creates_api_paste_template'
 
-    it 'upgrades metadata api packages' do
-      expect(chef_run).to upgrade_package 'nova-api-metadata'
-      expect(chef_run).to upgrade_package 'python3-nova'
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-api-metadata)
     end
 
     it do

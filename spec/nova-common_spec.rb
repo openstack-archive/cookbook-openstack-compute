@@ -16,15 +16,15 @@ describe 'openstack-compute::nova-common' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
-    it 'upgrades mysql python3 package' do
+    it do
       expect(chef_run).to upgrade_package 'python3-mysqldb'
     end
 
-    it 'upgrades nova common package' do
-      expect(chef_run).to upgrade_package 'nova-common'
+    it do
+      expect(chef_run).to upgrade_package %w(nova-common python3-nova)
     end
 
-    it 'upgrades memcache python3 package' do
+    it do
       expect(chef_run).to upgrade_package 'python3-memcache'
     end
 
@@ -32,7 +32,7 @@ describe 'openstack-compute::nova-common' do
       expect(chef_run).to create_directory('/etc/nova').with(
         owner: 'nova',
         group: 'nova',
-        mode: 0o750
+        mode: '750'
       )
     end
 
@@ -61,28 +61,42 @@ describe 'openstack-compute::nova-common' do
     describe 'nova.conf' do
       let(:file) { chef_run.template('/etc/nova/nova.conf') }
 
-      it 'creates the file' do
+      it do
         expect(chef_run).to create_template(file.name).with(
+          source: 'openstack-service.conf.erb',
+          cookbook: 'openstack-common',
           owner: 'nova',
           group: 'nova',
-          mode: 0o640
+          mode: '640',
+          sensitive: true
         )
       end
 
-      it 'has default *_path options set' do
+      it do
+        expect(chef_run.template('/etc/nova/nova.conf')).to notify('service[apache2]').to(:restart)
+      end
+
+      it '[DEFAULT]' do
         [
           %r{^log_dir = /var/log/nova$},
           %r{^state_path = /var/lib/nova$},
+          /^compute_driver = libvirt.LibvirtDriver$/,
           %r{^instances_path = /var/lib/nova/instances$},
-          %r{^lock_path = /var/lib/nova/lock$},
+          /^enabled_apis = osapi_compute,metadata$/,
+          /^iscsi_helper = tgtadm$/,
+          /^metadata_listen = 127.0.0.1$/,
+          /^metadata_listen_port = 8775$/,
+          %r{^transport_url = rabbit://guest:mypass@127.0.0.1:5672$},
         ].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
+          expect(chef_run).to render_config_file(file.name).with_section_content('DEFAULT', line)
         end
       end
 
-      it 'has compute driver attributes defaults set' do
-        [/^compute_driver = libvirt.LibvirtDriver$/].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
+      it '[oslo_concurrency]' do
+        [
+          %r{^lock_path = /var/lib/nova/lock$},
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('oslo_concurrency', line)
         end
       end
 
@@ -95,80 +109,88 @@ describe 'openstack-compute::nova-common' do
         end
       end
 
-      it 'has default transport_url/AMQP options set' do
-        [%r{^transport_url = rabbit://guest:mypass@127.0.0.1:5672$}].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
-        end
-      end
-
-      it 'has default metadata ip and port options set' do
-        [/^metadata_listen = 127.0.0.1$/,
-         /^metadata_listen_port = 8775$/].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
-        end
-      end
-
       it 'confirms default min value for workers' do
-        [/^osapi_compute_workers = /,
-         /^metadata_workers = /,
-         /^workers = /].each do |line|
+        [
+          /^osapi_compute_workers = /,
+          /^metadata_workers = /,
+          /^workers = /,
+        ].each do |line|
           expect(chef_run).to_not render_file(file.name).with_content(line)
         end
       end
 
-      context 'keystone_authtoken' do
-        it 'has correct auth_token settings' do
-          [
-            'auth_url = http://127.0.0.1:5000/v3',
-            'password = nova-pass',
-            'username = nova',
-            'project_name = service',
-            'user_domain_name = Default',
-            'project_domain_name = Default',
-            'service_token_roles_required = true',
-          ].each do |line|
-            expect(chef_run).to render_config_file(file.name)\
-              .with_section_content('keystone_authtoken', /^#{Regexp.quote(line)}$/)
-          end
+      it '[keystone_authtoken]' do
+        [
+          /^auth_type = v3password$/,
+          /^region_name = RegionOne$/,
+          /^username = nova$/,
+          /^user_domain_name = Default$/,
+          /^project_domain_name = Default$/,
+          /^project_name = service$/,
+          /^auth_version = v3$/,
+          /^service_token_roles_required = true$/,
+          %r{^auth_url = http://127.0.0.1:5000/v3$},
+          %r{^www_authenticate_uri = http://127.0.0.1:5000/v3$},
+          /^password = nova-pass$/,
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('keystone_authtoken', line)
         end
       end
 
-      context 'placement' do
-        it 'has correct authentication settings' do
-          [
-            'auth_type = password',
-            'region_name = RegionOne',
-            'password = placement-pass',
-            'username = placement',
-            'project_name = service',
-            'user_domain_name = Default',
-            'project_domain_name = Default',
-          ].each do |line|
-            expect(chef_run).to render_config_file(file.name)\
-              .with_section_content('placement', /^#{Regexp.quote(line)}$/)
-          end
+      it '[libvirt]' do
+        [
+          /^virt_type = kvm$/,
+          /^images_type = default$/,
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('libvirt', line)
         end
       end
 
-      it 'uses default values for attributes' do
+      it '[neutron]' do
+        [
+          /^auth_type = v3password$/,
+          /^region_name = RegionOne$/,
+          /^username = neutron$/,
+          /^user_domain_name = Default$/,
+          /^service_metadata_proxy = true$/,
+          /^project_name = service$/,
+          /^project_domain_name = Default$/,
+          %r{^auth_url = http://127.0.0.1:5000/v3$},
+          /^password = neutron-pass$/,
+          /^metadata_proxy_shared_secret = metadata-secret$/,
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('neutron', line)
+        end
+      end
+
+      it '[placement]' do
+        [
+          /^auth_type = password$/,
+          /^region_name = RegionOne$/,
+          /^username = placement$/,
+          /^user_domain_name = Default$/,
+          /^project_domain_name = Default$/,
+          /^project_name = service$/,
+          %r{^auth_url = http://127.0.0.1:5000/v3$},
+          /^password = placement-pass$/,
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('placement', line)
+        end
+      end
+
+      it '[scheduler]' do
+        [
+          /^discover_hosts_in_cells_interval = 300$/,
+        ].each do |line|
+          expect(chef_run).to render_config_file(file.name).with_section_content('scheduler', line)
+        end
+      end
+
+      it '[glance]' do
         [
           %r{^api_servers = http://127.0.0.1:9292$},
-
         ].each do |line|
-          expect(chef_run).to render_config_file(file.name)\
-            .with_section_content('glance', line)
-        end
-      end
-
-      it do
-        [
-          /^username = neutron$/,
-          /^project_name = service$/,
-          /^user_domain_name = Default/,
-          /^project_domain_name = Default/,
-        ].each do |line|
-          expect(chef_run).to render_config_file(file.name)\
-            .with_section_content('neutron', line)
+          expect(chef_run).to render_config_file(file.name).with_section_content('glance', line)
         end
       end
 
@@ -203,7 +225,7 @@ describe 'openstack-compute::nova-common' do
             /^server_listen = 127.0.0.1$/,
             /^server_proxyclient_address = 127.0.0.1$/,
           ].each do |line|
-            expect(chef_run).to render_file(file.name).with_content(line)
+            expect(chef_run).to render_config_file(file.name).with_section_content('vnc', line)
           end
         end
       end
@@ -219,19 +241,23 @@ describe 'openstack-compute::nova-common' do
             /^server_listen = 1.1.1.1$/,
             /^server_proxyclient_address = 2.2.2.2$/,
           ].each do |line|
-            expect(chef_run).to render_file(file.name).with_content(line)
+            expect(chef_run).to render_config_file(file.name).with_section_content('vnc', line)
           end
         end
       end
 
-      it 'has default *vncproxy_* options set' do
+      it '[vnc]' do
         [
+          %r{^novncproxy_base_url = http://127.0.0.1:6080/vnc_auto.html$},
+          %r{^xvpvncproxy_base_url = http://127.0.0.1:6081/console$},
           /^xvpvncproxy_host = 127.0.0.1$/,
           /^xvpvncproxy_port = 6081$/,
           /^novncproxy_host = 127.0.0.1$/,
           /^novncproxy_port = 6080$/,
+          /^server_listen = 127.0.0.1$/,
+          /^server_proxyclient_address = 127.0.0.1$/,
         ].each do |line|
-          expect(chef_run).to render_file(file.name).with_content(line)
+          expect(chef_run).to render_config_file(file.name).with_section_content('vnc', line)
         end
       end
 
@@ -295,13 +321,10 @@ describe 'openstack-compute::nova-common' do
       context 'serial console' do
         it 'sets default serial console options set' do
           [
-            # /^enabled = False$/,
             %r{base_url = ws://127.0.0.1:6083$},
-            # /^port_range = 10000:20000$/,
             /^proxyclient_address = 127.0.0.1$/,
           ].each do |line|
-            expect(chef_run).to render_config_file(file.name)\
-              .with_section_content('serial_console', line)
+            expect(chef_run).to render_config_file(file.name).with_section_content('serial_console', line)
           end
         end
 
@@ -311,19 +334,14 @@ describe 'openstack-compute::nova-common' do
             node.override['openstack']['endpoints']['public']['compute-serial-proxy']['scheme'] = 'wss'
             node.override['openstack']['endpoints']['public']['compute-serial-proxy']['host'] = '1.1.1.1'
             node.override['openstack']['endpoints']['public']['compute-serial-proxy']['port'] = '6082'
-            # node.override['openstack']['compute']['serial_console']['enable'] = 'True'
-            # node.override['openstack']['compute']['serial_console']['port_range'] = '11000:15000'
             runner.converge(described_recipe)
           end
           it do
             [
-              # /^enabled = True$/,
               %r{base_url = wss://1.1.1.1:6082$},
-              # /^port_range = 11000:15000$/,
               /^proxyclient_address = 127.0.0.1$/,
             ].each do |line|
-              expect(chef_run).to render_config_file(file.name)\
-                .with_section_content('serial_console', line)
+              expect(chef_run).to render_config_file(file.name).with_section_content('serial_console', line)
             end
           end
         end
@@ -385,7 +403,7 @@ describe 'openstack-compute::nova-common' do
         expect(chef_run).to create_template(file.name).with(
           user: 'root',
           group: 'root',
-          mode: 0o644
+          mode: '644'
         )
       end
 
@@ -412,8 +430,8 @@ describe 'openstack-compute::nova-common' do
       end
     end
 
-    it 'enables nova login' do
-      expect(chef_run).to run_execute('usermod -s /bin/sh nova')
+    it do
+      expect(chef_run).to modify_user('nova').with(shell: '/bin/sh')
     end
 
     it 'cleans up conf_secrets' do

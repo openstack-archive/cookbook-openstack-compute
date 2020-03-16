@@ -1,9 +1,10 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: openstack-compute
+# Cookbook:: openstack-compute
 # Recipe:: placement-api
 #
-# Copyright 2017, OpenStack Foundation
+# Copyright:: 2017, OpenStack Foundation
+# Copyright:: 2019-2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,11 +33,9 @@ nova_group = node['openstack']['compute']['group']
 
 platform_options = node['openstack']['compute']['platform']
 
-platform_options['api_placement_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['api_placement_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 service platform_options['api_placement_service'] do

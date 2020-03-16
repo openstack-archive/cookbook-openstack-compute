@@ -1,7 +1,9 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: openstack-compute
+# Cookbook:: openstack-compute
 # Recipe:: serialproxy
+#
+# Copyright:: 2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,11 +22,9 @@ include_recipe 'openstack-compute::nova-common'
 
 platform_options = node['openstack']['compute']['platform']
 
-platform_options['compute_serialproxy_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['compute_serialproxy_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 proxy_service = platform_options['compute_serialproxy_service']

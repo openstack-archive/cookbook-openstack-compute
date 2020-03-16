@@ -13,8 +13,8 @@ describe 'openstack-compute::conductor' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
-    it 'upgrades conductor package' do
-      expect(chef_run).to upgrade_package 'nova-conductor'
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-conductor)
     end
 
     it 'starts nova-conductor on boot' do

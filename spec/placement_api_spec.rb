@@ -14,10 +14,8 @@ describe 'openstack-compute::placement_api' do
       expect(chef_run).to include_recipe 'openstack-compute::nova-common'
     end
 
-    it 'upgrades placement packages' do
-      expect(chef_run).to upgrade_package 'nova-placement-api'
-      expect(chef_run).to upgrade_package 'python3-nova'
-      expect(chef_run).to upgrade_package 'libapache2-mod-wsgi-py3'
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova libapache2-mod-wsgi-py3 nova-placement-api)
     end
 
     it 'executes placement-api: nova-manage api_db sync' do

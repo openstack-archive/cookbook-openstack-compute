@@ -13,8 +13,8 @@ describe 'openstack-compute::serialproxy' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
-    it 'upgrades nova serialproxy packages' do
-      expect(chef_run).to upgrade_package('nova-serialproxy')
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-serialproxy)
     end
 
     it 'starts nova serialproxy' do

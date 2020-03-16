@@ -13,14 +13,12 @@ describe 'openstack-compute::vncproxy' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
-    it 'upgrades nova vncproxy packages' do
-      expect(chef_run).to upgrade_package('novnc')
-      expect(chef_run).to upgrade_package('websockify')
-      expect(chef_run).to upgrade_package('nova-novncproxy')
+    it do
+      expect(chef_run).to upgrade_package %w(novnc websockify python3-nova nova-novncproxy)
     end
 
-    it 'upgrades nova consoleauth package' do
-      expect(chef_run).to upgrade_package('nova-consoleauth')
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-consoleauth)
     end
 
     it 'starts nova vncproxy' do

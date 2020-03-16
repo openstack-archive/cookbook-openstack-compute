@@ -10,10 +10,8 @@ describe 'openstack-compute::libvirt' do
 
     include_context 'compute_stubs'
 
-    it 'upgrades libvirt packages' do
-      %w(libvirt device-mapper python-libguestfs).each do |pkg|
-        expect(chef_run).to upgrade_package pkg
-      end
+    it do
+      expect(chef_run).to upgrade_package %w(libvirt device-mapper python-libguestfs)
     end
 
     it 'creates libvirt group and adds nova as a member' do
@@ -43,7 +41,7 @@ describe 'openstack-compute::libvirt' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
-          mode: 0o644
+          mode: '644'
         )
       end
 

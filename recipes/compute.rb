@@ -1,10 +1,11 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: openstack-compute
+# Cookbook:: openstack-compute
 # Recipe:: compute
 #
-# Copyright 2012, Rackspace US, Inc.
-# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright:: 2012, Rackspace US, Inc.
+# Copyright:: 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright:: 2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,41 +27,35 @@ end
 include_recipe 'openstack-compute::nova-common'
 platform_options = node['openstack']['compute']['platform']
 
-platform_options['compute_compute_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['compute_compute_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 virt_type = node['openstack']['compute']['conf']['libvirt']['virt_type']
 
-platform_options["#{virt_type}_compute_packages"].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options["#{virt_type}_compute_packages"] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 # More volume attach packages
-platform_options['volume_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['volume_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 # TODO: (jklare) this has to be refactored!!!
 cookbook_file '/etc/nova/nova-compute.conf' do
   source 'nova-compute.conf'
-  mode 0o0644
+  mode '644'
   action :create
 end
 
 directory node['openstack']['compute']['conf']['DEFAULT']['instances_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 0o0755
+  mode '755'
   recursive true
 end
 

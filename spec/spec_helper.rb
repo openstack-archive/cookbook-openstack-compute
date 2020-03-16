@@ -129,10 +129,8 @@ shared_context 'compute_stubs' do
 end
 
 shared_examples 'expect_volume_packages' do
-  it 'upgrades volume utils packages' do
-    %w(sysfsutils sg3_utils device-mapper-multipath).each do |pkg|
-      expect(chef_run).to upgrade_package(pkg)
-    end
+  it do
+    expect(chef_run).to upgrade_package %w(sysfsutils sg3_utils device-mapper-multipath)
   end
 end
 
@@ -153,7 +151,7 @@ shared_examples 'expect_creates_nova_state_dir' do
     expect(chef_run).to create_directory('/var/lib/nova').with(
       user: 'nova',
       group: 'nova',
-      mode: 0o755
+      mode: '755'
     )
   end
 end
@@ -163,7 +161,7 @@ shared_examples 'expect_creates_nova_lock_dir' do
     expect(chef_run).to create_directory('/var/lib/nova/lock').with(
       user: 'nova',
       group: 'nova',
-      mode: 0o755
+      mode: '755'
     )
   end
 end
@@ -173,7 +171,7 @@ shared_examples 'expect_creates_nova_instances_dir' do
     expect(chef_run).to create_directory('/var/lib/nova/instances').with(
       user: 'nova',
       group: 'nova',
-      mode: 0o755
+      mode: '755'
     )
   end
 end
@@ -184,7 +182,7 @@ shared_examples 'expect_creates_api_paste_template' do
     expect(chef_run).to create_template('/etc/nova/api-paste.ini').with(
       user: 'nova',
       group: 'nova',
-      mode: 0o644
+      mode: '644'
     )
   end
 

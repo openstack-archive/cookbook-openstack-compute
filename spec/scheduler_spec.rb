@@ -13,8 +13,8 @@ describe 'openstack-compute::scheduler' do
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
 
-    it 'upgrades nova scheduler package' do
-      expect(chef_run).to upgrade_package('nova-scheduler')
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-scheduler)
     end
 
     it 'starts nova scheduler' do

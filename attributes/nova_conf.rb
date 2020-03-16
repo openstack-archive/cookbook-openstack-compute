@@ -7,7 +7,7 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['state_path'] = '/var/lib/nova'
   conf['DEFAULT']['compute_driver'] = 'libvirt.LibvirtDriver'
   conf['DEFAULT']['instances_path'] = "#{node['openstack']['compute']['conf']['DEFAULT']['state_path']}/instances"
-  conf['DEFAULT']['enabled_apis'] = 'osapi_compute'
+  conf['DEFAULT']['enabled_apis'] = 'osapi_compute,metadata'
   if node['openstack']['compute']['syslog']['use'] #= false
     conf['DEFAULT']['log_config'] = '/etc/openstack/logging.conf'
   end

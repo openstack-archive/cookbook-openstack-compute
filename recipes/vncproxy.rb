@@ -1,10 +1,11 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: openstack-compute
+# Cookbook:: openstack-compute
 # Recipe:: vncproxy
 #
-# Copyright 2012, Rackspace US, Inc.
-# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright:: 2012, Rackspace US, Inc.
+# Copyright:: 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright:: 2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,18 +24,14 @@ include_recipe 'openstack-compute::nova-common'
 
 platform_options = node['openstack']['compute']['platform']
 
-platform_options['compute_vncproxy_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['compute_vncproxy_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 # required for vnc console authentication
-platform_options['compute_vncproxy_consoleauth_packages'].each do |pkg|
-  package pkg do
-    action :upgrade
-  end
+package platform_options['compute_vncproxy_consoleauth_packages'] do
+  action :upgrade
 end
 
 proxy_service = platform_options['compute_vncproxy_service']

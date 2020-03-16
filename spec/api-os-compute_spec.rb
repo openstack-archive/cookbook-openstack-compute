@@ -24,9 +24,8 @@ describe 'openstack-compute::api-os-compute' do
         )
     end
 
-    it 'upgrades openstack api packages' do
-      expect(chef_run).to upgrade_package 'nova-api'
-      expect(chef_run).to upgrade_package 'python3-nova'
+    it do
+      expect(chef_run).to upgrade_package %w(python3-nova nova-api)
     end
 
     it do

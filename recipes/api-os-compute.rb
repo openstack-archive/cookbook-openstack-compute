@@ -1,10 +1,11 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: openstack-compute
+# Cookbook:: openstack-compute
 # Recipe:: api-os-compute
 #
-# Copyright 2012, Rackspace US, Inc.
-# Copyright 2018, Workday, Inc.
+# Copyright:: 2012, Rackspace US, Inc.
+# Copyright:: 2018, Workday, Inc.
+# Copyright:: 2019-2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,11 +29,9 @@ include_recipe 'openstack-compute::nova-common'
 
 platform_options = node['openstack']['compute']['platform']
 
-platform_options['api_os_compute_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['api_os_compute_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 nova_user = node['openstack']['compute']['user']
@@ -42,7 +41,7 @@ template '/etc/nova/api-paste.ini' do
   source 'api-paste.ini.erb'
   owner nova_user
   group nova_group
-  mode 0o0644
+  mode '644'
   notifies :restart, 'service[apache2]'
 end
 

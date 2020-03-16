@@ -10,10 +10,8 @@ describe 'openstack-compute::libvirt' do
 
     include_context 'compute_stubs'
 
-    it 'upgrades libvirt packages' do
-      %w(libvirt-bin python3-guestfs).each do |pkg|
-        expect(chef_run).to upgrade_package pkg
-      end
+    it do
+      expect(chef_run).to upgrade_package %w(libvirt-bin python3-guestfs)
     end
 
     it 'does not create libvirt group and add to nova' do
@@ -49,9 +47,10 @@ describe 'openstack-compute::libvirt' do
 
       it 'creates the /etc/libvirt/libvirtd.conf file' do
         expect(chef_run).to create_template(file.name).with(
+          source: 'libvirtd.conf.erb',
           owner: 'root',
           group: 'root',
-          mode: 0o644
+          mode: '644'
         )
       end
 
@@ -82,7 +81,7 @@ describe 'openstack-compute::libvirt' do
         expect(chef_run).to create_template(file.name).with(
           owner: 'root',
           group: 'root',
-          mode: 0o644
+          mode: '644'
         )
       end
 

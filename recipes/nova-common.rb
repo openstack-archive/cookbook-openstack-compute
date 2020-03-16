@@ -1,11 +1,12 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: openstack-compute
+# Cookbook:: openstack-compute
 # Recipe:: nova-common
 #
-# Copyright 2012, Rackspace US, Inc.
-# Copyright 2013, Craig Tracey <craigtracey@gmail.com>
-# Copyright 2014, SUSE Linux, GmbH.
+# Copyright:: 2012, Rackspace US, Inc.
+# Copyright:: 2013, Craig Tracey <craigtracey@gmail.com>
+# Copyright:: 2014, SUSE Linux, GmbH.
+# Copyright:: 2019-2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,47 +31,41 @@ include_recipe 'openstack-common::logging' if node['openstack']['compute']['sysl
 
 platform_options = node['openstack']['compute']['platform']
 
-platform_options['common_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['common_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 db_type = node['openstack']['db']['compute']['service_type']
-node['openstack']['db']['python_packages'][db_type].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package node['openstack']['db']['python_packages'][db_type] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 # required to run more than one consoleauth process
-platform_options['memcache_python_packages'].each do |pkg|
-  package pkg do
-    options platform_options['package_overrides']
-    action :upgrade
-  end
+package platform_options['memcache_python_packages'] do
+  options platform_options['package_overrides']
+  action :upgrade
 end
 
 directory '/etc/nova' do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 0o0750
+  mode '750'
   action :create
 end
 
 directory node['openstack']['compute']['conf']['DEFAULT']['state_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 0o0755
+  mode '755'
   recursive true
 end
 
 directory node['openstack']['compute']['conf']['oslo_concurrency']['lock_path'] do
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 0o0755
+  mode '755'
   recursive true
 end
 
@@ -208,7 +203,8 @@ template '/etc/nova/nova.conf' do
   cookbook 'openstack-common'
   owner node['openstack']['compute']['user']
   group node['openstack']['compute']['group']
-  mode 0o0640
+  mode '640'
+  sensitive true
   variables(
     # TODO(jaypipes): No support here for >1 image API servers
     # with the glance_api_servers configuration option...
@@ -230,9 +226,10 @@ template '/etc/nova/rootwrap.conf' do
   # Must be root!
   owner 'root'
   group 'root'
-  mode 0o0644
+  mode '644'
 end
 
-execute 'enable nova login' do
-  command "usermod -s /bin/sh #{node['openstack']['compute']['user']}"
+user node['openstack']['compute']['user'] do
+  shell '/bin/sh'
+  action :modify
 end
