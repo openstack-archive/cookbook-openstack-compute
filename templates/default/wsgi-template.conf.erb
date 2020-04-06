@@ -1,7 +1,7 @@
 <%= node['openstack']['compute']['custom_template_banner'] %>
 
 <VirtualHost <%= @server_host %>:<%= @server_port %>>
-  WSGIDaemonProcess <%= @daemon_process %> processes=2 threads=10 user=<%= @user %> group=<%= @group %> display-name=%{GROUP}
+  WSGIDaemonProcess <%= @daemon_process %> processes=<%= @processes %> threads=<%= @threads %> user=<%= @user %> group=<%= @group %> display-name=%{GROUP}
   WSGIProcessGroup <%= @daemon_process %>
   WSGIScriptAlias / <%= @server_entry %>
   WSGIApplicationGroup %{GLOBAL}

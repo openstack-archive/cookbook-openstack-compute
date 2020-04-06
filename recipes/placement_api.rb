@@ -75,6 +75,8 @@ template "#{apache_dir}/sites-available/nova-placement.conf" do
     run_dir: lock_dir,
     user: nova_user,
     group: nova_user,
+    processes: node['openstack']['compute']['placement']['processes'],
+    threads: node['openstack']['compute']['placement']['threads'],
     use_ssl: node['openstack']['compute']['placement']['ssl']['enabled'],
     cert_file: node['openstack']['compute']['placement']['ssl']['certfile'],
     chain_file: node['openstack']['compute']['placement']['ssl']['chainfile'],

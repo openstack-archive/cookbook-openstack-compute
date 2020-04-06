@@ -57,11 +57,13 @@ describe 'openstack-compute::api-os-compute' do
           group: 'nova',
           key_file: '',
           log_dir: '/var/log/apache2',
+          processes: 6,
           protocol: '',
           run_dir: '/var/lock/apache2',
           server_entry: '/usr/bin/nova-api-wsgi',
           server_host: '127.0.0.1',
           server_port: '8774',
+          threads: 1,
           user: 'nova',
           use_ssl: false,
         }
@@ -69,7 +71,7 @@ describe 'openstack-compute::api-os-compute' do
     end
     [
       /<VirtualHost 127.0.0.1:8774>$/,
-      /WSGIDaemonProcess nova-api processes=2 threads=10 user=nova group=nova display-name=%{GROUP}$/,
+      /WSGIDaemonProcess nova-api processes=6 threads=1 user=nova group=nova display-name=%{GROUP}$/,
       /WSGIProcessGroup nova-api$/,
       %r{WSGIScriptAlias / /usr/bin/nova-api-wsgi$},
       /WSGIApplicationGroup %{GLOBAL}$/,

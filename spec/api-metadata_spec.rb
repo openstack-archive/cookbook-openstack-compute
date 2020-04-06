@@ -48,11 +48,13 @@ describe 'openstack-compute::api-metadata' do
           group: 'nova',
           key_file: '',
           log_dir: '/var/log/apache2',
+          processes: 2,
           protocol: '',
           run_dir: '/var/lock/apache2',
           server_entry: '/usr/bin/nova-metadata-wsgi',
           server_host: '127.0.0.1',
           server_port: '8775',
+          threads: 10,
           user: 'nova',
           use_ssl: false,
         }

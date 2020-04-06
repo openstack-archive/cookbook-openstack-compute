@@ -80,6 +80,8 @@ template "#{apache_dir}/sites-available/nova-metadata.conf" do
     run_dir: lock_dir,
     user: node['openstack']['compute']['user'],
     group: node['openstack']['compute']['group'],
+    processes: node['openstack']['compute']['metadata']['processes'],
+    threads: node['openstack']['compute']['metadata']['threads'],
     use_ssl: node['openstack']['compute']['metadata']['ssl']['enabled'],
     cert_file: node['openstack']['compute']['metadata']['ssl']['certfile'],
     chain_file: node['openstack']['compute']['metadata']['ssl']['chainfile'],

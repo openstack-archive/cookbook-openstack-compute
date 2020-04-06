@@ -88,6 +88,8 @@ template "#{apache_dir}/sites-available/nova-api.conf" do
     run_dir: lock_dir,
     user: node['openstack']['compute']['user'],
     group: node['openstack']['compute']['group'],
+    processes: node['openstack']['compute']['api']['processes'],
+    threads: node['openstack']['compute']['api']['threads'],
     use_ssl: node['openstack']['compute']['api']['ssl']['enabled'],
     cert_file: node['openstack']['compute']['api']['ssl']['certfile'],
     chain_file: node['openstack']['compute']['api']['ssl']['chainfile'],
