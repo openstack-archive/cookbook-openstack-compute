@@ -17,24 +17,12 @@ describe 'openstack-compute::vncproxy' do
       expect(chef_run).to upgrade_package %w(novnc websockify python3-nova nova-novncproxy)
     end
 
-    it do
-      expect(chef_run).to upgrade_package %w(python3-nova nova-consoleauth)
-    end
-
     it 'starts nova vncproxy' do
       expect(chef_run).to start_service('nova-novncproxy')
     end
 
     it 'starts nova vncproxy on boot' do
       expect(chef_run).to enable_service('nova-novncproxy')
-    end
-
-    it 'starts nova consoleauth' do
-      expect(chef_run).to start_service('nova-consoleauth')
-    end
-
-    it 'starts nova consoleauth on boot' do
-      expect(chef_run).to enable_service('nova-consoleauth')
     end
   end
 end

@@ -32,27 +32,28 @@ db_user = node['openstack']['db']['compute_cell0']['username']
 db_password = get_password('db', 'nova_cell0')
 uri = db_uri('compute_cell0', db_user, db_password)
 
+execute 'api db sync' do
+  timeout node['openstack']['compute']['dbsync_timeout']
+  user nova_user
+  group nova_group
+  command 'nova-manage api_db sync'
+  action :run
+end
+
 execute 'map cell0' do
   user nova_user
   group nova_group
   command "nova-manage cell_v2 map_cell0 --database_connection #{uri}"
   not_if 'nova-manage cell_v2 list_cells | grep -q cell0'
+  sensitive true
   action :run
 end
 
 execute 'create cell1' do
   user nova_user
   group nova_group
-  not_if 'nova-manage cell_v2 list_cells | grep -q cell1'
   command 'nova-manage cell_v2 create_cell --verbose --name cell1'
-  action :run
-end
-
-execute 'api db sync' do
-  timeout node['openstack']['compute']['dbsync_timeout']
-  user nova_user
-  group nova_group
-  command 'nova-manage api_db sync'
+  not_if 'nova-manage cell_v2 list_cells | grep -q cell1'
   action :run
 end
 

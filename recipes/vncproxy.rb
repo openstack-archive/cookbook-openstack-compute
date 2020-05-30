@@ -29,22 +29,10 @@ package platform_options['compute_vncproxy_packages'] do
   action :upgrade
 end
 
-# required for vnc console authentication
-package platform_options['compute_vncproxy_consoleauth_packages'] do
-  action :upgrade
-end
-
 proxy_service = platform_options['compute_vncproxy_service']
 
 service proxy_service do
   service_name proxy_service
-  supports status: true, restart: true
-  action [:enable, :start]
-  subscribes :restart, 'template[/etc/nova/nova.conf]'
-end
-
-service 'nova-consoleauth' do
-  service_name platform_options['compute_vncproxy_consoleauth_service']
   supports status: true, restart: true
   action [:enable, :start]
   subscribes :restart, 'template[/etc/nova/nova.conf]'

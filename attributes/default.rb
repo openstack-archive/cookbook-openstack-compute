@@ -19,6 +19,7 @@ default['openstack']['compute']['user'] = 'nova'
 default['openstack']['compute']['group'] = 'nova'
 
 # Logging stuff
+default['openstack']['compute']['syslog']['use'] = false
 default['openstack']['compute']['syslog']['facility'] = 'LOG_LOCAL1'
 default['openstack']['compute']['syslog']['config_facility'] = 'local1'
 
@@ -30,7 +31,7 @@ default['openstack']['compute']['rootwrap']['syslog_log_facility'] = 'syslog'
 default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
 
 # SSL settings
-%w(api placement metadata).each do |service|
+%w(api metadata).each do |service|
   default['openstack']['compute'][service]['ssl']['enabled'] = false
   default['openstack']['compute'][service]['ssl']['certfile'] = ''
   default['openstack']['compute'][service]['ssl']['chainfile'] = ''
@@ -45,8 +46,6 @@ end
 # https://docs.openstack.org/releasenotes/nova/stein.html#known-issues
 default['openstack']['compute']['api']['threads'] = 1
 default['openstack']['compute']['api']['processes'] = 6
-default['openstack']['compute']['placement']['threads'] = 10
-default['openstack']['compute']['placement']['processes'] = 2
 default['openstack']['compute']['metadata']['threads'] = 10
 default['openstack']['compute']['metadata']['processes'] = 2
 
@@ -56,8 +55,6 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => ['openstack-nova-api'],
     'api_os_compute_service' => 'openstack-nova-api',
-    'api_placement_packages' => ['openstack-nova-placement-api'],
-    'api_placement_service' => 'openstack-nova-placement-api',
     'memcache_python_packages' => ['python-memcached'],
     'compute_api_metadata_packages' => ['openstack-nova-api'],
     'compute_api_metadata_service' => 'openstack-nova-metadata-api',
@@ -71,8 +68,6 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
     'compute_conductor_service' => 'openstack-nova-conductor',
     'compute_vncproxy_packages' => ['openstack-nova-novncproxy'],
     'compute_vncproxy_service' => 'openstack-nova-novncproxy',
-    'compute_vncproxy_consoleauth_packages' => ['openstack-nova-console'],
-    'compute_vncproxy_consoleauth_service' => 'openstack-nova-consoleauth',
     'compute_serialproxy_packages' => ['openstack-nova-serialproxy'],
     'compute_serialproxy_service' => 'openstack-nova-serialproxy',
     'libvirt_packages' => %w(libvirt device-mapper python-libguestfs),
@@ -90,8 +85,6 @@ when 'debian'
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => %w(python3-nova nova-api),
     'api_os_compute_service' => 'nova-api',
-    'api_placement_packages' => %w(python3-nova libapache2-mod-wsgi-py3 nova-placement-api),
-    'api_placement_service' => 'nova-placement-api',
     'memcache_python_packages' => ['python3-memcache'],
     'compute_api_metadata_packages' => %w(python3-nova nova-api-metadata),
     'compute_api_metadata_service' => 'nova-api-metadata',
@@ -106,8 +99,6 @@ when 'debian'
     # Websockify is needed due to https://bugs.launchpad.net/ubuntu/+source/nova/+bug/1076442
     'compute_vncproxy_packages' => %w(novnc websockify python3-nova nova-novncproxy),
     'compute_vncproxy_service' => 'nova-novncproxy',
-    'compute_vncproxy_consoleauth_packages' => %w(python3-nova nova-consoleauth),
-    'compute_vncproxy_consoleauth_service' => 'nova-consoleauth',
     'compute_serialproxy_packages' => %w(python3-nova nova-serialproxy),
     'compute_serialproxy_service' => 'nova-serialproxy',
     'libvirt_packages' => %w(libvirt-bin python3-guestfs),
@@ -126,11 +117,12 @@ default['openstack']['compute']['misc_paste'] = nil
 
 # ****************** OpenStack Compute Endpoints ******************************
 
-# The OpenStack Compute (Nova) XVPvnc endpoint
+# The OpenStack Compute (Nova) endpoints
 %w(
-  compute-xvpvnc compute-novnc
+  compute-api
   compute-metadata-api
-  compute-vnc compute-api
+  compute-novnc
+  compute-vnc
 ).each do |service|
   default['openstack']['bind_service']['all'][service]['host'] = '127.0.0.1'
   %w(public internal).each do |type|
@@ -139,8 +131,6 @@ default['openstack']['compute']['misc_paste'] = nil
   end
 end
 %w(public internal).each do |type|
-  default['openstack']['endpoints'][type]['compute-xvpvnc']['port'] = '6081'
-  default['openstack']['endpoints'][type]['compute-xvpvnc']['path'] = '/console'
   # The OpenStack Compute (Nova) Native API endpoint
   default['openstack']['endpoints'][type]['compute-api']['port'] = '8774'
   default['openstack']['endpoints'][type]['compute-api']['path'] = '/v2.1/%(tenant_id)s'
@@ -155,15 +145,10 @@ end
   default['openstack']['endpoints'][type]['compute-serial-proxy']['port'] = '6083'
   default['openstack']['endpoints'][type]['compute-serial-proxy']['path'] = '/'
   default['openstack']['endpoints'][type]['compute-serial-proxy']['host'] = '127.0.0.1'
-  # The OpenStack Compute (Nova) Placement API endpoint
-  default['openstack']['endpoints'][type]['placement-api']['port'] = '8778'
-  default['openstack']['endpoints'][type]['placement-api']['path'] = ''
-  default['openstack']['endpoints'][type]['placement-api']['host'] = '127.0.0.1'
 end
 default['openstack']['bind_service']['all']['compute-serial-proxy']['host'] = '127.0.0.1'
 default['openstack']['bind_service']['all']['compute-vnc-proxy']['host'] = '127.0.0.1'
 default['openstack']['bind_service']['all']['compute-serial-console']['host'] = '127.0.0.1'
-default['openstack']['bind_service']['all']['compute-xvpvnc']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-vnc']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-serial-proxy']['port'] = '6081'
 default['openstack']['bind_service']['all']['compute-novnc']['port'] = '6080'
@@ -171,5 +156,3 @@ default['openstack']['bind_service']['all']['compute-metadata-api']['host'] = '1
 default['openstack']['bind_service']['all']['compute-metadata-api']['port'] = '8775'
 default['openstack']['bind_service']['all']['compute-api']['host'] = '127.0.0.1'
 default['openstack']['bind_service']['all']['compute-api']['port'] = '8774'
-default['openstack']['bind_service']['all']['placement-api']['port'] = '8778'
-default['openstack']['bind_service']['all']['placement-api']['host'] = '127.0.0.1'

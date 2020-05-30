@@ -14,16 +14,12 @@ describe 'openstack-compute::placement_api' do
     include_examples 'expect_creates_nova_lock_dir'
 
     it 'upgrades placement packages' do
-      expect(chef_run).to upgrade_package 'openstack-nova-placement-api'
+      expect(chef_run).to upgrade_package 'openstack-placement-api'
     end
 
     it do
-      expect(chef_run).to disable_service 'openstack-nova-placement-api'
-      expect(chef_run).to stop_service 'openstack-nova-placement-api'
-    end
-
-    it do
-      expect(chef_run).to_not disable_apache2_site('nova-placement-api')
+      expect(chef_run).to disable_service 'openstack-placement-api'
+      expect(chef_run).to stop_service 'openstack-placement-api'
     end
   end
 end

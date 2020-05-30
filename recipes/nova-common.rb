@@ -100,9 +100,6 @@ memcache_servers = memcached_servers.join ','
 # internal/public. We'll stick with the general endpoint routine
 # for those.
 identity_endpoint = internal_endpoint 'identity'
-xvpvnc_endpoint = public_endpoint 'compute-xvpvnc'
-xvpvnc_bind = node['openstack']['bind_service']['all']['compute-xvpvnc']
-xvpvnc_bind_address = bind_address xvpvnc_bind
 novnc_endpoint = public_endpoint 'compute-novnc'
 novnc_bind = node['openstack']['bind_service']['all']['compute-novnc']
 novnc_bind_address = bind_address novnc_bind
@@ -120,7 +117,6 @@ network_endpoint = internal_endpoint 'network'
 image_endpoint = internal_endpoint 'image_api'
 
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint}")
-Chef::Log.debug("openstack-compute::nova-common:xvpvnc_endpoint|#{xvpvnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint}")
@@ -152,9 +148,6 @@ node.default['openstack']['compute']['conf'].tap do |conf|
   conf['DEFAULT']['metadata_listen'] = compute_metadata_api_bind_address
   conf['DEFAULT']['metadata_listen_port'] = compute_metadata_api_bind['port']
   conf['vnc']['novncproxy_base_url'] = novnc_endpoint.to_s
-  conf['vnc']['xvpvncproxy_base_url'] = xvpvnc_endpoint.to_s
-  conf['vnc']['xvpvncproxy_host'] = xvpvnc_bind_address
-  conf['vnc']['xvpvncproxy_port'] = xvpvnc_bind['port']
   conf['vnc']['novncproxy_host'] = novnc_bind_address
   conf['vnc']['novncproxy_port'] = novnc_bind['port']
   conf['vnc']['server_listen'] = vnc_bind_address

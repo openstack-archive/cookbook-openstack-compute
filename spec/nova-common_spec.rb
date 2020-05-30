@@ -249,9 +249,6 @@ describe 'openstack-compute::nova-common' do
       it '[vnc]' do
         [
           %r{^novncproxy_base_url = http://127.0.0.1:6080/vnc_auto.html$},
-          %r{^xvpvncproxy_base_url = http://127.0.0.1:6081/console$},
-          /^xvpvncproxy_host = 127.0.0.1$/,
-          /^xvpvncproxy_port = 6081$/,
           /^novncproxy_host = 127.0.0.1$/,
           /^novncproxy_port = 6080$/,
           /^server_listen = 127.0.0.1$/,
