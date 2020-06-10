@@ -37,7 +37,7 @@ describe 'openstack-compute::placement_api' do
     end
 
     it do
-      expect(chef_run).to install_apache2_install('openstack').with(listen: '127.0.0.1:8778')
+      expect(chef_run).to install_apache2_install('openstack').with(listen: %w(127.0.0.1:8778))
     end
 
     it do
@@ -168,6 +168,98 @@ describe 'openstack-compute::placement_api' do
 
     it do
       expect(chef_run.apache2_site('nova-placement')).to notify('service[apache2]').to(:restart).immediately
+    end
+    context 'nova_placement false' do
+      cached(:chef_run) do
+        node.override['openstack']['compute']['nova_placement'] = false
+        runner.converge(described_recipe)
+      end
+
+      it do
+        expect(chef_run).to upgrade_package %w(python3-nova python3-placement libapache2-mod-wsgi-py3 )
+      end
+
+      it 'executes placement-api: nova-manage api_db sync' do
+        expect(chef_run).to run_execute('placement-api: nova-manage api_db sync').with(
+          timeout: 3600,
+          user: 'placement',
+          group: 'placement',
+          command: 'placement-manage db sync'
+        )
+      end
+
+      it do
+        expect(chef_run).to disable_service 'placement-api'
+        expect(chef_run).to stop_service 'placement-api'
+      end
+
+      it do
+        expect(chef_run).to disable_apache2_site('nova-placement-api')
+      end
+
+      it do
+        expect(chef_run).to install_apache2_install('openstack').with(listen: %w(127.0.0.1:8778))
+      end
+
+      it do
+        expect(chef_run).to enable_apache2_module('wsgi')
+      end
+
+      it do
+        expect(chef_run).to_not enable_apache2_module('ssl')
+      end
+      it do
+        expect(chef_run).to create_template('/etc/apache2/sites-available/placement.conf').with(
+          source: 'wsgi-template.conf.erb',
+          variables: {
+            ca_certs_path: '',
+            cert_file: '',
+            cert_required: false,
+            chain_file: '',
+            ciphers: '',
+            daemon_process: 'placement-api',
+            group: 'placement',
+            key_file: '',
+            log_dir: '/var/log/apache2',
+            processes: 2,
+            protocol: '',
+            run_dir: '/var/lock/apache2',
+            server_entry: '/usr/bin/placement-api',
+            server_host: '127.0.0.1',
+            server_port: '8778',
+            threads: 10,
+            user: 'placement',
+            use_ssl: false,
+          }
+        )
+      end
+      [
+        /<VirtualHost 127.0.0.1:8778>$/,
+        /WSGIDaemonProcess placement-api processes=2 threads=10 user=placement group=placement display-name=%{GROUP}$/,
+        /WSGIProcessGroup placement-api$/,
+        %r{WSGIScriptAlias / /usr/bin/placement-api$},
+        /WSGIApplicationGroup %{GLOBAL}$/,
+        %r{ErrorLog /var/log/apache2/placement-api_error.log$},
+        %r{CustomLog /var/log/apache2/placement-api_access.log combined$},
+        %r{WSGISocketPrefix /var/lock/apache2$},
+      ].each do |line|
+        it do
+          expect(chef_run).to render_file('/etc/apache2/sites-available/placement.conf').with_content(line)
+        end
+      end
+
+      it do
+        expect(chef_run.template('/etc/apache2/sites-available/placement.conf')).to \
+          notify('service[apache2]').to(:restart)
+      end
+
+      it do
+        expect(chef_run).to enable_apache2_site('placement')
+      end
+
+      it do
+        expect(chef_run.apache2_site('placement')).to notify('service[apache2]').to(:restart).immediately
+      end
     end
   end
 end

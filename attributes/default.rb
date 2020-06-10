@@ -50,14 +50,25 @@ default['openstack']['compute']['placement']['processes'] = 2
 default['openstack']['compute']['metadata']['threads'] = 10
 default['openstack']['compute']['metadata']['processes'] = 2
 
+# Use Nova or Placement. By default use Nova
+# https://docs.openstack.org/placement/stein/upgrade/to-stein.html
+default['openstack']['compute']['nova_placement'] = true
+
 # Platform specific settings
 case node['platform_family']
 when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
+  if node['openstack']['compute']['nova_placement']
+    api_placement_packages = %w(openstack-nova-placement-api)
+    api_placement_service = 'openstack-nova-placement-api'
+  else
+    api_placement_packages = %w(openstack-placement-api)
+    api_placement_service = 'openstack-placement-api'
+  end
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => ['openstack-nova-api'],
     'api_os_compute_service' => 'openstack-nova-api',
-    'api_placement_packages' => ['openstack-nova-placement-api'],
-    'api_placement_service' => 'openstack-nova-placement-api',
+    'api_placement_packages' => api_placement_packages,
+    'api_placement_service' => api_placement_service,
     'memcache_python_packages' => ['python-memcached'],
     'compute_api_metadata_packages' => ['openstack-nova-api'],
     'compute_api_metadata_service' => 'openstack-nova-metadata-api',
@@ -87,11 +98,18 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
     'package_overrides' => '',
   }
 when 'debian'
+  if node['openstack']['compute']['nova_placement']
+    api_placement_packages = %w(python3-nova libapache2-mod-wsgi-py3 nova-placement-api)
+    api_placement_service = 'nova-placement-api'
+  else
+    api_placement_packages = %w(python3-nova python3-placement libapache2-mod-wsgi-py3)
+    api_placement_service = 'placement-api'
+  end
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => %w(python3-nova nova-api),
     'api_os_compute_service' => 'nova-api',
-    'api_placement_packages' => %w(python3-nova libapache2-mod-wsgi-py3 nova-placement-api),
-    'api_placement_service' => 'nova-placement-api',
+    'api_placement_packages' => api_placement_packages,
+    'api_placement_service' => api_placement_service,
     'memcache_python_packages' => ['python3-memcache'],
     'compute_api_metadata_packages' => %w(python3-nova nova-api-metadata),
     'compute_api_metadata_service' => 'nova-api-metadata',

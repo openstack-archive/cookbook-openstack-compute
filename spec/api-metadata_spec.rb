@@ -24,7 +24,7 @@ describe 'openstack-compute::api-metadata' do
     end
 
     it do
-      expect(chef_run).to install_apache2_install('openstack').with(listen: '127.0.0.1:8775')
+      expect(chef_run).to install_apache2_install('openstack').with(listen: %w(127.0.0.1:8775))
     end
 
     it do
