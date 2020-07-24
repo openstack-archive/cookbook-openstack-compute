@@ -188,16 +188,6 @@ end
 # merge all config options and secrets to be used in nova.conf
 nova_conf_options = merge_config_options 'compute'
 
-# service['apache2'] is defined in the apache2_default_install resource
-# but other resources are currently unable to reference it.  To work
-# around this issue, define the following helper in your cookbook:
-service 'apache2' do
-  extend Apache2::Cookbook::Helpers
-  service_name lazy { apache_platform_service_name }
-  supports restart: true, status: true, reload: true
-  action :nothing
-end
-
 template '/etc/nova/nova.conf' do
   source 'openstack-service.conf.erb'
   cookbook 'openstack-common'
@@ -210,7 +200,6 @@ template '/etc/nova/nova.conf' do
     # with the glance_api_servers configuration option...
     service_config: nova_conf_options
   )
-  notifies :restart, 'service[apache2]'
 end
 
 # delete all secrets saved in the attribute

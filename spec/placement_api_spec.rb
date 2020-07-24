@@ -10,9 +10,7 @@ describe 'openstack-compute::placement_api' do
 
     include_context 'compute_stubs'
 
-    it 'includes nova-common recipe' do
-      expect(chef_run).to include_recipe 'openstack-compute::nova-common'
-    end
+    include_examples 'expect_runs_nova_apache_recipe'
 
     it do
       expect(chef_run).to upgrade_package %w(python3-nova libapache2-mod-wsgi-py3 nova-placement-api)
