@@ -140,6 +140,12 @@ shared_examples 'expect_volume_packages' do
   end
 end
 
+shared_examples 'expect_runs_nova_apache_recipe' do
+  it 'includes _nova_apache' do
+    expect(chef_run).to include_recipe 'openstack-compute::_nova_apache'
+  end
+end
+
 shared_examples 'expect_runs_nova_common_recipe' do
   it 'includes nova-common' do
     expect(chef_run).to include_recipe 'openstack-compute::nova-common'

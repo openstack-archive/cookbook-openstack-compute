@@ -24,7 +24,7 @@ class ::Chef::Recipe
   include Apache2::Cookbook::Helpers
 end
 
-include_recipe 'openstack-compute::nova-common'
+include_recipe 'openstack-compute::_nova_apache'
 
 bind_service = node['openstack']['bind_service']['all']['placement-api']
 placement_user = node['openstack']['placement']['user']

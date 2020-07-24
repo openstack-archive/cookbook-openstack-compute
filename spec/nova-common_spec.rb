@@ -72,10 +72,6 @@ describe 'openstack-compute::nova-common' do
         )
       end
 
-      it do
-        expect(chef_run.template('/etc/nova/nova.conf')).to notify('service[apache2]').to(:restart)
-      end
-
       it '[DEFAULT]' do
         [
           %r{^log_dir = /var/log/nova$},

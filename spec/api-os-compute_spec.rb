@@ -9,7 +9,7 @@ describe 'openstack-compute::api-os-compute' do
     cached(:chef_run) { runner.converge(described_recipe) }
 
     include_context 'compute_stubs'
-    include_examples 'expect_runs_nova_common_recipe'
+    include_examples 'expect_runs_nova_apache_recipe'
     include_examples 'expect_creates_nova_state_dir'
     include_examples 'expect_creates_nova_lock_dir'
     include_examples 'expect_creates_api_paste_template'
