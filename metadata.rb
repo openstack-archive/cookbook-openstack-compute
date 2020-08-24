@@ -5,7 +5,7 @@ issues_url       'https://launchpad.net/openstack-chef'
 source_url       'https://opendev.org/openstack/cookbook-openstack-compute'
 license          'Apache-2.0'
 description      'The OpenStack Compute service Nova.'
-version          '19.2.0'
+version          '19.3.0'
 
 chef_version '>= 15.0'
 

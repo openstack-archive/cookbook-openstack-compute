@@ -13,9 +13,3 @@ Style/IfUnlessModifier:
     - 'attributes/nova_conf.rb'
     - 'recipes/libvirt.rb'
     - 'recipes/nova-common.rb'
-
-# Offense count: 97
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-Metrics/LineLength:
-  Max: 171
