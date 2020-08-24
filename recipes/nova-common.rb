@@ -20,8 +20,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'uri'
-
 # Make Openstack object available in Chef::Recipe
 class ::Chef::Recipe
   include ::Openstack
@@ -118,7 +116,7 @@ image_endpoint = internal_endpoint 'image_api'
 
 Chef::Log.debug("openstack-compute::nova-common:identity_endpoint|#{identity_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:novnc_endpoint|#{novnc_endpoint}")
-Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{::URI.decode compute_api_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::nova-common:compute_api_endpoint|#{compute_api_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:network_endpoint|#{network_endpoint}")
 Chef::Log.debug("openstack-compute::nova-common:image_endpoint|#{image_endpoint}")
 # Chef::Log.debug("openstack-compute::nova-common:ironic_endpoint|#{ironic_endpoint}")
@@ -133,7 +131,7 @@ node.default['openstack']['compute']['conf_secrets']
 .[]('neutron')['metadata_proxy_shared_secret'] =
   get_password 'token', 'neutron_metadata_secret'
 
-auth_url = ::URI.decode identity_endpoint.to_s
+auth_url = identity_endpoint.to_s
 node.default['openstack']['compute']['conf_secrets']
   .[]('keystone_authtoken')['password'] =
   get_password 'service', 'openstack-compute'

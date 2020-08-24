@@ -55,21 +55,9 @@ def update_grub_default_kernel(flavor = 'default')
   # change default option for /boot/grub/menu.lst
   unless current_default.eql?(default_boot)
     ::Chef::Log.info("Changed grub default to #{default_boot}")
-    Mixlib::ShellOut.new("sed -i -e 's;^default.*;default #{default_boot};' /boot/grub/menu.lst").run_command
+    shell_out("sed -i -e 's;^default.*;default #{default_boot};' /boot/grub/menu.lst")
   end
 end
-
-# def update_grub2_default_kernel(flavor = 'default')
-#   boot_entry = "'openSUSE GNU/Linux, with Xen hypervisor'"
-#   begin
-#     Mixlib::ShellOut.new("grub2-set-default #{boot_entry}").run_command.error!
-#     ::Chef::Log.info("Changed grub2 default to #{boot_entry}")
-#   rescue Mixlib::ShellOut::ShellCommandFailed => e
-#     ::Chef::Application.fatal!(
-#       "Unable to change grub2 default to #{boot_entry}
-# #{e.message}")
-#   end
-# end
 
 def update_boot_kernel_and_trigger_reboot(flavor = 'default')
   # only default and xen flavor is supported by this helper right now
@@ -85,7 +73,7 @@ def update_boot_kernel_and_trigger_reboot(flavor = 'default')
 
   # trigger reboot through reboot_handler, if kernel-$flavor is not yet
   # running
-  unless Mixlib::ShellOut.new('uname -r').run_command.stdout.include?(flavor)
+  unless shell_out('uname -r').stdout.include?(flavor)
     node.run_state['reboot'] = true
   end
 end

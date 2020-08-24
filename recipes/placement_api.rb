@@ -44,7 +44,7 @@ end
 db_user = node['openstack']['db']['placement']['username']
 db_pass = get_password 'db', 'placement'
 identity_endpoint = internal_endpoint 'identity'
-auth_url = ::URI.decode identity_endpoint.to_s
+auth_url = identity_endpoint.to_s
 
 node.default['openstack']['placement']['conf_secrets']
   .[]('placement_database')['connection'] =
@@ -64,7 +64,7 @@ end
 
 memcache_servers = memcached_servers.join ','
 placement_api_endpoint = internal_endpoint 'placement-api'
-Chef::Log.debug("openstack-compute::placement_api:placement_api_endpoint|#{::URI.decode placement_api_endpoint.to_s}")
+Chef::Log.debug("openstack-compute::placement_api:placement_api_endpoint|#{placement_api_endpoint}")
 
 node.default['openstack']['placement']['conf'].tap do |conf|
   unless memcache_servers.empty?
