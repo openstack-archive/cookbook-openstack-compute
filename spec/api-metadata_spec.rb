@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require_relative 'spec_helper'
 
 describe 'openstack-compute::api-metadata' do
@@ -50,7 +48,7 @@ describe 'openstack-compute::api-metadata' do
           log_dir: '/var/log/apache2',
           processes: 2,
           protocol: '',
-          run_dir: '/var/lock/apache2',
+          run_dir: '/var/lock',
           server_entry: '/usr/bin/nova-metadata-wsgi',
           server_host: '127.0.0.1',
           server_port: '8775',
@@ -68,7 +66,7 @@ describe 'openstack-compute::api-metadata' do
       /WSGIApplicationGroup %{GLOBAL}$/,
       %r{ErrorLog /var/log/apache2/nova-metadata_error.log$},
       %r{CustomLog /var/log/apache2/nova-metadata_access.log combined$},
-      %r{WSGISocketPrefix /var/lock/apache2$},
+      %r{WSGISocketPrefix /var/lock$},
     ].each do |line|
       it do
         expect(chef_run).to render_file('/etc/apache2/sites-available/nova-metadata.conf').with_content(line)

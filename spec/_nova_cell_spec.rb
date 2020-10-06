@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require_relative 'spec_helper'
 
 describe 'openstack-compute::_nova_cell' do
