@@ -1,5 +1,3 @@
-# encoding: UTF-8
-#
 
 # Set to some text value if you want templated config files
 # to contain a custom banner at the top of the written file

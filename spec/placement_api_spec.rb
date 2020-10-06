@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require_relative 'spec_helper'
 
 describe 'openstack-compute::placement_api' do
@@ -110,7 +108,7 @@ describe 'openstack-compute::placement_api' do
           log_dir: '/var/log/apache2',
           processes: 2,
           protocol: '',
-          run_dir: '/var/lock/apache2',
+          run_dir: '/var/lock',
           server_entry: '/usr/bin/placement-api',
           server_host: '127.0.0.1',
           server_port: '8778',
@@ -128,7 +126,7 @@ describe 'openstack-compute::placement_api' do
       /WSGIApplicationGroup %{GLOBAL}$/,
       %r{ErrorLog /var/log/apache2/placement-api_error.log$},
       %r{CustomLog /var/log/apache2/placement-api_access.log combined$},
-      %r{WSGISocketPrefix /var/lock/apache2$},
+      %r{WSGISocketPrefix /var/lock$},
     ].each do |line|
       it do
         expect(chef_run).to render_file('/etc/apache2/sites-available/placement.conf').with_content(line)

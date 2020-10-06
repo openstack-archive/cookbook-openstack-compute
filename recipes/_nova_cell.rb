@@ -1,4 +1,3 @@
-# encoding: UTF-8
 #
 # Cookbook:: openstack-compute
 # Recipe:: _nova_cell
