@@ -21,7 +21,7 @@ Requirements
 ============
 
 - Chef 15 or higher
-- Chef Workstation 20.8.111 for testing (also includes Berkshelf for
+- Chef Workstation 21.2.303 for testing (also includes Berkshelf for
   cookbook dependency resolution)
 
 Platform
