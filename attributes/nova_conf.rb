@@ -22,6 +22,14 @@ default['openstack']['compute']['conf'].tap do |conf|
   conf['keystone_authtoken']['auth_version'] = 'v3'
   conf['keystone_authtoken']['service_token_roles_required'] = true
 
+  # [service_user]
+  conf['service_user']['auth_type'] = 'password'
+  conf['service_user']['username'] = 'nova'
+  conf['service_user']['user_domain_name'] = 'Default'
+  conf['service_user']['project_name'] = 'service'
+  conf['service_user']['project_domain_name'] = 'Default'
+  conf['service_user']['send_service_user_token'] = true
+
   # [libvirt]
   conf['libvirt']['virt_type'] = 'kvm'
   conf['libvirt']['images_type'] = 'default'

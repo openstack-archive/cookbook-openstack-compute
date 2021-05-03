@@ -136,6 +136,10 @@ node.default['openstack']['compute']['conf_secrets']
   get_password 'service', 'openstack-compute'
 
 node.default['openstack']['compute']['conf_secrets']
+  .[]('service_user')['password'] =
+  get_password 'service', 'openstack-compute'
+
+node.default['openstack']['compute']['conf_secrets']
   .[]('placement')['password'] =
   get_password 'service', 'openstack-placement'
 
@@ -159,6 +163,9 @@ node.default['openstack']['compute']['conf'].tap do |conf|
   # [keystone_authtoken] section
   conf['keystone_authtoken']['auth_url'] = auth_url
   conf['keystone_authtoken']['www_authenticate_uri'] = auth_url
+
+  # [service_user] section
+  conf['service_user']['auth_url'] = auth_url
 
   # [placement] section
   conf['placement']['auth_url'] = auth_url
