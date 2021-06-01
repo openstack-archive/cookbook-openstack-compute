@@ -52,7 +52,7 @@ describe 'openstack-compute::api-metadata' do
           server_entry: '/usr/bin/nova-metadata-wsgi',
           server_host: '127.0.0.1',
           server_port: '8775',
-          threads: 10,
+          threads: 1,
           user: 'nova',
           use_ssl: false,
         }
@@ -60,7 +60,7 @@ describe 'openstack-compute::api-metadata' do
     end
     [
       /<VirtualHost 127.0.0.1:8775>$/,
-      /WSGIDaemonProcess nova-metadata processes=2 threads=10 user=nova group=nova display-name=%{GROUP}$/,
+      /WSGIDaemonProcess nova-metadata processes=2 threads=1 user=nova group=nova display-name=%{GROUP}$/,
       /WSGIProcessGroup nova-metadata$/,
       %r{WSGIScriptAlias / /usr/bin/nova-metadata-wsgi$},
       /WSGIApplicationGroup %{GLOBAL}$/,

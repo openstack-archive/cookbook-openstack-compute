@@ -63,7 +63,7 @@ describe 'openstack-compute::placement_api' do
           server_entry: '/usr/bin/nova-placement-api',
           server_host: '127.0.0.1',
           server_port: '8778',
-          threads: 10,
+          threads: 1,
           user: 'nova',
           use_ssl: false,
         }
@@ -71,7 +71,7 @@ describe 'openstack-compute::placement_api' do
     end
     [
       /<VirtualHost 127.0.0.1:8778>$/,
-      /WSGIDaemonProcess placement-api processes=2 threads=10 user=nova group=nova display-name=%{GROUP}$/,
+      /WSGIDaemonProcess placement-api processes=2 threads=1 user=nova group=nova display-name=%{GROUP}$/,
       /WSGIProcessGroup placement-api$/,
       %r{WSGIScriptAlias / /usr/bin/nova-placement-api$},
       /WSGIApplicationGroup %{GLOBAL}$/,
@@ -223,7 +223,7 @@ describe 'openstack-compute::placement_api' do
             server_entry: '/usr/bin/placement-api',
             server_host: '127.0.0.1',
             server_port: '8778',
-            threads: 10,
+            threads: 1,
             user: 'placement',
             use_ssl: false,
           }
@@ -231,7 +231,7 @@ describe 'openstack-compute::placement_api' do
       end
       [
         /<VirtualHost 127.0.0.1:8778>$/,
-        /WSGIDaemonProcess placement-api processes=2 threads=10 user=placement group=placement display-name=%{GROUP}$/,
+        /WSGIDaemonProcess placement-api processes=2 threads=1 user=placement group=placement display-name=%{GROUP}$/,
         /WSGIProcessGroup placement-api$/,
         %r{WSGIScriptAlias / /usr/bin/placement-api$},
         /WSGIApplicationGroup %{GLOBAL}$/,
