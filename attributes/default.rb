@@ -40,11 +40,11 @@ default['openstack']['compute']['rootwrap']['syslog_log_level'] = 'ERROR'
   default['openstack']['compute'][service]['ssl']['ciphers'] = ''
 end
 
-# Work around upstream issue with running the api service under wsgi
+# Work around upstream issue with running the api services under wsgi
 # https://docs.openstack.org/releasenotes/nova/stein.html#known-issues
 default['openstack']['compute']['api']['threads'] = 1
 default['openstack']['compute']['api']['processes'] = 6
-default['openstack']['compute']['metadata']['threads'] = 10
+default['openstack']['compute']['metadata']['threads'] = 1
 default['openstack']['compute']['metadata']['processes'] = 2
 
 # Platform specific settings

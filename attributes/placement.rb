@@ -23,7 +23,8 @@ default['openstack']['placement']['ssl']['protocol'] = ''
 default['openstack']['placement']['ssl']['ciphers'] = ''
 
 # Apache wsgi settings for vhost
-default['openstack']['placement']['threads'] = 10
+# https://docs.openstack.org/releasenotes/nova/stein.html#known-issues
+default['openstack']['placement']['threads'] = 1
 default['openstack']['placement']['processes'] = 2
 
 # Platform specific settings
