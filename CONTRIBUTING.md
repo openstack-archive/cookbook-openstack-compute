@@ -31,6 +31,6 @@ Contacts
 --------
 
 Mailing list: groups.google.com/group/opscode-chef-openstack
-IRC: #openstack-chef is our channel on irc.freenode.net
+IRC: #openstack-chef is our channel on irc.oftc.net
 Wiki: https://wiki.openstack.org/wiki/Chef/GettingStarted and https://docs.getchef.com/openstack.html
 Twitter: @chefopenstack
