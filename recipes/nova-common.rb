@@ -158,6 +158,8 @@ node.default['openstack']['compute']['conf'].tap do |conf|
     conf['cache']['backend'] = 'oslo_cache.memcache_pool'
     conf['cache']['enabled'] = 'true'
     conf['cache']['memcache_servers'] = memcache_servers
+    # keystonemiddleware needs its own key for this
+    conf['keystone_authtoken']['memcached_servers'] = memcache_servers
   end
 
   # [keystone_authtoken] section
