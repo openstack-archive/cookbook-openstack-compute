@@ -242,6 +242,7 @@ describe 'openstack-compute::nova-common' do
 
       it '[vnc]' do
         [
+          /^enabled = true$/,
           %r{^novncproxy_base_url = http://127.0.0.1:6080/vnc_auto.html$},
           /^novncproxy_host = 127.0.0.1$/,
           /^novncproxy_port = 6080$/,
@@ -249,6 +250,35 @@ describe 'openstack-compute::nova-common' do
           /^server_proxyclient_address = 127.0.0.1$/,
         ].each do |line|
           expect(chef_run).to render_config_file(file.name).with_section_content('vnc', line)
+        end
+      end
+
+      it '[spice]' do
+        expect(chef_run).not_to render_config_file(file.name).with_section_content('spice', /^enabled = true$/)
+      end
+
+      context 'with SPICE consoles' do
+        cached(:chef_run) do
+          node.override['openstack']['compute']['console_type'] = 'spice'
+          runner.converge(described_recipe)
+        end
+
+        it 'disables VNC support' do
+          expect(chef_run).to render_config_file(file.name)
+            .with_section_content('vnc', /^enabled = false$/)
+        end
+
+        it 'sets SPICE options correctly' do
+          [
+            /^enabled = true$/,
+            %r{^html5proxy_base_url = http://127.0.0.1:6082/spice_auto.html$},
+            /^html5proxy_host = 127.0.0.1$/,
+            /^html5proxy_port = 6082$/,
+            /^server_listen = 127.0.0.1$/,
+            /^server_proxyclient_address = 127.0.0.1$/,
+          ].each do |line|
+            expect(chef_run).to render_config_file(file.name).with_section_content('spice', line)
+          end
         end
       end
 

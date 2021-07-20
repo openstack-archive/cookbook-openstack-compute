@@ -120,6 +120,12 @@ openstack-compute::serialproxy
 -  Installs and configures the serialproxy service for serial console
    access to VMs
 
+openstack-compute::spiceproxy
+---------------------------
+
+-  Installs and configures the spicehtml5proxy service for console access
+   to VMs
+
 openstack-compute::vncproxy
 ---------------------------
 
