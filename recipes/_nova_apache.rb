@@ -2,8 +2,8 @@
 # Cookbook:: openstack-compute
 # Recipe:: _nova_apache
 #
-# Copyright:: 2019-2020, Oregon State University
-# Copyright:: 2020, x-ion GmbH
+# Copyright:: 2019-2021, Oregon State University
+# Copyright:: 2020-2021, x-ion GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

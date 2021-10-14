@@ -20,8 +20,8 @@ https://docs.openstack.org/nova/latest/
 Requirements
 ============
 
-- Chef 15 or higher
-- Chef Workstation 21.2.303 for testing (also includes Berkshelf for
+- Chef 16 or higher
+- Chef Workstation 21.10.640 for testing (also includes Berkshelf for
   cookbook dependency resolution)
 
 Platform
@@ -192,7 +192,7 @@ License and Author
 +-----------------+---------------------------------------------------+
 | **Copyright**   | Copyright (c) 2013-2014, IBM, Corp.               |
 +-----------------+---------------------------------------------------+
-| **Copyright**   | Copyright (c) 2019-2020, Oregon State University  |
+| **Copyright**   | Copyright (c) 2019-2021, Oregon State University  |
 +-----------------+---------------------------------------------------+
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may

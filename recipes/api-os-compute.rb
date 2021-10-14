@@ -2,9 +2,9 @@
 # Cookbook:: openstack-compute
 # Recipe:: api-os-compute
 #
-# Copyright:: 2012, Rackspace US, Inc.
-# Copyright:: 2018, Workday, Inc.
-# Copyright:: 2019-2020, Oregon State University
+# Copyright:: 2012-2021, Rackspace US, Inc.
+# Copyright:: 2018-2021, Workday, Inc.
+# Copyright:: 2019-2021, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

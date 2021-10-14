@@ -2,9 +2,9 @@
 # Cookbook:: openstack-compute
 # Recipe:: identity_registration
 #
-# Copyright:: 2013, AT&T
-# Copyright:: 2013, IBM Corp.
-# Copyright:: 2019-2020, Oregon State University
+# Copyright:: 2013-2021, AT&T
+# Copyright:: 2013-2021, IBM Corp.
+# Copyright:: 2019-2021, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
