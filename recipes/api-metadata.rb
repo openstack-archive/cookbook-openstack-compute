@@ -64,7 +64,7 @@ else
   end
 end
 
-apache2_module 'wsgi'
+apache2_mod_wsgi 'api-metadata'
 apache2_module 'ssl' if node['openstack']['compute']['metadata']['ssl']['enabled']
 
 template "#{apache_dir}/sites-available/nova-metadata.conf" do

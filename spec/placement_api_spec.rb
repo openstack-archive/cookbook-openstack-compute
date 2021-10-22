@@ -11,7 +11,7 @@ describe 'openstack-compute::placement_api' do
     include_examples 'expect_runs_nova_apache_recipe'
 
     it do
-      expect(chef_run).to upgrade_package %w(python3-placement libapache2-mod-wsgi-py3)
+      expect(chef_run).to upgrade_package %w(python3-placement)
     end
 
     it do
@@ -31,7 +31,7 @@ describe 'openstack-compute::placement_api' do
     end
 
     it do
-      expect(chef_run).to enable_apache2_module('wsgi')
+      expect(chef_run).to create_apache2_mod_wsgi 'placement'
     end
 
     it do

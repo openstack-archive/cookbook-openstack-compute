@@ -58,7 +58,12 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   default['openstack']['compute']['platform'] = {
     'api_os_compute_packages' => ['openstack-nova-api'],
     'api_os_compute_service' => 'openstack-nova-api',
-    'memcache_python_packages' => ['python-memcached'],
+    'memcache_python_packages' =>
+      if node['platform_version'].to_i >= 8
+        ['python3-memcached']
+      else
+        ['python-memcached']
+      end,
     'compute_api_metadata_packages' => ['openstack-nova-api'],
     'compute_api_metadata_service' => 'openstack-nova-metadata-api',
     'compute_compute_packages' => ['openstack-nova-compute'],
@@ -75,13 +80,18 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
     'compute_spiceproxy_service' => 'openstack-nova-spicehtml5proxy',
     'compute_serialproxy_packages' => ['openstack-nova-serialproxy'],
     'compute_serialproxy_service' => 'openstack-nova-serialproxy',
-    'libvirt_packages' => %w(libvirt device-mapper python-libguestfs),
+    'libvirt_packages' =>
+      if node['platform_version'].to_i >= 8
+        %w(libvirt device-mapper python3-libguestfs)
+      else
+        %w(libvirt device-mapper python-libguestfs)
+      end,
     'libvirt_service' => 'libvirtd',
     'dbus_service' => 'messagebus',
     'compute_cert_packages' => ['openstack-nova-cert'],
     'compute_cert_service' => 'openstack-nova-cert',
     'mysql_service' => 'mysqld',
-    'common_packages' => %w(openstack-nova-common mod_wsgi),
+    'common_packages' => %w(openstack-nova-common),
     'iscsi_helper' => 'ietadm',
     'volume_packages' => %w(sysfsutils sg3_utils device-mapper-multipath),
     'package_overrides' => '',

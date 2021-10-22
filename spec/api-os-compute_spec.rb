@@ -35,7 +35,7 @@ describe 'openstack-compute::api-os-compute' do
     end
 
     it do
-      expect(chef_run).to enable_apache2_module('wsgi')
+      expect(chef_run).to create_apache2_mod_wsgi 'api-os-compute'
     end
 
     it do

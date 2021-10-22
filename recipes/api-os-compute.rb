@@ -72,7 +72,7 @@ else
   end
 end
 
-apache2_module 'wsgi'
+apache2_mod_wsgi 'api-os-compute'
 apache2_module 'ssl' if node['openstack']['compute']['api']['ssl']['enabled']
 
 template "#{apache_dir}/sites-available/nova-api.conf" do

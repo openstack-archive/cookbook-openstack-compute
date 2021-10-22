@@ -2,9 +2,9 @@
 # Cookbook:: openstack-compute
 # Recipe:: spiceproxy
 #
-# Copyright:: 2012, Rackspace US, Inc.
-# Copyright:: 2013, Craig Tracey <craigtracey@gmail.com>
-# Copyright:: 2020, Oregon State University
+# Copyright:: 2012-2021, Rackspace US, Inc.
+# Copyright:: 2013-2021, Craig Tracey <craigtracey@gmail.com>
+# Copyright:: 2020-2021, Oregon State University
 # Copyright:: 2021, Marek Szuba <m.szuba@gsi.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

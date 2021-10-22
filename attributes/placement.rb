@@ -36,7 +36,7 @@ when 'rhel' # :pragma-foodcritic: ~FC024 - won't fix this
   }
 when 'debian'
   default['openstack']['placement']['platform'] = {
-    'placement_packages' => %w(python3-placement libapache2-mod-wsgi-py3),
+    'placement_packages' => %w(python3-placement),
     'placement_service' => 'placement-api',
   }
 end

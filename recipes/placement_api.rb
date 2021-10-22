@@ -113,7 +113,7 @@ else
   end
 end
 
-apache2_module 'wsgi'
+apache2_mod_wsgi 'placement'
 apache2_module 'ssl' if node['openstack']['placement']['ssl']['enabled']
 
 template "#{apache_dir}/sites-available/placement.conf" do
