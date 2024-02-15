@@ -1,9 +1,0 @@
-<%= node["openstack"]["compute"]["custom_template_banner"] %>
-<% @service_config.each do |key, value| -%>
-  <% if value.class == Hash -%>
-<%= "# #{value['comment']}" -%>
-<%= key %> = <%= value['set_to'] %>
-  <% else -%>
-<%= key %> = <%= value %>
-  <% end -%>
-<% end -%>
